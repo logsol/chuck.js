@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <style type="text/css">
+            html, body { margin: 0; padding: 0; }
+            canvas { background: #333; }
+        </style>
+        <script type="text/javascript" src="lib/Three/Three.min.js"></script>
+        <script type="text/javascript" src="http://www.html5canvastutorials.com/libraries/Three.js"></script>
+    </head>
+    <body></body>
+
+
+     
+
+    <script type="text/javascript">
+        var three;
+
+        init();
+
+        function animate(){       
+            three.plane.rotation.z += .01;
+            three.plane.position.z += .5;
+            three.plane.position.x += .4;
+            three.plane.position.y += .4;
+
+            three.renderer.render(three.scene, three.camera);
+            requestAnimationFrame(animate);
+        }
+
+        function init (){
+
+            var renderer, camera, scene, material, plane;
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.z = 700;
+            scene.add(camera);
+
+            material = new THREE.MeshLambertMaterial({
+                map: THREE.ImageUtils.loadTexture("img/smile.png")
+            });
+
+            plane = new THREE.Mesh(new THREE.PlaneGeometry(128, 128), material);
+            //plane.rotation.x = 180;
+            plane.overdraw = true;
+            scene.add(plane);
+
+            three = {
+                renderer: renderer,
+                camera: camera,
+                scene: scene,
+                plane: plane
+            };
+
+            animate();
+        };
+    </script>
+</html>
