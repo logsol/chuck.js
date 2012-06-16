@@ -13,25 +13,30 @@ function update() {
 }
 
 setInterval(update, 1000 / 60);
-setInterval(updateClients, 500);
+setInterval(updateClients, 100);
 
 function updateClients() {
 	var body = world.GetBodyList();
 	var update = {};
+	var isUpdateNeeded = false;
 	
 	do {
 		var userData = body.GetUserData();
-		
-		if(userData && userData.bodyId){
+
+		if(userData && userData.bodyId && body.IsAwake()){
 			update[userData.bodyId] = {
 				p: body.GetPosition(),
 				a: body.GetAngle(),
 				v: body.GetLinearVelocity(),
 			};
+			isUpdateNeeded = true;
 		}
 	} while (body = body.GetNext());
 	
-	sendToClients('world-update', update);
+	
+	if(isUpdateNeeded) { 
+		sendToClients('world-update', update);
+	}
 }
 
 function sendToClients(message, data) {
@@ -45,7 +50,13 @@ function sendToClients(message, data) {
 	}
 }
 
-
+function pong(client, data) {
+	var packet = {
+		m: 'pong',
+		d: data
+	}
+	client.send(JSON.stringify(packet));
+}
 
 setupWorld();
 //update();
@@ -74,21 +85,49 @@ socket.on('connection', function(client) {
 	
 	client.send(JSON.stringify({"startId" : clients.length}));
 
-	client.on('message', function(data){
-		data = JSON.parse(data);
+	client.on('message', function(packet){
+		packet = JSON.parse(packet);
 		
-		if(data && data.m){
-			switch(data.m){
+		if(packet && packet.m){
+			switch(packet.m){
 				case 'jump':
 					jump();
+					break;
+				case 'ping':
+					pong(client, packet.d);
 					break;
 				default:
 					break;
 			}
 		}
+		updateClients();
 	});
 
 	client.on('disconnect', function(){
 		console.log("disconnect");		
 	}); 
 });
+
+/******* collision ********/
+
+function createCollisionDetector() {
+	var listener = new b2ContactListener();
+   
+	listener.BeginContact = function(contact){
+
+	}
+	listener.PostSolve = function(contact, impulse){
+    	
+	}
+	listener.EndContact = function(contact){
+    	
+	}
+    
+	return listener;
+}
+
+
+
+
+
+

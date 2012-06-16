@@ -18,20 +18,26 @@ setInterval(updateClients, 500);
 function updateClients() {
 	var body = world.GetBodyList();
 	var update = {};
+	var isUpdateNeeded = false;
 	
 	do {
 		var userData = body.GetUserData();
-		
-		if(userData && userData.bodyId){
+
+		if(userData && userData.bodyId && body.IsAwake()){
+			console.log(body.IsAwake());
 			update[userData.bodyId] = {
 				p: body.GetPosition(),
 				a: body.GetAngle(),
 				v: body.GetLinearVelocity(),
 			};
+			isUpdateNeeded = true;
 		}
 	} while (body = body.GetNext());
 	
-	sendToClients('world-update', update);
+	
+	if(isUpdateNeeded) { 
+		sendToClients('world-update', update);
+	}
 }
 
 function sendToClients(message, data) {
@@ -41,7 +47,7 @@ function sendToClients(message, data) {
 	}
 	//console.log(JSON.stringify(packet));
 	for (var i = 0; i < clients.length; i++) {
-		clients[i].send(JSON.stringify(packet));
+		clients[i].send(	JSON.stringify(packet));
 	}
 }
 
@@ -86,6 +92,7 @@ socket.on('connection', function(client) {
 					break;
 			}
 		}
+		updateClients();
 	});
 
 	client.on('disconnect', function(){

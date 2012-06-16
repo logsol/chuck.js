@@ -1,5 +1,15 @@
 var id = null;
 
+//window.setInterval(ping, 1000);
+
+function ping(){
+	var packet = {
+		m: 'ping',
+		d: new Date().getTime()
+	} 
+	socket.send(JSON.stringify(packet));
+}
+
 function setupCanvas() {
 	var debugDraw = new b2DebugDraw();
 
@@ -13,12 +23,13 @@ function setupCanvas() {
 }
 
 function _jump() {
+	console.log('---jump---');
 	jump();
 	
-	var data = {
+	var packet = {
 		m: 'jump'
 	};
-	socket.send(JSON.stringify(data));
+	socket.send(JSON.stringify(packet));
 }
 
 function init() {
@@ -63,11 +74,18 @@ function updateWorld(data) {
 	var body = world.GetBodyList();
 	do {
 		var userData = body.GetUserData();
-		if(userData && userData.bodyId){		
+		if(userData && userData.bodyId && data[userData.bodyId]){		
 			var update = data[userData.bodyId];
+			
+			console.log('position difference:', (body.GetPosition().y - update.p.y) * 30, body.GetLinearVelocity().y);
+			
+			/*body.SetAwake(true);			
 			body.SetPosition(update.p);
 			body.SetAngle(update.a);
 			body.SetLinearVelocity(update.v);
+			*/
+			
+			
 		}
 	} while (body = body.GetNext());
 }
@@ -90,6 +108,9 @@ socket.on('message', function(packet) {
 		switch(packet.m) {
 			case 'world-update':
 				updateWorld(packet.d);
+				break;
+			case 'pong':
+				console.log('pong', new Date().getTime() - packet.d);
 				break;
 			default:	
 				break;

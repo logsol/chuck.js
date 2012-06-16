@@ -2,7 +2,7 @@ var bodiesNum = 3;
 var world;
 
 var xport = 8003;
-var xhost = '127.0.0.1';
+var xhost = 'fuuuuu.de';
 
 var	b2Vec2 = Box2D.Common.Math.b2Vec2,
 	b2AABB = Box2D.Collision.b2AABB,
@@ -22,8 +22,8 @@ function setupWorld() {
 
 	var fixDef = new b2FixtureDef;
 	fixDef.density = 1.0;
-	fixDef.friction = 0.5;
-	fixDef.restitution = 0.2;
+	fixDef.friction = 0.99;
+	fixDef.restitution = 0.01;
 		 
 	var bodyDef = new b2BodyDef;
 		 
@@ -56,7 +56,9 @@ function setupWorld() {
 		bodyDef.position.x = (i + 1) * 4;
 		bodyDef.position.y = 3;
 
-		bodyDef.userData = {"bodyId" : parseInt(i) };
+		bodyDef.userData = {
+			'bodyId': i + '' 
+		};
 
 		world.CreateBody(bodyDef).CreateFixture(fixDef);	
 	}
