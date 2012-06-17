@@ -1,0 +1,19 @@
+{
+  "author": "logsol <fartman@gmx.de>",
+  "name": "chuck.js",
+  "description": "Multiplayer browser jump and run game",
+  "version": "0.1.0",
+  "homepage": "http://chuck.fuuuuu.de/",
+  "repository": {
+    "url": "https://github.com/logsol/chuck.js"
+  },
+  "main": "",
+  "dependencies": {
+    "socket.io": ">= 0.9.6"
+  },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
