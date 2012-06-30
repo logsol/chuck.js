@@ -1,8 +1,9 @@
-var bodiesNum = 3;
+var bodiesNum = 13;
 var world;
 
 var xport = 8003;
 var xhost = 'fuuuuu.de';
+
 
 var	b2Vec2 = Box2D.Common.Math.b2Vec2,
 	b2AABB = Box2D.Collision.b2AABB,
@@ -15,15 +16,16 @@ var	b2Vec2 = Box2D.Common.Math.b2Vec2,
 	b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape,
 	b2CircleShape = Box2D.Collision.Shapes.b2CircleShape,
 	b2DebugDraw = Box2D.Dynamics.b2DebugDraw,
-	b2MouseJointDef =  Box2D.Dynamics.Joints.b2MouseJointDef;
+	b2MouseJointDef =  Box2D.Dynamics.Joints.b2MouseJointDef,
+	b2ContactListener =  Box2D.Dynamics.b2ContactListener;
 
-function setupWorld() {
-	world = new b2World(new b2Vec2(0, 10), true);
+function setupWorld(gravity) {
+	world = new b2World(new b2Vec2(0, gravity), true);
 
 	var fixDef = new b2FixtureDef;
 	fixDef.density = 1.0;
-	fixDef.friction = 0.5;
-	fixDef.restitution = 0.01;
+	fixDef.friction = 0.99;
+	fixDef.restitution = .51;
 		 
 	var bodyDef = new b2BodyDef;
 		 
@@ -51,9 +53,9 @@ function setupWorld() {
 
 	for(var i = 0; i < bodiesNum; i++) {
 		fixDef.shape = new b2PolygonShape;
-		fixDef.shape.SetAsBox(0.5, 0.5);
+		fixDef.shape.SetAsBox(0.4, 0.4);
 
-		bodyDef.position.x = (i + 1) * 4;
+		bodyDef.position.x = ((i + 1) * 2) % 8;
 		bodyDef.position.y = 3;
 
 		bodyDef.userData = {
@@ -67,7 +69,8 @@ function setupWorld() {
 function jump() {
 	var body = findBody(1);
 	body.SetAwake(true);
-	body.ApplyImpulse(new b2Vec2(0, -9), body.GetPosition());
+	body.ApplyImpulse(new b2Vec2(8, -15), body.GetPosition());
+	body.SetAngularVelocity(1.5);
 }
 
 function findBody(index) {

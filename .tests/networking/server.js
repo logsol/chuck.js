@@ -6,16 +6,19 @@ var http = require('http'),
 eval(fs.readFileSync('common.js') + '');
 
 var clients = [];
+var lastIntervalTime = new Date().getTime();
 
 function update() {
+	var newTime = new Date().getTime()
+	//console.log(newTime - lastIntervalTime);
+	lastIntervalTime = newTime;
+	
 	world.Step(1 / 60, 10, 10);
 	world.ClearForces();
 }
 
-setInterval(update, 1000 / 60);
-setInterval(updateClients, 100);
-
-function updateClients() {
+function updateWorld(client) {
+	
 	var body = world.GetBodyList();
 	var update = {};
 	var isUpdateNeeded = false;
@@ -27,7 +30,8 @@ function updateClients() {
 			update[userData.bodyId] = {
 				p: body.GetPosition(),
 				a: body.GetAngle(),
-				v: body.GetLinearVelocity(),
+				lv: body.GetLinearVelocity(),
+				av: body.GetAngularVelocity()
 			};
 			isUpdateNeeded = true;
 		}
@@ -35,18 +39,48 @@ function updateClients() {
 	
 	
 	if(isUpdateNeeded) { 
+		sendToClients('world-update', update, null);
+	}
+}
+
+function updateWithBodies(bodies) {
+	
+	var update = {};
+	var isUpdateNeeded = false;
+	
+	for(var b in bodies) {
+		var body = bodies[b];
+		
+		//console.log(body);		
+		
+		var userData = body.GetUserData();
+
+		if(userData && userData.bodyId && body.IsAwake()){
+			update[userData.bodyId] = {
+				p: body.GetPosition(),
+				a: body.GetAngle(),
+				lv: body.GetLinearVelocity(),
+				av: body.GetAngularVelocity()
+			};
+			isUpdateNeeded = true;
+		}
+	}
+	
+	
+	if(isUpdateNeeded) { 
 		sendToClients('world-update', update);
 	}
 }
 
-function sendToClients(message, data) {
+function sendToClients(message, data, except) {
 	var packet = {
 		m: message,
 		d: data
 	}
-	//console.log(JSON.stringify(packet));
 	for (var i = 0; i < clients.length; i++) {
-		clients[i].send(JSON.stringify(packet));
+		if(clients[i] != except) {
+			clients[i].send(JSON.stringify(packet));
+		}
 	}
 }
 
@@ -58,15 +92,22 @@ function pong(client, data) {
 	client.send(JSON.stringify(packet));
 }
 
-setupWorld();
-//update();
+// Set Gravity here
+setupWorld(0);
+//world.SetContactListener(createCollisionDetector());
 
-// SOCKETS
+// Box2D Engine step configuration
+setInterval(update, 1000 / 60);
 
+// Send world update to client every 32 ms
+setInterval(updateWorld, 32);
+
+
+// Setting up socket
 var server = http.createServer(
 	function(req, res){
 		res.writeHead(200, {'Content-Type': 'text/html'}); 
-		res.end('<h1>Hello world</h1>'); 
+		res.end('<h1>Box2D Network Testing</h1>'); 
 	}
 );
 
@@ -92,6 +133,7 @@ socket.on('connection', function(client) {
 			switch(packet.m){
 				case 'jump':
 					jump();
+					updateWorld(client);
 					break;
 				case 'ping':
 					pong(client, packet.d);
@@ -100,7 +142,7 @@ socket.on('connection', function(client) {
 					break;
 			}
 		}
-		updateClients();
+		//updateWorld();
 	});
 
 	client.on('disconnect', function(){
@@ -108,26 +150,21 @@ socket.on('connection', function(client) {
 	}); 
 });
 
-/******* collision ********/
-
+// The approach here was to only send updates when collisions happen
+/*
 function createCollisionDetector() {
 	var listener = new b2ContactListener();
    
 	listener.BeginContact = function(contact){
-
+		
 	}
 	listener.PostSolve = function(contact, impulse){
     	
 	}
 	listener.EndContact = function(contact){
-    	
+    		updateWithBodies([contact.GetFixtureA().GetBody(), contact.GetFixtureB().GetBody()]);
 	}
     
 	return listener;
 }
-
-
-
-
-
-
+*/
