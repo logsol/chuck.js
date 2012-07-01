@@ -16,7 +16,8 @@ requirejs(["Chuck/Chuck"], function(Chuck) {
 
 
 // Setting up http server
-var fileServer = new nodeStatic.Server('./');
+var fileServer = new nodeStatic.Server('./', { cache: false });
+
 var server = http.createServer(
 	function(req, res){
 		req.addListener('end', function () {
