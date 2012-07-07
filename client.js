@@ -21,11 +21,11 @@ function onConnect () {
 	Chuck.init();
 }
 
-function onMessage (packet) {
-	packet = JSON.parse(packet);
+function onMessage (message) {
+	var commands = JSON.parse(message);
 		
-	if (packet && packet.m) {
-		processServerCommand(packet);
+	for(var command in commands) {
+		processControlCommand(type, command[type]);
 	}
 }
 
@@ -33,16 +33,16 @@ function onDisconnect () {
 	console.log('client disconnected');
 }
 
-function processServerCommand(packet){
-	switch(packet.m) {
-		case 'join':
+function processControlCommand(command, options){
+	switch(command) {
+		case 'joined':
 			break;
 
 		case 'nick':
 			break;
 
 		case 'gameCommand':
-			Chuck.processGameCommand(packet.d);
+			Chuck.processGameCommand(options);
 			break;
 
 		default:	
