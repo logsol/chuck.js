@@ -14,33 +14,46 @@ requirejs(["Chuck/Chuck"], function(Chuck) {
 	Chuck.init();
 });
 
+var clients = [];
 
 // Setting up http server
 var fileServer = new nodeStatic.Server('./', { cache: false });
 
+function handleFileError(res){
+	res.writeHead(404, {'Content-Type': 'text/html'}); 
+	res.end('<h1>404 not ... found</h1>'); 
+}
+
 var server = http.createServer(
 	function(req, res){
 		req.addListener('end', function () {
-			switch(req.url) {
-				case '/':
-					fileServer.serveFile('./index.html', 200, {}, req, res);
+			switch(true) {
+				case req.url == '/':
+					fileServer.serveFile('./static/html/index.html', 200, {}, req, res);
 					break;
 
-				case '/client.js':
+				case req.url == '/client.js':
 					fileServer.serveFile('./client.js', 200, {}, req, res);
 					break;
 
-				case '/require.js':
+				case req.url == '/require.js':
 					fileServer.serveFile('./node_modules/requirejs/require.js', 200, {}, req, res);
 					break;
 
+				case new RegExp(/^\/lib/).test(req.url):
+					fileServer.serve(req, res, function(){
+						handleFileError(res)
+					});
+					break;
+
+				case new RegExp(/^\/static/).test(req.url):
+					fileServer.serve(req, res, function(){
+						handleFileError(res)
+					});
+					break;
+
 				default:
-					if(req.url.match(/^\/lib/)) {
-						fileServer.serve(req, res);
-					} else {
-						res.writeHead(404, {'Content-Type': 'text/html'}); 
-						res.end('<h1>404 not ... found</h1>'); 
-					}
+					handleFileError(res);
 					break;
 			}
 		});
@@ -54,7 +67,8 @@ socket.configure('development', function(){
 	socket.set('log level', 0);
 });
 
-socket.on('connection', function(client) {/*
+socket.on('connection', function(client) {
+	console.log('client connected');
 	clients.push(client);
 	console.log("Total clients: " + clients.length);
 	
@@ -81,5 +95,5 @@ socket.on('connection', function(client) {/*
 
 	client.on('disconnect', function(){
 		console.log("disconnect");		
-	}); */
+	}); 
 });
