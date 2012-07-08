@@ -3,6 +3,8 @@ chuck.js
 
 Physical JavaScript Action Browser (possibly Multiplayer) Game - it will be awesome!
 
+Follow the development at http://chuck-game.tumblr.com/
+
 How to run:
 
 * git clone https://github.com/logsol/chuck.js.git
