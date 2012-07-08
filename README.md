@@ -6,6 +6,7 @@ Physical JavaScript Action Browser (possibly Multiplayer) Game - it will be awes
 How to run:
 
 * git clone https://github.com/logsol/chuck.js.git
+* cd chuck.js
 * npm install
 * node server.js
 
