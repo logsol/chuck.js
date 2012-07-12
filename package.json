@@ -1,11 +1,17 @@
 {
-  "author": "logsol <fartman@gmx.de>",
   "name": "chuck.js",
+  "author": "logsol <fartman@gmx.de>",
+  "contributors": ["Jeena Paradies <spam@jeenaparadies.net> (http://jeena.net)"],
   "description": "Multiplayer browser jump and run game",
   "version": "0.1.0",
   "homepage": "http://chuck.fuuuuu.de/",
   "repository": {
+    "type": "git",
     "url": "https://github.com/logsol/chuck.js"
+  },
+  "bugs": {
+    "url": "https://github.com/logsol/chuck.js/issues",
+    "email": "fartman@gmx.de"
   },
   "main": "",
   "dependencies": {
@@ -17,5 +23,7 @@
   "optionalDependencies": {},
   "engines": {
     "node": "*"
-  }
+  },
+  "config": { "port": "1234" },
+  "private": true
 }

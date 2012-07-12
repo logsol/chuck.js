@@ -16,7 +16,7 @@ var requirements = [
 requirejs(requirements, function(HttpServer, Socket, Coordinator) {
 	
 	var options = {
-		port: 1234, 
+		port: process.env.npm_package_config_port, 
 		rootDirectory: './',
 		caching: false
 	};
