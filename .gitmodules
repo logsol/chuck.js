@@ -1,3 +1,0 @@
-[submodule "lib/Vendor/Three"]
-	path = lib/Vendor/Three
-	url = git://github.com/mrdoob/three.js.git
