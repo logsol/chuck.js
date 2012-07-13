@@ -1,7 +1,7 @@
 chuck.js
 ========
 
-Physical JavaScript Action Browser (possibly Multiplayer) Game - it will be awesome!
+Physical JavaScript Action Browser Multiplayer Game - it will be awesome!
 
 Follow the development at http://chuck-game.tumblr.com/
 
