@@ -4,7 +4,7 @@ requirejs.config({
 
 var inspector = {};
 
-requirejs(["Client/Networker", "SocketIO"], function(Networker, SocketIO) {
+requirejs(["Client/Networker", "Vendor/SocketIO"], function(Networker, SocketIO) {
 	var socket = SocketIO.connect(location.href);
 	var networker = new Networker(socket);
 
