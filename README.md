@@ -10,7 +10,7 @@ How to run:
 * ```git clone https://github.com/logsol/chuck.js.git```
 * ```cd chuck.js```
 * ```npm install```
-* ```node server.js```
+* ```node server.js [port] [log level]```
 
 Open in browser http://localhost:1234
 
