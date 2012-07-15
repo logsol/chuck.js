@@ -1,0 +1,12 @@
+1. add Event Notification Center and Trigger Mechanism - http://addyosmani.com/resources/essentialjsdesignpatterns/book/#observerpatternjavascript
+2. use assemble for game command creation
+3. use NULL for command option default value
+4. Rename Input Control Unit
+5. Rename ServerProcessor.updateWorld && game.updateClientsWorld broadcastWorldUpdate
+6. updateWorld add update intervall (15) to Settings
+7. rename channel.sendCommandToAllUsers to broadcastCommand(..,..,except)
+8. Networker - remove spawning from onJoinSuccess. create initital World update flag -> spawn
+9. on client side - change naming user -> player
+10. Repair Collision Detection, split between local and server detection
+11. Rethink Useres, Clients, Players on server and client side
+23. Rethink Project Structure
