@@ -13,28 +13,24 @@ var requirements = [
 	"Server/Coordinator"
 ];	
 
+var port = process.argv[2] 
+	|| process.env.PORT 
+	|| process.env.npm_package_config_port;
+
 requirejs(requirements, function(HttpServer, Socket, Coordinator) {
 	
 	var options = {
-		port: process.env.npm_package_config_port, 
+		port: port, 
 		rootDirectory: './',
-		caching: false
+		caching: false,
+		logLevel: process.argv[3]
 	};
 
 	var coordinator = new Coordinator();
 	var httpServer = new HttpServer(options);
-	var socket = new Socket(httpServer.getServer(), coordinator);
+	var socket = new Socket(httpServer.getServer(), options, coordinator);
 
 	inspector.coordinator = coordinator;
 });
 
 exports = module.exports = inspector;
-
-/*
-belongs to channel.js
-var chuck;
-requirejs(["Chuck/Chuck"], function(Chuck) {
-	Chuck.init();
-	chuck = Chuck;
-});
-*/
