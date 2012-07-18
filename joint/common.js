@@ -2,6 +2,7 @@ var bodiesNum = 3;
 var world;
 var body;
 var item;
+var joint;
 
 
 var	b2Vec2 = Box2D.Common.Math.b2Vec2,
@@ -62,7 +63,8 @@ function setupWorld(gravity) {
 	jointDef.upperAngle     = 0.25 * Math.PI; // 45 degrees
 	jointDef.enableLimit    = true;
 
-	world.CreateJoint(jointDef);
+	joint = world.CreateJoint(jointDef);
+	console.log(joint);
 
 
 	/*
@@ -93,4 +95,10 @@ function makeBody(width, height, x, y, fixedRotation, mass){
 function jump(body) {
 	body.SetAwake(true);
 	body.ApplyImpulse(new b2Vec2(2, -3), body.GetPosition());
+}
+
+
+function drop() {
+	world.DestroyJoint(joint);
+	joint = null;
 }
