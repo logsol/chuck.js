@@ -52,4 +52,18 @@ function getElementPosition(element) {
 	}
 }
 
+
+function findBody(index) {
+	var body = null;
+
+	var nextBody = world.GetBodyList();
+	for (var i = 0; i < bodiesNum; i++) {
+		if (nextBody.GetUserData().bodyId == index) { body = nextBody; break; }
+		nextBody = nextBody.GetNext();
+	}
+
+	return body;
+}
+
+
 window.onload = init;

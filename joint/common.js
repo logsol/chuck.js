@@ -46,21 +46,32 @@ function setupWorld(gravity) {
 	world.CreateBody(bodyDef).CreateFixture(fixDef);
 
 	// create some objects
+	
+	
+	var b1 = makeBox(2,3);
+	var b2 = makeBox(3,3);
+
+
+	
+}
+
+function makeBox(x, y){
+
+	var fixDef = new b2FixtureDef;
+	fixDef.density = 1.0;
+	fixDef.friction = 0.99;
+	fixDef.restitution = .51;
+	fixDef.shape = new b2PolygonShape;
+	fixDef.shape.SetAsBox(0.5, 0.5);
+
+	var bodyDef = new b2BodyDef;
 	bodyDef.type = b2Body.b2_dynamicBody;
+	bodyDef.position.x = x;
+	bodyDef.position.y = y;
 
-	for(var i = 0; i < bodiesNum; i++) {
-		fixDef.shape = new b2PolygonShape;
-		fixDef.shape.SetAsBox(0.4, 0.4);
+	world.CreateBody(bodyDef).CreateFixture(fixDef);
 
-		bodyDef.position.x = ((i + 1) * 2) % 8;
-		bodyDef.position.y = 3;
-
-		bodyDef.userData = {
-			'bodyId': i + '' 
-		};
-
-		world.CreateBody(bodyDef).CreateFixture(fixDef);	
-	}
+	return bodyDef;
 }
 
 function jump() {
@@ -69,16 +80,3 @@ function jump() {
 	body.ApplyImpulse(new b2Vec2(8, -15), body.GetPosition());
 	body.SetAngularVelocity(1.5);
 }
-
-function findBody(index) {
-	var body = null;
-
-	var nextBody = world.GetBodyList();
-	for (var i = 0; i < bodiesNum; i++) {
-		if (nextBody.GetUserData().bodyId == index) { body = nextBody; break; }
-		nextBody = nextBody.GetNext();
-	}
-
-	return body;
-}
-
