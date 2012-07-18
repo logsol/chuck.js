@@ -102,3 +102,10 @@ function drop() {
 	world.DestroyJoint(joint);
 	joint = null;
 }
+
+function throwItem(){
+	drop();
+	body = item;
+	body.SetAwake(true);
+	body.ApplyImpulse(new b2Vec2(-2, -.7), body.GetPosition());
+}
