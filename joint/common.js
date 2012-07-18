@@ -1,5 +1,7 @@
 var bodiesNum = 3;
 var world;
+var body;
+var item;
 
 
 var	b2Vec2 = Box2D.Common.Math.b2Vec2,
@@ -14,7 +16,8 @@ var	b2Vec2 = Box2D.Common.Math.b2Vec2,
 	b2CircleShape = Box2D.Collision.Shapes.b2CircleShape,
 	b2DebugDraw = Box2D.Dynamics.b2DebugDraw,
 	b2MouseJointDef =  Box2D.Dynamics.Joints.b2MouseJointDef,
-	b2ContactListener =  Box2D.Dynamics.b2ContactListener;
+	b2ContactListener =  Box2D.Dynamics.b2ContactListener,
+	b2RevoluteJointDef = Box2D.Dynamics.Joints.b2RevoluteJointDef;
 
 function setupWorld(gravity) {
 	world = new b2World(new b2Vec2(0, gravity), true);
@@ -48,35 +51,46 @@ function setupWorld(gravity) {
 	// create some objects
 	
 	
-	var b1 = makeBox(2,3);
-	var b2 = makeBox(3,3);
-
+	dude = makeBody(.2, .6,   2, 12, true).GetBody();
+	item = makeBody(.3, .1, 1.7, 11, false).GetBody();
 
 	
+	var jointDef = new b2RevoluteJointDef();
+	jointDef.Initialize(dude, item, dude.GetWorldCenter());
+
+	jointDef.lowerAngle     = -0.5 * Math.PI; // -90 degrees
+	jointDef.upperAngle     = 0.25 * Math.PI; // 45 degrees
+	jointDef.enableLimit    = true;
+
+	world.CreateJoint(jointDef);
+
+
+	/*
+	jointDef.maxMotorTorque = 10.0;
+	jointDef.motorSpeed     = 0.0;
+	jointDef.enableMotor    = true;
+	*/
 }
 
-function makeBox(x, y){
+function makeBody(width, height, x, y, fixedRotation){
 
 	var fixDef = new b2FixtureDef;
 	fixDef.density = 1.0;
 	fixDef.friction = 0.99;
 	fixDef.restitution = .51;
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(0.5, 0.5);
+	fixDef.shape.SetAsBox(width, height);
 
 	var bodyDef = new b2BodyDef;
 	bodyDef.type = b2Body.b2_dynamicBody;
 	bodyDef.position.x = x;
 	bodyDef.position.y = y;
+	bodyDef.fixedRotation = fixedRotation;
 
-	world.CreateBody(bodyDef).CreateFixture(fixDef);
-
-	return bodyDef;
+	return world.CreateBody(bodyDef).CreateFixture(fixDef);
 }
 
-function jump() {
-	var body = findBody(1);
+function jump(body) {
 	body.SetAwake(true);
-	body.ApplyImpulse(new b2Vec2(8, -15), body.GetPosition());
-	body.SetAngularVelocity(1.5);
+	body.ApplyImpulse(new b2Vec2(1, -1), body.GetPosition());
 }
