@@ -51,8 +51,8 @@ function setupWorld(gravity) {
 	// create some objects
 	
 	
-	dude = makeBody(.2, .6,   2, 12, true).GetBody();
-	item = makeBody(.3, .1, 1.7, 11, false).GetBody();
+	dude = makeBody(.2, .6,   2, 12, true,    3).GetBody();
+	item = makeBody(.2, .2, 1.8, 11.5, false, 1).GetBody();
 
 	
 	var jointDef = new b2RevoluteJointDef();
@@ -72,10 +72,10 @@ function setupWorld(gravity) {
 	*/
 }
 
-function makeBody(width, height, x, y, fixedRotation){
+function makeBody(width, height, x, y, fixedRotation, mass){
 
 	var fixDef = new b2FixtureDef;
-	fixDef.density = 1.0;
+	fixDef.density = mass;
 	fixDef.friction = 0.99;
 	fixDef.restitution = .51;
 	fixDef.shape = new b2PolygonShape;
@@ -92,5 +92,5 @@ function makeBody(width, height, x, y, fixedRotation){
 
 function jump(body) {
 	body.SetAwake(true);
-	body.ApplyImpulse(new b2Vec2(1, -1), body.GetPosition());
+	body.ApplyImpulse(new b2Vec2(2, -3), body.GetPosition());
 }
