@@ -11,13 +11,12 @@ Factory.prototype.new = function () {
     
     var module = arguments[0];
 
-    return Object.create(
-        module.prototype, 
-        {
-            factory: {value: this},
-            notificationCenter: {value: this.notificationCenter}
-        }
-    );
+    var o = Object.create(module.prototype, {
+        factory: {value: this},
+        notificationCenter: {value: this.notificationCenter}
+    });
+
+    return new (o.call(arguments))();
 }
 
 function Player(name) {
@@ -36,7 +35,7 @@ var factory = new Factory();
 
 var player = factory.new(Player, "jeena");
 
-player.factory.new(Player, "logsol").notificationCenter.alert("foo");
+player.factory.new(Player, "logsol").name;
 
 
 /*
