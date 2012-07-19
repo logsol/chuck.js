@@ -35,15 +35,13 @@ NotificationCenter.prototype.alert = function(a) {
 var factory = new Factory();
 
 var player = factory.new(Player, "jeena");
-console.log(player.notificationCenter);
+
+player.factory.new(Player, "logsol").notificationCenter.alert("foo");
 
 
 /*
 
 Lala:chuck.js jeena$ node Factory.js 
-Created NotificationCenter
-Created Player
-Player.notificationCenter [object Object]
-Player.name jeena
+foo
 
 */
