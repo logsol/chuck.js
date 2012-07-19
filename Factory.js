@@ -11,12 +11,18 @@ Factory.prototype.new = function () {
     
     var module = arguments[0];
 
-    var o = Object.create(module.prototype, {
-        factory: {value: this},
-        notificationCenter: {value: this.notificationCenter}
+    module.prototype = new ExtensibleObject({
+        factory: this,
+        notificationCenter: this.notificationCenter
     });
 
-    return new (o.call(arguments))();
+    return new (module.bind.apply(module, arguments))();
+}
+
+function ExtensibleObject(properties) {
+    for(var propertyName in properties) {
+        this[propertyName] = properties[propertyName];
+    }
 }
 
 function Player(name) {
@@ -35,7 +41,7 @@ var factory = new Factory();
 
 var player = factory.new(Player, "jeena");
 
-player.factory.new(Player, "logsol").name;
+player.factory.new(Player, "logsol").notificationCenter.alert("foo");
 
 
 /*
