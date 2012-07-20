@@ -18,7 +18,7 @@ Factory.prototype.new = function (constructor /*, arg1, arg2, ... */) {
         }
     });
     
-    constructor.apply(instance, Array.prototype.slice.call(arguments, [1]));
+    constructor.apply(instance, Array.prototype.slice.call(arguments, 1));
     return instance; 
 }
 
@@ -45,6 +45,8 @@ player.factory.new(Player, "logsol").notificationCenter.log("test");
 /*
 
 Lala:chuck.js jeena$ node Factory.js 
-foo
+Player jeena created
+Player logsol created
+test
 
 */
