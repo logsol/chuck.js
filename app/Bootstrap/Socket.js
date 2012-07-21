@@ -1,4 +1,8 @@
-define(['socket.io'], function(io) {
+define([
+	'socket.io'
+], 
+
+function(io) {
 
 	function Socket(server, options, coordinator) {
         options.logLevel = typeof options.logLevel != 'undefined'
