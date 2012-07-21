@@ -3,10 +3,13 @@ define(function() {
     function Detector() {
     }
 
-    Detecotr.COLLISION_IDENTIFIER_TILE = "tile";
-
-    Detector.prototype.name = function(arguments){
-        return null;
+    Detector.IDENTIFIER = {
+        TILE: "tile",
+        PLAYER: "player",
+        PLAYER_HEAD: 'head',
+        PLAYER_CHEST: 'chest',
+        PLAYER_LEGS: 'legs',
+        PLAYER_FOOT_SENSOR: 'footsensor'
     }
 
     return Detector;
