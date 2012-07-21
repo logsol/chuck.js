@@ -1,4 +1,4 @@
-define(["Game/Config/Settings", "Lib/Vendor/Box2D", "Game/Core/Collision/Detector"], function(Settings, Box2D, Detector) {
+define(["Game/Config/Settings", "Lib/Vendor/Box2D", "Game/Core/Collision/Detector"], function(Settings, Box2D, CollisionDetector) {
     
     // Public
     function Level(path, engine) {
@@ -50,7 +50,7 @@ define(["Game/Config/Settings", "Lib/Vendor/Box2D", "Game/Core/Collision/Detecto
         fixtureDef.friction = Settings.TILE_FRICTION;
         fixtureDef.restitution = Settings.TILE_RESTITUTION;
         fixtureDef.isSensor = false;
-        fixtureDef.userData = Detector.COLLISION_IDENTIFIER_TILE;
+        fixtureDef.userData = CollisionDetector.IDENTIFIER.TILE;
 
         this.engine.createBody(bodyDef).CreateFixture(fixtureDef);
     }
