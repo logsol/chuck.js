@@ -1,7 +1,12 @@
-define(["Lib/Vendor/Box2D", "Game/Core/Collision/Detector"], function(Box2D, Parent) {
+define([
+	"Lib/Vendor/Box2D", 
+	"Game/Core/Collision/Detector"
+], 
+
+function(Box2D, Parent) {
 
 	function Detector(me) {
-		Parent.apply(this);
+		Parent.call(this);
 		this.me = me;
     
 	    this.listener = new Box2D.Dynamics.b2ContactListener();
