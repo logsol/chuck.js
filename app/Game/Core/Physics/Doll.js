@@ -1,4 +1,4 @@
-define(["Lib/Vendor/Box2D", "Game/Config/Settings", "Game/Core/Collision/Detector"], function(Box2D, Settings, Detector) {
+define(["Lib/Vendor/Box2D", "Game/Config/Settings", "Game/Core/Collision/Detector"], function(Box2D, Settings, CollisionDetector) {
 
     function Doll (physicsEngine, id){
         this.id = id;
@@ -18,7 +18,7 @@ define(["Lib/Vendor/Box2D", "Game/Config/Settings", "Game/Core/Collision/Detecto
         bodyDef.fixedRotation = true;
         bodyDef.linearDamping = Settings.PLAYER_LINEAR_DAMPING;
         bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
-        bodyDef.userData = Detector.IDENTIFIER.PLAYER + '-' + this.id;
+        bodyDef.userData = CollisionDetector.IDENTIFIER.PLAYER + '-' + this.id;
 
         this.body = world.CreateBody(bodyDef);
 
@@ -32,14 +32,14 @@ define(["Lib/Vendor/Box2D", "Game/Config/Settings", "Game/Core/Collision/Detecto
         headShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, -37 / Settings.RATIO));
         fixtureDef.shape = headShape;
         fixtureDef.isSensor = false;
-        fixtureDef.userData = Detector.IDENTIFIER.PLAYER_HEAD;
+        fixtureDef.userData = CollisionDetector.IDENTIFIER.PLAYER_HEAD;
         this.body.CreateFixture(fixtureDef);
 
         var bodyShape = new Box2D.Collision.Shapes.b2PolygonShape();
         bodyShape.SetAsOrientedBox(5 / Settings.RATIO, 16 / Settings.RATIO, new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, -21 / Settings.RATIO));
         fixtureDef.shape = bodyShape;
         fixtureDef.isSensor = false;
-        fixtureDef.userData = Detector.IDENTIFIER.PLAYER_CHEST;
+        fixtureDef.userData = CollisionDetector.IDENTIFIER.PLAYER_CHEST;
         this.body.CreateFixture(fixtureDef);
 
         var legsShape = new Box2D.Collision.Shapes.b2CircleShape();
@@ -48,7 +48,7 @@ define(["Lib/Vendor/Box2D", "Game/Config/Settings", "Game/Core/Collision/Detecto
         fixtureDef.shape = legsShape;
         fixtureDef.friction = Settings.PLAYER_FRICTION;
         fixtureDef.isSensor = false;
-        fixtureDef.userData = Detector.IDENTIFIER.PLAYER_LEGS;
+        fixtureDef.userData = CollisionDetector.IDENTIFIER.PLAYER_LEGS;
 
         this.legs = this.body.CreateFixture(fixtureDef);
 
@@ -57,7 +57,7 @@ define(["Lib/Vendor/Box2D", "Game/Config/Settings", "Game/Core/Collision/Detecto
         feetShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, 0 / Settings.RATIO));
         fixtureDef.shape = feetShape;
         fixtureDef.isSensor = true;
-        fixtureDef.userData = Detector.IDENTIFIER.FOOTSENSOR;
+        fixtureDef.userData = CollisionDetector.IDENTIFIER.FOOTSENSOR;
         this.body.CreateFixture(fixtureDef);
 
         this.body.SetActive(false);

@@ -1,4 +1,9 @@
-define(["Chuck/Physics/Doll", "Chuck/Settings"], function(Doll, Settings){
+define([
+	"Game/Core/Physics/Doll",
+	"Game/Config/Settings"
+],
+
+function(Doll, Settings) {
 
 	function Player (physicsEngine, id, repository) {
 	    this.physicsEngine = physicsEngine;

@@ -1,4 +1,7 @@
-define(function() {
+define([
+],
+
+function() {
 
 	var Parser = {};
 
