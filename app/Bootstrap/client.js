@@ -1,5 +1,5 @@
 requirejs.config({
-	baseUrl: 'lib'
+	baseUrl: 'app'
 });
 
 var inspector = {};

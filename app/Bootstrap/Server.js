@@ -1,7 +1,7 @@
 define([
-	"Server/HttpServer", 
-	"Server/Socket",
-	"Server/Coordinator"
+	"Bootstrap/HttpServer", 
+	"Bootstrap/Socket",
+	"Lobby/Coordinator"
 ],
 
 function(HttpServer, Socket, Coordinator) {
