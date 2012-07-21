@@ -1,4 +1,4 @@
-define(["Chuck/Settings", "Chuck/Constants", "Vendor/Box2D"], function(Settings, Constants, Box2D) {
+define(["Game/Config/Settings", "Lib/Vendor/Box2D", "Game/Core/Collision/Detector"], function(Settings, Box2D, Detector) {
     
     // Public
     function Level(path, engine) {
@@ -50,7 +50,7 @@ define(["Chuck/Settings", "Chuck/Constants", "Vendor/Box2D"], function(Settings,
         fixtureDef.friction = Settings.TILE_FRICTION;
         fixtureDef.restitution = Settings.TILE_RESTITUTION;
         fixtureDef.isSensor = false;
-        fixtureDef.userData = Constants.COLLISION_IDENTIFIER_TILE;
+        fixtureDef.userData = Detector.COLLISION_IDENTIFIER_TILE;
 
         this.engine.createBody(bodyDef).CreateFixture(fixtureDef);
     }
