@@ -1,4 +1,11 @@
-define(["Client/Dom", "Vendor/Three", "Chuck/Settings", "Chuck/View/CameraController"], function(Dom, Three, Settings, CameraController){
+var requires = [
+	"Game/Client/View/DomController", 
+	"Lib/Vendor/Three", 
+	"Game/Config/Settings", 
+	"Game/Client/View/CameraController"
+];
+
+define(requires, function(DomController, Three, Settings, CameraController){
 	
 	function ViewController(){
 
@@ -36,10 +43,10 @@ define(["Client/Dom", "Vendor/Three", "Chuck/Settings", "Chuck/View/CameraContro
 		this.renderer.setClearColorHex(0x333333, 1);
 	    this.renderer.setSize(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT);
 
-	    Dom.setCanvas(this.renderer.domElement);
+	    DomController.setCanvas(this.renderer.domElement);
 
 	    if(Settings.DEBUG_MODE){
-	    	Dom.createDebugCanvas();
+	    	DomController.createDebugCanvas();
 	    }
 
 	    this.scene = new Three.Scene();

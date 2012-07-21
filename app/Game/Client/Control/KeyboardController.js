@@ -1,8 +1,8 @@
-define(["Chuck/Control/InputController", "Chuck/Control/KeyboardInput"], function(InputController, KeyboardInput){
+define(["Game/Core/Control/InputController", "Game/Client/Control/KeyboardInput"], function(InputController, KeyboardInput){
 
-    function InputControlUnit(me, clientProcessor) {
+    function KeyboardController(me, gameController) {
 
-        this.clientProcessor = clientProcessor;
+        this.gameController = gameController;
         this.inputController = new InputController(me);
 
         this.keyboardInput = new KeyboardInput(this);
@@ -22,7 +22,7 @@ define(["Chuck/Control/InputController", "Chuck/Control/KeyboardInput"], functio
         this.init(keys);
     }
 
-    InputControlUnit.prototype.init = function(keys)  {
+    KeyboardController.prototype.init = function(keys)  {
 
         this.keyboardInput.registerKey(keys.a, 'moveLeft', 'stop', 'moveLeft');
         this.keyboardInput.registerKey(keys.left, 'moveLeft', 'stop', 'moveLeft');
@@ -40,55 +40,55 @@ define(["Chuck/Control/InputController", "Chuck/Control/KeyboardInput"], functio
         this.keyboardInput.registerKey(keys.down, 'activateShift', 'activateShift', 'deactivateShift');
     }
 
-    InputControlUnit.prototype.moveLeft = function() {
+    KeyboardController.prototype.moveLeft = function() {
         this.inputController.moveLeft();
-        this.clientProcessor.sendGameCommand('moveLeft');
+        this.gameController.sendGameCommand('moveLeft');
     }
 
-    InputControlUnit.prototype.moveRight = function() {
+    KeyboardController.prototype.moveRight = function() {
         this.inputController.moveRight();
-        this.clientProcessor.sendGameCommand('moveRight');
+        this.gameController.sendGameCommand('moveRight');
     }
 
-    InputControlUnit.prototype.stop = function() {
+    KeyboardController.prototype.stop = function() {
         this.inputController.stop();
-        this.clientProcessor.sendGameCommand('stop');
+        this.gameController.sendGameCommand('stop');
     }
 
-    InputControlUnit.prototype.jump = function() {
+    KeyboardController.prototype.jump = function() {
         this.inputController.jump();
-        this.clientProcessor.sendGameCommand('jump');
+        this.gameController.sendGameCommand('jump');
     }
 
-    InputControlUnit.prototype.jumped = function() {
+    KeyboardController.prototype.jumped = function() {
         this.inputController.jumped();
     }
 
-    InputControlUnit.prototype.jumping = function() {
+    KeyboardController.prototype.jumping = function() {
         this.inputController.jumping();
     }
 
-    InputControlUnit.prototype.duck = function() {
+    KeyboardController.prototype.duck = function() {
         this.inputController.duck();
-        this.clientProcessor.sendGameCommand('duck');
+        this.gameController.sendGameCommand('duck');
     }
 
-    InputControlUnit.prototype.standUp = function() {
+    KeyboardController.prototype.standUp = function() {
         this.inputController.standUp();
     }
 
-    InputControlUnit.prototype.activateShift = function() {
+    KeyboardController.prototype.activateShift = function() {
         this.inputController.activateShift();
-        this.clientProcessor.sendGameCommand('activateShift');
+        this.gameController.sendGameCommand('activateShift');
     }
 
-    InputControlUnit.prototype.deactivateShift = function() {
+    KeyboardController.prototype.deactivateShift = function() {
         this.inputController.deactivateShift();
     }
 
-    InputControlUnit.prototype.update = function() {
+    KeyboardController.prototype.update = function() {
         this.keyboardInput.update();
     }
 
-    return InputControlUnit;
+    return KeyboardController;
 });

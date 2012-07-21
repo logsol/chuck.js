@@ -1,30 +1,29 @@
 var requires = [
-	"Chuck/View/ViewController", 
-	"Chuck/Physics/Engine", 
-	"Chuck/Player", 
-	"Chuck/Control/InputControlUnit", 
-	"Chuck/Settings", 
-	"Vendor/Box2D",
-	"Chuck/Loader/Level",
-	"RequestAnimationFrame"
+	"Game/Client/View/ViewController", 
+	"Game/Core/Physics/Engine", 
+	"Game/Core/Player", 
+	"Game/Client/Control/KeyboardController", 
+	"Game/Config/Settings", 
+	"Game/Core/Loader/Level",
+	"Lib/Vendor/Box2D",
+	"Lib/Utilities/RequestAnimFrame"
 ];
 
-define(requires,
-	function(ViewController, PhysicsEngine, Player, InputControlUnit, Settings, Box2D, Level, requestAnimFrame) {
+define(requires, function(ViewController, PhysicsEngine, Player, KeyboardController, Settings, Level, Box2D, requestAnimFrame) {
 
-	function ClientProcessor (clientGame) {
+	function GameController (clientGame) {
 		this.clientGame = clientGame;
 		this.init();
 	};
 
-	ClientProcessor.prototype.init = function() {
+	GameController.prototype.init = function() {
 		this.viewController = new ViewController();
 	    this.physicsEngine = new PhysicsEngine();
 
 	    this.update();
 	}
 
-	ClientProcessor.prototype.loadLevel = function(path) {
+	GameController.prototype.loadLevel = function(path) {
 		if (this.level) {
 			this.level.unload();
 		}
@@ -33,15 +32,15 @@ define(requires,
 		this.level.loadLevelInToEngine();
 	}
 
-	ClientProcessor.prototype.getPhysicsEngine = function() {
+	GameController.prototype.getPhysicsEngine = function() {
 	    return this.physicsEngine;
 	}
 
-	ClientProcessor.prototype.getMe = function() {
+	GameController.prototype.getMe = function() {
 	    return this.me;
 	}
 
-	ClientProcessor.prototype.update  = function() {
+	GameController.prototype.update  = function() {
 
 		requestAnimFrame(this.update.bind(this));
 
@@ -49,32 +48,32 @@ define(requires,
     	this.viewController.update();
 
     	if(this.me) {
-    		this.inputControlUnit.update();	
+    		this.KeyboardController.update();	
     		this.me.update();
     	}
 	}
 
-	ClientProcessor.prototype.destruct = function() {
+	GameController.prototype.destruct = function() {
 		
 	}
 
-	ClientProcessor.prototype.spawnNewPlayerWithId = function(id) {
+	GameController.prototype.spawnNewPlayerWithId = function(id) {
 		var player = new Player(this.physicsEngine, id, null);
 		player.spawn(100, 0);
 		this.physicsEngine.setCollisionDetector(player);
 		return player;
 	}
 
-	ClientProcessor.prototype.spawnMeWithId = function(id) {
+	GameController.prototype.spawnMeWithId = function(id) {
 		this.me = this.spawnNewPlayerWithId(id);
-		this.inputControlUnit = new InputControlUnit(this.me, this);
+		this.KeyboardController = new KeyboardController(this.me, this);
 	}
 
-	ClientProcessor.prototype.sendGameCommand = function(command, options) {
+	GameController.prototype.sendGameCommand = function(command, options) {
 		this.clientGame.sendGameCommand(command, options);
 	}
 
-	ClientProcessor.prototype.processGameCommand = function(command, options) {
+	GameController.prototype.processGameCommand = function(command, options) {
 		
 		if (command == "worldUpdate") {
 
@@ -98,5 +97,5 @@ define(requires,
 
 	}
 
-	return ClientProcessor;
+	return GameController;
 });
