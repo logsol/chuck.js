@@ -25,6 +25,5 @@
     "node": "*"
   },
   "config": { "port": "1234" },
-  "private": true,
-  "scripts": {"start": "node app.js"}
+  "private": true
 }
