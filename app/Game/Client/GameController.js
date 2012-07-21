@@ -1,40 +1,24 @@
 define([
+	"Game/Core/GameController",
+	"Game/Server/Physics/Engine", 
 	"Game/Client/View/ViewController", 
-	"Game/Core/Physics/Engine", 
-	"Game/Core/Player", 
 	"Game/Client/Control/KeyboardController", 
-	"Game/Config/Settings", 
-	"Game/Core/Loader/Level",
-	"Lib/Vendor/Box2D",
 	"Lib/Utilities/RequestAnimFrame"
 ],
 
-function(ViewController, PhysicsEngine, Player, KeyboardController, Settings, Level, Box2D, requestAnimFrame) {
+function(Parent, PhysicsEngine, ViewController, KeyboardController, requestAnimFrame) {
 
-	function GameController (clientGame) {
-		this.clientGame = clientGame;
-		this.init();
-	};
+	function GameController () {
+		this.me;
+		this.keyboardController;
 
-	GameController.prototype.init = function() {
+		Parent.apply(this, new PhysicsEngine());
 		this.viewController = new ViewController();
-	    this.physicsEngine = new PhysicsEngine();
-
-	    this.update();
+		this.update();
 	}
 
-	GameController.prototype.loadLevel = function(path) {
-		if (this.level) {
-			this.level.unload();
-		}
+	GameController.prototype = Object.create(Parent);
 
-		this.level = new Level(path, this.physicsEngine);
-		this.level.loadLevelInToEngine();
-	}
-
-	GameController.prototype.getPhysicsEngine = function() {
-	    return this.physicsEngine;
-	}
 
 	GameController.prototype.getMe = function() {
 	    return this.me;
@@ -48,29 +32,18 @@ function(ViewController, PhysicsEngine, Player, KeyboardController, Settings, Le
     	this.viewController.update();
 
     	if(this.me) {
-    		this.KeyboardController.update();	
+    		this.keyboardController.update();	
     		this.me.update();
     	}
 	}
 
-	GameController.prototype.destruct = function() {
-		
+	GameController.prototype.destroy = function() {
+		Parent.prototype.destroy.call(this);
 	}
 
-	GameController.prototype.spawnNewPlayerWithId = function(id) {
-		var player = new Player(this.physicsEngine, id, null);
-		player.spawn(100, 0);
-		this.physicsEngine.setCollisionDetector(player);
-		return player;
-	}
-
-	GameController.prototype.spawnMeWithId = function(id) {
-		this.me = this.spawnNewPlayerWithId(id);
-		this.KeyboardController = new KeyboardController(this.me, this);
-	}
-
-	GameController.prototype.sendGameCommand = function(command, options) {
-		this.clientGame.sendGameCommand(command, options);
+	GameController.prototype.meJoined = function(user) {
+		this.me = this.userJoined(user);
+		this.keyboardController = new KeyboardController(this.me, this);
 	}
 
 	GameController.prototype.processGameCommand = function(command, options) {
