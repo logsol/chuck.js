@@ -1,4 +1,4 @@
-define(["Protocol/Helper"], function(ProtocolHelper) {
+define(["Game/Core/Protocol/Helper"], function(ProtocolHelper) {
 
 	function User(socketLink, coordinator) {
 

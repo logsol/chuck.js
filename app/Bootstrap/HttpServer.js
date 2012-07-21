@@ -1,4 +1,9 @@
-define(['http', 'node-static'], function(http, nodeStatic) {
+define([
+	'http', 
+	'node-static'
+], 
+
+function(http, nodeStatic) {
 
 	function HttpServer(options) {
 		options.port = options.port || 1234;

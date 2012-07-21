@@ -1,4 +1,9 @@
-define(["Server/User", "Server/Channel", "Server/Factory"], function(User, Channel, Factory) {
+define([
+	"Game/Server/User", 
+	"Game/Server/Channel"
+], 
+
+function(User, Channel) {
 
 	function Coordinator() {
 		this.channels = {};
@@ -30,8 +35,7 @@ define(["Server/User", "Server/Channel", "Server/Factory"], function(User, Chann
 
 		var channel = this.channels[channelName];
 		if(!channel) {
-			var factory = new Factory();
-			channel = factory.new(Channel, channelName);
+			channel = new Channel(channelName);
 			this.channels[channelName] = channel;
 		}
 
