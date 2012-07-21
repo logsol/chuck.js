@@ -1,11 +1,11 @@
-define(['Chuck/Settings'], function(Settings) {
+define(['Game/Config/Settings'], function(Settings) {
 
-	var Dom = {
+	var DomController = {
 		canvas: null,
 		debugCanvas: null
 	};
 
-	Dom.getCanvasContainer = function(){
+	DomController.getCanvasContainer = function(){
 		var container = document.getElementById(Settings.CANVAS_DOM_ID);
 
 		if(container) {
@@ -15,39 +15,39 @@ define(['Chuck/Settings'], function(Settings) {
 		}
 	}
 
-	Dom.getCanvas = function(){
-		return Dom.canvas;
+	DomController.getCanvas = function(){
+		return DomController.canvas;
 	}
 
-	Dom.setCanvas = function(canvas){
+	DomController.setCanvas = function(canvas){
 		
-		var container = Dom.getCanvasContainer();
-		if(Dom.canvas){
-			container.removeChild(Dom.canvas);
+		var container = DomController.getCanvasContainer();
+		if(DomController.canvas){
+			container.removeChild(DomController.canvas);
 		}
 
-		Dom.canvas = canvas;
+		DomController.canvas = canvas;
 		container.appendChild(canvas);
 	}
 
-	Dom.getDebugCanvas = function(){
-		return Dom.debugCanvas;
+	DomController.getDebugCanvas = function(){
+		return DomController.debugCanvas;
 	}
 
-	Dom.createDebugCanvas = function(){
+	DomController.createDebugCanvas = function(){
 		
-		var container = Dom.getCanvasContainer();
-		if(Dom.debugCanvas){
-			container.removeChild(Dom.debugCanvas);
+		var container = DomController.getCanvasContainer();
+		if(DomController.debugCanvas){
+			container.removeChild(DomController.debugCanvas);
 		}
 
 		var canvas = document.createElement('canvas');
 		canvas.width = Settings.STAGE_WIDTH;
 		canvas.height = Settings.STAGE_HEIGHT;
-		Dom.debugCanvas = canvas;
+		DomController.debugCanvas = canvas;
 		container.appendChild(canvas);
 	}
 
-	return Dom;
+	return DomController;
 	
 });
