@@ -1,36 +1,16 @@
-var requirejs = require('requirejs');
-
-var inspector = {};
-
-requirejs.config({
-	nodeRequire: require,
-	baseUrl: 'lib'
-});
-
-var requirements = [
+define([
 	"Server/HttpServer", 
 	"Server/Socket",
 	"Server/Coordinator"
-];	
+],
 
-var port = process.argv[2] 
-	|| process.env.PORT 
-	|| process.env.npm_package_config_port;
+function(HttpServer, Socket, Coordinator) {
 
-requirejs(requirements, function(HttpServer, Socket, Coordinator) {
-	
-	var options = {
-		port: port, 
-		rootDirectory: './',
-		caching: false,
-		logLevel: process.argv[3]
-	};
+	function Server(options) {
+		this.coordinator = new Coordinator();
+		this.httpServer = new HttpServer(options);
+		this.socket = new Socket(httpServer.getServer(), options, coordinator);
+	}
 
-	var coordinator = new Coordinator();
-	var httpServer = new HttpServer(options);
-	var socket = new Socket(httpServer.getServer(), options, coordinator);
-
-	inspector.coordinator = coordinator;
+	return Server;
 });
-
-exports = module.exports = inspector;
