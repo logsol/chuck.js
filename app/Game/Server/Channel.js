@@ -1,9 +1,9 @@
-define(["Chuck/ServerGame"], function(ServerGame) {
+define(["Game/Server/GameController"], function(GameController) {
 
 	function Channel(name) {
 		this.name = name;
 		this.users = {};
-		this.serverGame = this.factory.new(ServerGame, this);
+		this.serverGame = new GameController();
 		console.log("server game " + this.serverGame);
 		this.serverGame.loadLevel("default.json");
 
