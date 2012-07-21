@@ -32,12 +32,12 @@ function(Engine, Level, ) {
         for(var player in this.players) {
             this.players[player].destroy();
         }
-        delete this.players;
     }
 
     GameController.prototype.userJoined = function(user) {
-        var player = new Player(this.physicsEngine, id);
+        var player = new Player(id, this.physicsEngine);
         this.players[user.id] = player;
+        return player;
     }
 
     GameController.prototype.userLeft = function(user) {

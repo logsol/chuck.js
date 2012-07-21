@@ -5,7 +5,7 @@ define([
 
 function(Doll, Settings) {
 
-	function Player (physicsEngine, id, repository) {
+	function Player (id, physicsEngine, repository) {
 	    this.physicsEngine = physicsEngine;
 	    this.id = id;
 	    this.repository = repository;
