@@ -1,9 +1,9 @@
-define(["Chuck/Control/Key"], function(Key){
+define(["Game/Client/Control/Key"], function(Key){
 
-    function KeyboardInput (inputControlUnit) {
+    function KeyboardInput (keyboardController) {
 
         this._registry = {};
-        this._inputControlUnit = inputControlUnit;
+        this._keyboardController = keyboardController;
         
         this.init();
     }
@@ -61,12 +61,12 @@ define(["Chuck/Control/Key"], function(Key){
             }
 
             if (callback) {
-                self._inputControlUnit[callback]();
+                self._keyboardController[callback]();
             } else {
                 if (key.getActive()) {
                     callback = key.getKeyFrameFunction();
                     if (callback) {
-                        self._inputControlUnit[callback]();
+                        self._keyboardController[callback]();
                     }
                 }
             }
