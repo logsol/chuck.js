@@ -1,4 +1,4 @@
-var requires = [
+define([
 	"Game/Client/View/ViewController", 
 	"Game/Core/Physics/Engine", 
 	"Game/Core/Player", 
@@ -7,9 +7,9 @@ var requires = [
 	"Game/Core/Loader/Level",
 	"Lib/Vendor/Box2D",
 	"Lib/Utilities/RequestAnimFrame"
-];
+],
 
-define(requires, function(ViewController, PhysicsEngine, Player, KeyboardController, Settings, Level, Box2D, requestAnimFrame) {
+function(ViewController, PhysicsEngine, Player, KeyboardController, Settings, Level, Box2D, requestAnimFrame) {
 
 	function GameController (clientGame) {
 		this.clientGame = clientGame;

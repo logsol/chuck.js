@@ -6,9 +6,9 @@ define([
 	"Chuck/Loader/Level",
 	"Chuck/Control/InputController",
 	"RequestAnimationFrame"
-], 
+],
 
-function(PhysicsEngine, Settings, Player, Box2D, Level, InputController, requestAnimFrame){
+function(PhysicsEngine, Settings, Player, Box2D, Level, InputController, requestAnimFrame) {
 
 	function GameController (channel) {
 		this.channel = channel;
