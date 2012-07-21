@@ -1,4 +1,4 @@
-var requires = [
+define([
 	"Chuck/Physics/Engine", 
 	"Chuck/Settings", 
 	"Chuck/Player", 
@@ -6,9 +6,9 @@ var requires = [
 	"Chuck/Loader/Level",
 	"Chuck/Control/InputController",
 	"RequestAnimationFrame"
-];
+],
 
-define(requires, function(PhysicsEngine, Settings, Player, Box2D, Level, InputController, requestAnimFrame){
+function(PhysicsEngine, Settings, Player, Box2D, Level, InputController, requestAnimFrame) {
 
 	function ServerProcessor (serverGame) {
 		this.serverGame = serverGame;

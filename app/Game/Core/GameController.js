@@ -1,0 +1,50 @@
+define([
+    "Game/Core/Physics/Engine"
+    "Game/Core/Loader/Level"
+],
+
+function(Engine, Level, ) {
+
+    function GameController(physicsEngine) {
+        this.players = {};
+
+        if (! physicsEngine instanceof Engine) {
+            throw physicsEngine + " is not of type Engine";
+        }
+
+        this.physicsEngine = physicsEngine;
+    }
+
+    GameController.prototype.getPhysicsEngine = function() {
+        return this.physicsEngine;
+    }
+
+    GameController.prototype.loadLevel = function(path) {
+        if (this.level) {
+            this.level.unload();
+        }
+
+        this.level = new Level(path, this.physicsEngine);
+        this.level.loadLevelInToEngine();
+    }
+
+    GameController.prototype.destroy = function() {
+        for(var player in this.players) {
+            this.players[player].destroy();
+        }
+        delete this.players;
+    }
+
+    GameController.prototype.userJoined = function(user) {
+        var player = new Player(this.physicsEngine, id);
+        this.players[user.id] = player;
+    }
+
+    GameController.prototype.userLeft = function(user) {
+        var player = this.players[user.id];
+        player.destroy();
+        delete this.players[user.id];
+    }
+
+    return GameController;
+});
