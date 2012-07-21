@@ -1,6 +1,16 @@
-define(function() {
+define([
+    "Lib/Vendor/Box2D", 
+    "Game/Core/Collision/Detector"
+],
+
+function(Box2D, Parent) {
 
     function Detector() {
+        this.listener = new Box2D.Dynamics.b2ContactListener();
+        this.listener.chuckDetector = this;
+        this.listener.BeginContact = this.BeginContact;
+        this.listener.PostSolve = this.PostSolve;
+        this.listener.EndContact = this.EndContact;
     }
 
     Detector.IDENTIFIER = {
@@ -12,6 +22,27 @@ define(function() {
         PLAYER_FOOT_SENSOR: 'footsensor'
     }
 
-    return Detector;
+    Detector.prototype.getListener = function() {
+        return this.listener;
+    }
 
+    Detector.prototype.handleStand = function(point, isColliding) {
+        throw "Overwrite this function";
+    }
+
+    /** Extension **/
+
+    Detector.prototype.BeginContact = function(point) {
+        this.chuckDetector.handleStand(point, true);
+    }
+
+    Detector.prototype.PostSolve = function(point, impulse) {
+        this.chuckDetector.handleStand(point, true);
+    }
+
+    Detector.prototype.EndContact = function(point) {
+        this.chuckDetector.handleStand(point, false);
+    }
+
+    return Detector;
 });
