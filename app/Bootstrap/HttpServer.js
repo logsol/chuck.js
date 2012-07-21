@@ -36,7 +36,7 @@ function(http, nodeStatic) {
 							fileServer.serveFile('./node_modules/requirejs/require.js', 200, {}, req, res);
 							break;
 
-						case new RegExp(/^\/lib/).test(req.url):
+						case new RegExp(/^\/app/).test(req.url):
 							fileServer.serve(req, res, function(){
 								self.handleFileError(res)
 							});
