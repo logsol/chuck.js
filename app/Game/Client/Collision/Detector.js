@@ -1,6 +1,7 @@
-define(["Vendor/Box2D", "Chuck/Constants"], function(Box2D, Constants) {
+define(["Lib/Vendor/Box2D", "Game/Core/Collision/Detector"], function(Box2D, Parent) {
 
 	function Detector(me) {
+		Parent.apply(this);
 		this.me = me;
     
 	    this.listener = new Box2D.Dynamics.b2ContactListener();
@@ -10,13 +11,15 @@ define(["Vendor/Box2D", "Chuck/Constants"], function(Box2D, Constants) {
 	    this.listener.EndContact = this.EndContact;
 	}
 
+	Detector.prototype = Object.create(Parent);
+
 	Detector.prototype.getListener = function() {
 	    return this.listener;
 	}
 
 	Detector.prototype.handleStand = function(point, isColliding) {
-	    if (point.GetFixtureA().GetUserData() == Constants.COLLISION_IDENTIFIER_FOOTSENSOR
-	     || point.GetFixtureB().GetUserData() == Constants.COLLISION_IDENTIFIER_FOOTSENSOR)  {
+	    if (point.GetFixtureA().GetUserData() == Detector.IDENTIFIER.PLAYER_FOOT_SENSOR
+	     || point.GetFixtureB().GetUserData() == Detector.IDENTIFIER.PLAYER_FOOT_SENSOR)  {
 
 	        this.me.onFootSensorDetection(isColliding);
 	    }
