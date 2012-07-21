@@ -2,7 +2,7 @@ define(["Game/Core/Protocol/Helper", "Game/Client/GameController"], function(Pro
 
 	function Networker(socketLink) {
 		this.socketLink = socketLink;
-		this.GameController = null;
+		this.gameController = null;
 
 		this.init();
 	}
@@ -36,8 +36,8 @@ define(["Game/Core/Protocol/Helper", "Game/Client/GameController"], function(Pro
 	}
 
 	Networker.prototype.onDisconnect = function() {
-		this.GameController.destruct();
-		this.GameController = null;
+		this.gameController.destruct();
+		this.gameController = null;
 	}
 
 	Networker.prototype.join = function(channelName){
@@ -50,19 +50,19 @@ define(["Game/Core/Protocol/Helper", "Game/Client/GameController"], function(Pro
 	}
 
 	Networker.prototype.onJoinSuccess = function(options) {
-		this.GameController = new GameController(this, options.id);
-		this.GameController.loadLevel("default.json")
+		this.gameController = new GameController(this, options.id);
+		this.gameController.loadLevel("default.json")
 		console.log("Joined " + options.channelName);
 
 		if (options.userIds && options.userIds.length > 0) {
 			for(var i = 0; i < options.userIds.length; i++) {
-				this.GameController.userJoined(options.userIds[i])
+				this.gameController.userJoined(options.userIds[i])
 			}
 		}
 	}
 
 	Networker.prototype.onUserJoined = function(userId) {
-		this.GameController.userJoined(userId);
+		this.gameController.userJoined(userId);
 		console.log("User " + userId + " joined");
 	}
 
@@ -71,7 +71,7 @@ define(["Game/Core/Protocol/Helper", "Game/Client/GameController"], function(Pro
 	}
 
 	Networker.prototype.onUserLeft = function(userId) {
-		this.GameController.userLeft(userId);
+		this.gameController.userLeft(userId);
 	}
 
 	Networker.prototype.processControlCommand = function(command, options) {
@@ -82,7 +82,7 @@ define(["Game/Core/Protocol/Helper", "Game/Client/GameController"], function(Pro
 
 			case 'gameCommand':
 				for(var gameCommand in options) {
-					this.GameController.processGameCommand(gameCommand, options[gameCommand]);
+					this.gameController.processGameCommand(gameCommand, options[gameCommand]);
 				}
 				break;
 
