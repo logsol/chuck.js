@@ -1,4 +1,8 @@
-define(["Protocol/Parser"], function(Parser) {
+define([
+	"Game/Core/Protocol/Parser"
+],
+
+function(Parser) {
 
 	var Helper = {}
 
