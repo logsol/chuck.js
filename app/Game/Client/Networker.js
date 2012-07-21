@@ -1,8 +1,8 @@
-define(["Protocol/Helper", "Chuck/ClientGame"], function(ProtocolHelper, ClientGame) {
+define(["Game/Core/Protocol/Helper", "Game/Client/GameController"], function(ProtocolHelper, GameController) {
 
 	function Networker(socketLink) {
 		this.socketLink = socketLink;
-		this.clientGame = null;
+		this.GameController = null;
 
 		this.init();
 	}
@@ -36,8 +36,8 @@ define(["Protocol/Helper", "Chuck/ClientGame"], function(ProtocolHelper, ClientG
 	}
 
 	Networker.prototype.onDisconnect = function() {
-		this.clientGame.destruct();
-		this.clientGame = null;
+		this.GameController.destruct();
+		this.GameController = null;
 	}
 
 	Networker.prototype.join = function(channelName){
@@ -50,19 +50,19 @@ define(["Protocol/Helper", "Chuck/ClientGame"], function(ProtocolHelper, ClientG
 	}
 
 	Networker.prototype.onJoinSuccess = function(options) {
-		this.clientGame = new ClientGame(this, options.id);
-		this.clientGame.loadLevel("default.json")
+		this.GameController = new GameController(this, options.id);
+		this.GameController.loadLevel("default.json")
 		console.log("Joined " + options.channelName);
 
 		if (options.userIds && options.userIds.length > 0) {
 			for(var i = 0; i < options.userIds.length; i++) {
-				this.clientGame.userJoined(options.userIds[i])
+				this.GameController.userJoined(options.userIds[i])
 			}
 		}
 	}
 
 	Networker.prototype.onUserJoined = function(userId) {
-		this.clientGame.userJoined(userId);
+		this.GameController.userJoined(userId);
 		console.log("User " + userId + " joined");
 	}
 
@@ -71,7 +71,7 @@ define(["Protocol/Helper", "Chuck/ClientGame"], function(ProtocolHelper, ClientG
 	}
 
 	Networker.prototype.onUserLeft = function(userId) {
-		this.clientGame.userLeft(userId);
+		this.GameController.userLeft(userId);
 	}
 
 	Networker.prototype.processControlCommand = function(command, options) {
@@ -82,7 +82,7 @@ define(["Protocol/Helper", "Chuck/ClientGame"], function(ProtocolHelper, ClientG
 
 			case 'gameCommand':
 				for(var gameCommand in options) {
-					this.clientGame.processGameCommand(gameCommand, options[gameCommand]);
+					this.GameController.processGameCommand(gameCommand, options[gameCommand]);
 				}
 				break;
 
