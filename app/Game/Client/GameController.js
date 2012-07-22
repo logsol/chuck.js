@@ -1,6 +1,6 @@
 define([
 	"Game/Core/GameController",
-	"Game/Server/Physics/Engine", 
+	"Game/Core/Physics/Engine", 
 	"Game/Client/View/ViewController", 
 	"Game/Client/Control/KeyboardController", 
 	"Lib/Utilities/RequestAnimFrame"
