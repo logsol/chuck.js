@@ -1,4 +1,8 @@
-define(['Chuck/Settings'], function(Settings) {
+define([
+    'Game/Config/Settings'
+], 
+
+function(Settings) {
 
 	var requestAnimFrame =  (function(){
 
