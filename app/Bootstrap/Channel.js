@@ -1,8 +1,9 @@
 define([
-	"Game/Server/Channel"
+	"Game/Server/Channel",
+	"Game/Server/CoordinatorLink"
 ],
 
-function(Channel) {
+function(Channel, CoordinatorLink) {
 
 	function ChannelBootstrap(process) {
 

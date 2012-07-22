@@ -40,10 +40,15 @@ function(User, Channel, nodeFork) {
 		if(!channel) {
 
 			try {
-				console.log('try');
-				channel = fork('app/Bootstrap/Channel.js');
+				channel = fork('channel.js');
 				channel.send('CREATE');
-				channel.send('{setName:"' + channelName + '"}');
+
+				channel.send({
+					channel: {
+						setName: channelName
+					}
+				});
+				
 			} catch (err) {
 				throw 'Failed to fork channel ' + channelName + '! (' + err + ')';
 			}

@@ -8,14 +8,13 @@ function(GameController, NotificationCenter) {
 	function Channel(coordinatorLink) {
 
 		this.coordinatorLink = coordinatorLink;
-
-		console.log('A CHANNEL WAS CREATED');
-		/*
+		this.coordinatorLink.receive = this.onMessage;
+		
 		this.users = {};
+
 		this.gameController = new GameController();
 		this.gameController.loadLevel("default.json");
-*/
-/*
+		/*
 		var self = this;
 		NotificationCenter.on("processGameCommandFromUser", function(topic, args) {
 			self.processGameCommandFromUser.apply(self, args);
@@ -26,6 +25,23 @@ function(GameController, NotificationCenter) {
 	Channel.validateName = function(name){
 		return true;
 	}
+
+	Channel.prototype.onMessage = function(message) {
+		for(var recipient in message) {
+			switch(recipient) {
+
+				case 'user':
+					this.users[message.id].onMessage(message.user);
+					break;
+				case 'channel':
+					this.onMessage(message.channel);
+					break;
+				default: 
+					throw 'unknown recipient';
+					break;
+			}
+		}
+	};
 /*
 	Channel.prototype.addUser = function(user){
 		var userIds = Object.keys(this.users);

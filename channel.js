@@ -1,9 +1,4 @@
-console.log(requirejs);
-
-
-var ree = require('requirejs');
-
-console.log(ree);
+var requirejs = require('requirejs');
 
 requirejs.config({
 	baseUrl: 'app'
