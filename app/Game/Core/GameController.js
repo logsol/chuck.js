@@ -6,6 +6,7 @@ define([
 function(Engine, Level) {
 
     function GameController(physicsEngine) {
+        console.log('constructor called');
         this.players = {};
 
         if (! physicsEngine instanceof Engine) {

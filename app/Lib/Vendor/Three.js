@@ -1,3 +1,3 @@
-define(["Vendor/Three/Three"], function() {
+define(["Lib/Vendor/Three/Three"], function() {
     return THREE;
 })

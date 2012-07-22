@@ -10,13 +10,16 @@ define([
 function(Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, NotificationCenter) {
 
 	function GameController () {
-		Parent.apply(this, new PhysicsEngine());
+		Parent.call(this, new PhysicsEngine());
 
 		this.inputControllers = {};
 
 		this.update();
 	    this.updateWorld();
 	}
+
+	GameController.prototype = Object.create(Parent.prototype);
+	console.log(GameController.loadLevel);
 
 	GameController.prototype.update  = function() {
 

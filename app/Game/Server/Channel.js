@@ -8,9 +8,8 @@ function(GameController, NotificationCenter) {
 	function Channel(name) {
 		this.name = name;
 		this.users = {};
-		this.serverGame = new GameController();
-		console.log("server game " + this.serverGame);
-		this.serverGame.loadLevel("default.json");
+		this.gameController = new GameController();
+		this.gameController.loadLevel("default.json");
 
 		var self = this;
 		NotificationCenter.on("processGameCommandFromUser", function(topic, args) {
@@ -30,11 +29,11 @@ function(GameController, NotificationCenter) {
 		user.sendCommand('joinSuccess', {channelName: this.name, id: user.id, userIds: userIds});
 		this.sendCommandToAllUsersExcept('userJoined', user.id, user);
 
-		this.serverGame.createPlayerForUser(user)
+		this.gameController.createPlayerForUser(user)
 	}
 
 	Channel.prototype.releaseUser = function(user) {
-		this.serverGame.userIdLeft(user.id);
+		this.gameController.userIdLeft(user.id);
 
 		this.sendCommandToAllUsersExcept("userLeft", user.id, user);
 		delete this.users[user.id];
@@ -55,7 +54,7 @@ function(GameController, NotificationCenter) {
 	}
 
 	Channel.prototype.processGameCommandFromUser = function(command, options, user) {
-		this.serverGame.progressGameCommandFromUser(command, options, user);
+		this.gameController.progressGameCommandFromUser(command, options, user);
 	}
 
 	return Channel;

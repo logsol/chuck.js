@@ -1,4 +1,9 @@
-define(["Game/Core/Protocol/Helper", "Game/Client/GameController"], function(ProtocolHelper, GameController) {
+define([
+	"Game/Core/Protocol/Helper", 
+	"Game/Client/GameController"
+], 
+
+function(ProtocolHelper, GameController) {
 
 	function Networker(socketLink) {
 		this.socketLink = socketLink;
@@ -36,7 +41,7 @@ define(["Game/Core/Protocol/Helper", "Game/Client/GameController"], function(Pro
 	}
 
 	Networker.prototype.onDisconnect = function() {
-		this.gameController.destruct();
+		if(this.gameController) this.gameController.destruct();
 		this.gameController = null;
 	}
 
