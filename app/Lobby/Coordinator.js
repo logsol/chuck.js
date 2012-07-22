@@ -1,9 +1,12 @@
 define([
-	"Game/Server/User", 
-	"Game/Server/Channel"
+	"Lobby/User", 
+	"Game/Server/Channel",
+	"node-fork"
 ], 
 
-function(User, Channel) {
+function(User, Channel, nodeFork) {
+
+	var fork = nodeFork.fork;
 
 	function Coordinator() {
 		this.channels = {};
@@ -16,16 +19,16 @@ function(User, Channel) {
 	}
 
 	Coordinator.prototype.assignUserToLobby = function(user){
-		if(user.channel) {
-			user.channel.releaseUser(user);
+		if(user.channelProcess) {
+			//user.channel.releaseUser(user); -> generate message
 		}
 		this.lobbyUsers[user.id] = user;
 	}
 
 	Coordinator.prototype.assignUserToChannel = function(user, channelName){
 
-		if(user.channel) {
-			user.channel.releaseUser(user);
+		if(user.channelProcess) {
+			//user.channel.releaseUser(user); -> generate message
 		}
 
 		if(!Channel.validateName(channelName)){
@@ -35,20 +38,29 @@ function(User, Channel) {
 
 		var channel = this.channels[channelName];
 		if(!channel) {
-			channel = new Channel(channelName);
+
+			try {
+				console.log('try');
+				channel = fork('app/Bootstrap/Channel.js');
+				channel.send('CREATE');
+				channel.send('{setName:"' + channelName + '"}');
+			} catch (err) {
+				throw 'Failed to fork channel ' + channelName + '! (' + err + ')';
+			}
+
 			this.channels[channelName] = channel;
 		}
 
-		channel.addUser(user);
-		user.setChannel(channel);
+		//channel.addUser(user);
+		//user.setChannel(channel);
 
 		delete this.lobbyUsers[user.id];
 	}
 
 	Coordinator.prototype.removeUser = function(user){
 		delete this.lobbyUsers[user.id];
-		if(user.channel) {
-			user.channel.releaseUser(user);
+		if(user.channelProcess) {
+			//user.channel.releaseUser(user); -> generate message
 		}
 	}
 

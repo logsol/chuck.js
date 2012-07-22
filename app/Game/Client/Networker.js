@@ -19,7 +19,7 @@ function(ProtocolHelper, GameController) {
 		this.socketLink.on('connect', function() {
 			self.onConnect();
 		});
-
+/*
 		this.socketLink.on('message', function(message) {
 			self.onMessage(message);
 		});
@@ -27,12 +27,13 @@ function(ProtocolHelper, GameController) {
 		this.socketLink.on('disconnect', function() {
 			self.onDisconnect();
 		});
+*/
 	}
 
 	Networker.prototype.onConnect = function() {
 		this.join('dungeon');
 	}
-
+/*
 	Networker.prototype.onMessage = function(message) {
 		var self = this;
 		ProtocolHelper.runCommands(message, function(command, options) {
@@ -44,7 +45,7 @@ function(ProtocolHelper, GameController) {
 		if(this.gameController) this.gameController.destruct();
 		this.gameController = null;
 	}
-
+*/
 	Networker.prototype.join = function(channelName){
 		this.sendCommand('join', channelName);
 	}
@@ -53,9 +54,9 @@ function(ProtocolHelper, GameController) {
 		var message = ProtocolHelper.encodeCommand(command, options);
 		this.socketLink.send(message);
 	}
-
+/*
 	Networker.prototype.onJoinSuccess = function(options) {
-		this.gameController = new GameController(this, options.id);
+		this.gameController = new GameController(options.id);
 		this.gameController.loadLevel("default.json")
 		console.log("Joined " + options.channelName);
 
@@ -103,7 +104,7 @@ function(ProtocolHelper, GameController) {
 				break;
 		}
 	}
-
+*/
 	return Networker;
 	
 });

@@ -1,26 +1,32 @@
 define([
 	"Game/Server/GameController",
-	"Game/Server/NotificationCenter"
+	"Game/Core/NotificationCenter"
 ], 
 
 function(GameController, NotificationCenter) {
 
-	function Channel(name) {
-		this.name = name;
+	function Channel(coordinatorLink) {
+
+		this.coordinatorLink = coordinatorLink;
+
+		console.log('A CHANNEL WAS CREATED');
+		/*
 		this.users = {};
 		this.gameController = new GameController();
 		this.gameController.loadLevel("default.json");
-
+*/
+/*
 		var self = this;
 		NotificationCenter.on("processGameCommandFromUser", function(topic, args) {
 			self.processGameCommandFromUser.apply(self, args);
 		});
+*/
 	}
 
 	Channel.validateName = function(name){
 		return true;
 	}
-
+/*
 	Channel.prototype.addUser = function(user){
 		var userIds = Object.keys(this.users);
 
@@ -56,7 +62,7 @@ function(GameController, NotificationCenter) {
 	Channel.prototype.processGameCommandFromUser = function(command, options, user) {
 		this.gameController.progressGameCommandFromUser(command, options, user);
 	}
-
+*/
 	return Channel;
 	
 });

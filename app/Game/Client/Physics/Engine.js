@@ -17,7 +17,7 @@ function(Parent, Settings, DomController, Box2D) {
 
     Engine.prototype.setupDebugDraw = function() {
         //var debugSprite = Settings.DEBUG_DRAW_CANVAS_SPRITE;
-        var debugSprite = Dom.getDebugCanvas().getContext("2d");
+        var debugSprite = DomController.getDebugCanvas().getContext("2d");
 
         // set debug draw
         var debugDraw = new Box2D.Dynamics.b2DebugDraw();

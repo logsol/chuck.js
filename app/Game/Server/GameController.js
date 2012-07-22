@@ -4,7 +4,7 @@ define([
 	"Game/Config/Settings", 
 	"Game/Core/Control/InputController",
 	"Lib/Utilities/RequestAnimFrame",
-	"Game/Server/NotificationCenter"
+	"Game/Core/NotificationCenter"
 ],
 
 function(Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, NotificationCenter) {
@@ -14,15 +14,15 @@ function(Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, Not
 
 		this.inputControllers = {};
 
-		this.update();
-	    this.updateWorld();
+		//this.update();
+	    //this.updateWorld();
 
-		NotificationCenter.on('user/joined', this.userJoined, this);
-		NotificationCenter.on('user/left', this.userLeft, this);
+		//NotificationCenter.on('user/joined', this.userJoined, this);
+		//NotificationCenter.on('user/left', this.userLeft, this);
 	}
 
 	GameController.prototype = Object.create(Parent.prototype);
-
+/*
 	GameController.prototype.update  = function() {
 
 		requestAnimFrame(this.update.bind(this));
@@ -79,6 +79,6 @@ function(Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, Not
 
 		setTimeout(this.updateWorld.bind(this), Settings.WORLD_UPDATE_BROADCAST_INTERVAL);
 	}
-
+*/
 	return GameController;
 });

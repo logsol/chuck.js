@@ -7,7 +7,6 @@ define([
 function(Engine, Level, Player) {
 
     function GameController(physicsEngine) {
-        console.log('constructor called');
         this.players = {};
 
         if (! physicsEngine instanceof Engine) {
@@ -30,11 +29,15 @@ function(Engine, Level, Player) {
         this.level.loadLevelInToEngine();
     }
 
+    /*
+
     GameController.prototype.destroy = function() {
         for(var player in this.players) {
             this.players[player].destroy();
         }
     }
+
+    
 
     GameController.prototype.userJoined = function(user) {
         var player = new Player(user.id, this.physicsEngine);
@@ -47,6 +50,8 @@ function(Engine, Level, Player) {
         player.destroy();
         delete this.players[user.id];
     }
+
+    */
 
     return GameController;
 });

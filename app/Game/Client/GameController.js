@@ -3,24 +3,28 @@ define([
 	"Game/Client/Physics/Engine", 
 	"Game/Client/View/ViewController", 
 	"Game/Client/Control/KeyboardController", 
+	"Game/Core/NotificationCenter",
 	"Lib/Utilities/RequestAnimFrame"
 ],
 
-function(Parent, PhysicsEngine, ViewController, KeyboardController, requestAnimFrame) {
+function(Parent, PhysicsEngine, ViewController, KeyboardController, NotificationCenter, requestAnimFrame) {
 
 	function GameController () {
+		this.viewController = new ViewController();
+
 		Parent.call(this, new PhysicsEngine());
 
 		this.me = null;
 		this.keyboardController = null;
 
-		this.viewController = new ViewController();
-		this.update();
+		//NotificationCenter.on('me/joined', this.meJoined, this)
+
+		//this.update();
 	}
 
 	GameController.prototype = Object.create(Parent.prototype);
 
-
+/*
 	GameController.prototype.getMe = function() {
 	    return this.me;
 	}
@@ -40,6 +44,7 @@ function(Parent, PhysicsEngine, ViewController, KeyboardController, requestAnimF
 
 	GameController.prototype.meJoined = function(user) {
 		this.me = this.userJoined(user);
+
 		this.keyboardController = new KeyboardController(this.me, this);
 	}
 
@@ -66,6 +71,6 @@ function(Parent, PhysicsEngine, ViewController, KeyboardController, requestAnimF
 		}
 
 	}
-
+*/
 	return GameController;
 });
