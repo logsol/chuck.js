@@ -9,7 +9,7 @@ define([
 function(Parent, PhysicsEngine, ViewController, KeyboardController, requestAnimFrame) {
 
 	function GameController () {
-		Parent.apply(this, new PhysicsEngine());
+		Parent.call(this, new PhysicsEngine());
 
 		this.me = null;
 		this.keyboardController = null;
@@ -18,7 +18,7 @@ function(Parent, PhysicsEngine, ViewController, KeyboardController, requestAnimF
 		this.update();
 	}
 
-	GameController.prototype = Object.create(Parent);
+	GameController.prototype = Object.create(Parent.prototype);
 
 
 	GameController.prototype.getMe = function() {

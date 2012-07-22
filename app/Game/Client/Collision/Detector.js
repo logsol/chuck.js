@@ -10,7 +10,7 @@ function(Box2D, Parent) {
 		this.me = me;
 	}
 
-	Detector.prototype = Object.create(Parent);
+	Detector.prototype = Object.create(Parent.prototype);
 
 	Detector.prototype.handleStand = function(point, isColliding) {
 	    if (point.GetFixtureA().GetUserData() == Detector.IDENTIFIER.PLAYER_FOOT_SENSOR

@@ -9,7 +9,7 @@ function(Box2D, Parent) {
         Parent.call(this);
     }
 
-    Detector.prototype = Object.create(Parent);
+    Detector.prototype = Object.create(Parent.prototype);
 
     Detector.prototype.handleStand = function(point, isColliding) {
         throw "Implement this function";

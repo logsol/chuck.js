@@ -19,7 +19,6 @@ function(Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, Not
 	}
 
 	GameController.prototype = Object.create(Parent.prototype);
-	console.log(GameController.loadLevel);
 
 	GameController.prototype.update  = function() {
 
