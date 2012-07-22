@@ -1,15 +1,11 @@
-define([
-	"Game/Client/Networker", 
-	"Lib/Vendor/SocketIO"
-],
+requirejs.config({
+	baseUrl: 'app'
+});
 
-function(Networker, SocketIO) {
+var inspector = {};
 
-	function Client(location) {
-		this.socket = SocketIO.connect(location);
-		this.networker = new Networker(socket);
-	}
-
-	return Client;
+requirejs(["Bootstrap/Client"], function(Client) {
 	
+	var client = new Client(location.href);
+	inspector.client = client;
 });
