@@ -1,39 +1,21 @@
 define([
-	"Chuck/Physics/Engine", 
-	"Chuck/Settings", 
-	"Chuck/Player", 
-	"Vendor/Box2D",
-	"Chuck/Loader/Level",
+	"Game/Core/GameController",
+	"Game/Server/Physics/Engine", 
+	"Game/Config/Settings", 
 	"Chuck/Control/InputController",
-	"RequestAnimationFrame"
+	"RequestAnimationFrame",
+	"NotificationCenter"
 ],
 
-function(PhysicsEngine, Settings, Player, Box2D, Level, InputController, requestAnimFrame) {
+function(Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, NotificationCenter) {
 
-	function GameController (channel) {
-		this.channel = channel;
-		this.players = {};
-		this.init();
-	}
+	function GameController () {
+		Parent.apply(this, new PhysicsEngine());
 
-	GameController.prototype.init = function() {
-	    this.physicsEngine = this.factory.new(PhysicsEngine);
-  	    
-	    this.update();
+		this.inputControllers = {};
+
+		this.update();
 	    this.updateWorld();
-	}
-
-	GameController.prototype.loadLevel = function(path) {
-		if (this.level) {
-			this.level.unload();
-		}
-
-		this.level = new Level(path, this.physicsEngine);
-		this.level.loadLevelInToEngine();
-	}
-
-	GameController.prototype.getPhysicsEngine = function() {
-	    return this.physicsEngine;
 	}
 
 	GameController.prototype.update  = function() {
@@ -46,38 +28,21 @@ function(PhysicsEngine, Settings, Player, Box2D, Level, InputController, request
 	    }
 	}
 
-	GameController.prototype.destruct = function() {
-		
+	GameController.prototype.userJoined = function(user) {
+		var player = Parent.prototype.userJoined.call(this, user);
+		this.inputControllers[player.id] = new InputController(player);
 	}
 
-	GameController.prototype.createPlayerForUser = function(user) {
-		var id = user.id;
-	
-		var player = new Player(this.physicsEngine, id, null);
-		this.players[id] = {
-			player: player,
-			inputController: new InputController(player)
-		};
-
-		player.spawn(100, 0);
-  	    this.physicsEngine.setCollisionDetector(player);
+	GameController.prototype.userLeft = function(user) {
+		Parent.prototype.userLeft.call(this, user);
+		delete this.inputControllers[user.id];
 	}
 
-	GameController.prototype.progressGameCommandFromId = function(command, options, id) {
-		var inputController = this.players[id].inputController;
+	GameController.prototype.progressGameCommandFromUser = function(command, options, user) {
+		var inputController = this.inputControllers[user.id];
 		if (typeof inputController[command] == 'function') {
 			inputController[command](options);
 		}
-	}
-
-	GameController.prototype.userIdLeft = function(id) {
-		var player = this.players[id].player;
-		player.destroy();
-		delete this.players[id];
-	}
-
-	GameController.prototype.updateClientsWorld = function(update_world) {
-		this.channel.sendCommandToAllUsers('gameCommand', {worldUpdate: update_world});
 	}
 
 	GameController.prototype.updateWorld = function() {
@@ -100,9 +65,8 @@ function(PhysicsEngine, Settings, Player, Box2D, Level, InputController, request
 			}
 		} while (body = body.GetNext());
 		
-		if(isUpdateNeeded) { 
-			//this.serverGame.updateClientsWorld(update);
-			this.notificationCenter.trigger("sendCommandToAllUsers", ['gameCommand', {worldUpdate:update}]);
+		if(isUpdateNeeded) {
+			NotificationCenter.trigger("sendCommandToAllUsers", ['gameCommand', {worldUpdate:update}]);
 		}
 
 		setTimeout(this.updateWorld.bind(this), Settings.WORLD_UPDATE_BROADCAST_INTERVAL);
