@@ -33,4 +33,4 @@ function(Settings, Box2D, CollisionDetector) {
 	}
 
 	return Engine;
-})
+});
