@@ -1,5 +1,5 @@
 define([
-	"Game/Core/Protocol/Helper"
+	"Game/Core/Protocol/Helper",
 	"Game/Server/NotificationCenter"
 ], 
 

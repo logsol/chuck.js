@@ -3,7 +3,7 @@ define([
 	"Game/Core/Physics/Engine", 
 	"Game/Config/Settings", 
 	"Game/Core/Control/InputController",
-	"Lib/Unilities/RequestAnimFrame",
+	"Lib/Utilities/RequestAnimFrame",
 	"Game/Server/NotificationCenter"
 ],
 
