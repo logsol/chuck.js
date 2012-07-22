@@ -2,9 +2,9 @@ define([
 	"Game/Core/GameController",
 	"Game/Server/Physics/Engine", 
 	"Game/Config/Settings", 
-	"Chuck/Control/InputController",
-	"RequestAnimationFrame",
-	"NotificationCenter"
+	"Game/Core/Control/InputController",
+	"Lib/Unilities/RequestAnimFrame",
+	"Game/Server/NotificationCenter"
 ],
 
 function(Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, NotificationCenter) {
