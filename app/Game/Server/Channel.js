@@ -25,11 +25,11 @@ function(GameController, NotificationCenter) {
 		var userIds = Object.keys(this.users);
 
 		this.users[user.id] = user;
-		
+
 		user.sendCommand('joinSuccess', {channelName: this.name, id: user.id, userIds: userIds});
 		this.sendCommandToAllUsersExcept('userJoined', user.id, user);
 
-		this.gameController.createPlayerForUser(user)
+		NotificationCenter.trigger('user/joined', user);
 	}
 
 	Channel.prototype.releaseUser = function(user) {

@@ -1,9 +1,10 @@
 define([
     "Game/Core/Physics/Engine",
-    "Game/Core/Loader/Level"
+    "Game/Core/Loader/Level",
+    "Game/Core/Player"
 ],
 
-function(Engine, Level) {
+function(Engine, Level, Player) {
 
     function GameController(physicsEngine) {
         console.log('constructor called');
@@ -36,7 +37,7 @@ function(Engine, Level) {
     }
 
     GameController.prototype.userJoined = function(user) {
-        var player = new Player(id, this.physicsEngine);
+        var player = new Player(user.id, this.physicsEngine);
         this.players[user.id] = player;
         return player;
     }

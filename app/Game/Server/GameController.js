@@ -16,6 +16,9 @@ function(Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, Not
 
 		this.update();
 	    this.updateWorld();
+
+		NotificationCenter.on('user/joined', this.userJoined, this);
+		NotificationCenter.on('user/left', this.userLeft, this);
 	}
 
 	GameController.prototype = Object.create(Parent.prototype);
@@ -26,13 +29,16 @@ function(Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, Not
 
 	    this.physicsEngine.update();
 	    for(var id in this.players) {
-	    	this.players[id].player.update();
+	    	this.players[id].update();
 	    }
 	}
 
 	GameController.prototype.userJoined = function(user) {
-		var player = Parent.prototype.userJoined.call(this, user);
-		this.inputControllers[player.id] = new InputController(player);
+		Parent.prototype.userJoined.call(this, user);
+		
+		var id = user.id;
+		var player = this.players[id];
+		this.inputControllers[id] = new InputController(player);
 	}
 
 	GameController.prototype.userLeft = function(user) {
@@ -68,7 +74,7 @@ function(Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, Not
 		} while (body = body.GetNext());
 		
 		if(isUpdateNeeded) {
-			NotificationCenter.trigger("sendCommandToAllUsers", ['gameCommand', {worldUpdate:update}]);
+			//NotificationCenter.trigger("sendCommandToAllUsers", ['gameCommand', {worldUpdate:update}]);
 		}
 
 		setTimeout(this.updateWorld.bind(this), Settings.WORLD_UPDATE_BROADCAST_INTERVAL);

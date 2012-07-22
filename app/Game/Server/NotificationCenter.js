@@ -8,21 +8,23 @@ function() {
         this.subUid = -1;
     }
 
-    NotificationCenter.prototype.trigger = function(topic, args) {
+    NotificationCenter.prototype.trigger = function(topic) {
 
         if (!this.topics[topic]) {
             throw "No such topic " + topic + ". Could not trigger.";
         }
 
+        var args = Array.prototype.slice.call(arguments, 1);
         var subscribers = this.topics[topic];
         var len = subscribers ? subscribers.length : 0;
 
         while (len--) {
-            subscribers[len].func(topic, args);
+            var subscriber = subscribers[len];
+            subscriber.func.apply(subscriber.context, args);
         }
     }
 
-    NotificationCenter.prototype.on = function(topic, func) {
+    NotificationCenter.prototype.on = function(topic, func, context) {
         
         if (!this.topics[topic]) {
             this.topics[topic] = [];
@@ -31,7 +33,8 @@ function() {
         var token = ( ++this.subUid ).toString();
         this.topics[topic].push({
             token: token,
-            func: func
+            func: func,
+            context: context
         });
 
         return token;

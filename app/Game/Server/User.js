@@ -29,20 +29,7 @@ function(ProtocolHelper, NotificationCenter) {
 	}
 
 	User.prototype.setChannel = function(channel) {
-		if (NotificationCenter) {
-			NotificationCenter.off("updateClientsWorld");			
-		}
-
 		this.channel = channel;
-
-		// Use the right factory and nc
-		NotificationCenter = this.channel.notificationCenter;
-		this.factory = this.channel.factory;
-
-		var self = this;
-		NotificationCenter.on("sendCommandToAllUsers", function(topic, args) {
-			self.sendCommand.apply(self, args);
-		});
 	}
 
 	User.prototype.sendCommand = function(command, options) {
@@ -75,7 +62,7 @@ function(ProtocolHelper, NotificationCenter) {
 
 			case 'gameCommand':
 				for(var gameCommand in options) {
-					NotificationCenter.trigger("processGameCommandFromUser", [gameCommand, options[gameCommand], this]);
+					//NotificationCenter.trigger("processGameCommandFromUser", [gameCommand, options[gameCommand], this]);
 					//this.channel.processGameCommandFromUser(gameCommand, options[gameCommand], this);
 				}
 				break;
