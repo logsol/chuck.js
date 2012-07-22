@@ -1,4 +1,9 @@
-define(["Game/Core/Protocol/Helper"], function(ProtocolHelper) {
+define([
+	"Game/Core/Protocol/Helper"
+	"Game/Server/NotificationCenter"
+], 
+
+function(ProtocolHelper, NotificationCenter) {
 
 	function User(socketLink, coordinator) {
 
@@ -24,18 +29,18 @@ define(["Game/Core/Protocol/Helper"], function(ProtocolHelper) {
 	}
 
 	User.prototype.setChannel = function(channel) {
-		if (this.notificationCenter) {
-			this.notificationCenter.off("updateClientsWorld");			
+		if (NotificationCenter) {
+			NotificationCenter.off("updateClientsWorld");			
 		}
 
 		this.channel = channel;
 
 		// Use the right factory and nc
-		this.notificationCenter = this.channel.notificationCenter;
+		NotificationCenter = this.channel.notificationCenter;
 		this.factory = this.channel.factory;
 
 		var self = this;
-		this.notificationCenter.on("sendCommandToAllUsers", function(topic, args) {
+		NotificationCenter.on("sendCommandToAllUsers", function(topic, args) {
 			self.sendCommand.apply(self, args);
 		});
 	}
@@ -70,7 +75,7 @@ define(["Game/Core/Protocol/Helper"], function(ProtocolHelper) {
 
 			case 'gameCommand':
 				for(var gameCommand in options) {
-					this.notificationCenter.trigger("processGameCommandFromUser", [gameCommand, options[gameCommand], this]);
+					NotificationCenter.trigger("processGameCommandFromUser", [gameCommand, options[gameCommand], this]);
 					//this.channel.processGameCommandFromUser(gameCommand, options[gameCommand], this);
 				}
 				break;
