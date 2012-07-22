@@ -1,4 +1,9 @@
-define(["Game/Server/GameController"], function(GameController) {
+define([
+	"Game/Server/GameController",
+	"Game/Server/NotificationCenter"
+], 
+
+function(GameController, NotificationCenter) {
 
 	function Channel(name) {
 		this.name = name;
@@ -8,7 +13,7 @@ define(["Game/Server/GameController"], function(GameController) {
 		this.serverGame.loadLevel("default.json");
 
 		var self = this;
-		this.notificationCenter.on("processGameCommandFromUser", function(topic, args) {
+		NotificationCenter.on("processGameCommandFromUser", function(topic, args) {
 			self.processGameCommandFromUser.apply(self, args);
 		});
 	}
