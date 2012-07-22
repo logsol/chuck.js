@@ -1,12 +1,12 @@
 define([
 	"Lobby/User", 
 	"Game/Server/Channel",
-	"node-fork"
+	"child_process"
 ], 
 
-function(User, Channel, nodeFork) {
+function(User, Channel, childProcess) {
 
-	var fork = nodeFork.fork;
+	var fork = childProcess.fork;
 
 	function Coordinator() {
 		this.channels = {};

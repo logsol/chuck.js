@@ -17,8 +17,7 @@
   "dependencies": {
     "socket.io": ">= 0.9.6",
     "node-static": ">= 0.6.0",
-    "requirejs": ">= 2.0.2",
-    "node-fork": ">= 0.4.2"
+    "requirejs": ">= 2.0.2"
   },
   "devDependencies": {},
   "optionalDependencies": {},

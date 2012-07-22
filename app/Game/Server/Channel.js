@@ -6,9 +6,10 @@ define([
 function(GameController, NotificationCenter) {
 
 	function Channel(coordinatorLink) {
+		var self = this;
 
 		this.coordinatorLink = coordinatorLink;
-		this.coordinatorLink.receive = this.onMessage;
+		this.coordinatorLink.receive = function(message) { self.onMessage(message) };
 		
 		this.users = {};
 
@@ -26,18 +27,40 @@ function(GameController, NotificationCenter) {
 		return true;
 	}
 
+	// Messages look like:
+	// {chanel: {setName: 'foo'}}
+	// {user: {jupm: null}, id: 12}
 	Channel.prototype.onMessage = function(message) {
+
 		for(var recipient in message) {
+
 			switch(recipient) {
 
 				case 'user':
 					this.users[message.id].onMessage(message.user);
 					break;
+				case 'id': // Do nothing, it is needed by the user
+					break;
 				case 'channel':
-					this.onMessage(message.channel);
+					this.onCommand(message.channel);
 					break;
 				default: 
 					throw 'unknown recipient';
+					break;
+			}
+		}
+	};
+
+	Channel.prototype.onCommand = function(message) {
+		for(var command in message) {
+			switch(command) {
+
+				case 'setName':
+					this.name = message[command];
+					console.log("Chanel name set to '" + this.name + "'");
+					break;
+				default:
+					throw 'unknown command';
 					break;
 			}
 		}
