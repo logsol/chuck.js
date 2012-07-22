@@ -38,10 +38,6 @@ function(Parent, PhysicsEngine, ViewController, KeyboardController, requestAnimF
     	}
 	}
 
-	GameController.prototype.destroy = function() {
-		Parent.prototype.destroy.call(this);
-	}
-
 	GameController.prototype.meJoined = function(user) {
 		this.me = this.userJoined(user);
 		this.keyboardController = new KeyboardController(this.me, this);

@@ -1,11 +1,15 @@
-define(function() {
+define([
+],
 
-	function NotificationCenter() {
+function() {
+
+    function NotificationCenter() {
         this.topics = {};
         this.subUid = -1;
-	}
+    }
 
     NotificationCenter.prototype.trigger = function(topic, args) {
+
         if (!this.topics[topic]) {
             throw "No such topic " + topic + ". Could not trigger.";
         }
@@ -16,11 +20,10 @@ define(function() {
         while (len--) {
             subscribers[len].func(topic, args);
         }
-
-        return this;
     }
 
     NotificationCenter.prototype.on = function(topic, func) {
+        
         if (!this.topics[topic]) {
             this.topics[topic] = [];
         }
@@ -46,8 +49,7 @@ define(function() {
                 }
             }
         }
-        return this;
     }
 
-	return NotificationCenter;
+    return new NotificationCenter(); // making it singletone
 });
