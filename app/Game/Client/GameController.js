@@ -9,10 +9,11 @@ define([
 function(Parent, PhysicsEngine, ViewController, KeyboardController, requestAnimFrame) {
 
 	function GameController () {
-		this.me;
-		this.keyboardController;
-
 		Parent.apply(this, new PhysicsEngine());
+
+		this.me = null;
+		this.keyboardController = null;
+
 		this.viewController = new ViewController();
 		this.update();
 	}
