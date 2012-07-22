@@ -1,9 +1,9 @@
 define([
-    "Game/Core/Physics/Engine"
+    "Game/Core/Physics/Engine",
     "Game/Core/Loader/Level"
 ],
 
-function(Engine, Level, ) {
+function(Engine, Level) {
 
     function GameController(physicsEngine) {
         this.players = {};
