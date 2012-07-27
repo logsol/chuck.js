@@ -28,7 +28,7 @@ function(GameController, NotificationCenter) {
 	}
 
 	// Messages look like:
-	// {chanel: {setName: 'foo'}}
+	// {channel: {setName: 'foo'}}
 	// {user: {jupm: null}, id: 12}
 	Channel.prototype.onMessage = function(message) {
 
@@ -37,12 +37,12 @@ function(GameController, NotificationCenter) {
 			switch(recipient) {
 
 				case 'user':
-					this.users[message.id].onMessage(message.user);
+					this.forward(this.users[message.id], message.user);
 					break;
 				case 'id': // Do nothing, it is needed by the user
 					break;
 				case 'channel':
-					this.onCommand(message.channel);
+					this.forward(this, message.channel);
 					break;
 				default: 
 					throw 'unknown recipient';
@@ -51,20 +51,21 @@ function(GameController, NotificationCenter) {
 		}
 	};
 
-	Channel.prototype.onCommand = function(message) {
+	Channel.prototype.forward = function(target, message) {
 		for(var command in message) {
-			switch(command) {
-
-				case 'setName':
-					this.name = message[command];
-					console.log("Chanel name set to '" + this.name + "'");
-					break;
-				default:
-					throw 'unknown command';
-					break;
+			if(typeof target[command] == 'function'){
+				target[command].call(target, message[command]);
+			} else {
+				throw 'trying to call undefined function ' + target[command];
 			}
 		}
 	};
+
+	Channel.prototype.setName = function(name) {
+		this.name = name;
+		console.log('   created channel ' + name);
+	}
+	
 /*
 	Channel.prototype.addUser = function(user){
 		var userIds = Object.keys(this.users);
