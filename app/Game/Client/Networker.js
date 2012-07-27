@@ -23,14 +23,15 @@ function(ProtocolHelper, GameController) {
 		this.socketLink.on('message', function(message) {
 			self.onMessage(message);
 		});
-
+*/
 		this.socketLink.on('disconnect', function() {
 			self.onDisconnect();
 		});
-*/
+
 	}
 
 	Networker.prototype.onConnect = function() {
+		console.log('connected.')
 		this.join('dungeon');
 	}
 /*
@@ -40,12 +41,13 @@ function(ProtocolHelper, GameController) {
 			self.processControlCommand(command, options);
 		});
 	}
-
+*/
 	Networker.prototype.onDisconnect = function() {
 		if(this.gameController) this.gameController.destruct();
 		this.gameController = null;
+		console.log('disconnected. game destroyed. no auto-reconnect');
 	}
-*/
+
 	Networker.prototype.join = function(channelName){
 		this.sendCommand('join', channelName);
 	}
