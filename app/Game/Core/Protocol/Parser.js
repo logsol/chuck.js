@@ -3,15 +3,15 @@ define([
 
 function() {
 
-	var Parser = {};
+    var Parser = {};
 
-	Parser.encode = function(message){
-		return JSON.stringify(message);
-	}
+    Parser.encode = function(message){
+        return JSON.stringify(message);
+    }
 
-	Parser.decode = function(message){
-		return JSON.parse(message);
-	}
+    Parser.decode = function(message){
+        return JSON.parse(message);
+    }
 
-	return Parser;
+    return Parser;
 });

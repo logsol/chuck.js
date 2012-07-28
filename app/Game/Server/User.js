@@ -1,45 +1,45 @@
 define([
-	"Game/Core/User",
-	"Game/Core/Protocol/Helper",
-	"Game/Core/NotificationCenter"
+    "Game/Core/User",
+    "Game/Core/Protocol/Helper",
+    "Game/Core/NotificationCenter"
 ], 
 
 function(Parent, ProtocolHelper, NotificationCenter) {
 
-	function User(id, coordinator) {
-		Parent.call(this, id);
-		this.id = socketLink.id;
-		this.socketLink = socketLink;
-		this.coordinator = coordinator;
-		this.channel = null;
-		
-		this.init(socketLink);
-	}
+    function User(id, coordinator) {
+        Parent.call(this, id);
+        this.id = socketLink.id;
+        this.socketLink = socketLink;
+        this.coordinator = coordinator;
+        this.channel = null;
+        
+        this.init(socketLink);
+    }
 
-	User.prototype = Object.create(Parent.prototype);
+    User.prototype = Object.create(Parent.prototype);
 
-	User.prototype.init = function(socketLink){
+    User.prototype.init = function(socketLink){
 
-		var self = this;
+        var self = this;
 
-	}
+    }
 /*
-	User.prototype.setChannel = function(channel) {
-		this.channel = channel;
-	}
+    User.prototype.setChannel = function(channel) {
+        this.channel = channel;
+    }
 
-	User.prototype.sendCommand = function(command, options) {
+    User.prototype.sendCommand = function(command, options) {
 
-		var message = ProtocolHelper.encodeCommand(command, options);
-		this.socketLink.send(message);
-	}
+        var message = ProtocolHelper.encodeCommand(command, options);
+        this.socketLink.send(message);
+    }
 
 
 
-	User.prototype.toString = function() {
-		return "[User " + this.id + "]";
-	};
+    User.prototype.toString = function() {
+        return "[User " + this.id + "]";
+    };
 */
-	return User;
-	
+    return User;
+    
 });

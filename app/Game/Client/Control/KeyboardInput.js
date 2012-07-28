@@ -8,7 +8,7 @@ define(["Game/Client/Control/Key"], function(Key){
         this.init();
     }
 
-    KeyboardInput.prototype.init = function() {	
+    KeyboardInput.prototype.init = function() {    
         // Using window is ok here because it only runs in the browser
         window.onkeydown = this._onKeyDown.bind(this);
         window.onkeyup = this._onKeyUp.bind(this);

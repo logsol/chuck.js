@@ -1,34 +1,34 @@
 define([
-	"Game/Server/Channel",
-	"Game/Server/CoordinatorLink"
+    "Game/Server/Channel",
+    "Game/Server/CoordinatorLink"
 ],
 
 function(Channel, CoordinatorLink) {
 
-	function ChannelBootstrap(process) {
+    function ChannelBootstrap(process) {
 
-		var coordinatorLink = new CoordinatorLink(process);
-		var channel = null;
+        var coordinatorLink = new CoordinatorLink(process);
+        var channel = null;
 
-		process.on('message', function(message) {
+        process.on('message', function(message) {
 
-			switch(message){
-				case 'CREATE':
-					channel = new Channel(coordinatorLink);
-					break;
+            switch(message){
+                case 'CREATE':
+                    channel = new Channel(coordinatorLink);
+                    break;
 
-				case 'KILL':
-					channel.destroy();
-					process.exit(0);
-					break;
+                case 'KILL':
+                    channel.destroy();
+                    process.exit(0);
+                    break;
 
-				default:
-					coordinatorLink.receive(message);
-					break;
-			}
-		});	
-	}
+                default:
+                    coordinatorLink.receive(message);
+                    break;
+            }
+        });    
+    }
 
-	return ChannelBootstrap;
-	
+    return ChannelBootstrap;
+    
 });

@@ -31,7 +31,7 @@ define(function(){
 
     InputController.prototype.jumping = function() {
         if (this._isJumping) {
-            this.player.jumping();			
+            this.player.jumping();            
         }
     }
 
