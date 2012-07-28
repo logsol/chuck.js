@@ -6,8 +6,8 @@ define([
 
 function (Parent, ProtocolHelper, NotificationCenter) {
 
-    function User (id, coordinator) {
-        Parent.call(this, id);
+    function User (socketLink, coordinator) {
+        Parent.call(this, socketLink.id);
         this.id = socketLink.id;
         this.socketLink = socketLink;
         this.coordinator = coordinator;

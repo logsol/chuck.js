@@ -10,6 +10,7 @@ function (Parent, ProtocolHelper) {
 
         this.coordinator = coordinator;
         this.channelProcess = null;
+        this.socketLink = socketLink;
 
         var self = this;
 

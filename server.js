@@ -1,6 +1,6 @@
 var requirejs = require('requirejs');
 
-var inspector = {};
+var inspector;
 
 requirejs.config({
     nodeRequire: require,
@@ -18,9 +18,22 @@ var options = {
     logLevel: process.argv[3] || 0
 };
 
-requirejs(["Bootstrap/Server"], function (Server) {
-    var server = new Server(options);
-    inspector.server = server;
+requirejs([
+    "Bootstrap/HttpServer", 
+    "Bootstrap/Socket",
+    "Lobby/Coordinator"
+], 
+
+function (HttpServer, Socket, Coordinator) {
+    var coordinator = new Coordinator();
+    var httpServer = new HttpServer(options);
+    var socket = new Socket(httpServer.getServer(), options, coordinator);
+
+    inspector = {
+        coordinator: coordinator,
+        httpServer: httpServer,
+        socket: socket
+    }
 });
 
 exports = module.exports = inspector;

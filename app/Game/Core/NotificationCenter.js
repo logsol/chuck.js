@@ -8,7 +8,7 @@ function () {
         this.subUid = -1;
     }
 
-    NotificationCenter.prototype.trigger = function (topic) {
+    NotificationCenter.prototype.trigger = function (topic /*, arguments*/) {
 
         if (!this.topics[topic]) {
             throw "No such topic " + topic + ". Could not trigger.";

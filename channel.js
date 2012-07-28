@@ -6,8 +6,12 @@ requirejs.config({
 
 var inspector = {};
 
-requirejs(["Bootstrap/Channel"], function (ChannelBootstrap) {
+requirejs([
+    "Game/Server/LobbyPipe"
+], 
+
+function (LobbyPipe) {
+	var lobbyPipe = new LobbyPipe(process);
     
-    var channelBootstrap = new ChannelBootstrap(process);
-    inspector.channelBootstrap = channelBootstrap;
+    inspector.lobbyPipe = lobbyPipe;
 });

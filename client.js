@@ -4,7 +4,12 @@ requirejs.config({
 
 var inspector = {};
 
-requirejs(["Bootstrap/Client"], function (Client) {
+requirejs([
+    "Game/Client/Networker", 
+    "Lib/Vendor/SocketIO"
+], 
+
+function (Networker, SocketIO) {
     
     var options = {
         "reconnect": false,
@@ -17,6 +22,8 @@ requirejs(["Bootstrap/Client"], function (Client) {
         ],
     };
 
-    var client = new Client(location.href, options);
-    inspector.client = client;
+    var socket = SocketIO.connect(location.href, options);
+    var networker = new Networker(socket);
+
+    inspector.networker = networker;
 });

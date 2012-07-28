@@ -1,10 +1,11 @@
 define([
     "Lobby/User", 
     "Game/Server/Channel",
+    "Lobby/PipeToChannel"
     "child_process"
 ], 
 
-function (User, Channel, childProcess) {
+function (User, Channel, PipeToChannel, childProcess) {
 
     var fork = childProcess.fork;
 
@@ -38,22 +39,22 @@ function (User, Channel, childProcess) {
 
         var channel = this.channels[channelName];
         if(!channel) {
-
-            try {
-                channel = fork('channel.js');
-                channel.send('CREATE');
-
-                channel.send({
-                    channel: {
-                        setName: channelName
-                    }
-                });
-                
-            } catch (err) {
-                throw 'Failed to fork channel ' + channelName + '! (' + err + ')';
-            }
-
+            channel = new PipeToChannel(channelName);
             this.channels[channelName] = channel;
+
+            NotificationCenter.on('channel/' + channelName + '/message', function (data) {
+                channel.send('channel', data);
+            }, this);
+
+            NotificationCenter.on('user/joined', function (user) {
+                NotificationCenter.on('channel/' + channelName + '/user/' + user.id, function (recipient, data) {
+                    channel.send(recipient, data);
+                }, this);
+            }, this);
+
+            NotificationCenter.on('user/left', function (user) {
+                
+            }, this);
         }
 
         //channel.addUser(user);
@@ -63,10 +64,11 @@ function (User, Channel, childProcess) {
     }
 
     Coordinator.prototype.removeUser = function (user) {
+
+        user.channel.send('user/' + user.id + '/left');
+        NotificationCenter.off('channel/' + user.channel.channelName + '/user/' + user.id);
+
         delete this.lobbyUsers[user.id];
-        if(user.channelProcess) {
-            //user.channel.releaseUser(user); -> generate message
-        }
     }
 
     return Coordinator;
