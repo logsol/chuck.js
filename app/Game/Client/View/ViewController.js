@@ -7,7 +7,7 @@ var requires = [
 
 define(requires, function (DomController, Three, Settings, CameraController){
     
-    function ViewController(){
+    function ViewController (){
 
         this.mesh = null;
         this.scene = null;

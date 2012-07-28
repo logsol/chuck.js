@@ -3,7 +3,7 @@ define([
 
 function () {
 
-    function CoordinatorLink(process) {
+    function CoordinatorLink (process) {
         this.process = process;
     }
 

@@ -1,6 +1,6 @@
 define(['Lib/Vendor/Three', 'Game/Config/Settings'], function (Three, Settings) {
 
-    function CameraController(isOrthographic) {
+    function CameraController (isOrthographic) {
 
         isOrthographic = typeof isOrthographic == 'undefined' 
             ? true 

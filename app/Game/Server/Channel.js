@@ -5,7 +5,7 @@
 
     function (GameController, NotificationCenter) {
 
-        function Channel(coordinatorLink) {
+        function Channel (coordinatorLink) {
             var self = this;
 
             this.coordinatorLink = coordinatorLink;

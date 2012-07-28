@@ -5,7 +5,7 @@ define([
 
 function (Box2D, Parent) {
 
-    function Detector() {
+    function Detector () {
         this.listener = new Box2D.Dynamics.b2ContactListener();
         this.listener.chuckDetector = this;
         this.listener.BeginContact = this.BeginContact;

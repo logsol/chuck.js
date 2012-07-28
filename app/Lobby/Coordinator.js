@@ -8,7 +8,7 @@ function (User, Channel, childProcess) {
 
     var fork = childProcess.fork;
 
-    function Coordinator() {
+    function Coordinator () {
         this.channels = {};
         this.lobbyUsers = {};
     }

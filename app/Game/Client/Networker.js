@@ -5,7 +5,7 @@ define([
 
 function (ProtocolHelper, GameController) {
 
-    function Networker(socketLink) {
+    function Networker (socketLink) {
         this.socketLink = socketLink;
         this.gameController = null;
 

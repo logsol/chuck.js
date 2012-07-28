@@ -1,7 +1,7 @@
 define(["Game/Config/Settings", "Lib/Vendor/Box2D", "Game/Core/Collision/Detector"], function (Settings, Box2D, CollisionDetector) {
     
     // Public
-    function Level(path, engine) {
+    function Level (path, engine) {
         this.path = path;
         this.engine = engine;
         this.levelObject = null;

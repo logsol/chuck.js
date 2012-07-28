@@ -5,7 +5,7 @@ define([
 
 function (http, nodeStatic) {
 
-    function HttpServer(options) {
+    function HttpServer (options) {
         options.port = options.port || 1234;
         options.caching = typeof options.caching != 'undefined' ? options.caching : true;
         options.rootDirectory = options.rootDirectory || './';

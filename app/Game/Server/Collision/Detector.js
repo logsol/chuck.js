@@ -5,7 +5,7 @@ define([
 
 function (Box2D, Parent) {
 
-    function Detector() {
+    function Detector () {
         Parent.call(this);
     }
 

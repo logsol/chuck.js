@@ -1,6 +1,6 @@
 define(["Game/Core/Control/InputController", "Game/Client/Control/KeyboardInput"], function (InputController, KeyboardInput){
 
-    function KeyboardController(me, gameController) {
+    function KeyboardController (me, gameController) {
 
         this.gameController = gameController;
         this.inputController = new InputController(me);

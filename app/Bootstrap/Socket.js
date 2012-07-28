@@ -4,7 +4,7 @@ define([
 
 function (io) {
 
-    function Socket(server, options, coordinator) {
+    function Socket (server, options, coordinator) {
         options.logLevel = typeof options.logLevel != 'undefined'
             ? options.logLevel
             : 0;

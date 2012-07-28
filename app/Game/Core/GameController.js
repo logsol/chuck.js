@@ -6,7 +6,7 @@ define([
 
 function (Engine, Level, Player) {
 
-    function GameController(physicsEngine) {
+    function GameController (physicsEngine) {
         this.players = {};
 
         if (! physicsEngine instanceof Engine) {

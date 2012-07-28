@@ -5,7 +5,7 @@ define([
 
 function (Parent, ProtocolHelper) {
 
-    function User(socketLink, coordinator) {
+    function User (socketLink, coordinator) {
         Parent.call(this, socketLink.id);
 
         this.coordinator = coordinator;

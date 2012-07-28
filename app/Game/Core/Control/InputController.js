@@ -1,6 +1,6 @@
 define(function (){
 
-    function InputController(player) {
+    function InputController (player) {
 
         this.player = player;
 

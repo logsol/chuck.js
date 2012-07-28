@@ -5,7 +5,7 @@ define([
 
 function (Channel, CoordinatorLink) {
 
-    function ChannelBootstrap(process) {
+    function ChannelBootstrap (process) {
 
         var coordinatorLink = new CoordinatorLink(process);
         var channel = null;

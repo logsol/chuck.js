@@ -3,7 +3,7 @@ define([
 
 function () {
 
-    function NotificationCenter() {
+    function NotificationCenter () {
         this.topics = {};
         this.subUid = -1;
     }
