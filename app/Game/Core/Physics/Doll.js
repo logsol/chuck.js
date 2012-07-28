@@ -1,4 +1,4 @@
-define(["Lib/Vendor/Box2D", "Game/Config/Settings", "Game/Core/Collision/Detector"], function(Box2D, Settings, CollisionDetector) {
+define(["Lib/Vendor/Box2D", "Game/Config/Settings", "Game/Core/Collision/Detector"], function (Box2D, Settings, CollisionDetector) {
 
     function Doll (physicsEngine, id){
         this.id = id;
@@ -106,7 +106,7 @@ define(["Lib/Vendor/Box2D", "Game/Config/Settings", "Game/Core/Collision/Detecto
         this.body.ApplyImpulse(vector, this.body.GetPosition());
     }
 
-    Doll.prototype.destroy = function() {
+    Doll.prototype.destroy = function () {
         this.body.GetWorld().DestroyBody(this.body);
     }
 

@@ -3,7 +3,7 @@ define([
     "Game/Core/Collision/Detector"
 ], 
 
-function(Box2D, Parent) {
+function (Box2D, Parent) {
 
     function Detector() {
         Parent.call(this);
@@ -11,7 +11,7 @@ function(Box2D, Parent) {
 
     Detector.prototype = Object.create(Parent.prototype);
 
-    Detector.prototype.handleStand = function(point, isColliding) {
+    Detector.prototype.handleStand = function (point, isColliding) {
         throw "Implement this function";
     }
 

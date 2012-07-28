@@ -5,7 +5,7 @@ define([
     "Lib/Vendor/Box2D"
 ],
 
-function(Parent, Settings, DomController, Box2D) {
+function (Parent, Settings, DomController, Box2D) {
 
     function Engine () {
         Parent.call(this);
@@ -15,7 +15,7 @@ function(Parent, Settings, DomController, Box2D) {
         }
     }
 
-    Engine.prototype.setupDebugDraw = function() {
+    Engine.prototype.setupDebugDraw = function () {
         //var debugSprite = Settings.DEBUG_DRAW_CANVAS_SPRITE;
         var debugSprite = DomController.getDebugCanvas().getContext("2d");
 
@@ -42,7 +42,7 @@ function(Parent, Settings, DomController, Box2D) {
     }
 
 
-    Engine.prototype.update = function() {
+    Engine.prototype.update = function () {
         Parent.prototype.update.call(this);
 
         this.world.DrawDebugData();

@@ -4,7 +4,7 @@ define([
     "Game/Core/NotificationCenter"
 ], 
 
-function(Parent, ProtocolHelper, NotificationCenter) {
+function (Parent, ProtocolHelper, NotificationCenter) {
 
     function User(id, coordinator) {
         Parent.call(this, id);
@@ -18,17 +18,17 @@ function(Parent, ProtocolHelper, NotificationCenter) {
 
     User.prototype = Object.create(Parent.prototype);
 
-    User.prototype.init = function(socketLink){
+    User.prototype.init = function (socketLink){
 
         var self = this;
 
     }
 /*
-    User.prototype.setChannel = function(channel) {
+    User.prototype.setChannel = function (channel) {
         this.channel = channel;
     }
 
-    User.prototype.sendCommand = function(command, options) {
+    User.prototype.sendCommand = function (command, options) {
 
         var message = ProtocolHelper.encodeCommand(command, options);
         this.socketLink.send(message);
@@ -36,7 +36,7 @@ function(Parent, ProtocolHelper, NotificationCenter) {
 
 
 
-    User.prototype.toString = function() {
+    User.prototype.toString = function () {
         return "[User " + this.id + "]";
     };
 */

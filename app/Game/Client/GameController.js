@@ -7,7 +7,7 @@ define([
     "Lib/Utilities/RequestAnimFrame"
 ],
 
-function(Parent, PhysicsEngine, ViewController, KeyboardController, NotificationCenter, requestAnimFrame) {
+function (Parent, PhysicsEngine, ViewController, KeyboardController, NotificationCenter, requestAnimFrame) {
 
     function GameController () {
         this.viewController = new ViewController();
@@ -25,11 +25,11 @@ function(Parent, PhysicsEngine, ViewController, KeyboardController, Notification
     GameController.prototype = Object.create(Parent.prototype);
 
 /*
-    GameController.prototype.getMe = function() {
+    GameController.prototype.getMe = function () {
         return this.me;
     }
 
-    GameController.prototype.update  = function() {
+    GameController.prototype.update  = function () {
 
         requestAnimFrame(this.update.bind(this));
 
@@ -42,13 +42,13 @@ function(Parent, PhysicsEngine, ViewController, KeyboardController, Notification
         }
     }
 
-    GameController.prototype.meJoined = function(user) {
+    GameController.prototype.meJoined = function (user) {
         this.me = this.userJoined(user);
 
         this.keyboardController = new KeyboardController(this.me, this);
     }
 
-    GameController.prototype.processGameCommand = function(command, options) {
+    GameController.prototype.processGameCommand = function (command, options) {
         
         if (command == "worldUpdate") {
 

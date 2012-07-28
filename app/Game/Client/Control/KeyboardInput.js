@@ -1,4 +1,4 @@
-define(["Game/Client/Control/Key"], function(Key){
+define(["Game/Client/Control/Key"], function (Key){
 
     function KeyboardInput (keyboardController) {
 
@@ -8,13 +8,13 @@ define(["Game/Client/Control/Key"], function(Key){
         this.init();
     }
 
-    KeyboardInput.prototype.init = function() {    
+    KeyboardInput.prototype.init = function () {    
         // Using window is ok here because it only runs in the browser
         window.onkeydown = this._onKeyDown.bind(this);
         window.onkeyup = this._onKeyUp.bind(this);
     }
 
-    KeyboardInput.prototype.registerKey = function(keyCode, onKeyDown, onKeyUp, onKeyFrame) {
+    KeyboardInput.prototype.registerKey = function (keyCode, onKeyDown, onKeyUp, onKeyFrame) {
         var key = new Key();
         key.setKeyDownFunction(onKeyDown);
         key.setKeyUpFunction(onKeyUp);
@@ -22,11 +22,11 @@ define(["Game/Client/Control/Key"], function(Key){
         this._registry[keyCode] = key;
     }
 
-    KeyboardInput.prototype._getKeyByKeyCode = function(keyCode) {
+    KeyboardInput.prototype._getKeyByKeyCode = function (keyCode) {
         return this._registry[keyCode];
     }
 
-    KeyboardInput.prototype._onKeyDown = function(e) {
+    KeyboardInput.prototype._onKeyDown = function (e) {
         var key = this._getKeyByKeyCode(e.keyCode);
         if (key && key.getActive() == false) {
             key.setActivityUpdateStatus(true);
@@ -34,7 +34,7 @@ define(["Game/Client/Control/Key"], function(Key){
         }
     }
 
-    KeyboardInput.prototype._onKeyUp = function(e) {
+    KeyboardInput.prototype._onKeyUp = function (e) {
         var key = this._getKeyByKeyCode(e.keyCode);
         if (key != null) {
             key.setActivityUpdateStatus(false);
@@ -42,7 +42,7 @@ define(["Game/Client/Control/Key"], function(Key){
         }
     }
 
-    KeyboardInput.prototype.update = function() {
+    KeyboardInput.prototype.update = function () {
         var callback = null;
         var self = this;
 

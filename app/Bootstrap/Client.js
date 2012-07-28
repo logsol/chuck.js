@@ -3,7 +3,7 @@ define([
     "Lib/Vendor/SocketIO"
 ],
 
-function(Networker, SocketIO) {
+function (Networker, SocketIO) {
 
     function Client(location, options) {
         this.socket = SocketIO.connect(location, options);

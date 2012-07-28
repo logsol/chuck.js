@@ -3,7 +3,7 @@ define([
     "Game/Core/Collision/Detector"
 ], 
 
-function(Box2D, Parent) {
+function (Box2D, Parent) {
 
     function Detector(me) {
         Parent.call(this);
@@ -12,7 +12,7 @@ function(Box2D, Parent) {
 
     Detector.prototype = Object.create(Parent.prototype);
 
-    Detector.prototype.handleStand = function(point, isColliding) {
+    Detector.prototype.handleStand = function (point, isColliding) {
         if (point.GetFixtureA().GetUserData() == Detector.IDENTIFIER.PLAYER_FOOT_SENSOR
          || point.GetFixtureB().GetUserData() == Detector.IDENTIFIER.PLAYER_FOOT_SENSOR)  {
 

@@ -3,7 +3,7 @@ define([
     'node-static'
 ], 
 
-function(http, nodeStatic) {
+function (http, nodeStatic) {
 
     function HttpServer(options) {
         options.port = options.port || 1234;
@@ -15,13 +15,13 @@ function(http, nodeStatic) {
         this.init(options);
     }
 
-    HttpServer.prototype.init = function(options) {
+    HttpServer.prototype.init = function (options) {
         var self = this;
 
         var fileServer = new nodeStatic.Server(options.rootDirectory, { cache: options.caching });
 
         this.server = http.createServer(
-            function(req, res){
+            function (req, res){
                 req.addListener('end', function () {
                     switch(true) {
                         case req.url == '/':
@@ -37,13 +37,13 @@ function(http, nodeStatic) {
                             break;
 
                         case new RegExp(/^\/app/).test(req.url):
-                            fileServer.serve(req, res, function(){
+                            fileServer.serve(req, res, function (){
                                 self.handleFileError(res)
                             });
                             break;
 
                         case new RegExp(/^\/static/).test(req.url):
-                            fileServer.serve(req, res, function(){
+                            fileServer.serve(req, res, function (){
                                 self.handleFileError(res)
                             });
                             break;
@@ -58,7 +58,7 @@ function(http, nodeStatic) {
         this.server.listen(options.port);
     }
 
-    HttpServer.prototype.getServer = function(){
+    HttpServer.prototype.getServer = function (){
         return this.server;
     }
 

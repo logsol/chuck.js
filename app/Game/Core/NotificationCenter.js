@@ -1,14 +1,14 @@
 define([
 ],
 
-function() {
+function () {
 
     function NotificationCenter() {
         this.topics = {};
         this.subUid = -1;
     }
 
-    NotificationCenter.prototype.trigger = function(topic) {
+    NotificationCenter.prototype.trigger = function (topic) {
 
         if (!this.topics[topic]) {
             throw "No such topic " + topic + ". Could not trigger.";
@@ -24,7 +24,7 @@ function() {
         }
     }
 
-    NotificationCenter.prototype.on = function(topic, func, context) {
+    NotificationCenter.prototype.on = function (topic, func, context) {
         
         if (!this.topics[topic]) {
             this.topics[topic] = [];
@@ -40,7 +40,7 @@ function() {
         return token;
     }
 
-    NotificationCenter.prototype.off = function(token) {
+    NotificationCenter.prototype.off = function (token) {
 
         for(var m in this.topics) {
             if (this.topics[m]) {

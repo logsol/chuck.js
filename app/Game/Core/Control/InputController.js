@@ -1,4 +1,4 @@
-define(function(){
+define(function (){
 
     function InputController(player) {
 
@@ -8,50 +8,50 @@ define(function(){
         this._isJumping;
     }
 
-    InputController.prototype.moveLeft = function() {
+    InputController.prototype.moveLeft = function () {
         this.player.move(-1);
     }
 
-    InputController.prototype.moveRight = function() {
+    InputController.prototype.moveRight = function () {
         this.player.move(1);
     }
 
-    InputController.prototype.stop = function() {
+    InputController.prototype.stop = function () {
         this.player.stop();
     }
 
-    InputController.prototype.jump = function() {
+    InputController.prototype.jump = function () {
         this._isJumping = true;
         this.player.jump();
     }
 
-    InputController.prototype.jumped = function() {
+    InputController.prototype.jumped = function () {
         this._isJumping = false;
     }
 
-    InputController.prototype.jumping = function() {
+    InputController.prototype.jumping = function () {
         if (this._isJumping) {
             this.player.jumping();            
         }
     }
 
-    InputController.prototype.duck = function() {
+    InputController.prototype.duck = function () {
         this.player.duck();
     }
 
-    InputController.prototype.standUp = function() {
+    InputController.prototype.standUp = function () {
         this.player.standUp();
     }
 
-    InputController.prototype.activateShift = function() {
+    InputController.prototype.activateShift = function () {
         this._shift = true;
     }
 
-    InputController.prototype.deactivateShift = function() {
+    InputController.prototype.deactivateShift = function () {
         this._shift = false;
     }
 
-    InputController.prototype.update = function() {
+    InputController.prototype.update = function () {
 
     }
 

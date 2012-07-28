@@ -1,4 +1,4 @@
-define(["Game/Config/Settings", "Lib/Vendor/Box2D", "Game/Core/Collision/Detector"], function(Settings, Box2D, CollisionDetector) {
+define(["Game/Config/Settings", "Lib/Vendor/Box2D", "Game/Core/Collision/Detector"], function (Settings, Box2D, CollisionDetector) {
     
     // Public
     function Level(path, engine) {
@@ -7,12 +7,12 @@ define(["Game/Config/Settings", "Lib/Vendor/Box2D", "Game/Core/Collision/Detecto
         this.levelObject = null;
     }
 
-    Level.prototype.loadLevelInToEngine = function() {
+    Level.prototype.loadLevelInToEngine = function () {
         this.loadLevelObjectFromPath(this.path);
         this.createPhysicTiles();
     }
 
-    Level.prototype.unload = function() {
+    Level.prototype.unload = function () {
         // TODO unload level from engine if necessary
         // Perhaps just remove all bodies?
     }
@@ -30,7 +30,7 @@ define(["Game/Config/Settings", "Lib/Vendor/Box2D", "Game/Core/Collision/Detecto
         }
     }
 
-    Level.prototype.createPhysicTile = function(tile) {
+    Level.prototype.createPhysicTile = function (tile) {
         tile.r = tile.r || 0;
         var vertices = this.createVertices(tile);
 
@@ -55,7 +55,7 @@ define(["Game/Config/Settings", "Lib/Vendor/Box2D", "Game/Core/Collision/Detecto
         this.engine.createBody(bodyDef).CreateFixture(fixtureDef);
     }
 
-    Level.prototype.createVertices = function(tile) {
+    Level.prototype.createVertices = function (tile) {
         var vs = [];
 
         switch(tile.s) {
@@ -119,15 +119,15 @@ define(["Game/Config/Settings", "Lib/Vendor/Box2D", "Game/Core/Collision/Detecto
         return vs;
     }
 
-    Level.prototype.mkArg = function(multiplier) {
+    Level.prototype.mkArg = function (multiplier) {
         return Settings.TILE_SIZE / 2 / Settings.RATIO * multiplier;
     }
 
-    Level.prototype.addVec = function(vs, m1, m2) {
+    Level.prototype.addVec = function (vs, m1, m2) {
         return vs.push(new Box2D.Common.Math.b2Vec2(this.mkArg(m1), this.mkArg(m2)));
     }
 
-    Level.prototype.loadLevelObjectFromPath = function(path) {
+    Level.prototype.loadLevelObjectFromPath = function (path) {
         
         // TODO: load JSON levelObject from path
         // s: shape

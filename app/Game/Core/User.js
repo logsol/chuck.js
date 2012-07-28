@@ -1,4 +1,4 @@
-define(function() {
+define(function () {
 
     function User(id) {
         this.id = id;

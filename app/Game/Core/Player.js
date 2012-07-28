@@ -3,7 +3,7 @@ define([
     "Game/Config/Settings"
 ],
 
-function(Doll, Settings) {
+function (Doll, Settings) {
 
     function Player (id, physicsEngine, repository) {
         this.physicsEngine = physicsEngine;
@@ -19,7 +19,7 @@ function(Doll, Settings) {
         this.init(id);
     }
 
-    Player.prototype.init = function(id) {
+    Player.prototype.init = function (id) {
         this.doll = new Doll(this.physicsEngine, id);
     //this.mc = EmbedHandler.load(EmbedHandler.CHUCK);
     //this.mc.stop();
@@ -27,20 +27,20 @@ function(Doll, Settings) {
     //mclp.parse(this.mc);
     }
 
-    Player.prototype.spawn = function(x, y) {
+    Player.prototype.spawn = function (x, y) {
         //this.repository.createModel(this.mc, this.doll.getBody());
         this.doll.spawn(x, y);
     }
 
-    Player.prototype.getDoll = function() {
+    Player.prototype.getDoll = function () {
         return this.doll;
     }
 
-    Player.prototype.getBody = function() {
+    Player.prototype.getBody = function () {
         return this.doll.getBody();
     }
 
-    Player.prototype.setStanding = function(isStanding) {
+    Player.prototype.setStanding = function (isStanding) {
         var resetStates = ['jump', 'jumploop'];
         if (resetStates.indexOf(this.currentAnimationState)>=0 && !this.standing && isStanding) {
             this.animate('stand');
@@ -48,11 +48,11 @@ function(Doll, Settings) {
         this.standing = isStanding;
     }
 
-    Player.prototype.isStanding = function() {
+    Player.prototype.isStanding = function () {
         return this.standing;
     }
 
-    Player.prototype.move = function(direction) {
+    Player.prototype.move = function (direction) {
         this.moveDirection = direction;
         
         switch(true) {
@@ -74,7 +74,7 @@ function(Doll, Settings) {
         }
     }
 
-    Player.prototype.stop = function() {
+    Player.prototype.stop = function () {
         this.moveDirection = 0;
         this.doll.stop();
         if (this.isWalking() || this.standing) {
@@ -82,7 +82,7 @@ function(Doll, Settings) {
         }
     }
 
-    Player.prototype.jump = function() {
+    Player.prototype.jump = function () {
         if (this.isStanding()) {
             this.doll.jump();
             this.animate('jump');
@@ -90,25 +90,25 @@ function(Doll, Settings) {
         }
     }
 
-    Player.prototype.jumping = function() {
+    Player.prototype.jumping = function () {
         if (!this.isStanding()) {
             this.doll.jumping();
         }
     }
 
-    Player.prototype.duck = function() {
+    Player.prototype.duck = function () {
         if (this.standing && !this.isWalking()) {
             this.animate('duck');
         }
     }
 
-    Player.prototype.standUp = function() {
+    Player.prototype.standUp = function () {
         if (this.standing) {
             this.animate('standup');
         }
     }
 
-    Player.prototype.animate = function(type) {
+    Player.prototype.animate = function (type) {
         if (type == this.currentAnimationState) {
             return;
         }
@@ -118,14 +118,14 @@ function(Doll, Settings) {
         this.currentAnimationState = type;
     }
 
-    Player.prototype.calculateWalkAnimation = function() {
+    Player.prototype.calculateWalkAnimation = function () {
         if (this.moveDirection == this.lookDirection) {
             return 'run';
         } 
         return 'walkback';
     }
 
-    Player.prototype.look = function(x, y) {
+    Player.prototype.look = function (x, y) {
         /*
         var degree = Math.atan2(Settings.STAGE_WIDTH / 2 - x, Settings.STAGE_HEIGHT / 2 - 25 - y) / (Math.PI / 180);
         var lastLookDirection = this.lookDirection;
@@ -147,7 +147,7 @@ function(Doll, Settings) {
         }*/
     }
 
-    Player.prototype.isWalking = function() {
+    Player.prototype.isWalking = function () {
         var states = ['walk', 'walkback', 'run'];
 
         if (states.indexOf(this.currentAnimationState) >= 0) {
@@ -157,7 +157,7 @@ function(Doll, Settings) {
     }
 
     // called by CollisionDetection
-    Player.prototype.onFootSensorDetection = function(isColliding) {
+    Player.prototype.onFootSensorDetection = function (isColliding) {
         if(isColliding) {
             if(this.doll.getBody().GetLinearVelocity().y < -Settings.JUMP_SPEED && !this.isStanding()) {
                 return;
@@ -173,7 +173,7 @@ function(Doll, Settings) {
         }
     }
 
-    Player.prototype.update = function() {
+    Player.prototype.update = function () {
         //this.mc.head.y = this.mc.head_posmask.y;
 
         if (this.doll.getBody().GetLinearVelocity().x == 0 && this.isWalking()) {
@@ -185,7 +185,7 @@ function(Doll, Settings) {
         }
     }
 
-    Player.prototype.destroy = function() {
+    Player.prototype.destroy = function () {
         this.doll.destroy();
     }
 

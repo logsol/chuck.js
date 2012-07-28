@@ -7,7 +7,7 @@ define([
     "Game/Core/NotificationCenter"
 ],
 
-function(Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, NotificationCenter) {
+function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, NotificationCenter) {
 
     function GameController () {
         Parent.call(this, new PhysicsEngine());
@@ -23,7 +23,7 @@ function(Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, Not
 
     GameController.prototype = Object.create(Parent.prototype);
 /*
-    GameController.prototype.update  = function() {
+    GameController.prototype.update  = function () {
 
         requestAnimFrame(this.update.bind(this));
 
@@ -33,7 +33,7 @@ function(Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, Not
         }
     }
 
-    GameController.prototype.userJoined = function(user) {
+    GameController.prototype.userJoined = function (user) {
         Parent.prototype.userJoined.call(this, user);
         
         var id = user.id;
@@ -41,19 +41,19 @@ function(Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, Not
         this.inputControllers[id] = new InputController(player);
     }
 
-    GameController.prototype.userLeft = function(user) {
+    GameController.prototype.userLeft = function (user) {
         Parent.prototype.userLeft.call(this, user);
         delete this.inputControllers[user.id];
     }
 
-    GameController.prototype.progressGameCommandFromUser = function(command, options, user) {
+    GameController.prototype.progressGameCommandFromUser = function (command, options, user) {
         var inputController = this.inputControllers[user.id];
         if (typeof inputController[command] == 'function') {
             inputController[command](options);
         }
     }
 
-    GameController.prototype.updateWorld = function() {
+    GameController.prototype.updateWorld = function () {
         
         var update = {};
         var isUpdateNeeded = false;

@@ -3,7 +3,7 @@ define([
     "Game/Client/GameController"
 ], 
 
-function(ProtocolHelper, GameController) {
+function (ProtocolHelper, GameController) {
 
     function Networker(socketLink) {
         this.socketLink = socketLink;
@@ -12,41 +12,41 @@ function(ProtocolHelper, GameController) {
         this.init();
     }
 
-    Networker.prototype.init = function() {
+    Networker.prototype.init = function () {
         
         var self = this;
 
-        this.socketLink.on('connect', function() {
+        this.socketLink.on('connect', function () {
             self.onConnect();
         });
 /*
-        this.socketLink.on('message', function(message) {
+        this.socketLink.on('message', function (message) {
             self.onMessage(message);
         });
 */
-        this.socketLink.on('disconnect', function() {
+        this.socketLink.on('disconnect', function () {
             self.onDisconnect();
         });
 
     }
 
-    Networker.prototype.onConnect = function() {
+    Networker.prototype.onConnect = function () {
         console.log('connected.')
         this.join('dungeon');
     }
 
-    Networker.prototype.onDisconnect = function() {
+    Networker.prototype.onDisconnect = function () {
         if(this.gameController) this.gameController.destruct();
         this.gameController = null;
         console.log('disconnected. game destroyed. no auto-reconnect');
     }
 
-    Networker.prototype.join = function(channelName){
+    Networker.prototype.join = function (channelName){
         this.sendCommand('join', channelName);
     }
 
 
-    Networker.prototype.onJoinSuccess = function(options) {
+    Networker.prototype.onJoinSuccess = function (options) {
         this.gameController = new GameController(options.id);
         this.gameController.loadLevel("default.json");
         /*
@@ -60,35 +60,35 @@ function(ProtocolHelper, GameController) {
         */
     }
 
-    Networker.prototype.sendCommand = function(command, options) {
+    Networker.prototype.sendCommand = function (command, options) {
         var message = ProtocolHelper.encodeCommand(command, options);
         this.socketLink.send(message);
     }
 
 /*
-    Networker.prototype.onMessage = function(message) {
+    Networker.prototype.onMessage = function (message) {
         var self = this;
         
-        ProtocolHelper.runCommands(message, function(command, options) {
+        ProtocolHelper.runCommands(message, function (command, options) {
             self.processControlCommand(command, options);
         });
 
     }
 
-    Networker.prototype.onUserJoined = function(userId) {
+    Networker.prototype.onUserJoined = function (userId) {
         this.gameController.userJoined(userId);
         console.log("User " + userId + " joined");
     }
 
-    Networker.prototype.sendGameCommand = function(command, options) {
+    Networker.prototype.sendGameCommand = function (command, options) {
         this.sendCommand('gameCommand', ProtocolHelper.assemble(command, options));
     }
 
-    Networker.prototype.onUserLeft = function(userId) {
+    Networker.prototype.onUserLeft = function (userId) {
         this.gameController.userLeft(userId);
     }
 
-    Networker.prototype.processControlCommand = function(command, options) {
+    Networker.prototype.processControlCommand = function (command, options) {
         switch(command) {
             case 'joinSuccess':
                 this.onJoinSuccess(options);

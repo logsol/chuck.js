@@ -4,7 +4,7 @@ define([
     "Game/Core/Player"
 ],
 
-function(Engine, Level, Player) {
+function (Engine, Level, Player) {
 
     function GameController(physicsEngine) {
         this.players = {};
@@ -16,11 +16,11 @@ function(Engine, Level, Player) {
         this.physicsEngine = physicsEngine;
     }
 
-    GameController.prototype.getPhysicsEngine = function() {
+    GameController.prototype.getPhysicsEngine = function () {
         return this.physicsEngine;
     }
 
-    GameController.prototype.loadLevel = function(path) {
+    GameController.prototype.loadLevel = function (path) {
         if (this.level) {
             this.level.unload();
         }
@@ -31,7 +31,7 @@ function(Engine, Level, Player) {
 
     /*
 
-    GameController.prototype.destroy = function() {
+    GameController.prototype.destroy = function () {
         for(var player in this.players) {
             this.players[player].destroy();
         }
@@ -39,13 +39,13 @@ function(Engine, Level, Player) {
 
     
 
-    GameController.prototype.userJoined = function(user) {
+    GameController.prototype.userJoined = function (user) {
         var player = new Player(user.id, this.physicsEngine);
         this.players[user.id] = player;
         return player;
     }
 
-    GameController.prototype.userLeft = function(user) {
+    GameController.prototype.userLeft = function (user) {
         var player = this.players[user.id];
         player.destroy();
         delete this.players[user.id];

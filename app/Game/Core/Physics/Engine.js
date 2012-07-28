@@ -4,7 +4,7 @@ define([
     "Game/Core/Collision/Detector"
 ],
 
-function(Settings, Box2D, CollisionDetector) {
+function (Settings, Box2D, CollisionDetector) {
 
     function Engine () {
         this.world = new Box2D.Dynamics.b2World(
@@ -13,21 +13,21 @@ function(Settings, Box2D, CollisionDetector) {
         );
     }
 
-    Engine.prototype.getWorld = function() {
+    Engine.prototype.getWorld = function () {
         return this.world;
     }
 
-    Engine.prototype.setCollisionDetector = function(me) {
+    Engine.prototype.setCollisionDetector = function (me) {
         
         var detector = new CollisionDetector(me); // FIXME: check if core collision detector works
         this.world.SetContactListener(detector.getListener());
     }
 
-    Engine.prototype.createBody = function(bodyDef) {
+    Engine.prototype.createBody = function (bodyDef) {
         return this.world.CreateBody(bodyDef);
     }
 
-    Engine.prototype.update = function() {
+    Engine.prototype.update = function () {
         this.world.Step(Settings.BOX2D_TIME_STEP, Settings.BOX2D_VELOCITY_ITERATIONS, Settings.BOX2D_POSITION_ITERATIONS);
         this.world.ClearForces();
     }

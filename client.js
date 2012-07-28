@@ -4,7 +4,7 @@ requirejs.config({
 
 var inspector = {};
 
-requirejs(["Bootstrap/Client"], function(Client) {
+requirejs(["Bootstrap/Client"], function (Client) {
     
     var options = {
         "reconnect": false,

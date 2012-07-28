@@ -4,7 +4,7 @@ define([
     "Lobby/Coordinator"
 ],
 
-function(HttpServer, Socket, Coordinator) {
+function (HttpServer, Socket, Coordinator) {
 
     function Server(options) {
         coordinator = new Coordinator();
