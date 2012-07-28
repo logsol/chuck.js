@@ -5,9 +5,9 @@ var requires = [
     "Game/Client/View/CameraController"
 ];
 
-define(requires, function (DomController, Three, Settings, CameraController){
+define(requires, function (DomController, Three, Settings, CameraController) {
     
-    function ViewController (){
+    function ViewController () {
 
         this.mesh = null;
         this.scene = null;
@@ -25,7 +25,7 @@ define(requires, function (DomController, Three, Settings, CameraController){
         } 
     }
 
-    ViewController.prototype.init = function (){
+    ViewController.prototype.init = function () {
 
         var self = this;
 
@@ -45,7 +45,7 @@ define(requires, function (DomController, Three, Settings, CameraController){
 
         DomController.setCanvas(this.renderer.domElement);
 
-        if(Settings.DEBUG_MODE){
+        if(Settings.DEBUG_MODE) {
             DomController.createDebugCanvas();
         }
 
@@ -61,12 +61,12 @@ define(requires, function (DomController, Three, Settings, CameraController){
         this.scene.add(directionalLight);
 
 
-        this.createMesh(100, 100, 100, 100, 'static/img/100.png', function (mesh){
+        this.createMesh(100, 100, 100, 100, 'static/img/100.png', function (mesh) {
             self.mesh = mesh;
             self.scene.add(mesh);
         });
 /*
-         this.createMesh(50, 50, 200, 100, 'static/img/100.png', function (mesh){
+         this.createMesh(50, 50, 200, 100, 'static/img/100.png', function (mesh) {
             self.scene.add(mesh);
         });
 */
@@ -93,7 +93,7 @@ define(requires, function (DomController, Three, Settings, CameraController){
 
     ViewController.prototype.createMesh = function (width, height, x, y, imgPath, callback) {
         var textureImg = new Image();
-        textureImg.onload = function (){
+        textureImg.onload = function () {
             var material = new Three.MeshLambertMaterial({
                 map: Three.ImageUtils.loadTexture(imgPath)
             });

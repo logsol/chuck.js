@@ -13,25 +13,25 @@ function (User, Channel, childProcess) {
         this.lobbyUsers = {};
     }
 
-    Coordinator.prototype.createUser = function (socketLink){
+    Coordinator.prototype.createUser = function (socketLink) {
         var user = new User(socketLink, this);
         this.assignUserToLobby(user);
     }
 
-    Coordinator.prototype.assignUserToLobby = function (user){
+    Coordinator.prototype.assignUserToLobby = function (user) {
         if(user.channelProcess) {
             //user.channel.releaseUser(user); -> generate message
         }
         this.lobbyUsers[user.id] = user;
     }
 
-    Coordinator.prototype.assignUserToChannel = function (user, channelName){
+    Coordinator.prototype.assignUserToChannel = function (user, channelName) {
 
         if(user.channelProcess) {
             //user.channel.releaseUser(user); -> generate message
         }
 
-        if(!Channel.validateName(channelName)){
+        if(!Channel.validateName(channelName)) {
             //TODO send validation error
             return false;
         }
@@ -62,7 +62,7 @@ function (User, Channel, childProcess) {
         delete this.lobbyUsers[user.id];
     }
 
-    Coordinator.prototype.removeUser = function (user){
+    Coordinator.prototype.removeUser = function (user) {
         delete this.lobbyUsers[user.id];
         if(user.channelProcess) {
             //user.channel.releaseUser(user); -> generate message

@@ -1,4 +1,4 @@
-define(["Game/Core/Control/InputController", "Game/Client/Control/KeyboardInput"], function (InputController, KeyboardInput){
+define(["Game/Core/Control/InputController", "Game/Client/Control/KeyboardInput"], function (InputController, KeyboardInput) {
 
     function KeyboardController (me, gameController) {
 

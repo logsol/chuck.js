@@ -1,4 +1,4 @@
-define(function (){
+define(function () {
 
     function Key () {
         this._active = false;

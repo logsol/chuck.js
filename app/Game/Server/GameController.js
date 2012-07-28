@@ -62,7 +62,7 @@ function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, No
         do {
             var userData = body.GetUserData();
 
-            if(userData && body.IsAwake()){
+            if(userData && body.IsAwake()) {
                 update[userData] = {
                     p: body.GetPosition(),
                     a: body.GetAngle(),

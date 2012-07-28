@@ -15,19 +15,19 @@ function (io) {
         this.init(options);
     }
 
-    Socket.prototype.init = function (options){
+    Socket.prototype.init = function (options) {
 
         var self = this;
-        this.socket.configure('development', function (){
+        this.socket.configure('development', function () {
             this.set('log level', options.logLevel);
         });
 
-        this.socket.on('connection', function (user){
+        this.socket.on('connection', function (user) {
             self.onConnection(user);
         });
     }
 
-    Socket.prototype.onConnection = function (socketLink){
+    Socket.prototype.onConnection = function (socketLink) {
         this.coordinator.createUser(socketLink);
     }
 

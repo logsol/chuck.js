@@ -5,7 +5,7 @@ define(['Game/Config/Settings'], function (Settings) {
         debugCanvas: null
     };
 
-    DomController.getCanvasContainer = function (){
+    DomController.getCanvasContainer = function () {
         var container = document.getElementById(Settings.CANVAS_DOM_ID);
 
         if(container) {
@@ -15,14 +15,14 @@ define(['Game/Config/Settings'], function (Settings) {
         }
     }
 
-    DomController.getCanvas = function (){
+    DomController.getCanvas = function () {
         return DomController.canvas;
     }
 
-    DomController.setCanvas = function (canvas){
+    DomController.setCanvas = function (canvas) {
         
         var container = DomController.getCanvasContainer();
-        if(DomController.canvas){
+        if(DomController.canvas) {
             container.removeChild(DomController.canvas);
         }
 
@@ -30,14 +30,14 @@ define(['Game/Config/Settings'], function (Settings) {
         container.appendChild(canvas);
     }
 
-    DomController.getDebugCanvas = function (){
+    DomController.getDebugCanvas = function () {
         return DomController.debugCanvas;
     }
 
-    DomController.createDebugCanvas = function (){
+    DomController.createDebugCanvas = function () {
         
         var container = DomController.getCanvasContainer();
-        if(DomController.debugCanvas){
+        if(DomController.debugCanvas) {
             container.removeChild(DomController.debugCanvas);
         }
 

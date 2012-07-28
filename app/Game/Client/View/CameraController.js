@@ -31,17 +31,17 @@ define(['Lib/Vendor/Three', 'Game/Config/Settings'], function (Three, Settings) 
         this.camera.position.z = 481;
     }
 
-    CameraController.prototype.getCamera = function (){
+    CameraController.prototype.getCamera = function () {
         return this.camera;
     }
 
-    CameraController.prototype.setPosition = function (x, y){
+    CameraController.prototype.setPosition = function (x, y) {
         this.camera.position.x = x;
         this.camera.position.y = y;
     }
 
 
-    CameraController.prototype.setZoom = function (z){
+    CameraController.prototype.setZoom = function (z) {
         this.camera.position.z = z;
     }
 

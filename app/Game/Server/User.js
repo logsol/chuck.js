@@ -18,7 +18,7 @@ function (Parent, ProtocolHelper, NotificationCenter) {
 
     User.prototype = Object.create(Parent.prototype);
 
-    User.prototype.init = function (socketLink){
+    User.prototype.init = function (socketLink) {
 
         var self = this;
 

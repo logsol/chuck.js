@@ -13,10 +13,10 @@ function (Parent, ProtocolHelper) {
 
         var self = this;
 
-        socketLink.on('message', function (message){
+        socketLink.on('message', function (message) {
             self.onMessage(message);
         });
-        socketLink.on('disconnect', function (){
+        socketLink.on('disconnect', function () {
             self.onDisconnect();
         });
     }
@@ -27,18 +27,18 @@ function (Parent, ProtocolHelper) {
         this.channelProcess = channelProcess;
     }
 
-    User.prototype.onMessage = function (message){
+    User.prototype.onMessage = function (message) {
         var self = this;
-        ProtocolHelper.runCommands(message, function (command, options){
+        ProtocolHelper.runCommands(message, function (command, options) {
             self.processControlCommand(command, options);
         });
     }
 
-    User.prototype.onDisconnect = function (){
+    User.prototype.onDisconnect = function () {
         this.coordinator.removeUser(this);
     }
 
-    User.prototype.processControlCommand = function (command, options){
+    User.prototype.processControlCommand = function (command, options) {
         switch(command) {
 
             case 'join':

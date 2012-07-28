@@ -12,7 +12,7 @@ function (Channel, CoordinatorLink) {
 
         process.on('message', function (message) {
 
-            switch(message){
+            switch(message) {
                 case 'CREATE':
                     channel = new Channel(coordinatorLink);
                     break;

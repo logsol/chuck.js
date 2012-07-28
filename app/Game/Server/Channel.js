@@ -23,7 +23,7 @@
     */
         }
 
-        Channel.validateName = function (name){
+        Channel.validateName = function (name) {
             return true;
         }
 
@@ -53,7 +53,7 @@
 
         Channel.prototype.forward = function (target, message) {
             for(var command in message) {
-                if(typeof target[command] == 'function'){
+                if(typeof target[command] == 'function') {
                     target[command].call(target, message[command]);
                 } else {
                     throw 'trying to call undefined function ' + target[command];
@@ -67,7 +67,7 @@
         }
         
     /*
-        Channel.prototype.addUser = function (user){
+        Channel.prototype.addUser = function (user) {
             var userIds = Object.keys(this.users);
 
             this.users[user.id] = user;

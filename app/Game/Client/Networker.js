@@ -41,7 +41,7 @@ function (ProtocolHelper, GameController) {
         console.log('disconnected. game destroyed. no auto-reconnect');
     }
 
-    Networker.prototype.join = function (channelName){
+    Networker.prototype.join = function (channelName) {
         this.sendCommand('join', channelName);
     }
 

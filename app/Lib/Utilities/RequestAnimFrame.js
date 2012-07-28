@@ -4,9 +4,9 @@ define([
 
 function (Settings) {
 
-    var requestAnimFrame =  (function (){
+    var requestAnimFrame = (function () {
 
-        var _setTimeout = function ( callback ){
+        var _setTimeout = function ( callback ) {
             setTimeout(callback, Settings.BOX2D_TIME_STEP * 1000);
         }
 
