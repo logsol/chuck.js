@@ -1,17 +1,19 @@
 var requirejs = require('requirejs');
 
 requirejs.config({
+    nodeRequire: require,
     baseUrl: 'app'
 });
 
 var inspector = {};
 
 requirejs([
-    "Game/Server/LobbyPipe"
+    "Game/Server/PipeToLobby",
+    "Game/Core/NotificationCenter"
 ], 
 
-function (LobbyPipe) {
-	var lobbyPipe = new LobbyPipe(process);
+function (PipeToLobby, nc) {
+	var PipeToLobby = new PipeToLobby(process);
     
-    inspector.lobbyPipe = lobbyPipe;
+    inspector.PipeToLobby = PipeToLobby;
 });

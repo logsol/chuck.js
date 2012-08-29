@@ -1,13 +1,11 @@
 define([
     "Lobby/User", 
     "Game/Server/Channel",
-    "Lobby/PipeToChannel"
-    "child_process"
+    "Lobby/PipeToChannel",
+    "Game/Core/NotificationCenter"
 ], 
 
-function (User, Channel, PipeToChannel, childProcess) {
-
-    var fork = childProcess.fork;
+function (User, Channel, PipeToChannel, NotificationCenter) {
 
     function Coordinator () {
         this.channels = {};

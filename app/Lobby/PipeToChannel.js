@@ -1,8 +1,11 @@
 define([
-	"Game/Core/NotificationCenter"
+	//"Game/Core/NotificationCenter",
+	"child_process"
 ],
 
-function (NotificationCenter) {
+function (childProcess) {
+
+	var fork = childProcess.fork;
 
 	function PipeToChannel (channelName) {
 

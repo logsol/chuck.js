@@ -1,30 +1,33 @@
 define([
-    "Game/Core/NotficationCenter"
+    "Game/Core/NotificationCenter",
+    "Game/Server/Channel"
 ],
 
-function (NotficationCenter) {
+function (NotificationCenter, Channel) {
 
     function PipeToLobby (process) {
+
+        var self = this;
 
         this.channel = null;
         this.process = process;
 
-        NotficationCenter.on('net/send', this.send, this);
+        NotificationCenter.on('net/send', this.send, this);
 
         process.on('message', function (message, handle) {
 
-            switch(message) {
+            switch(message.data) {
                 case 'CREATE':
-                    this.channel = new Channel(this);
+                    self.channel = new Channel(self);
                     break;
 
                 case 'KILL':
-                    this.channel.destroy();
+                    self.channel.destroy();
                     process.exit(0);
                     break;
 
                 default:
-                    this.onMessage(message);
+                    self.onMessage(message);
                     break;
             }
         });    
@@ -40,7 +43,7 @@ function (NotficationCenter) {
     };
 
     PipeToLobby.prototype.onMessage = function (message) {
-        NotficationCenter.trigger(message.recipient + '/message', message.data);
+        NotificationCenter.trigger(message.recipient + '/message', message.data);
     }
 
     return PipeToLobby;

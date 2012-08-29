@@ -5,11 +5,16 @@
 
     function (GameController, NotificationCenter) {
 
-        function Channel (coordinatorLink) {
+        function Channel (pipeToLobby) {
+
             var self = this;
 
-            this.coordinatorLink = coordinatorLink;
-            this.coordinatorLink.receive = function (message) { self.onMessage(message) };
+            this.pipeToLobby = pipeToLobby;
+
+            
+            //this.pipeToLobby.receive = function (message) { self.onMessage(message) };
+            // !!! This should be done differently - use NotificationCenter.on('channel/dungeon/message') instead
+
             
             this.users = {};
 
