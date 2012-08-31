@@ -26,6 +26,7 @@ function (http, nodeStatic) {
                     switch(true) {
                         case req.url == '/':
                             fileServer.serveFile('./static/html/index.html', 200, {}, req, res);
+                            console.checkpoint('HTTP Server serves index');
                             break;
 
                         case req.url == '/client.js':
@@ -56,6 +57,7 @@ function (http, nodeStatic) {
             }
         );
         this.server.listen(options.port);
+        console.checkpoint('start HTTP server');
     }
 
     HttpServer.prototype.getServer = function () {

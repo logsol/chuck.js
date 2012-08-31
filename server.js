@@ -18,6 +18,10 @@ var options = {
     logLevel: process.argv[3] || 0
 };
 
+console.checkpoint = function (s) {
+    console.log('   \033[34mbeep  - \033[0m' + s);
+}
+
 requirejs([
     "Bootstrap/HttpServer", 
     "Bootstrap/Socket",

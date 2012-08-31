@@ -23,8 +23,11 @@ function (io) {
         });
 
         this.socket.on('connection', function (user) {
+            console.checkpoint('socket receiving connection');
             self.onConnection(user);
         });
+
+        console.checkpoint('start Socket Listener');
     }
 
     Socket.prototype.onConnection = function (socketLink) {

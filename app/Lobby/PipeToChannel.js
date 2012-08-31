@@ -1,24 +1,27 @@
 define([
-	//"Game/Core/NotificationCenter",
+	"Game/Core/NotificationCenter",
 	"child_process"
 ],
 
-function (childProcess) {
+function (NotificationCenter, childProcess) {
 
 	var fork = childProcess.fork;
 
 	function PipeToChannel (channelName) {
 
-		this.channelProcess = null;
+		this.channelPipe = null;
 
 		try {
-            this.channelProcess = fork('channel.js');
+            this.channelPipe = fork('channel.js');
         } catch (err) {
             throw 'Failed to fork channel! (' + err + ')';
         }
 
-        this.send('channel/' + channelName, 'CREATE');
-        this.channelProcess.on('message', this.onMessage.bind(this));
+        console.checkpoint('creating channel process for ' + channelName);
+
+        this.send('channel/' + channelName, { CREATE: channelName });
+
+        this.channelPipe.on('message', this.onMessage.bind(this));
 
         var self = this;
 	}
@@ -29,7 +32,7 @@ function (childProcess) {
             data: data
         }
 
-		this.channelProcess.send(message);
+		this.channelPipe.send(message);
 	}
 
 	PipeToChannel.prototype.onMessage = function (message) {

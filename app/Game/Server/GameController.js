@@ -9,16 +9,19 @@ define([
 
 function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, NotificationCenter) {
 
-    function GameController () {
+    function GameController (channel) {
         Parent.call(this, new PhysicsEngine());
 
         this.inputControllers = {};
+        this.channel = channel;
 
         //this.update();
         //this.updateWorld();
 
         //NotificationCenter.on('user/joined', this.userJoined, this);
         //NotificationCenter.on('user/left', this.userLeft, this);
+
+        console.checkpoint('starting game controller for channel ' + channel.name);
     }
 
     GameController.prototype = Object.create(Parent.prototype);

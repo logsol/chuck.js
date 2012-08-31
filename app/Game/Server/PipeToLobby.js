@@ -16,19 +16,21 @@ function (NotificationCenter, Channel) {
 
         process.on('message', function (message, handle) {
 
-            switch(message.data) {
-                case 'CREATE':
-                    self.channel = new Channel(self);
-                    break;
+            for(var method in message.data) {
+                switch(method) {
+                    case 'CREATE':
+                        self.channel = new Channel(this, message.data[method]);
+                        break;
 
-                case 'KILL':
-                    self.channel.destroy();
-                    process.exit(0);
-                    break;
+                    case 'KILL':
+                        self.channel.destroy();
+                        process.exit(0);
+                        break;
 
-                default:
-                    self.onMessage(message);
-                    break;
+                    default:
+                        self.onMessage(message);
+                        break;
+                }
             }
         });    
     }
@@ -43,7 +45,7 @@ function (NotificationCenter, Channel) {
     };
 
     PipeToLobby.prototype.onMessage = function (message) {
-        NotificationCenter.trigger(message.recipient + '/message', message.data);
+        NotificationCenter.trigger(message.recipient + '/message', message);
     }
 
     return PipeToLobby;

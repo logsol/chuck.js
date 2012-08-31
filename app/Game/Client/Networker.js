@@ -39,6 +39,7 @@ function (ProtocolHelper, GameController) {
         if(this.gameController) this.gameController.destruct();
         this.gameController = null;
         console.log('disconnected. game destroyed. no auto-reconnect');
+        document.body.style.backgroundColor = '#aaaaaa';
     }
 
     Networker.prototype.join = function (channelName) {

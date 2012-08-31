@@ -7,6 +7,10 @@ requirejs.config({
 
 var inspector = {};
 
+console.checkpoint = function (s) {
+    console.log('   \033[34mbeep  - \033[0m' + s);
+}
+
 requirejs([
     "Game/Server/PipeToLobby",
     "Game/Core/NotificationCenter"
