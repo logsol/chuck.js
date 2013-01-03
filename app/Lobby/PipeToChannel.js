@@ -36,7 +36,7 @@ function (NotificationCenter, childProcess) {
 	}
 
 	PipeToChannel.prototype.onMessage = function (message) {
-		NotficationCenter.trigger(message.recipient + '/message', message.data);
+		NotificationCenter.trigger(message.recipient + '/message', message.data);
 	}
 
 	return PipeToChannel;

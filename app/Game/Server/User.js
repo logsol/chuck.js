@@ -1,45 +1,31 @@
 define([
-    "Game/Core/User",
-    "Game/Core/Protocol/Helper",
-    "Game/Core/NotificationCenter"
-], 
+	"Game/Core/User",
+	"Game/Core/NotificationCenter",
+	"Game/Core/Protocol/Helper"
+],
+ 
+function(Parent, NotificationCenter, ProtocolHelper) {
+ 
+    function User(id, channel) {
+    	Parent.call(this, id);
 
-function (Parent, ProtocolHelper, NotificationCenter) {
+    	this.channel = channel;
+    	var self = this;
 
-    function User (socketLink, coordinator) {
-        Parent.call(this, socketLink.id);
-        this.id = socketLink.id;
-        this.socketLink = socketLink;
-        this.coordinator = coordinator;
-        this.channel = null;
-        
-        this.init(socketLink);
+    	NotificationCenter.on('user/joined', function(user) {
+    		self.sendCommand("joined", true);
+    	});
     }
 
     User.prototype = Object.create(Parent.prototype);
 
-    User.prototype.init = function (socketLink) {
+    User.prototype.sendCommand = function(command, options) {
+    	var recipient = "user/" + this.id;
+		var data = ProtocolHelper.encodeCommand(command, options);
 
-        var self = this;
-
-    }
-/*
-    User.prototype.setChannel = function (channel) {
-        this.channel = channel;
-    }
-
-    User.prototype.sendCommand = function (command, options) {
-
-        var message = ProtocolHelper.encodeCommand(command, options);
-        this.socketLink.send(message);
-    }
-
-
-
-    User.prototype.toString = function () {
-        return "[User " + this.id + "]";
+    	NotificationCenter.trigger("net/send", recipient, data);
     };
-*/
+
     return User;
-    
+ 
 });

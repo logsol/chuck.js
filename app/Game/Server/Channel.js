@@ -1,9 +1,10 @@
     define([
         "Game/Server/GameController",
-        "Game/Core/NotificationCenter"
+        "Game/Core/NotificationCenter",
+        "Game/Server/User"
     ], 
 
-    function (GameController, NotificationCenter) {
+    function (GameController, NotificationCenter, User) {
 
         function Channel (pipeToLobby, name) {
 
@@ -36,12 +37,12 @@
 
                 switch(message.recipient) {
                     case 'user':
-                        self.forward(self.users[message.id], message.user);
+                        self.forward(self.users[message.id], message.data);
                         break;
                     case 'id': // Do nothing, it is needed by the user
                         break;
                     case 'channel':
-                        self.forward(self, message.channel);
+                        self.forward(self, message.data);
                         break;
                     default: 
                         throw 'unknown recipient';
@@ -67,16 +68,16 @@
         };
         
     
-        Channel.prototype.addUser = function (user) {
-            //var userIds = Object.keys(this.users);
-            console.log('addUser', user);
+        Channel.prototype.addUser = function (userId) {
+            var user = new User(userId, this);
             this.users[user.id] = user;
-
-            //user.sendCommand('joinSuccess', {channelName: this.name, id: user.id, userIds: userIds});
-            //this.sendCommandToAllUsersExcept('userJoined', user.id, user);
-
-            //NotificationCenter.trigger('user/joined', user);
+            NotificationCenter.trigger('user/joined', user);
         }
+/*
+        Channel.prototype.send = function(recipient, message) {
+
+            this.pipeToLobby.send(recipient, message);
+        }*/
 /*
         Channel.prototype.releaseUser = function (user) {
             this.gameController.userIdLeft(user.id);

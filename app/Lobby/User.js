@@ -1,9 +1,10 @@
 define([
     "Game/Core/User",
-    "Game/Core/Protocol/Helper"
+    "Game/Core/Protocol/Helper",
+    "Game/Core/NotificationCenter"
 ],
 
-function (Parent, ProtocolHelper) {
+function (Parent, ProtocolHelper, NotificationCenter) {
 
     function User (socketLink, coordinator) {
         Parent.call(this, socketLink.id);
@@ -20,6 +21,8 @@ function (Parent, ProtocolHelper) {
         socketLink.on('disconnect', function () {
             self.onDisconnect();
         });
+
+        NotificationCenter.on("user/" + this.socketLink.id + "/message", this.onChannelMessage, this);
     }
 
     User.prototype = Object.create(Parent.prototype);
@@ -61,6 +64,10 @@ function (Parent, ProtocolHelper) {
                 break;
         }
     }
+
+    User.prototype.onChannelMessage = function(message) {
+        this.socketLink.send(message);
+    };
 
     return User;
 

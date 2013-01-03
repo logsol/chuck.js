@@ -19,11 +19,12 @@ function (ProtocolHelper, GameController) {
         this.socketLink.on('connect', function () {
             self.onConnect();
         });
-/*
+
         this.socketLink.on('message', function (message) {
-            self.onMessage(message);
+            //self.onMessage(message);
+            console.log('Message from server: ', message);
         });
-*/
+
         this.socketLink.on('disconnect', function () {
             self.onDisconnect();
         });
@@ -48,7 +49,7 @@ function (ProtocolHelper, GameController) {
 
 
     Networker.prototype.onJoinSuccess = function (options) {
-        this.gameController = new GameController(options.id);
+        this.gameController = new GameController();
         this.gameController.loadLevel("default.json");
         /*
         console.log("Joined " + options.channelName);
