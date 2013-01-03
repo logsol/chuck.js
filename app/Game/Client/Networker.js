@@ -49,7 +49,7 @@ function (ProtocolHelper, GameController) {
 
     Networker.prototype.onJoinSuccess = function (options) {
         this.gameController = new GameController();
-        this.gameController.loadLevel("default.json");
+        //this.gameController.loadLevel("default.json");
         
 
 
