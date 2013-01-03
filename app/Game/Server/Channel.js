@@ -15,25 +15,18 @@
             this.users = {};
 
             this.pipeToLobby = pipeToLobby;
+
             this.gameController = new GameController(this);
-            
             this.gameController.loadLevel("default.json");
 
-            //this.pipeToLobby.receive = function (message) { self.onMessage(message) };
-            // !!! This should be done differently - use NotificationCenter.on('channel/dungeon/message') instead
 
             /*
             var self = this;
             NotificationCenter.on("processGameCommandFromUser", function (topic, args) {
                 self.processGameCommandFromUser.apply(self, args);
             });
+             */
 
-
-    */
-
-            // Messages look like:
-            // {channel: {setName: 'foo'}}
-            // {user: {jupm: null}, id: 12}
             NotificationCenter.on('channel/message', function (message) {
 
                 switch(message.recipient) {
@@ -60,7 +53,7 @@
                 }
             });
 
-            NotificationCenter.on('channel/users/all', this.sendControlCommandToAllUsers, this);
+            NotificationCenter.on('sendControlCommandToAllUsers', this.sendControlCommandToAllUsers, this);
             NotificationCenter.on('channel/users/all/except', this.sendControlCommandToAllUsersExcept, this);
 
             console.checkpoint('channel ' + name + ' created');

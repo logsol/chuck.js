@@ -29,15 +29,11 @@ function (Engine, Level, Player) {
         this.level.loadLevelInToEngine();
     }
 
-    /*
-
     GameController.prototype.destroy = function () {
         for(var player in this.players) {
             this.players[player].destroy();
         }
     }
-
-    
 
     GameController.prototype.userJoined = function (user) {
         var player = new Player(user.id, this.physicsEngine);
@@ -51,7 +47,6 @@ function (Engine, Level, Player) {
         delete this.players[user.id];
     }
 
-    */
 
     return GameController;
 });

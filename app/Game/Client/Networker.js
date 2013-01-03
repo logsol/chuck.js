@@ -48,8 +48,8 @@ function (ProtocolHelper, GameController) {
 
 
     Networker.prototype.onJoinSuccess = function (options) {
-        //this.gameController = new GameController();
-        //this.gameController.loadLevel("default.json");
+        this.gameController = new GameController();
+        this.gameController.loadLevel("default.json");
         
 
 
@@ -79,7 +79,7 @@ function (ProtocolHelper, GameController) {
     }
 
     Networker.prototype.onUserJoined = function (userId) {
-        //this.gameController.userJoined(userId);
+        //this.gameController.userJoined(userId); -> replace with game command
         console.log("User " + userId + " joined");
     }
 /*
@@ -88,7 +88,7 @@ function (ProtocolHelper, GameController) {
     }
 */
     Networker.prototype.onUserLeft = function (userId) {
-        //this.gameController.userLeft(userId);
+        //this.gameController.userLeft(userId); -> replace with game command
         console.log("User " + userId + " left");
     }
 

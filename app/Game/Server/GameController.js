@@ -15,17 +15,17 @@ function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, No
         this.inputControllers = {};
         this.channel = channel;
 
-        //this.update();
-        //this.updateWorld();
+        this.update();
+        this.updateWorld();
 
-        //NotificationCenter.on('user/joined', this.userJoined, this);
-        //NotificationCenter.on('user/left', this.userLeft, this);
+        NotificationCenter.on('user/joined', this.userJoined, this);
+        NotificationCenter.on('user/left', this.userLeft, this);
 
         console.checkpoint('starting game controller for channel ' + channel.name);
     }
 
     GameController.prototype = Object.create(Parent.prototype);
-/*
+
     GameController.prototype.update  = function () {
 
         requestAnimFrame(this.update.bind(this));
@@ -37,6 +37,8 @@ function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, No
     }
 
     GameController.prototype.userJoined = function (user) {
+        console.log(Parent.prototype);
+
         Parent.prototype.userJoined.call(this, user);
         
         var id = user.id;
@@ -77,11 +79,11 @@ function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, No
         } while (body = body.GetNext());
         
         if(isUpdateNeeded) {
-            //NotificationCenter.trigger("sendCommandToAllUsers", ['gameCommand', {worldUpdate:update}]);
+            NotificationCenter.trigger("sendControlCommandToAllUsers", ['gameCommand', {worldUpdate:update}]);
         }
 
         setTimeout(this.updateWorld.bind(this), Settings.WORLD_UPDATE_BROADCAST_INTERVAL);
     }
-*/
+
     return GameController;
 });
