@@ -1,10 +1,11 @@
     define([
         "Game/Server/GameController",
         "Game/Core/NotificationCenter",
-        "Game/Server/User"
+        "Game/Server/User",
+        "Game/Core/Protocol/Helper"
     ], 
 
-    function (GameController, NotificationCenter, User) {
+    function (GameController, NotificationCenter, User, ProtocolHelper) {
 
         function Channel (pipeToLobby, name) {
 
@@ -33,22 +34,34 @@
             // Messages look like:
             // {channel: {setName: 'foo'}}
             // {user: {jupm: null}, id: 12}
-            NotificationCenter.on('channel/message', function (message){
+            NotificationCenter.on('channel/message', function (message) {
 
                 switch(message.recipient) {
                     case 'user':
-                        self.forward(self.users[message.id], message.data);
+                        console.log(message);
+                        var user = self.users[message.id];
+                        ProtocolHelper.runCommands(message.data, function (command, options) {
+                            user[command].call(user, options);
+                        });
                         break;
+
                     case 'id': // Do nothing, it is needed by the user
                         break;
+
                     case 'channel':
-                        self.forward(self, message.data);
+                        ProtocolHelper.runCommands(message.data, function (command, options) {
+                            self[command].call(self, options);
+                        });
                         break;
+
                     default: 
                         throw 'unknown recipient';
                         break;
                 }
             });
+
+            NotificationCenter.on('channel/users/all', this.sendControlCommandToAllUsers, this);
+            NotificationCenter.on('channel/users/all/except', this.sendControlCommandToAllUsersExcept, this);
 
             console.checkpoint('channel ' + name + ' created');
         }
@@ -57,49 +70,36 @@
             return true;
         }
 
-        Channel.prototype.forward = function (target, message) {
-            for(var command in message) {
-                if(typeof target[command] == 'function') {
-                    target[command].call(target, message[command]);
-                } else {
-                    throw 'trying to call undefined function ' + target[command];
-                }
-            }
-        };
-        
-    
         Channel.prototype.addUser = function (userId) {
             var user = new User(userId, this);
             this.users[user.id] = user;
+            NotificationCenter.trigger('user/' + user.id + "/joinSuccess", {userId: user.id, channelName: this.name});
             NotificationCenter.trigger('user/joined', user);
         }
-/*
-        Channel.prototype.send = function(recipient, message) {
 
-            this.pipeToLobby.send(recipient, message);
-        }*/
-/*
-        Channel.prototype.releaseUser = function (user) {
-            this.gameController.userIdLeft(user.id);
 
-            this.sendCommandToAllUsersExcept("userLeft", user.id, user);
+        Channel.prototype.releaseUser = function (userId) {
+            var user = this.users[userId];
+            //this.gameController.userIdLeft(user.id);
+
+            this.sendControlCommandToAllUsersExcept("userLeft", user.id, user);
             delete this.users[user.id];
         }
 
-        Channel.prototype.sendCommandToAllUsers = function (command, options) {
+        Channel.prototype.sendControlCommandToAllUsers = function (command, options) {
             for(var id in this.users) {
-                this.users[id].sendCommand(command, options);
+                this.users[id].sendControlCommand(command, options);
             }
         }
 
-        Channel.prototype.sendCommandToAllUsersExcept = function (command, options, except_user) {
+        Channel.prototype.sendControlCommandToAllUsersExcept = function (command, options, exceptUser) {
             for(var id in this.users) {
-                if (id != except_user.id) {
-                    this.users[id].sendCommand(command, options);
+                if (id != exceptUser.id) {
+                    this.users[id].sendControlCommand(command, options);
                 }
             }
         }
-
+/*
         Channel.prototype.processGameCommandFromUser = function (command, options, user) {
             this.gameController.progressGameCommandFromUser(command, options, user);
         }

@@ -12,7 +12,7 @@ function (NotificationCenter, Channel) {
         this.channel = null;
         this.process = process;
 
-        NotificationCenter.on('net/send', this.send, this);
+        NotificationCenter.on('process/message', this.send, this);
 
         process.on('message', function (message, handle) {
 

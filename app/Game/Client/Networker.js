@@ -21,8 +21,7 @@ function (ProtocolHelper, GameController) {
         });
 
         this.socketLink.on('message', function (message) {
-            //self.onMessage(message);
-            console.log('Message from server: ', message);
+            self.onMessage(message);
         });
 
         this.socketLink.on('disconnect', function () {
@@ -49,11 +48,13 @@ function (ProtocolHelper, GameController) {
 
 
     Networker.prototype.onJoinSuccess = function (options) {
-        this.gameController = new GameController();
-        this.gameController.loadLevel("default.json");
-        /*
-        console.log("Joined " + options.channelName);
+        //this.gameController = new GameController();
+        //this.gameController.loadLevel("default.json");
+        
 
+
+        console.log("Joined " + options.channelName);
+        /*
         if (options.userIds && options.userIds.length > 0) {
             for(var i = 0; i < options.userIds.length; i++) {
                 this.gameController.userJoined(options.userIds[i])
@@ -67,7 +68,7 @@ function (ProtocolHelper, GameController) {
         this.socketLink.send(message);
     }
 
-/*
+
     Networker.prototype.onMessage = function (message) {
         var self = this;
         
@@ -78,19 +79,21 @@ function (ProtocolHelper, GameController) {
     }
 
     Networker.prototype.onUserJoined = function (userId) {
-        this.gameController.userJoined(userId);
+        //this.gameController.userJoined(userId);
         console.log("User " + userId + " joined");
     }
-
+/*
     Networker.prototype.sendGameCommand = function (command, options) {
         this.sendCommand('gameCommand', ProtocolHelper.assemble(command, options));
     }
-
+*/
     Networker.prototype.onUserLeft = function (userId) {
-        this.gameController.userLeft(userId);
+        //this.gameController.userLeft(userId);
+        console.log("User " + userId + " left");
     }
 
     Networker.prototype.processControlCommand = function (command, options) {
+        
         switch(command) {
             case 'joinSuccess':
                 this.onJoinSuccess(options);
@@ -98,7 +101,7 @@ function (ProtocolHelper, GameController) {
 
             case 'gameCommand':
                 for(var gameCommand in options) {
-                    this.gameController.processGameCommand(gameCommand, options[gameCommand]);
+                    //this.gameController.processGameCommand(gameCommand, options[gameCommand]);
                 }
                 break;
 
@@ -114,7 +117,7 @@ function (ProtocolHelper, GameController) {
                 break;
         }
     }
-*/
+
     return Networker;
     
 });

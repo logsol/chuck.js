@@ -13,17 +13,28 @@ function(Parent, NotificationCenter, ProtocolHelper) {
     	var self = this;
 
     	NotificationCenter.on('user/joined', function(user) {
-    		self.sendCommand("joined", true);
+    		if(user.id != self.id) {
+    			self.sendControlCommand("userJoined", user.id);    			
+    		}
+    	});
+
+    	NotificationCenter.on('user/' + this.id + "/joinSuccess", function(options) {
+    		self.sendControlCommand("joinSuccess", options);
     	});
     }
 
     User.prototype = Object.create(Parent.prototype);
 
-    User.prototype.sendCommand = function(command, options) {
+    User.prototype.sendControlCommand = function(command, options) {
     	var recipient = "user/" + this.id;
 		var data = ProtocolHelper.encodeCommand(command, options);
 
-    	NotificationCenter.trigger("net/send", recipient, data);
+    	NotificationCenter.trigger("process/message", recipient, data);
+    };
+
+    User.prototype.sendGameCommand = function(command, options) {
+    	var data = ProtocolHelper.encodeCommand(command, options);
+    	this.sendControlCommand("gameCommand", data);
     };
 
     return User;

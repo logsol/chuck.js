@@ -17,7 +17,12 @@ function (Parser) {
     }
 
     Helper.runCommands = function (message, callback) {
-        var commands = Parser.decode(message);
+        var commands;
+        if (typeof message == "string") {
+            commands = Parser.decode(message);
+        } else {
+            commands = message;
+        }
         
         for(var command in commands) {
             callback(command, commands[command]);

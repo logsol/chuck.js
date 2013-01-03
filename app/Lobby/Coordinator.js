@@ -53,7 +53,7 @@ function (User, Channel, PipeToChannel, NotificationCenter) {
 
     Coordinator.prototype.removeUser = function (user) {
 
-        //user.channel.send('user/' + user.id + '/left');
+        NotificationCenter.trigger('user/left', user);
         //NotificationCenter.off('channel/' + user.channel.channelName + '/user/' + user.id);
 
         delete this.lobbyUsers[user.id];
@@ -82,7 +82,7 @@ function (User, Channel, PipeToChannel, NotificationCenter) {
         }, this);
 
         NotificationCenter.on('user/left', function (user) {
-
+            channelPipe.send('channel', { releaseUser: user.id });
         }, this);
         
         return channelPipe;
