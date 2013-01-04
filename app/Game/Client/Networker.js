@@ -58,16 +58,15 @@ function (ProtocolHelper, GameController, User, NotificationCenter) {
         var user = new User(options.userId);
         this.gameController.meJoined(user);
 
-        console.log("Joined " + options.channelName);
+        console.log("Joined ", options);
 
-
-        /*
-        if (options.userIds && options.userIds.length > 0) {
-            for(var i = 0; i < options.userIds.length; i++) {
-                this.gameController.userJoined(options.userIds[i])
+        // -> replace with decent command
+        if (options.others && options.others.length > 0) {
+            for(var i = 0; i < options.others.length; i++) {
+                var user = {id: options.others[i]};
+                this.gameController.userJoined(user);
             }
         }
-        */
     }
 
     Networker.prototype.sendCommand = function (command, options) {
@@ -75,6 +74,10 @@ function (ProtocolHelper, GameController, User, NotificationCenter) {
         this.socketLink.send(message);
     }
 
+    Networker.prototype.sendGameCommand = function(command, options) {
+        var message = ProtocolHelper.encodeCommand(command, options);
+        this.sendCommand('gameCommand', message);
+    }
 
     Networker.prototype.onMessage = function (message) {
         var self = this;
@@ -86,16 +89,16 @@ function (ProtocolHelper, GameController, User, NotificationCenter) {
     }
 
     Networker.prototype.onUserJoined = function (userId) {
-        //this.gameController.userJoined(userId); -> replace with game command
+        // -> replace with game command
+        var user = {id: userId};
+        this.gameController.userJoined(user);
         console.log("User " + userId + " joined");
     }
-/*
-    Networker.prototype.sendGameCommand = function (command, options) {
-        this.sendCommand('gameCommand', ProtocolHelper.assemble(command, options));
-    }
-*/
+
     Networker.prototype.onUserLeft = function (userId) {
-        //this.gameController.userLeft(userId); -> replace with game command
+        // -> replace with game command
+        var user = {id: userId};
+        this.gameController.userLeft(user);
         console.log("User " + userId + " left");
     }
 
@@ -124,11 +127,6 @@ function (ProtocolHelper, GameController, User, NotificationCenter) {
                 break;
         }
     }
-
-    Networker.prototype.sendGameCommand = function(command, options) {
-        var message = ProtocolHelper.encodeCommand(command, options);
-        this.sendCommand('gameCommand', message);
-    };
 
     return Networker;
     

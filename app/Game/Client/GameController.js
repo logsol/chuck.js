@@ -48,6 +48,16 @@ function (Parent, PhysicsEngine, ViewController, KeyboardController, Notificatio
         this.keyboardController = new KeyboardController(this.me, this);
     }
 
+    GameController.prototype.userJoined = function (user) {
+        var player = Parent.prototype.userJoined.call(this, user);
+        player.spawn(50, 50);
+        return player;
+    }
+/*
+    GameController.prototype.userLeft = function (user) {
+        Parent.prototype.userLeft.call(user);
+    }
+*/
     GameController.prototype.processGameCommand = function (command, options) {
         
         if (command == "worldUpdate") {
