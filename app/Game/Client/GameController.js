@@ -17,14 +17,12 @@ function (Parent, PhysicsEngine, ViewController, KeyboardController, Notificatio
         this.me = null;
         this.keyboardController = null;
 
-        //NotificationCenter.on('me/joined', this.meJoined, this)
-
-        //this.update();
+        this.update();
     }
 
     GameController.prototype = Object.create(Parent.prototype);
 
-/*
+
     GameController.prototype.getMe = function () {
         return this.me;
     }
@@ -44,7 +42,6 @@ function (Parent, PhysicsEngine, ViewController, KeyboardController, Notificatio
 
     GameController.prototype.meJoined = function (user) {
         this.me = this.userJoined(user);
-
         this.keyboardController = new KeyboardController(this.me, this);
     }
 
@@ -71,6 +68,6 @@ function (Parent, PhysicsEngine, ViewController, KeyboardController, Notificatio
         }
 
     }
-*/
+
     return GameController;
 });

@@ -1,9 +1,10 @@
 define([
     "Game/Core/Protocol/Helper", 
-    "Game/Client/GameController"
+    "Game/Client/GameController",
+    "Game/Core/User"
 ], 
 
-function (ProtocolHelper, GameController) {
+function (ProtocolHelper, GameController, User) {
 
     function Networker (socketLink) {
         this.socketLink = socketLink;
@@ -49,11 +50,15 @@ function (ProtocolHelper, GameController) {
 
     Networker.prototype.onJoinSuccess = function (options) {
         this.gameController = new GameController();
-        //this.gameController.loadLevel("default.json");
+        this.gameController.loadLevel("default.json");
         
 
+        var user = new User(options.userId);
+        this.gameController.meJoined(user);
 
         console.log("Joined " + options.channelName);
+
+
         /*
         if (options.userIds && options.userIds.length > 0) {
             for(var i = 0; i < options.userIds.length; i++) {
@@ -71,7 +76,7 @@ function (ProtocolHelper, GameController) {
 
     Networker.prototype.onMessage = function (message) {
         var self = this;
-        
+
         ProtocolHelper.runCommands(message, function (command, options) {
             self.processControlCommand(command, options);
         });
@@ -93,7 +98,7 @@ function (ProtocolHelper, GameController) {
     }
 
     Networker.prototype.processControlCommand = function (command, options) {
-        
+
         switch(command) {
             case 'joinSuccess':
                 this.onJoinSuccess(options);
@@ -101,7 +106,7 @@ function (ProtocolHelper, GameController) {
 
             case 'gameCommand':
                 for(var gameCommand in options) {
-                    //this.gameController.processGameCommand(gameCommand, options[gameCommand]);
+                    this.gameController.processGameCommand(gameCommand, options[gameCommand]);
                 }
                 break;
 

@@ -37,12 +37,11 @@ function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, No
     }
 
     GameController.prototype.userJoined = function (user) {
-        console.log(Parent.prototype);
-
         Parent.prototype.userJoined.call(this, user);
         
         var id = user.id;
         var player = this.players[id];
+        player.spawn(50, 50);
         this.inputControllers[id] = new InputController(player);
     }
 
@@ -67,6 +66,9 @@ function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, No
         do {
             var userData = body.GetUserData();
 
+
+
+
             if(userData && body.IsAwake()) {
                 update[userData] = {
                     p: body.GetPosition(),
@@ -79,7 +81,7 @@ function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, No
         } while (body = body.GetNext());
         
         if(isUpdateNeeded) {
-            NotificationCenter.trigger("sendControlCommandToAllUsers", ['gameCommand', {worldUpdate:update}]);
+            NotificationCenter.trigger("sendControlCommandToAllUsers", 'gameCommand', {worldUpdate:update});
         }
 
         setTimeout(this.updateWorld.bind(this), Settings.WORLD_UPDATE_BROADCAST_INTERVAL);
