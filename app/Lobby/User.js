@@ -54,10 +54,7 @@ function (Parent, ProtocolHelper, NotificationCenter) {
                 break;
 
             case 'gameCommand':
-                for(var gameCommand in options) {
-                    //NotificationCenter.trigger("processGameCommandFromUser", [gameCommand, options[gameCommand], this]);
-                    //this.channel.processGameCommandFromUser(gameCommand, options[gameCommand], this);
-                }
+                NotificationCenter.trigger("user/gameCommand", this.id, options);
                 break;
 
             default: 

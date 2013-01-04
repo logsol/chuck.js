@@ -84,6 +84,10 @@ function (User, Channel, PipeToChannel, NotificationCenter) {
         NotificationCenter.on('user/left', function (user) {
             channelPipe.send('channel', { releaseUser: user.id });
         }, this);
+
+        NotificationCenter.on('user/gameCommand', function (userId, data) {
+            channelPipe.sendToUser(userId, data);
+        }, this);
         
         return channelPipe;
     };

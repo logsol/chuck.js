@@ -35,6 +35,15 @@ function (NotificationCenter, childProcess) {
 		this.channelPipe.send(message);
 	}
 
+	PipeToChannel.prototype.sendToUser = function (id, data) {
+        var message = {
+            recipient: "user/" + id,
+            data: data
+        }
+		
+		this.channelPipe.send(message);
+	}
+
 	PipeToChannel.prototype.onMessage = function (message) {
 		NotificationCenter.trigger(message.recipient + '/message', message.data);
 	}

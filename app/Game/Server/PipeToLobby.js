@@ -45,7 +45,7 @@ function (NotificationCenter, Channel) {
     };
 
     PipeToLobby.prototype.onMessage = function (message) {
-        NotificationCenter.trigger(message.recipient + '/message', message);
+        NotificationCenter.trigger(message.recipient + '/message', message);    
     }
 
     return PipeToLobby;

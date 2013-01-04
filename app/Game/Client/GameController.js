@@ -22,6 +22,9 @@ function (Parent, PhysicsEngine, ViewController, KeyboardController, Notificatio
 
     GameController.prototype = Object.create(Parent.prototype);
 
+    GameController.prototype.destruct = function() {
+        //destroy box2d world etc.
+    };
 
     GameController.prototype.getMe = function () {
         return this.me;

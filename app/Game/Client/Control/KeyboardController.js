@@ -1,4 +1,10 @@
-define(["Game/Core/Control/InputController", "Game/Client/Control/KeyboardInput"], function (InputController, KeyboardInput) {
+define([
+    "Game/Core/Control/InputController", 
+    "Game/Client/Control/KeyboardInput",
+    "Game/Core/NotificationCenter"
+], 
+
+function (InputController, KeyboardInput, NotificationCenter) {
 
     function KeyboardController (me, gameController) {
 
@@ -42,22 +48,22 @@ define(["Game/Core/Control/InputController", "Game/Client/Control/KeyboardInput"
 
     KeyboardController.prototype.moveLeft = function () {
         this.inputController.moveLeft();
-        this.gameController.sendGameCommand('moveLeft');
+        NotificationCenter.trigger('sendGameCommand', 'moveLeft');
     }
 
     KeyboardController.prototype.moveRight = function () {
         this.inputController.moveRight();
-        this.gameController.sendGameCommand('moveRight');
+        NotificationCenter.trigger('sendGameCommand', 'moveRight');
     }
 
     KeyboardController.prototype.stop = function () {
         this.inputController.stop();
-        this.gameController.sendGameCommand('stop');
+        NotificationCenter.trigger('sendGameCommand', 'stop');
     }
 
     KeyboardController.prototype.jump = function () {
         this.inputController.jump();
-        this.gameController.sendGameCommand('jump');
+        NotificationCenter.trigger('sendGameCommand', 'jump');
     }
 
     KeyboardController.prototype.jumped = function () {
@@ -70,7 +76,7 @@ define(["Game/Core/Control/InputController", "Game/Client/Control/KeyboardInput"
 
     KeyboardController.prototype.duck = function () {
         this.inputController.duck();
-        this.gameController.sendGameCommand('duck');
+        NotificationCenter.trigger('sendGameCommand', 'duck');
     }
 
     KeyboardController.prototype.standUp = function () {
@@ -79,7 +85,7 @@ define(["Game/Core/Control/InputController", "Game/Client/Control/KeyboardInput"
 
     KeyboardController.prototype.activateShift = function () {
         this.inputController.activateShift();
-        this.gameController.sendGameCommand('activateShift');
+        NotificationCenter.trigger('sendGameCommand', 'activateShift');
     }
 
     KeyboardController.prototype.deactivateShift = function () {

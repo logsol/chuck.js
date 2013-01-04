@@ -41,8 +41,10 @@ function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, No
         
         var id = user.id;
         var player = this.players[id];
+        user.setPlayer(player);
         player.spawn(50, 50);
         this.inputControllers[id] = new InputController(player);
+        player.inputController = this.inputControllers[id]; // FIXME move this to Server/Player
     }
 
     GameController.prototype.userLeft = function (user) {

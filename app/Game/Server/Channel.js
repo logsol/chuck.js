@@ -20,37 +20,17 @@
             this.gameController.loadLevel("default.json");
 
 
-            /*
+            
             var self = this;
             NotificationCenter.on("processGameCommandFromUser", function (topic, args) {
                 self.processGameCommandFromUser.apply(self, args);
             });
-             */
+            
 
             NotificationCenter.on('channel/message', function (message) {
-
-                switch(message.recipient) {
-                    case 'user':
-                        console.log(message);
-                        var user = self.users[message.id];
-                        ProtocolHelper.runCommands(message.data, function (command, options) {
-                            user[command].call(user, options);
-                        });
-                        break;
-
-                    case 'id': // Do nothing, it is needed by the user
-                        break;
-
-                    case 'channel':
-                        ProtocolHelper.runCommands(message.data, function (command, options) {
-                            self[command].call(self, options);
-                        });
-                        break;
-
-                    default: 
-                        throw 'unknown recipient';
-                        break;
-                }
+                ProtocolHelper.runCommands(message.data, function (command, options) {
+                    self[command].call(self, options);
+                });
             });
 
             NotificationCenter.on('sendControlCommandToAllUsers', this.sendControlCommandToAllUsers, this);

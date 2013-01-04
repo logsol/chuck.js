@@ -1,10 +1,11 @@
 define([
     "Game/Core/Protocol/Helper", 
     "Game/Client/GameController",
-    "Game/Core/User"
+    "Game/Core/User",
+    "Game/Core/NotificationCenter"
 ], 
 
-function (ProtocolHelper, GameController, User) {
+function (ProtocolHelper, GameController, User, NotificationCenter) {
 
     function Networker (socketLink) {
         this.socketLink = socketLink;
@@ -29,6 +30,7 @@ function (ProtocolHelper, GameController, User) {
             self.onDisconnect();
         });
 
+        NotificationCenter.on("sendGameCommand", this.sendGameCommand, this);
     }
 
     Networker.prototype.onConnect = function () {
@@ -122,6 +124,11 @@ function (ProtocolHelper, GameController, User) {
                 break;
         }
     }
+
+    Networker.prototype.sendGameCommand = function(command, options) {
+        var message = ProtocolHelper.encodeCommand(command, options);
+        this.sendCommand('gameCommand', message);
+    };
 
     return Networker;
     

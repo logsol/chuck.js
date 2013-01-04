@@ -10,6 +10,7 @@ function(Parent, NotificationCenter, ProtocolHelper) {
     	Parent.call(this, id);
 
     	this.channel = channel;
+        this.player = null;
     	var self = this;
 
     	NotificationCenter.on('user/joined', function(user) {
@@ -21,6 +22,12 @@ function(Parent, NotificationCenter, ProtocolHelper) {
     	NotificationCenter.on('user/' + this.id + "/joinSuccess", function(options) {
     		self.sendControlCommand("joinSuccess", options);
     	});
+
+        NotificationCenter.on('user/' + this.id + "/message", function(message) { // FIXME: right now only game commands?
+            ProtocolHelper.runCommands(message.data, function (command, options) {
+                self.gameCommand(command, options);
+            });
+        });
     }
 
     User.prototype = Object.create(Parent.prototype);
@@ -35,6 +42,14 @@ function(Parent, NotificationCenter, ProtocolHelper) {
     User.prototype.sendGameCommand = function(command, options) {
     	var data = ProtocolHelper.encodeCommand(command, options);
     	this.sendControlCommand("gameCommand", data);
+    };
+
+    User.prototype.gameCommand = function(command, options) {
+        this.player.inputController[command].call(this.player.inputController);
+    };
+
+    User.prototype.setPlayer = function(player) {
+        this.player = player;
     };
 
     return User;
