@@ -55,6 +55,7 @@
         Channel.prototype.onReleaseUser = function (userId) {
             var user = this.users[userId];
             this.sendControlCommandToAllUsersExcept("userLeft", user.id, user);
+            NotificationCenter.trigger('user/left', user);
             delete this.users[user.id];
         }
 
