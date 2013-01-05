@@ -1,33 +1,39 @@
 define([
-    "Game/Core/Protocol/Parser"
+    "Game/Core/Protocol/Parser",
+    "Lib/Utilities/Exception"
 ],
 
-function (Parser) {
+function (Parser, Exception) {
 
     var Helper = {}
 
     Helper.encodeCommand = function (command, options) {
-        return Parser.encode(Helper.assemble(command, options));
+        var message = {};
+        message[command] = options || null;
+        return Parser.encode(message);
     }
 
-    Helper.assemble = function (command, options) {
-        var commands = {};
-        commands[command] = options || null;
-        return commands;
-    }
+    Helper.applyCommand = function(options, target) {
 
-    Helper.runCommands = function (message, callback) {
-        var commands;
-        if (typeof message == "string") {
-            commands = Parser.decode(message);
+        var message;
+        if (typeof options == "string") {
+            message = Parser.decode(options);
         } else {
-            commands = message;
+            message = options;
         }
         
-        for(var command in commands) {
-            callback(command, commands[command]);
+        // The for loop is only here to get the key, it is not designed to get multiple commands
+        for(var command in message) {
+            var methodName = "on" + command.toUpperCaseFirstChar();
+            var options = message[command];
+
+            if (!target[methodName]) {   
+                throw new Exception("Helper.applyCommand:", target, "has no method", methodName);
+            }
+
+            target[methodName].call(target, options);
         }
-    }
+    };
 
     return Helper;
     
