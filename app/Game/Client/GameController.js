@@ -43,17 +43,6 @@ function (Parent, PhysicsEngine, ViewController, KeyboardController, Notificatio
         }
     }
 
-    GameController.prototype.meJoined = function (user) {
-        this.me = this.userJoined(user);
-        this.keyboardController = new KeyboardController(this.me, this);
-    }
-
-    GameController.prototype.userJoined = function (user) {
-        var player = Parent.prototype.userJoined.call(this, user);
-        //player.spawn(50, 50);
-        return player;
-    }
-
     GameController.prototype.onWorldUpdate = function (updateData) {
 
         var body = this.physicsEngine.world.GetBodyList();
@@ -71,8 +60,24 @@ function (Parent, PhysicsEngine, ViewController, KeyboardController, Notificatio
 
     }
 
-    GameController.prototype.onPlayerSpawn = function(user) {
-        
+
+    GameController.prototype.onJoinMe = function (playerId) {
+        //this.onSpawnPlayer(options);
+        this.me = this.players[playerId];
+        this.keyboardController = new KeyboardController(this.me, this);
+    }
+
+    GameController.prototype.onSpawnPlayer = function(options) {
+        var playerId = options.id,
+            x = options.x,
+            y = options.y;
+
+            console.log(this.players, options);
+
+        var player = this.players[playerId];
+        player.spawn(x, y);
+
+
     };
 
     return GameController;

@@ -13,7 +13,7 @@ function(Parent, NotificationCenter, ProtocolHelper) {
         this.player = null;
     	var self = this;
 
-    	NotificationCenter.on('user/joined', function(user) {
+    	NotificationCenter.on('user/joined', function(user) { // FIXME: use sendToAllUsersExcept instead
     		if(user.id != self.id) {
     			self.sendControlCommand("userJoined", user.id);    			
     		}
@@ -23,7 +23,7 @@ function(Parent, NotificationCenter, ProtocolHelper) {
     		self.sendControlCommand("joinSuccess", options);
     	});
 
-        NotificationCenter.on('user/' + this.id + "/controlCommand", function(message) { // FIXME: right now only game commands?
+        NotificationCenter.on('user/' + this.id + "/controlCommand", function(message) {
             ProtocolHelper.applyCommand(message.data, self);
         });
     }

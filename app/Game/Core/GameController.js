@@ -36,9 +36,7 @@ function (Engine, Level, Player) {
     }
 
     GameController.prototype.userJoined = function (user) {
-        var player = new Player(user.id, this.physicsEngine);
-        this.players[user.id] = player;
-        return player;
+        this.players[user.id] = this.createPlayer(user);
     }
 
     GameController.prototype.userLeft = function (user) {
@@ -46,6 +44,10 @@ function (Engine, Level, Player) {
         player.destroy();
         delete this.players[user.id];
     }
+
+    GameController.prototype.createPlayer = function(user) {
+        return new Player(user.id, this.physicsEngine);
+    };
 
 
     return GameController;

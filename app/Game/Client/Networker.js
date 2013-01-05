@@ -46,14 +46,12 @@ function (ProtocolHelper, GameController, User, NotificationCenter) {
         this.gameController = new GameController();
         this.gameController.loadLevel("default.json");
 
-        var user = new User(options.userId);
-        this.gameController.meJoined(user);
-
-        console.log("Joined Success", options);
+        this.onUserJoined(options.userId);
+        this.gameController.onJoinMe(options.userId);
 
         if (options.others) {
             for(var i = 0; i < options.others.length; i++) {
-                this.users[userId] = new User(options.others[i]);
+                this.onUserJoined(options.others[i]);
             }
         }
     }
@@ -73,10 +71,14 @@ function (ProtocolHelper, GameController, User, NotificationCenter) {
     // Commands from server
 
     Networker.prototype.onUserJoined = function (userId) {
-        this.users[userId] = new User(userId);
+        var user = new User(userId);
+        this.users[userId] = user;
+        this.gameController.userJoined(user);
     }
 
     Networker.prototype.onUserLeft = function (userId) {
+        var user = this.users[userId];
+        this.gameController.userLeft(user);
         delete this.users[userId];
     }
 

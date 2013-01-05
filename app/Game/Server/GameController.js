@@ -4,15 +4,15 @@ define([
     "Game/Config/Settings", 
     "Game/Server/Control/InputController",
     "Lib/Utilities/RequestAnimFrame",
-    "Game/Core/NotificationCenter"
+    "Game/Core/NotificationCenter",
+    "Game/Server/Player"
 ],
 
-function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, NotificationCenter) {
+function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, NotificationCenter, Player) {
 
     function GameController (channel) {
         Parent.call(this, new PhysicsEngine());
 
-        this.inputControllers = {};
         this.channel = channel;
 
         this.update();
@@ -38,26 +38,31 @@ function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, No
 
     GameController.prototype.userJoined = function (user) {
         Parent.prototype.userJoined.call(this, user);
-        
-        var id = user.id;
-        var player = this.players[id];
+        var player = this.players[user.id];
         user.setPlayer(player);
-        player.spawn(50, 50);
-        this.inputControllers[id] = new InputController(player);
-        player.inputController = this.inputControllers[id]; // FIXME move this to Server/Player
+        this.spawnPlayer(player);
     }
 
-    GameController.prototype.userLeft = function (user) {
-        Parent.prototype.userLeft.call(this, user);
-        delete this.inputControllers[user.id];
-    }
+    GameController.prototype.spawnPlayer = function(player) {
+        var x = 150,
+            y = 50;
+        player.spawn(x, y);
 
-    GameController.prototype.progressGameCommandFromUser = function (command, options, user) {
-        var inputController = this.inputControllers[user.id];
-        if (typeof inputController[command] == 'function') {
-            inputController[command](options);
-        }
-    }
+        var message = {
+            spawnPlayer: {
+                id: player.id, 
+                x: x, 
+                y: y
+            }
+        };
+        NotificationCenter.trigger("sendControlCommandToAllUsers", "gameCommand", message);
+    };
+
+    GameController.prototype.createPlayer = function(user) {
+        var player = new Player(user.id, this.physicsEngine);
+        player.setInputController(new InputController(player))
+        return player;
+    };
 
     GameController.prototype.updateWorld = function () {
         

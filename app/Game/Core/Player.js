@@ -5,31 +5,23 @@ define([
 
 function (Doll, Settings) {
 
-    function Player (id, physicsEngine, repository) {
+    function Player (id, physicsEngine) {
         this.physicsEngine = physicsEngine;
         this.id = id;
-        this.repository = repository;
         this.standing = false;
         this.doll;
         this.mc;
         this.currentAnimationState = 'stand';
         this.lookDirection = 1;
         this.moveDirection = 0;
+        this.isSpawned = false;
         
-        this.init(id);
-    }
-
-    Player.prototype.init = function (id) {
-        this.doll = new Doll(this.physicsEngine, id);
-    //this.mc = EmbedHandler.load(EmbedHandler.CHUCK);
-    //this.mc.stop();
-    //var mclp = new MovieClipLabelParser();
-    //mclp.parse(this.mc);
     }
 
     Player.prototype.spawn = function (x, y) {
-        //this.repository.createModel(this.mc, this.doll.getBody());
+        this.doll = new Doll(this.physicsEngine, this.id);
         this.doll.spawn(x, y);
+        this.isSpawned = true;
     }
 
     Player.prototype.getDoll = function () {
@@ -112,8 +104,6 @@ function (Doll, Settings) {
         if (type == this.currentAnimationState) {
             return;
         }
-
-        //this.mc.gotoAndPlay(type);
 
         this.currentAnimationState = type;
     }
