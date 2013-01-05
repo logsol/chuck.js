@@ -1,4 +1,10 @@
-define(["Lib/Vendor/Box2D", "Game/Config/Settings", "Game/Core/Collision/Detector"], function (Box2D, Settings, CollisionDetector) {
+define([
+    "Lib/Vendor/Box2D", 
+    "Game/Config/Settings", 
+    "Game/Core/Collision/Detector"
+], 
+
+function (Box2D, Settings, CollisionDetector) {
 
     function Doll (physicsEngine, id) {
         this.id = id;

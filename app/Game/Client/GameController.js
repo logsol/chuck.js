@@ -72,8 +72,6 @@ function (Parent, PhysicsEngine, ViewController, KeyboardController, Notificatio
             x = options.x,
             y = options.y;
 
-            console.log(this.players, options);
-
         var player = this.players[playerId];
         player.spawn(x, y);
 

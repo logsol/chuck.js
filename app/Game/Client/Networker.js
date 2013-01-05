@@ -49,9 +49,17 @@ function (ProtocolHelper, GameController, User, NotificationCenter) {
         this.onUserJoined(options.userId);
         this.gameController.onJoinMe(options.userId);
 
-        if (options.others) {
-            for(var i = 0; i < options.others.length; i++) {
-                this.onUserJoined(options.others[i]);
+        if (options.joinedUsers) {
+            for(var i = 0; i < options.joinedUsers.length; i++) {
+                this.onUserJoined(options.joinedUsers[i]);
+            }
+        }
+
+        if (options.spawnedPlayers) {
+            for(var i = 0; i < options.spawnedPlayers.length; i++) {
+                this.gameController.onSpawnPlayer(options.spawnedPlayers[i]);
+
+                console.log("already spawned player, options: ", options.spawnedPlayers[i])
             }
         }
     }

@@ -32,6 +32,10 @@ function (Doll, Settings) {
         return this.doll.getBody();
     }
 
+    Player.prototype.getPosition = function () {
+        return this.getBody().GetPosition();
+    }
+
     Player.prototype.setStanding = function (isStanding) {
         var resetStates = ['jump', 'jumploop'];
         if (resetStates.indexOf(this.currentAnimationState)>=0 && !this.standing && isStanding) {

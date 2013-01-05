@@ -38,14 +38,16 @@
 
         Channel.prototype.onAddUser = function (userId) {
             var user = new User(userId, this);
-            var others = Object.keys(this.users);
+            var joinedUsers = Object.keys(this.users);
+            var spawnedPlayers = this.gameController.getSpawnedPlayersAndTheirPositions();
 
             this.users[user.id] = user;
 
             var options = {
                 userId: user.id, 
                 channelName: this.name, 
-                others: others
+                joinedUsers: joinedUsers,
+                spawnedPlayers: spawnedPlayers
             };
             
             NotificationCenter.trigger('user/' + user.id + "/joinSuccess", options);

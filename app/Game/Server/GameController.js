@@ -91,5 +91,34 @@ function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, No
         setTimeout(this.updateWorld.bind(this), Settings.WORLD_UPDATE_BROADCAST_INTERVAL);
     }
 
+    GameController.prototype.getSpawnedPlayers = function() {
+        var spawnedPlayers = {};
+        for(player in this.players) {
+            if(player.isSpawned) {
+                spawnedPlayers[player.id] = player;
+            }
+        }
+        return spawnedPlayers;
+    };
+
+    GameController.prototype.getSpawnedPlayersAndTheirPositions = function() {
+        var spawnedPlayers = [];
+        for(id in this.players) {
+            var player = this.players[id];
+            if(player.isSpawned) {
+                spawnedPlayers.push({
+                    id: id,
+                    x: player.getPosition().x * Settings.RATIO,
+                    y: player.getPosition().y * Settings.RATIO
+                });
+            }
+        }
+
+        // FIXME:  OR: use get Spawned Players and fetch them into a sort of transfer objects
+        //             that contains only necessary data 
+
+        return spawnedPlayers;
+    };
+
     return GameController;
 });
