@@ -23,14 +23,26 @@ function(Parent, NotificationCenter, ProtocolHelper) {
     		self.sendControlCommand("joinSuccess", options);
     	});
 
-        NotificationCenter.on('user/' + this.id + "/message", function(message) { // FIXME: right now only game commands?
-            ProtocolHelper.runCommands(message.data, function (command, options) {
-                self.gameCommand(command, options);
-            });
+        NotificationCenter.on('user/' + this.id + "/controlCommand", function(message) { // FIXME: right now only game commands?
+            ProtocolHelper.applyCommand(message.data, self);
         });
     }
 
     User.prototype = Object.create(Parent.prototype);
+
+    User.prototype.setPlayer = function(player) {
+        this.player = player;
+    };
+
+
+    // User command callbacks
+
+    User.prototype.onGameCommand = function(command) {
+        this.player.inputController.applyCommand(command);
+    };
+
+
+    // Sending commands
 
     User.prototype.sendControlCommand = function(command, options) {
     	var recipient = "user/" + this.id;
@@ -44,13 +56,6 @@ function(Parent, NotificationCenter, ProtocolHelper) {
     	this.sendControlCommand("gameCommand", data);
     };
 
-    User.prototype.gameCommand = function(command, options) {
-        this.player.inputController[command].call(this.player.inputController);
-    };
-
-    User.prototype.setPlayer = function(player) {
-        this.player = player;
-    };
 
     return User;
  

@@ -85,7 +85,7 @@ function (User, Channel, PipeToChannel, NotificationCenter) {
             channelPipe.send('channel', { releaseUser: user.id });
         }, this);
 
-        NotificationCenter.on('user/gameCommand', function (userId, data) {
+        NotificationCenter.on('user/controlCommand', function (userId, data) {
             channelPipe.sendToUser(userId, data);
         }, this);
         

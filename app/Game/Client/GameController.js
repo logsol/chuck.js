@@ -50,37 +50,30 @@ function (Parent, PhysicsEngine, ViewController, KeyboardController, Notificatio
 
     GameController.prototype.userJoined = function (user) {
         var player = Parent.prototype.userJoined.call(this, user);
-        player.spawn(50, 50);
+        //player.spawn(50, 50);
         return player;
     }
-/*
-    GameController.prototype.userLeft = function (user) {
-        Parent.prototype.userLeft.call(user);
+
+    GameController.prototype.onWorldUpdate = function (updateData) {
+
+        var body = this.physicsEngine.world.GetBodyList();
+        do {
+            var bodyName = body.GetUserData();
+            if(bodyName && updateData[bodyName]) {        
+                var update = updateData[bodyName];             
+                body.SetAwake(true);            
+                body.SetPosition(update.p);
+                body.SetAngle(update.a);
+                body.SetLinearVelocity(update.lv);
+                body.SetAngularVelocity(update.av);
+            }
+        } while (body = body.GetNext());
+
     }
-*/
-    GameController.prototype.processGameCommand = function (command, options) {
+
+    GameController.prototype.onPlayerSpawn = function(user) {
         
-        if (command == "worldUpdate") {
-
-            var body = this.physicsEngine.world.GetBodyList();
-            do {
-                var userData = body.GetUserData();
-                if(userData && options[userData]) {        
-                    var update = options[userData];
-                                
-                    //console.log('position difference:', (body.GetPosition().y - update.p.y) * 30, body.GetLinearVelocity().y);
-                    
-                    body.SetAwake(true);            
-                    body.SetPosition(update.p);
-                    body.SetAngle(update.a);
-                    body.SetLinearVelocity(update.lv);
-                    body.SetAngularVelocity(update.av);
-                }
-            } while (body = body.GetNext());
-
-        }
-
-    }
+    };
 
     return GameController;
 });

@@ -13,16 +13,10 @@ function (Parent, ProtocolHelper, NotificationCenter) {
         this.channelProcess = null;
         this.socketLink = socketLink;
 
-        var self = this;
+        socketLink.on('message', this.onMessage.bind(this));
+        socketLink.on('disconnect', this.onDisconnect.bind(this));
 
-        socketLink.on('message', function (message) {
-            self.onMessage(message);
-        });
-        socketLink.on('disconnect', function () {
-            self.onDisconnect();
-        });
-
-        NotificationCenter.on("user/" + this.socketLink.id + "/message", this.onChannelMessage, this);
+        NotificationCenter.on("user/" + this.socketLink.id + "/message", this.socketLink.send, this.socketLink);
     }
 
     User.prototype = Object.create(Parent.prototype);
@@ -31,39 +25,32 @@ function (Parent, ProtocolHelper, NotificationCenter) {
         this.channelProcess = channelProcess;
     }
 
+    
+    // Socket callbacks
+
     User.prototype.onMessage = function (message) {
-        var self = this;
-        ProtocolHelper.runCommands(message, function (command, options) {
-            self.processControlCommand(command, options);
-        });
+        ProtocolHelper.applyCommand(message, this);
     }
 
     User.prototype.onDisconnect = function () {
         this.coordinator.removeUser(this);
     }
 
-    User.prototype.processControlCommand = function (command, options) {
-        switch(command) {
 
-            case 'join':
-                this.coordinator.assignUserToChannel(this, options);
-                break;
+    // User command callbacks
 
-            case 'leave':
-                this.coordinator.assignUserToLobby(this);
-                break;
+    User.prototype.onJoin = function(options) {
+        this.coordinator.assignUserToChannel(this, options);
+    };
 
-            case 'gameCommand':
-                NotificationCenter.trigger("user/gameCommand", this.id, options);
-                break;
+    User.prototype.onLeave = function(options) {
+        this.coordinator.assignUserToLobby(this);
+    };
 
-            default: 
-                break;
-        }
-    }
-
-    User.prototype.onChannelMessage = function(message) {
-        this.socketLink.send(message);
+    User.prototype.onGameCommand = function(options) {
+        // repacking for transport via pipe
+        var message = ProtocolHelper.encodeCommand("gameCommand", options);
+        NotificationCenter.trigger("user/controlCommand", this.id, message);
     };
 
     return User;

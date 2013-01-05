@@ -2,7 +2,7 @@ define([
     "Game/Core/GameController",
     "Game/Core/Physics/Engine", 
     "Game/Config/Settings", 
-    "Game/Core/Control/InputController",
+    "Game/Server/Control/InputController",
     "Lib/Utilities/RequestAnimFrame",
     "Game/Core/NotificationCenter"
 ],
@@ -67,9 +67,6 @@ function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, No
         var body = this.physicsEngine.world.GetBodyList();
         do {
             var userData = body.GetUserData();
-
-
-
 
             if(userData && body.IsAwake()) {
                 update[userData] = {
