@@ -4,7 +4,8 @@ var inspector;
 
 requirejs.config({
     nodeRequire: require,
-    baseUrl: 'app'
+    baseUrl: 'app',
+    deps: ['Lib/Utilities/Extensions']
 });
 
 var port = process.argv[2]

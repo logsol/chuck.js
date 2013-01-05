@@ -1,5 +1,6 @@
 requirejs.config({
-    baseUrl: 'app'
+    baseUrl: 'app',
+    deps: ['Lib/Utilities/Extensions']
 });
 
 var inspector = {};

@@ -2,7 +2,8 @@ var requirejs = require('requirejs');
 
 requirejs.config({
     nodeRequire: require,
-    baseUrl: 'app'
+    baseUrl: 'app',
+    deps: ['Lib/Utilities/Extensions']
 });
 
 var inspector = {};
