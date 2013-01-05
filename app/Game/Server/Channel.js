@@ -38,10 +38,17 @@
 
         Channel.prototype.onAddUser = function (userId) {
             var user = new User(userId, this);
-            var othersJoined = Object.keys(this.users);
+            var others = Object.keys(this.users);
 
             this.users[user.id] = user;
-            NotificationCenter.trigger('user/' + user.id + "/joinSuccess", {userId: user.id, channelName: this.name, others: othersJoined});
+
+            var options = {
+                userId: user.id, 
+                channelName: this.name, 
+                others: others
+            };
+            
+            NotificationCenter.trigger('user/' + user.id + "/joinSuccess", options);
             NotificationCenter.trigger('user/joined', user);
         }
 
