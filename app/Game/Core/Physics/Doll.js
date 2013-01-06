@@ -6,8 +6,8 @@ define([
 
 function (Box2D, Settings, CollisionDetector) {
 
-    function Doll (physicsEngine, id) {
-        this.id = id;
+    function Doll (physicsEngine, player) {
+        this.player = player;
         this.physicsEngine = physicsEngine;
         this.body;
         this.legs;
@@ -24,7 +24,7 @@ function (Box2D, Settings, CollisionDetector) {
         bodyDef.fixedRotation = true;
         bodyDef.linearDamping = Settings.PLAYER_LINEAR_DAMPING;
         bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
-        bodyDef.userData = CollisionDetector.IDENTIFIER.PLAYER + '-' + this.id;
+        bodyDef.userData = CollisionDetector.IDENTIFIER.PLAYER + '-' + this.player.id;
 
         this.body = world.CreateBody(bodyDef);
 
@@ -63,7 +63,12 @@ function (Box2D, Settings, CollisionDetector) {
         feetShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, 0 / Settings.RATIO));
         fixtureDef.shape = feetShape;
         fixtureDef.isSensor = true;
-        fixtureDef.userData = CollisionDetector.IDENTIFIER.PLAYER_FOOT_SENSOR + '-' + this.id;
+
+        fixtureDef.userData = {
+            identifier: CollisionDetector.IDENTIFIER.PLAYER_FOOT_SENSOR,
+            player: this.player
+        }
+
         this.body.CreateFixture(fixtureDef);
 
         this.body.SetActive(false);

@@ -5,14 +5,12 @@ define([
 
 function (Box2D, Parent) {
 
-    function Detector (player) { // FIXME evtl.bind(this) ?
+    function Detector () { // FIXME evtl.bind(this) ?
         this.listener = new Box2D.Dynamics.b2ContactListener();
         this.listener.chuckDetector = this;
         this.listener.BeginContact = this.BeginContact;
-        this.listener.PostSolve = this.PostSolve;
+        //this.listener.PostSolve = this.PostSolve;
         this.listener.EndContact = this.EndContact;
-
-        this.player = player;
     }
 
     Detector.IDENTIFIER = {
@@ -30,10 +28,10 @@ function (Box2D, Parent) {
 
     Detector.prototype.handleStand = function (point, isColliding) {
 
-        if (point.GetFixtureA().GetUserData() == Detector.IDENTIFIER.PLAYER_FOOT_SENSOR + '-' + this.player.id
-         || point.GetFixtureB().GetUserData() == Detector.IDENTIFIER.PLAYER_FOOT_SENSOR + '-' + this.player.id)  {
-
-            this.player.onFootSensorDetection(isColliding);
+        if (point.GetFixtureA().GetUserData().identifier == Detector.IDENTIFIER.PLAYER_FOOT_SENSOR) {
+            point.GetFixtureA().GetUserData().player.onFootSensorDetection(isColliding);
+        } else if (point.GetFixtureB().GetUserData().identifier == Detector.IDENTIFIER.PLAYER_FOOT_SENSOR) {
+            point.GetFixtureB().GetUserData().player.onFootSensorDetection(isColliding);
         }
     }
 
@@ -44,7 +42,7 @@ function (Box2D, Parent) {
     }
 
     Detector.prototype.PostSolve = function (point, impulse) {
-        this.chuckDetector.handleStand(point, true);
+        //this.chuckDetector.handleStand(point, true);
     }
 
     Detector.prototype.EndContact = function (point) {

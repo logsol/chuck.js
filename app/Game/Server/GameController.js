@@ -13,6 +13,8 @@ function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, No
     function GameController (channel) {
         Parent.call(this, new PhysicsEngine());
 
+        this.physicsEngine.setCollisionDetector();
+
         this.channel = channel;
 
         this.update();
@@ -61,8 +63,6 @@ function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, No
     GameController.prototype.createPlayer = function(user) {
         var player = new Player(user.id, this.physicsEngine);
         player.setInputController(new InputController(player))
-
-        this.physicsEngine.setCollisionDetector(player);
         
         return player;
     };
