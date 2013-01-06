@@ -1,6 +1,6 @@
 define([
     "Game/Core/GameController",
-    "Game/Core/Physics/Engine", 
+    "Game/Core/Physics/Engine",
     "Game/Config/Settings", 
     "Game/Server/Control/InputController",
     "Lib/Utilities/RequestAnimFrame",
@@ -61,6 +61,9 @@ function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, No
     GameController.prototype.createPlayer = function(user) {
         var player = new Player(user.id, this.physicsEngine);
         player.setInputController(new InputController(player))
+
+        this.physicsEngine.setCollisionDetector(player);
+        
         return player;
     };
 

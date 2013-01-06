@@ -158,12 +158,12 @@ function (Doll, Settings) {
             }
             this.setStanding(true);
         } else {
-        // TODO This needs some more thought to it.
-        // maybe take a look at collision groups for collision detection, 
-        // to group all tiles together
+            // TODO This needs some more thought to it.
+            // maybe take a look at collision groups for collision detection, 
+            // to group all tiles together
 
-        //this.setStanding(false);
-        //this.animate('jumploop');
+            //this.setStanding(false);
+            //this.animate('jumploop');
         }
     }
 
@@ -174,7 +174,7 @@ function (Doll, Settings) {
             this.stop();
         }
 
-        if (!this.doll.getBody().IsAwake()) {
+        if (!this.doll.getBody().IsAwake() && !this.isStanding()) {
             this.setStanding(true);
         }
     }

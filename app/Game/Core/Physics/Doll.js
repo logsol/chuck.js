@@ -63,7 +63,7 @@ function (Box2D, Settings, CollisionDetector) {
         feetShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, 0 / Settings.RATIO));
         fixtureDef.shape = feetShape;
         fixtureDef.isSensor = true;
-        fixtureDef.userData = CollisionDetector.IDENTIFIER.FOOTSENSOR;
+        fixtureDef.userData = CollisionDetector.IDENTIFIER.PLAYER_FOOT_SENSOR + '-' + this.id;
         this.body.CreateFixture(fixtureDef);
 
         this.body.SetActive(false);

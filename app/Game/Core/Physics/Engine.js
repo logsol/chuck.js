@@ -17,9 +17,9 @@ function (Settings, Box2D, CollisionDetector) {
         return this.world;
     }
 
-    Engine.prototype.setCollisionDetector = function (me) {
+    Engine.prototype.setCollisionDetector = function (player) {
         
-        var detector = new CollisionDetector(me); // FIXME: check if core collision detector works
+        var detector = new CollisionDetector(player); 
         this.world.SetContactListener(detector.getListener());
     }
 

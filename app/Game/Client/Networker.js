@@ -28,6 +28,7 @@ function (ProtocolHelper, GameController, User, NotificationCenter) {
         NotificationCenter.on("sendGameCommand", this.sendGameCommand, this);
     }
 
+
     // Socket callbacks
 
     Networker.prototype.onConnect = function () {
@@ -64,6 +65,7 @@ function (ProtocolHelper, GameController, User, NotificationCenter) {
         }
     }
 
+
     // Sending commands
 
     Networker.prototype.sendCommand = function (command, options) {
@@ -75,6 +77,7 @@ function (ProtocolHelper, GameController, User, NotificationCenter) {
         var message = ProtocolHelper.encodeCommand(command, options);
         this.sendCommand('gameCommand', message);
     }
+
 
     // Commands from server
 

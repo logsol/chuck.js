@@ -5,12 +5,14 @@ define([
 
 function (Box2D, Parent) {
 
-    function Detector () {
+    function Detector (player) { // FIXME evtl.bind(this) ?
         this.listener = new Box2D.Dynamics.b2ContactListener();
         this.listener.chuckDetector = this;
         this.listener.BeginContact = this.BeginContact;
         this.listener.PostSolve = this.PostSolve;
         this.listener.EndContact = this.EndContact;
+
+        this.player = player;
     }
 
     Detector.IDENTIFIER = {
@@ -27,7 +29,12 @@ function (Box2D, Parent) {
     }
 
     Detector.prototype.handleStand = function (point, isColliding) {
-        throw "Overwrite this function";
+
+        if (point.GetFixtureA().GetUserData() == Detector.IDENTIFIER.PLAYER_FOOT_SENSOR + '-' + this.player.id
+         || point.GetFixtureB().GetUserData() == Detector.IDENTIFIER.PLAYER_FOOT_SENSOR + '-' + this.player.id)  {
+
+            this.player.onFootSensorDetection(isColliding);
+        }
     }
 
     /** Extension **/

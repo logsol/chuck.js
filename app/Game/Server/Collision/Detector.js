@@ -5,15 +5,11 @@ define([
 
 function (Box2D, Parent) {
 
-    function Detector () {
-        Parent.call(this);
+    function Detector (player) {
+        Parent.call(this, player);
     }
 
     Detector.prototype = Object.create(Parent.prototype);
-
-    Detector.prototype.handleStand = function (point, isColliding) {
-        throw "Implement this function";
-    }
 
     return Detector;
 });

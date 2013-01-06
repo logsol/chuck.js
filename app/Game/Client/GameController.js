@@ -65,6 +65,8 @@ function (Parent, PhysicsEngine, ViewController, KeyboardController, Notificatio
         //this.onSpawnPlayer(options);
         this.me = this.players[playerId];
         this.keyboardController = new KeyboardController(this.me, this);
+
+        this.physicsEngine.setCollisionDetector(this.me);
     }
 
     GameController.prototype.onSpawnPlayer = function(options) {
