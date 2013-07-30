@@ -1,13 +1,15 @@
 define([
+    "Lib/Vendor/Box2D",
     "Game/Core/GameController",
     "Game/Client/Physics/Engine", 
     "Game/Client/View/ViewController", 
     "Game/Client/Control/PlayerController", 
     "Game/Core/NotificationCenter",
-    "Lib/Utilities/RequestAnimFrame"
+    "Lib/Utilities/RequestAnimFrame",
+    "Game/Config/Settings"
 ],
 
-function (Parent, PhysicsEngine, ViewController, PlayerController, NotificationCenter, requestAnimFrame) {
+function (Box2D, Parent, PhysicsEngine, ViewController, PlayerController, NotificationCenter, requestAnimFrame, Settings) {
 
     function GameController () {
         this.viewController = new ViewController();
@@ -22,6 +24,25 @@ function (Parent, PhysicsEngine, ViewController, PlayerController, NotificationC
     }
 
     GameController.prototype = Object.create(Parent.prototype);
+
+    GameController.prototype.makeMouseJoint = function(p) {
+        var ground = this.physicsEngine.getGround();
+        var body = this.me.getBody();
+
+        var def = new Box2D.Dynamics.Joints.b2MouseJointDef();
+ 
+        def.bodyA = ground;
+        def.bodyB = body;
+        def.target = p;
+         
+        def.collideConnected = false;
+        def.maxForce = 100;
+        def.dampingRatio = 0.99;
+         
+        this.mouse_joint = this.physicsEngine.world.CreateJoint(def);
+         
+        body.SetAwake(true);
+    }
 
     GameController.prototype.destruct = function() {
         //destroy box2d world etc.
@@ -48,13 +69,41 @@ function (Parent, PhysicsEngine, ViewController, PlayerController, NotificationC
         var body = this.physicsEngine.world.GetBodyList();
         do {
             var bodyName = body.GetUserData();
-            if(bodyName && updateData[bodyName]) {        
+            if(bodyName && updateData[bodyName]) {
                 var update = updateData[bodyName];             
-                body.SetAwake(true);            
-                body.SetPosition(update.p);
-                body.SetAngle(update.a);
-                body.SetLinearVelocity(update.lv);
-                body.SetAngularVelocity(update.av);
+                body.SetAwake(true);  
+
+                if(false && this.me && this.me.getBody() == body) {
+
+                    var p = body.GetPosition();
+                    var x = update.p.x - p.x;
+                    var y = update.p.y - p.y;
+
+                    var max = 0.5;
+                    var factor = 0.2;
+
+                    //if(x > max || x < -max || y > max || y < -max) {
+                        if(!this.mouse_joint) this.makeMouseJoint(update.p);
+                        else this.mouse_joint.SetTarget(update.p);
+                        var self = this;
+                        /*setTimeout(function() {
+                            self.physicsEngine.world.DestroyJoint(self.mouse_joint);
+                            self.mouse_joint = null;
+                        }, Settings.WORLD_UPDATE_BROADCAST_INTERVAL / 2)*/
+                    //} else {
+                        //this.physicsEngine.world.DestroyJoint(this.mouse_joint);
+                        //this.mouse_joint = null;
+                    //}
+
+                    // NEXT TIME, try to create a simple body, that gets position and velocities from server doll
+                    // and connect the joint to that.
+
+                } else {
+                    body.SetPosition(update.p);
+                    body.SetAngle(update.a);
+                    body.SetLinearVelocity(update.lv);
+                    body.SetAngularVelocity(update.av);                
+                }
             }
         } while (body = body.GetNext());
 

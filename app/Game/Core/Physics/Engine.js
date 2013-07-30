@@ -11,10 +11,15 @@ function (Settings, Box2D, CollisionDetector) {
             new Box2D.Common.Math.b2Vec2(0, Settings.BOX2D_GRAVITY),
             Settings.BOX2D_ALLOW_SLEEP
         );
+        this.ground = null;
     }
 
     Engine.prototype.getWorld = function () {
         return this.world;
+    }
+
+    Engine.prototype.getGround = function () {
+        return this.ground;
     }
 
     Engine.prototype.setCollisionDetector = function (player) {
@@ -24,7 +29,9 @@ function (Settings, Box2D, CollisionDetector) {
     }
 
     Engine.prototype.createBody = function (bodyDef) {
-        return this.world.CreateBody(bodyDef);
+        var body = this.world.CreateBody(bodyDef);
+        if(!this.ground) this.ground = body;
+        return body;
     }
 
     Engine.prototype.update = function () {

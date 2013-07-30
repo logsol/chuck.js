@@ -22,7 +22,7 @@ define({
     WALK_SPEED: 2.5,
     RUN_SPEED: 4.0,
     FLY_SPEED: 3.2,
-    JUMP_SPEED: 3.0,
+    JUMP_SPEED: 4.0,
     JUMP_UPLIFT: 0.05,
 
     // restitution: bouncyness, friction: rubbing, density: mass
@@ -46,5 +46,5 @@ define({
     DEBUG_MODE: true,
 
     // NETWORKING
-    WORLD_UPDATE_BROADCAST_INTERVAL: 100
+    WORLD_UPDATE_BROADCAST_INTERVAL: 70
 })
