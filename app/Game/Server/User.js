@@ -38,7 +38,7 @@ function(Parent, NotificationCenter, ProtocolHelper) {
     // User command callbacks
 
     User.prototype.onGameCommand = function(command) {
-        this.player.inputController.applyCommand(command);
+        this.player.playerController.applyCommand(command);
     };
 
 

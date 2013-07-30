@@ -15,7 +15,7 @@ function (Doll, Settings) {
         this.lookDirection = 1;
         this.moveDirection = 0;
         this.isSpawned = false;
-        
+        this.playerController = null;
     }
 
     Player.prototype.spawn = function (x, y) {
@@ -177,10 +177,18 @@ function (Doll, Settings) {
         if (!this.doll.getBody().IsAwake() && !this.isStanding()) {
             this.setStanding(true);
         }
+
+        if(this.playerController) {
+            this.playerController.update();
+        }
     }
 
     Player.prototype.destroy = function () {
         this.doll.destroy();
+    }
+
+    Player.prototype.setPlayerController = function(playerController) {
+        this.playerController = playerController;
     }
 
     return Player;

@@ -2,13 +2,13 @@ define([
     "Game/Core/GameController",
     "Game/Core/Physics/Engine",
     "Game/Config/Settings", 
-    "Game/Server/Control/InputController",
+    "Game/Server/Control/PlayerController",
     "Lib/Utilities/RequestAnimFrame",
     "Game/Core/NotificationCenter",
     "Game/Server/Player"
 ],
 
-function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, NotificationCenter, Player) {
+function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, NotificationCenter, Player) {
 
     function GameController (channel) {
         Parent.call(this, new PhysicsEngine());
@@ -62,7 +62,7 @@ function (Parent, PhysicsEngine, Settings, InputController, requestAnimFrame, No
 
     GameController.prototype.createPlayer = function(user) {
         var player = new Player(user.id, this.physicsEngine);
-        player.setInputController(new InputController(player))
+        player.setPlayerController(new PlayerController(player))
         
         return player;
     };

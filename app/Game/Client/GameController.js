@@ -2,12 +2,12 @@ define([
     "Game/Core/GameController",
     "Game/Client/Physics/Engine", 
     "Game/Client/View/ViewController", 
-    "Game/Client/Control/KeyboardController", 
+    "Game/Client/Control/PlayerController", 
     "Game/Core/NotificationCenter",
     "Lib/Utilities/RequestAnimFrame"
 ],
 
-function (Parent, PhysicsEngine, ViewController, KeyboardController, NotificationCenter, requestAnimFrame) {
+function (Parent, PhysicsEngine, ViewController, PlayerController, NotificationCenter, requestAnimFrame) {
 
     function GameController () {
         this.viewController = new ViewController();
@@ -17,7 +17,6 @@ function (Parent, PhysicsEngine, ViewController, KeyboardController, Notificatio
         this.physicsEngine.setCollisionDetector();
 
         this.me = null;
-        this.keyboardController = null;
 
         this.update();
     }
@@ -40,7 +39,6 @@ function (Parent, PhysicsEngine, ViewController, KeyboardController, Notificatio
         this.viewController.update();
 
         if(this.me) {
-            this.keyboardController.update();    
             this.me.update();
         }
     }
@@ -62,11 +60,10 @@ function (Parent, PhysicsEngine, ViewController, KeyboardController, Notificatio
 
     }
 
-
     GameController.prototype.onJoinMe = function (playerId) {
         //this.onSpawnPlayer(options);
         this.me = this.players[playerId];
-        this.keyboardController = new KeyboardController(this.me, this);
+        this.me.setPlayerController(new PlayerController(this.me));
     }
 
     GameController.prototype.onSpawnPlayer = function(options) {
@@ -76,9 +73,7 @@ function (Parent, PhysicsEngine, ViewController, KeyboardController, Notificatio
 
         var player = this.players[playerId];
         player.spawn(x, y);
-
-
-    };
+    }
 
     return GameController;
 });

@@ -1,19 +1,22 @@
 define([
-	"Game/Core/Control/InputController",
+	"Game/Core/Control/PlayerController",
 	"Game/Core/NotificationCenter",
     "Game/Core/Protocol/Parser"
 ],
  
 function(Parent, NotificationCenter, Parser) {
  
-    function InputController(player) {
+    function PlayerController(player) {
 
     	Parent.call(this, player);
     }
 
-    InputController.prototype = Object.create(Parent.prototype);
+    PlayerController.prototype = Object.create(Parent.prototype);
 
-    InputController.prototype.applyCommand = function(options) {
+    /* 
+     * retrieves move (and other) commands from client and executes them at the server 
+     */ 
+    PlayerController.prototype.applyCommand = function(options) {
         var message;
         if (typeof options == "string") {
             message = Parser.decode(options);
@@ -26,6 +29,6 @@ function(Parent, NotificationCenter, Parser) {
         }
     };
 
-    return InputController;
+    return PlayerController;
  
 });
