@@ -1,4 +1,8 @@
-define(["Game/Config/Settings", "Lib/Vendor/Box2D", "Game/Core/Collision/Detector"], function (Settings, Box2D, CollisionDetector) {
+define([
+    "Game/Config/Settings", 
+    "Lib/Vendor/Box2D", 
+    "Game/Core/Collision/Detector"
+], function (Settings, Box2D, CollisionDetector) {
     
     // Public
     function Level (path, engine) {
@@ -179,6 +183,7 @@ define(["Game/Config/Settings", "Lib/Vendor/Box2D", "Game/Core/Collision/Detecto
 
         this.levelObject = {
             tiles: [
+{s:1, x:1, y:1, r:0},
 {s:1, x:3, y:18},
 {s:1, x:37, y:27},
 {s:1, x:20, y:24},

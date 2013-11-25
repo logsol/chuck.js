@@ -124,5 +124,11 @@ function (Box2D, Parent, PhysicsEngine, ViewController, PlayerController, Notifi
         player.spawn(x, y);
     }
 
+    GameController.prototype.loadLevel = function (path) {
+        Parent.prototype.loadLevel.call(this, path);
+        var tiles = this.level.levelObject.tiles;
+        this.viewController.loadMeshes(tiles);
+    }
+
     return GameController;
 });

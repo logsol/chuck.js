@@ -34,11 +34,11 @@ define(requires, function (DomController, Three, Settings, CameraController) {
             preserveDrawingBuffer: true
         };
 
-        if(isWebGlEnabled()) {
+        //if(isWebGlEnabled()) {
             this.renderer = new Three.WebGLRenderer(rendererOptions);
-        } else {
-            this.renderer = new Three.CanvasRenderer(rendererOptions);
-        }
+        //} else {
+            //this.renderer = new Three.CanvasRenderer(rendererOptions);
+        //}
         
         this.renderer.setClearColorHex(0x333333, 1);
         this.renderer.setSize(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT);
@@ -50,15 +50,15 @@ define(requires, function (DomController, Three, Settings, CameraController) {
         }
 
         this.scene = new Three.Scene();
-         this.scene.add(this.cameraController.getCamera());
+        this.scene.add(this.cameraController.getCamera());
 
 
-         var ambientLight = new Three.AmbientLight(0xffffff);
+        var ambientLight = new Three.AmbientLight(0xffffff);
         this.scene.add(ambientLight);
  
-        var directionalLight = new Three.DirectionalLight(0xffffff);
-        directionalLight.position.set(1, 0, 10).normalize();
-        this.scene.add(directionalLight);
+        //var directionalLight = new Three.DirectionalLight(0xffffff);
+        //directionalLight.position.set(1, 0, 10).normalize();
+        //this.scene.add(directionalLight);
 
 
         this.createMesh(100, 100, 100, 100, 'static/img/100.png', function (mesh) {
@@ -74,15 +74,36 @@ define(requires, function (DomController, Three, Settings, CameraController) {
         //this.animate(this);
     }
 
-    ViewController.prototype.update = function () {
+    ViewController.prototype.loadMeshes = function(objects) {
+        var self = this;
+        for (var i = 0; i < objects.length; i++) {
+            (function() {
+                var o = objects[i];
+                var x = o.x * Settings.TILE_SIZE;
+                var y = (-o.y) * Settings.TILE_SIZE;
+                var r = o.r ? o.r : 0;
+                var rad = 0.5 * Math.PI * -r;
 
-        if(this.mesh) {
-            this.mesh.rotation.z += .01;
-            this.mesh.position.z += 1;
-            this.mesh.position.x += .4;
-            this.mesh.position.y += .4;
+                var material = self.tileAtPositionExists(objects, o.x, o.y -1) ? "Soil" : "GrassSoil";
+                
+                self.createMesh(Settings.TILE_SIZE, Settings.TILE_SIZE, x, y, 'static/img/Tiles/' + material + '/' + o.s + '' + o.r + '.gif', function(mesh) {
+                    self.scene.add(mesh);
+                    //mesh.rotation.z = rad;
+                });
+            })();
+        };
+    };
+
+    ViewController.prototype.tileAtPositionExists = function(objects, x, y) {
+
+        for (var i = 0; i < objects.length; i++) {
+            var o = objects[i];
+            if(o.x == x && o.y == y) return true;
         }
+        return false;
+    };
 
+    ViewController.prototype.update = function () {
         this.render();
     }
 
@@ -93,17 +114,18 @@ define(requires, function (DomController, Three, Settings, CameraController) {
 
     ViewController.prototype.createMesh = function (width, height, x, y, imgPath, callback) {
         var textureImg = new Image();
-        textureImg.onload = function () {
+        textureImg.onload = function () { // FIXME: perhaps not needed to load double?
             var material = new Three.MeshLambertMaterial({
-                map: Three.ImageUtils.loadTexture(imgPath)
+                map: Three.ImageUtils.loadTexture(imgPath),
+                transparent: true
             });
 
             var mesh = new Three.Mesh(new Three.PlaneGeometry(width, height), material);
-            mesh.overdraw = true;/*
-            mesh.position.z = 0;
+            mesh.overdraw = true;
+            //mesh.position.z = 1;
             mesh.position.x = x;
             mesh.position.y = y;
-            */
+            
             callback(mesh);
         };
         textureImg.src = imgPath;

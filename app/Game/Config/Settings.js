@@ -3,7 +3,6 @@ define({
     STAGE_HEIGHT: 400,
 
     // BOX2D INITIALATORS
-    RATIO: 35,
     BOX2D_WORLD_AABB_SIZE: 3000,
     BOX2D_ALLOW_SLEEP: true,
     BOX2D_GRAVITY: 16,
@@ -16,6 +15,7 @@ define({
     GRAPHICS_SUBPATH_ITEMS: 'items/',
     GRAPHICS_SUBPATH_CHARACTERS: 'characters/',
 
+    RATIO: 35,
     TILE_SIZE: 15,
 
     // GAME PLAY 
