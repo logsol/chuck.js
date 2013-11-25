@@ -22,9 +22,16 @@ function (http, nodeStatic) {
 
         this.server = http.createServer(
             function (req, res) {
+
+                req.addListener('data', function() { // doesn't work on Jeenas computer without this
+                    //console.log("data")
+                });
+
                 req.addListener('end', function () {
+
                     switch(true) {
                         case req.url == '/':
+
                             fileServer.serveFile('./static/html/index.html', 200, {}, req, res);
                             console.checkpoint('HTTP Server serves index');
                             break;
@@ -57,6 +64,7 @@ function (http, nodeStatic) {
             }
         );
         this.server.listen(options.port);
+
         console.checkpoint('start HTTP server');
     }
 
