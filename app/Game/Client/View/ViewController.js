@@ -56,7 +56,7 @@ define(requires, function (DomController, Three, Settings, CameraController) {
         var ambientLight = new Three.AmbientLight(0xffffff);
         this.scene.add(ambientLight);
 
- 
+
         //var directionalLight = new Three.DirectionalLight(0xffffff);
         //directionalLight.position.set(1, 0, 10).normalize();
         //this.scene.add(directionalLight);
@@ -107,6 +107,10 @@ define(requires, function (DomController, Three, Settings, CameraController) {
     }
 
     ViewController.prototype.render = function () {
+        if(this.player) {
+            var pos = this.player.getDoll().getBody().GetPosition();
+            this.cameraController.setPosition(pos.x * 35, -(pos.y * 35));
+        }
         this.renderer.render(this.scene, this.cameraController.getCamera());
     }
 
@@ -125,6 +129,10 @@ define(requires, function (DomController, Three, Settings, CameraController) {
         mesh.position.y = y;
         //mesh.position.z = 1;
     }
+
+    ViewController.prototype.setPlayer = function(player) {
+        this.player = player;
+    };
 
     return ViewController;
 });

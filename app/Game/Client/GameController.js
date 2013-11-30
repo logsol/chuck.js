@@ -113,6 +113,7 @@ function (Box2D, Parent, PhysicsEngine, ViewController, PlayerController, Notifi
         //this.onSpawnPlayer(options);
         this.me = this.players[playerId];
         this.me.setPlayerController(new PlayerController(this.me));
+        this.viewController.setPlayer(this.me);
     }
 
     GameController.prototype.onSpawnPlayer = function(options) {

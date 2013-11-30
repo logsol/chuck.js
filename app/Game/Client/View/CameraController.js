@@ -46,7 +46,7 @@ define(['Lib/Vendor/Three', 'Game/Config/Settings'], function (Three, Settings) 
         if(!event) event = window.event; // IE
         if(event.wheelDelta) delta = event.wheelDelta/120;
         else if(event.detail) delta = -event.detail/3;
-        if(delta) this.camera.position.z += delta * 10;
+        if(delta) this.camera.position.z -= delta * 10;
         if(event.preventDefault) event.preventDefault();
         event.returnValue = false;
     };
