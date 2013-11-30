@@ -109,7 +109,7 @@ define(requires, function (DomController, Three, Settings, CameraController) {
     ViewController.prototype.render = function () {
         if(this.player) {
             var pos = this.player.getDoll().getBody().GetPosition();
-            this.cameraController.setPosition(pos.x * 35, -(pos.y * 35));
+            this.cameraController.setPosition(pos.x * Settings.RATIO, -(pos.y * Settings.RATIO));
         }
         this.renderer.render(this.scene, this.cameraController.getCamera());
     }
