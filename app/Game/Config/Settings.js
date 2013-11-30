@@ -43,7 +43,7 @@ define({
     CANVAS_DOM_ID: 'canvasContainer',
     IS_BROWSER_ENVIRONMENT: typeof window !== 'undefined',
 
-    DEBUG_MODE: true,
+    DEBUG_MODE: false,
 
     // NETWORKING
     WORLD_UPDATE_BROADCAST_INTERVAL: 70

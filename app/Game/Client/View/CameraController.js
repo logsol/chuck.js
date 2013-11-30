@@ -13,7 +13,7 @@ define(['Lib/Vendor/Three', 'Game/Config/Settings'], function (Three, Settings) 
                 Settings.STAGE_WIDTH/2, 
                 Settings.STAGE_HEIGHT/2, 
                 -Settings.STAGE_HEIGHT/2, 
-                -2000, 
+                1, 
                 1000 
             );
 
@@ -27,7 +27,7 @@ define(['Lib/Vendor/Three', 'Game/Config/Settings'], function (Three, Settings) 
             );
         }
 
-        this.camera.position.z = 481; // 481 
+        this.camera.position.z = 270; // 481 
         this.setPosition(Settings.STAGE_WIDTH / 2, -Settings.STAGE_HEIGHT / 2);
 
         this.initWheel();

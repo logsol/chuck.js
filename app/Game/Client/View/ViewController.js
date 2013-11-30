@@ -13,6 +13,7 @@ define(requires, function (DomController, Three, Settings, CameraController) {
         this.scene = null;
         this.renderer = null;
         this.cameraController = new CameraController();
+        this.movableObjects = [];
 
         this.init();
     }
@@ -30,7 +31,7 @@ define(requires, function (DomController, Three, Settings, CameraController) {
         var self = this;
 
         var rendererOptions = {
-            antialias: true,
+            antialias: false,
             preserveDrawingBuffer: true
         };
 
@@ -55,7 +56,6 @@ define(requires, function (DomController, Three, Settings, CameraController) {
 
         var ambientLight = new Three.AmbientLight(0xffffff);
         this.scene.add(ambientLight);
-
 
         //var directionalLight = new Three.DirectionalLight(0xffffff);
         //directionalLight.position.set(1, 0, 10).normalize();
@@ -86,7 +86,7 @@ define(requires, function (DomController, Three, Settings, CameraController) {
                 
                 self.createMesh(Settings.TILE_SIZE, Settings.TILE_SIZE, x, y, 'static/img/Tiles/' + material + '/' + o.s + '' + o.r + '.gif', function(mesh) {
                     self.scene.add(mesh);
-                    console.log("img height:", mesh.material.map.image.height);
+                    //console.log("img height:", mesh.material.map.image.height);
                     //mesh.rotation.z = rad;
                 });
             })();
@@ -107,10 +107,18 @@ define(requires, function (DomController, Three, Settings, CameraController) {
     }
 
     ViewController.prototype.render = function () {
-        if(this.player) {
-            var pos = this.player.getDoll().getBody().GetPosition();
+        if(this.mainPlayer) {
+            var pos = this.mainPlayer.getDoll().getBody().GetPosition();
             this.cameraController.setPosition(pos.x * Settings.RATIO, -(pos.y * Settings.RATIO));
         }
+
+        for (var i = 0; i < this.movableObjects.length; i++) {
+            var obj = this.movableObjects[i];
+            var pos = obj.player.getDoll().getBody().GetPosition();
+            obj.mesh.position.x = pos.x * Settings.RATIO;
+            obj.mesh.position.y = -pos.y * Settings.RATIO + 21;
+        }
+
         this.renderer.render(this.scene, this.cameraController.getCamera());
     }
 
@@ -130,8 +138,24 @@ define(requires, function (DomController, Three, Settings, CameraController) {
         //mesh.position.z = 1;
     }
 
-    ViewController.prototype.setPlayer = function(player) {
-        this.player = player;
+    ViewController.prototype.setMainPlayer = function(player) {
+        this.mainPlayer = player;
+    };
+
+    ViewController.prototype.addMovablePlayer = function(player) {
+        var self = this;
+        var mesh = null;
+        var pos = player.getDoll().getBody().GetPosition();
+        var size = {w:10, h:42};
+        var callback = function(mesh) {
+            self.scene.add(mesh);
+            self.movableObjects.push({
+                player: player,
+                mesh: mesh
+            });            
+        }
+        this.createMesh(size.w, size.h, pos.x, pos.y, "static/img/Characters/Chuck/chuck.png", callback);
+
     };
 
     return ViewController;
