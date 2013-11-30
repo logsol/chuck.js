@@ -40,7 +40,7 @@ define(requires, function (DomController, Three, Settings, CameraController) {
             //this.renderer = new Three.CanvasRenderer(rendererOptions);
         //}
         
-        this.renderer.setClearColorHex(0x333333, 1);
+        this.renderer.setClearColor("#333333", 1);
         this.renderer.setSize(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT);
 
         DomController.setCanvas(this.renderer.domElement);

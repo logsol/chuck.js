@@ -6,7 +6,7 @@ define(['Lib/Vendor/Three', 'Game/Config/Settings'], function (Three, Settings) 
             ? true 
             : isOrthographic;
 
-        if(isOrthographic) {
+        if(!isOrthographic) {
             
             this.camera = new Three.OrthographicCamera(
                 -Settings.STAGE_WIDTH/2, 
@@ -22,13 +22,13 @@ define(['Lib/Vendor/Three', 'Game/Config/Settings'], function (Three, Settings) 
             this.camera = new Three.PerspectiveCamera(
                 45, 
                 Settings.STAGE_WIDTH / Settings.STAGE_HEIGHT, 
-                -2000, 
-                1000
+                1, 
+                -500
             );
         }
 
         this.camera.position.z = 481;
-        this.setPosition(0,0);
+        this.setPosition(Settings.STAGE_WIDTH / 2, -Settings.STAGE_HEIGHT / 2);
     }
 
     CameraController.prototype.getCamera = function () {
@@ -36,8 +36,8 @@ define(['Lib/Vendor/Three', 'Game/Config/Settings'], function (Three, Settings) 
     }
 
     CameraController.prototype.setPosition = function (x, y) {
-        this.camera.position.x = x + Settings.STAGE_WIDTH / 2;
-        this.camera.position.y = y - Settings.STAGE_HEIGHT / 2;
+        this.camera.position.x = x;
+        this.camera.position.y = y;
     }
 
 
