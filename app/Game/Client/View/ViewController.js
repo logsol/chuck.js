@@ -55,6 +55,7 @@ define(requires, function (DomController, Three, Settings, CameraController) {
 
         var ambientLight = new Three.AmbientLight(0xffffff);
         this.scene.add(ambientLight);
+
  
         //var directionalLight = new Three.DirectionalLight(0xffffff);
         //directionalLight.position.set(1, 0, 10).normalize();
@@ -66,6 +67,10 @@ define(requires, function (DomController, Three, Settings, CameraController) {
         //    self.scene.add(mesh);
         //});
     }
+
+    ViewController.prototype.loadPlayerMesh = function(player) {
+        
+    };
 
     ViewController.prototype.loadMeshes = function(objects) {
         var self = this;
