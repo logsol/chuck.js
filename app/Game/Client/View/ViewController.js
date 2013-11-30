@@ -61,17 +61,10 @@ define(requires, function (DomController, Three, Settings, CameraController) {
         //this.scene.add(directionalLight);
 
 
-        this.createMesh(100, 100, 100, 100, 'static/img/100.png', function (mesh) {
-            self.mesh = mesh;
-            self.scene.add(mesh);
-        });
-/*
-         this.createMesh(50, 50, 200, 100, 'static/img/100.png', function (mesh) {
-            self.scene.add(mesh);
-        });
-*/
-
-        //this.animate(this);
+        //this.createMesh(100, 100, 100, 100, 'static/img/100.png', function (mesh) {
+        //    self.mesh = mesh;
+        //    self.scene.add(mesh);
+        //});
     }
 
     ViewController.prototype.loadMeshes = function(objects) {
@@ -88,6 +81,7 @@ define(requires, function (DomController, Three, Settings, CameraController) {
                 
                 self.createMesh(Settings.TILE_SIZE, Settings.TILE_SIZE, x, y, 'static/img/Tiles/' + material + '/' + o.s + '' + o.r + '.gif', function(mesh) {
                     self.scene.add(mesh);
+                    console.log("img height:", mesh.material.map.image.height);
                     //mesh.rotation.z = rad;
                 });
             })();
@@ -108,27 +102,23 @@ define(requires, function (DomController, Three, Settings, CameraController) {
     }
 
     ViewController.prototype.render = function () {
-
         this.renderer.render(this.scene, this.cameraController.getCamera());
     }
 
     ViewController.prototype.createMesh = function (width, height, x, y, imgPath, callback) {
-        var textureImg = new Image();
-        textureImg.onload = function () { // FIXME: perhaps not needed to load double?
-            var material = new Three.MeshLambertMaterial({
-                map: Three.ImageUtils.loadTexture(imgPath),
-                transparent: true
-            });
+        var mesh;
+        var material = new Three.MeshLambertMaterial({
+            map: Three.ImageUtils.loadTexture(imgPath, new THREE.UVMapping(), function(){
+                callback(mesh);
+            }),
+            transparent: true
+        });
 
-            var mesh = new Three.Mesh(new Three.PlaneGeometry(width, height), material);
-            mesh.overdraw = true;
-            //mesh.position.z = 1;
-            mesh.position.x = x;
-            mesh.position.y = y;
-            
-            callback(mesh);
-        };
-        textureImg.src = imgPath;
+        mesh = new Three.Mesh(new Three.PlaneGeometry(width, height), material);
+        mesh.overdraw = true;
+        mesh.position.x = x;
+        mesh.position.y = y;
+        //mesh.position.z = 1;
     }
 
     return ViewController;
