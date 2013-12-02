@@ -8,7 +8,7 @@ define({
     BOX2D_GRAVITY: 16,
     BOX2D_VELOCITY_ITERATIONS: 5,
     BOX2D_POSITION_ITERATIONS: 5,
-    BOX2D_TIME_STEP: 1 / 60,
+    BOX2D_TIME_STEP: 1 / 30,
 
     // GRAPHIC PATHS
     GRAPHICS_PATH: 'static/img/',
@@ -17,6 +17,7 @@ define({
 
     RATIO: 35,
     TILE_SIZE: 15,
+    CAMERA_IS_ORTHOGRAPHIC: true,
 
     // GAME PLAY 
     WALK_SPEED: 2.5,
@@ -43,7 +44,7 @@ define({
     CANVAS_DOM_ID: 'canvasContainer',
     IS_BROWSER_ENVIRONMENT: typeof window !== 'undefined',
 
-    DEBUG_MODE: false,
+    DEBUG_MODE: true,
 
     // NETWORKING
     WORLD_UPDATE_BROADCAST_INTERVAL: 70

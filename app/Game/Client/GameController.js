@@ -21,6 +21,7 @@ function (Box2D, Parent, PhysicsEngine, ViewController, PlayerController, Notifi
         this.me = null;
 
         this.update();
+        this.render();
     }
 
     GameController.prototype = Object.create(Parent.prototype);
@@ -54,14 +55,18 @@ function (Box2D, Parent, PhysicsEngine, ViewController, PlayerController, Notifi
 
     GameController.prototype.update  = function () {
 
-        requestAnimFrame(this.update.bind(this));
+        setTimeout(this.update.bind(this), Settings.BOX2D_TIME_STEP * 1000);
 
         this.physicsEngine.update();
-        this.viewController.update();
-
+        
         if(this.me) {
             this.me.update();
         }
+    }
+
+    GameController.prototype.render = function() {
+        requestAnimFrame(this.render.bind(this));
+        this.viewController.render();
     }
 
     GameController.prototype.onWorldUpdate = function (updateData) {
@@ -113,7 +118,7 @@ function (Box2D, Parent, PhysicsEngine, ViewController, PlayerController, Notifi
         //this.onSpawnPlayer(options);
         this.me = this.players[playerId];
         this.me.setPlayerController(new PlayerController(this.me));
-        this.viewController.setMainPlayer(this.me);
+        this.viewController.setMe(this.me);
     }
 
     GameController.prototype.onSpawnPlayer = function(options) {
@@ -125,7 +130,7 @@ function (Box2D, Parent, PhysicsEngine, ViewController, PlayerController, Notifi
         player.spawn(x, y);
 
         // add to view controller
-        this.viewController.addMovablePlayer(player);
+        this.viewController.addPlayer(player);
     }
 
     GameController.prototype.loadLevel = function (path) {

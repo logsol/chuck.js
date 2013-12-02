@@ -1,33 +1,19 @@
 define(['Lib/Vendor/Three', 'Game/Config/Settings'], function (Three, Settings) {
 
-    function CameraController (isOrthographic) {
+    function CameraController () {
+        this.zoom = 1;
 
-        isOrthographic = typeof isOrthographic == 'undefined' 
-            ? true 
-            : isOrthographic;
+        this.camera = new Three.OrthographicCamera(
+            -Settings.STAGE_WIDTH/2, 
+            Settings.STAGE_WIDTH/2, 
+            Settings.STAGE_HEIGHT/2, 
+            -Settings.STAGE_HEIGHT/2, 
+            0, 
+            1000 
+        );
 
-        if(!isOrthographic) {
-            
-            this.camera = new Three.OrthographicCamera(
-                -Settings.STAGE_WIDTH/2, 
-                Settings.STAGE_WIDTH/2, 
-                Settings.STAGE_HEIGHT/2, 
-                -Settings.STAGE_HEIGHT/2, 
-                1, 
-                1000 
-            );
+        this.camera.position.z = 1;
 
-        } else {
-
-            this.camera = new Three.PerspectiveCamera(
-                45, 
-                Settings.STAGE_WIDTH / Settings.STAGE_HEIGHT, 
-                1, 
-                -500
-            );
-        }
-
-        this.camera.position.z = 270; // 481 
         this.setPosition(Settings.STAGE_WIDTH / 2, -Settings.STAGE_HEIGHT / 2);
 
         this.initWheel();
@@ -46,7 +32,9 @@ define(['Lib/Vendor/Three', 'Game/Config/Settings'], function (Three, Settings) 
         if(!event) event = window.event; // IE
         if(event.wheelDelta) delta = event.wheelDelta/120;
         else if(event.detail) delta = -event.detail/3;
-        if(delta) this.camera.position.z -= delta * 10;
+        if(delta) {
+            this.setZoom(this.zoom + (delta / 30));
+        }
         if(event.preventDefault) event.preventDefault();
         event.returnValue = false;
     };
@@ -62,7 +50,14 @@ define(['Lib/Vendor/Three', 'Game/Config/Settings'], function (Three, Settings) 
 
 
     CameraController.prototype.setZoom = function (z) {
-        this.camera.position.z = z;
+        this.zoom = z;
+        z *= 2;
+        console.log(this.zoom)
+        this.camera.left   = - Settings.STAGE_WIDTH / z;
+        this.camera.right  =   Settings.STAGE_WIDTH / z;
+        this.camera.top    =   Settings.STAGE_HEIGHT / z;
+        this.camera.bottom = - Settings.STAGE_HEIGHT / z;
+        this.camera.updateProjectionMatrix();
     }
 
     return CameraController;

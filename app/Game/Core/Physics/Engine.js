@@ -12,6 +12,7 @@ function (Settings, Box2D, CollisionDetector) {
             Settings.BOX2D_ALLOW_SLEEP
         );
         this.ground = null;
+        console.log(Settings.BOX2D_TIME_STEP)
     }
 
     Engine.prototype.getWorld = function () {

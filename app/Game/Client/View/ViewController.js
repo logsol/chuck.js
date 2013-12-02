@@ -102,13 +102,10 @@ define(requires, function (DomController, Three, Settings, CameraController) {
         return false;
     };
 
-    ViewController.prototype.update = function () {
-        this.render();
-    }
-
     ViewController.prototype.render = function () {
-        if(this.mainPlayer) {
-            var pos = this.mainPlayer.getDoll().getBody().GetPosition();
+        
+        if(this.me) {
+            var pos = this.me.getDoll().getBody().GetPosition();
             this.cameraController.setPosition(pos.x * Settings.RATIO, -(pos.y * Settings.RATIO));
         }
 
@@ -135,14 +132,13 @@ define(requires, function (DomController, Three, Settings, CameraController) {
         mesh.overdraw = true;
         mesh.position.x = x;
         mesh.position.y = y;
-        //mesh.position.z = 1;
     }
 
-    ViewController.prototype.setMainPlayer = function(player) {
-        this.mainPlayer = player;
+    ViewController.prototype.setMe = function(player) {
+        this.me = player;
     };
 
-    ViewController.prototype.addMovablePlayer = function(player) {
+    ViewController.prototype.addPlayer = function(player) {
         var self = this;
         var mesh = null;
         var pos = player.getDoll().getBody().GetPosition();
@@ -155,7 +151,15 @@ define(requires, function (DomController, Three, Settings, CameraController) {
             });            
         }
         this.createMesh(size.w, size.h, pos.x, pos.y, "static/img/Characters/Chuck/chuck.png", callback);
+    };
 
+    ViewController.prototype.removPlayer = function(player) {
+        for (var i = 0; i < this.movableObjects.length; i++) {
+            var o = this.movableObjects[i];
+            if(o.player == player) {
+                this.scene.remove(o.mesh);
+            }
+        };
     };
 
     return ViewController;
