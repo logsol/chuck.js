@@ -1,7 +1,8 @@
 define([
     "Game/Config/Settings", 
     "Lib/Vendor/Box2D", 
-    "Game/Core/Collision/Detector"
+    "Game/" + GLOBALS.context + "/Collision/Detector"
+
 ], function (Settings, Box2D, CollisionDetector) {
     
     // Public

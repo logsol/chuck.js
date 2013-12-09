@@ -1,3 +1,5 @@
+GLOBALS = { context: "Client" };
+
 requirejs.config({
     baseUrl: 'app',
     deps: ['Lib/Utilities/Extensions']
