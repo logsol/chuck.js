@@ -1,0 +1,28 @@
+<snippet>
+    <content><![CDATA[
+define([
+	"${2:Path}"
+],
+ 
+function(Parent) {
+ 
+    function ${1:Module}() {
+    	Parent.call(this);
+    }
+
+    ${1:Module}.prototype = Object.create(Parent.prototype);
+ 
+    ${1:Module}.prototype.${3:name} = function(${4:arguments}) {
+        return null;
+    }
+ 
+    return ${1:Module};
+ 
+});
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>defex</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.js</scope>
+    <description>define(..) - create a new extended require.js module</description>
+</snippet>

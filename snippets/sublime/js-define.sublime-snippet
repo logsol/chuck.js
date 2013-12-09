@@ -1,0 +1,24 @@
+<snippet>
+    <content><![CDATA[
+define([
+],
+ 
+function() {
+ 
+    function ${1:Module}() {
+    }
+ 
+    ${1:Module}.prototype.${2:name} = function(${3:arguments}) {
+        return null;
+    }
+ 
+    return ${1:Module};
+ 
+});
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>def</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.js</scope>
+    <description>define(..) - create a new require.js module</description>
+</snippet>
