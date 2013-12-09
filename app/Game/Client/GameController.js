@@ -1,6 +1,6 @@
 define([
-    "Lib/Vendor/Box2D",
     "Game/Core/GameController",
+    "Lib/Vendor/Box2D",
     "Game/Client/Physics/Engine", 
     "Game/Client/View/ViewController", 
     "Game/Client/Control/PlayerController", 
@@ -10,7 +10,7 @@ define([
     "Lib/Vendor/Stats"
 ],
 
-function (Box2D, Parent, PhysicsEngine, ViewController, PlayerController, NotificationCenter, requestAnimFrame, Settings, Stats) {
+function (Parent, Box2D, PhysicsEngine, ViewController, PlayerController, NotificationCenter, requestAnimFrame, Settings, Stats) {
 
     function GameController () {
         this.viewController = new ViewController();

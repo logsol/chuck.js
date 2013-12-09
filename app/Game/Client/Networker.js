@@ -1,7 +1,7 @@
 define([
     "Game/Core/Protocol/Helper", 
     "Game/Client/GameController",
-    "Game/Core/User",
+    "Game/Client/User",
     "Game/Core/NotificationCenter"
 ], 
 

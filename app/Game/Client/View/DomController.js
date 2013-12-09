@@ -1,4 +1,8 @@
-define(['Game/Config/Settings'], function (Settings) {
+define([
+    'Game/Config/Settings'
+], 
+
+function (Settings) {
 
     var DomController = {
         canvas: null,

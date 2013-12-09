@@ -1,9 +1,9 @@
 define([
-    "Lib/Vendor/Box2D", 
-    "Game/Core/Collision/Detector"
+    "Game/Core/Collision/Detector",
+    "Lib/Vendor/Box2D"
 ], 
 
-function (Box2D, Parent) {
+function (Parent, Box2D) {
 
     function Detector (player) {
         Parent.call(this, player);

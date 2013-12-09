@@ -1,9 +1,8 @@
 define([
-    "Lib/Vendor/Box2D", 
-    "Game/Core/Collision/Detector"
+    "Lib/Vendor/Box2D"
 ],
 
-function (Box2D, Parent) {
+function (Box2D) {
 
     function Detector () { // FIXME evtl.bind(this) ?
         this.listener = new Box2D.Dynamics.b2ContactListener();

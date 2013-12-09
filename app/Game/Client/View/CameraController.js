@@ -1,4 +1,9 @@
-define(['Lib/Vendor/Three', 'Game/Config/Settings'], function (Three, Settings) {
+define([
+    'Lib/Vendor/Three', 
+    'Game/Config/Settings'
+], 
+
+function (Three, Settings) {
 
     function CameraController () {
         this.zoom = 1;
