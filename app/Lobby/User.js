@@ -53,6 +53,11 @@ function (Parent, ProtocolHelper, NotificationCenter) {
         NotificationCenter.trigger("user/controlCommand", this.id, message);
     };
 
+    User.prototype.onPing = function(timestamp) {
+        var message = ProtocolHelper.encodeCommand("pong", timestamp);
+        NotificationCenter.trigger("user/" + this.socketLink.id + "/message", message);
+    };
+
     return User;
 
 });

@@ -6,10 +6,11 @@ define([
     "Game/Client/Control/PlayerController", 
     "Game/Core/NotificationCenter",
     "Lib/Utilities/RequestAnimFrame",
-    "Game/Config/Settings"
+    "Game/Config/Settings",
+    "Lib/Vendor/Stats"
 ],
 
-function (Box2D, Parent, PhysicsEngine, ViewController, PlayerController, NotificationCenter, requestAnimFrame, Settings) {
+function (Box2D, Parent, PhysicsEngine, ViewController, PlayerController, NotificationCenter, requestAnimFrame, Settings, Stats) {
 
     function GameController () {
         this.viewController = new ViewController();
@@ -20,11 +21,18 @@ function (Box2D, Parent, PhysicsEngine, ViewController, PlayerController, Notifi
 
         this.me = null;
 
+        this.initStats();
+
         this.update();
-        this.render();
     }
 
     GameController.prototype = Object.create(Parent.prototype);
+
+    GameController.prototype.initStats = function() {
+        this.stats = new Stats();
+        this.stats.setMode(0);
+        document.body.appendChild(this.stats.domElement);
+    };
 
     GameController.prototype.makeMouseJoint = function(p) {
         var ground = this.physicsEngine.getGround();
@@ -54,19 +62,19 @@ function (Box2D, Parent, PhysicsEngine, ViewController, PlayerController, Notifi
     }
 
     GameController.prototype.update  = function () {
+        this.stats.begin();
 
-        setTimeout(this.update.bind(this), Settings.BOX2D_TIME_STEP * 1000);
+        requestAnimFrame(this.update.bind(this));
 
         this.physicsEngine.update();
         
         if(this.me) {
             this.me.update();
         }
-    }
 
-    GameController.prototype.render = function() {
-        requestAnimFrame(this.render.bind(this));
         this.viewController.render();
+
+        this.stats.end();
     }
 
     GameController.prototype.onWorldUpdate = function (updateData) {

@@ -63,7 +63,21 @@ function (ProtocolHelper, GameController, User, NotificationCenter) {
                 console.log("already spawned player, options: ", options.spawnedPlayers[i])
             }
         }
+
+        this.initPing();
     }
+
+    Networker.prototype.initPing = function() {
+        this.pingDOMElement = document.createElement("span");
+        this.pingDOMElement.style.color = "white";
+        this.pingDOMElement.style.fontFamily = "monospace";
+        document.body.appendChild(this.pingDOMElement);
+        this.ping();
+    };
+
+    Networker.prototype.ping = function() {
+        this.sendCommand("ping", Date.now());
+    };
 
 
     // Sending commands
@@ -96,6 +110,11 @@ function (ProtocolHelper, GameController, User, NotificationCenter) {
     Networker.prototype.onGameCommand = function(message) {
         ProtocolHelper.applyCommand(message, this.gameController);
     }
+
+    Networker.prototype.onPong = function(timestamp) {
+        this.pingDOMElement.innerHTML = "Ping: " + (Date.now() - parseInt(timestamp, 10));
+        setTimeout(this.ping.bind(this), 1000);
+    };
 
     return Networker;
     

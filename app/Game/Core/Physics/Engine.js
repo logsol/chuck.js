@@ -12,6 +12,7 @@ function (Settings, Box2D, CollisionDetector) {
             Settings.BOX2D_ALLOW_SLEEP
         );
         this.ground = null;
+        this.lastStep = Date.now();
         console.log(Settings.BOX2D_TIME_STEP)
     }
 
@@ -36,7 +37,9 @@ function (Settings, Box2D, CollisionDetector) {
     }
 
     Engine.prototype.update = function () {
-        this.world.Step(Settings.BOX2D_TIME_STEP, Settings.BOX2D_VELOCITY_ITERATIONS, Settings.BOX2D_POSITION_ITERATIONS);
+        var stepLength = (Date.now() - this.lastStep) / 1000;
+        this.world.Step(stepLength, Settings.BOX2D_VELOCITY_ITERATIONS, Settings.BOX2D_POSITION_ITERATIONS);
+        this.lastStep = Date.now();
         this.world.ClearForces();
     }
 

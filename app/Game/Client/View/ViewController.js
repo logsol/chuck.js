@@ -35,11 +35,11 @@ define(requires, function (DomController, Three, Settings, CameraController) {
             preserveDrawingBuffer: true
         };
 
-        //if(isWebGlEnabled()) {
+        if(Settings.USE_WEBGL) {
             this.renderer = new Three.WebGLRenderer(rendererOptions);
-        //} else {
-            //this.renderer = new Three.CanvasRenderer(rendererOptions);
-        //}
+        } else {
+            this.renderer = new Three.CanvasRenderer(rendererOptions);
+        }
         
         this.renderer.setClearColor("#333333", 1);
         this.renderer.setSize(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT);

@@ -8,7 +8,7 @@ define({
     BOX2D_GRAVITY: 16,
     BOX2D_VELOCITY_ITERATIONS: 5,
     BOX2D_POSITION_ITERATIONS: 5,
-    BOX2D_TIME_STEP: 1 / 30,
+    BOX2D_TIME_STEP: 1 / 60,
 
     // GRAPHIC PATHS
     GRAPHICS_PATH: 'static/img/',
@@ -43,8 +43,9 @@ define({
     // BROWSER
     CANVAS_DOM_ID: 'canvasContainer',
     IS_BROWSER_ENVIRONMENT: typeof window !== 'undefined',
+    USE_WEGBL: true, 
 
-    DEBUG_MODE: true,
+    DEBUG_MODE: false,
 
     // NETWORKING
     WORLD_UPDATE_BROADCAST_INTERVAL: 70

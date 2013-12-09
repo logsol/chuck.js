@@ -7,10 +7,11 @@ var inspector = {};
 
 requirejs([
     "Game/Client/Networker", 
-    "Lib/Vendor/SocketIO"
+    "Lib/Vendor/SocketIO",
+    "Game/Config/Settings"
 ], 
 
-function (Networker, SocketIO) {
+function (Networker, SocketIO, Settings) {
     
     var options = {
         "reconnect": false,
@@ -27,4 +28,5 @@ function (Networker, SocketIO) {
     var networker = new Networker(socket);
 
     inspector.networker = networker;
+    inspector.settings = Settings;
 });
