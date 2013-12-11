@@ -1,7 +1,7 @@
 define([
-    "Game/Core/Physics/Engine",
-    "Game/Core/Loader/Level",
-    "Game/Core/Player"
+    "Game/" + GLOBALS.context + "/Physics/Engine",
+    "Game/" + GLOBALS.context + "/Loader/Level",
+    "Game/" + GLOBALS.context + "/Player"
 ],
 
 function (Engine, Level, Player) {

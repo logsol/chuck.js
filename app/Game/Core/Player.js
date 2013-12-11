@@ -1,5 +1,5 @@
 define([
-    "Game/Core/Physics/Doll",
+    "Game/" + GLOBALS.context + "/Physics/Doll",
     "Game/Config/Settings"
 ],
 

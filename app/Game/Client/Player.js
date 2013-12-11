@@ -1,5 +1,5 @@
 define([
-	"Game/Core/Loader/Level"
+	"Game/Core/Player"
 ],
  
 function(Parent) {

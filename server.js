@@ -1,3 +1,4 @@
+GLOBALS = { context: "Server" };
 var requirejs = require('requirejs');
 
 var inspector;
