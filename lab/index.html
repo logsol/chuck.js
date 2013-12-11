@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chuck</title>
+        <style>
+            html, body { 
+                margin: 0; 
+                padding: 0; 
+                display: table; 
+                width: 100%; 
+                height: 100%;
+                background: #000;
+            }
+            #canvasContainer { 
+                text-align: center; 
+                display: table-cell; 
+                vertical-align: middle; 
+                height: 100%;
+            }
+            canvas { 
+                background: #333;  
+                margin: 10px;
+            }
+            #canvasContainer canvas:first-child {
+                
+            }
+        </style>
+    </head>
+    <body>
+        <div id="canvasContainer">
+        </div>
+        <script data-main="client" src="../node_modules/requirejs/require.js"></script>
+    </body>
+</html>
