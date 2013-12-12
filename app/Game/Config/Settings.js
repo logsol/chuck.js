@@ -16,12 +16,12 @@ define({
     GRAPHICS_SUBPATH_CHARACTERS: 'characters/',
 
     RATIO: 35,
-    TILE_SIZE: 15,
+    TILE_SIZE: 40, //15
     CAMERA_IS_ORTHOGRAPHIC: true,
 
     // GAME PLAY 
     WALK_SPEED: 2.5,
-    RUN_SPEED: 4.0,
+    RUN_SPEED: 4,
     FLY_SPEED: 3.2,
     JUMP_SPEED: 4.0,
     JUMP_UPLIFT: 0.05,

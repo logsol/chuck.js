@@ -54,8 +54,10 @@ define(requires, function (DomController, Three, Settings, CameraController) {
         this.scene.add(this.cameraController.getCamera());
 
 
-        var ambientLight = new Three.AmbientLight(0xffffff);
+        var ambientLight = new Three.AmbientLight(0xffaaaa);
         this.scene.add(ambientLight);
+
+
 
         //var directionalLight = new Three.DirectionalLight(0xffffff);
         //directionalLight.position.set(1, 0, 10).normalize();
@@ -105,13 +107,19 @@ define(requires, function (DomController, Three, Settings, CameraController) {
     ViewController.prototype.render = function () {
         
         if(this.me) {
-            var pos = this.me.getDoll().getBody().GetPosition();
-            this.cameraController.setPosition(pos.x * Settings.RATIO, -(pos.y * Settings.RATIO));
+            var pos = this.me.getPosition();
+            var x = pos.x * Settings.RATIO;
+            var y = -(pos.y * Settings.RATIO);
+
+            x += this.me.playerController.xyInput.x * Settings.STAGE_WIDTH / 4;
+            y += this.me.playerController.xyInput.y * Settings.STAGE_HEIGHT / 4;
+
+            this.cameraController.setPosition(x, y);
         }
 
         for (var i = 0; i < this.movableObjects.length; i++) {
             var obj = this.movableObjects[i];
-            var pos = obj.player.getDoll().getBody().GetPosition();
+            var pos = obj.player.getPosition();
             obj.mesh.position.x = pos.x * Settings.RATIO;
             obj.mesh.position.y = -pos.y * Settings.RATIO + 21;
         }
@@ -141,7 +149,7 @@ define(requires, function (DomController, Three, Settings, CameraController) {
     ViewController.prototype.addPlayer = function(player) {
         var self = this;
         var mesh = null;
-        var pos = player.getDoll().getBody().GetPosition();
+        var pos = player.getPosition();
         var size = {w:10, h:42};
         var callback = function(mesh) {
             self.scene.add(mesh);

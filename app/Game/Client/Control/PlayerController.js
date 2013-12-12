@@ -1,16 +1,20 @@
 define([
     "Game/Core/Control/PlayerController", 
     "Game/Client/Control/KeyboardInput",
+    "Game/Client/Control/Input/MouseInput",
     "Game/Core/NotificationCenter"
 ], 
 
-function (Parent, KeyboardInput, NotificationCenter) {
+function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
 
     function PlayerController (me) {
 
         Parent.call(this, me);
 
         this.keyboardInput = new KeyboardInput(this);
+        this.xyInput = new MouseInput(this);
+
+        NotificationCenter.on("onXyChange", this.setXY, this);
 
         var keys = {
             w:87,
@@ -21,7 +25,7 @@ function (Parent, KeyboardInput, NotificationCenter) {
             up: 38,
             left: 37,
             down: 40,
-            right: 39            
+            right: 39
         }
 
         this.init(keys);
@@ -61,10 +65,17 @@ function (Parent, KeyboardInput, NotificationCenter) {
         NotificationCenter.trigger('sendGameCommand', 'jump');
     }
 
+    PlayerController.prototype.setXY = function(x, y) {
+        Parent.prototype.lookAt.call(this, x, y);
+        NotificationCenter.trigger('sendGameCommand', 'lookAt', x, y); // implement that x and y are received
+    };
+
     PlayerController.prototype.update = function () {
         this.keyboardInput.update();
         Parent.prototype.update.call(this);
     }
+
+
 
     return PlayerController;
 });

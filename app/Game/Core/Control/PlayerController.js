@@ -29,6 +29,10 @@ define(function () {
         this.player.jump();
     }
 
+    PlayerController.prototype.lookAt = function (x, y) {
+        this.player.lookAt(x, y);
+    }
+
     PlayerController.prototype.update = function () {
         //console.log(this._walkingDirectionStatus)
         if(this._walkingDirectionStatus != 0) {

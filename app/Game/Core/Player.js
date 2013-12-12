@@ -7,15 +7,16 @@ function (Doll, Settings) {
 
     function Player (id, physicsEngine) {
         this.physicsEngine = physicsEngine;
+        this.playerController = null;
+
         this.id = id;
         this.standing = false;
         this.doll;
-        this.mc;
         this.currentAnimationState = 'stand';
-        this.lookDirection = 1;
         this.moveDirection = 0;
+        this.lookDirection = 0;
         this.isSpawned = false;
-        this.playerController = null;
+        
     }
 
     Player.prototype.spawn = function (x, y) {
@@ -113,17 +114,20 @@ function (Doll, Settings) {
     }
 
     Player.prototype.calculateWalkAnimation = function () {
-        if (this.moveDirection == this.lookDirection) {
+        // FIXME dont know if this is right
+        if (this.moveDirection == (this.lookDirection > 0)) {
             return 'run';
         } 
         return 'walkback';
     }
 
-    Player.prototype.look = function (x, y) {
-        /*
-        var degree = Math.atan2(Settings.STAGE_WIDTH / 2 - x, Settings.STAGE_HEIGHT / 2 - 25 - y) / (Math.PI / 180);
+    Player.prototype.lookAt = function (x, y) {
+        //console.log("player looking at ", x, y);
+        
+       
         var lastLookDirection = this.lookDirection;
-
+/*
+        var degree = Math.atan2(Settings.STAGE_WIDTH / 2 - x, Settings.STAGE_HEIGHT / 2 - 25 - y) / (Math.PI / 180);
         if (x < Settings.STAGE_WIDTH / 2) {
             this.mc.scaleX = -1;
             this.lookDirection = -1;
@@ -135,10 +139,17 @@ function (Doll, Settings) {
             degree = (45 + -degree / 2) - 90;
             this.mc.head.rotation = degree;
         }
+        */
+
+        if(x < 0) {
+            this.lookDirection = -1;
+        } else {
+            this.lookDirection = 1;
+        }
 
         if (this.lookDirection != lastLookDirection && this.isWalking()) {
             this.animate(this.calculateWalkAnimation());
-        }*/
+        }
     }
 
     Player.prototype.isWalking = function () {
