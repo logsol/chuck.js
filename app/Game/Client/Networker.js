@@ -2,10 +2,11 @@ define([
     "Game/Core/Protocol/Helper", 
     "Game/Client/GameController",
     "Game/Client/User",
-    "Game/Core/NotificationCenter"
+    "Game/Core/NotificationCenter",
+    "Game/Config/Settings"
 ], 
 
-function (ProtocolHelper, GameController, User, NotificationCenter) {
+function (ProtocolHelper, GameController, User, NotificationCenter, Settings) {
 
     function Networker (socketLink) {
         this.socketLink = socketLink;
@@ -22,6 +23,9 @@ function (ProtocolHelper, GameController, User, NotificationCenter) {
 
         var self = this;
         this.socketLink.on('message', function (message) {
+            if(Settings.NETWORK_LOG_INCOMING) {
+                console.log('INCOMING', message);
+            }
             ProtocolHelper.applyCommand(message, self);
         });
 
@@ -85,6 +89,9 @@ function (ProtocolHelper, GameController, User, NotificationCenter) {
     Networker.prototype.sendCommand = function (command, options) {
         var message = ProtocolHelper.encodeCommand(command, options);
         this.socketLink.send(message);
+        if(Settings.NETWORK_LOG_OUTGOING) {
+            console.log('OUTGOING', message);
+        }
     }
 
     Networker.prototype.sendGameCommand = function(command, options) {
