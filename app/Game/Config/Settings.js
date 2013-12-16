@@ -16,8 +16,9 @@ define({
     GRAPHICS_SUBPATH_CHARACTERS: 'characters/',
 
     RATIO: 35,
-    TILE_SIZE: 40, //15
+    TILE_SIZE: 15, //15
     CAMERA_IS_ORTHOGRAPHIC: true,
+    VIEW_CONTROLLER: 1 ? 'Three' : 'Pixi',
 
     // GAME PLAY 
     WALK_SPEED: 2.5,

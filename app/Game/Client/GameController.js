@@ -2,7 +2,7 @@ define([
     "Game/Core/GameController",
     "Lib/Vendor/Box2D",
     "Game/Client/Physics/Engine", 
-    "Game/Client/View/ViewController", 
+    "Game/Client/View/ViewManager", 
     "Game/Client/Control/PlayerController", 
     "Game/Core/NotificationCenter",
     "Lib/Utilities/RequestAnimFrame",
@@ -10,14 +10,12 @@ define([
     "Lib/Vendor/Stats"
 ],
 
-function (Parent, Box2D, PhysicsEngine, ViewController, PlayerController, NotificationCenter, requestAnimFrame, Settings, Stats) {
+function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, NotificationCenter, requestAnimFrame, Settings, Stats) {
 
     function GameController () {
-        
+        this.viewController = ViewManager.prototype.createView();
 
         Parent.call(this, new PhysicsEngine());
-
-        this.viewController = new ViewController();
 
         this.physicsEngine.setCollisionDetector();
 
