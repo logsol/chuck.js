@@ -18,7 +18,7 @@ define({
     RATIO: 35,
     TILE_SIZE: 15, //15
     CAMERA_IS_ORTHOGRAPHIC: true,
-    VIEW_CONTROLLER: 1 ? 'Three' : 'Pixi',
+    VIEW_CONTROLLER: 0 ? 'Three' : 'Pixi',
 
     // GAME PLAY 
     WALK_SPEED: 2.5,

@@ -101,10 +101,6 @@ function (Parent, DomController, Three, Settings) {
         mesh.position.y = y;
     }
 
-    ThreeView.prototype.setMe = function(player) {
-        this.me = player;
-    };
-
     ThreeView.prototype.addPlayer = function(player) {
         var self = this;
         var mesh = null;
@@ -145,22 +141,6 @@ function (Parent, DomController, Three, Settings) {
         this.setCameraPosition(Settings.STAGE_WIDTH / 2, -Settings.STAGE_HEIGHT / 2);
     }
 
-    ThreeView.prototype.calculateCameraPosition = function() {
-        var reference = this.me.getPosition();
-        var pos = {};
-
-        pos.x = reference.x;
-        pos.y = reference.y;
-
-        pos.x = pos.x * Settings.RATIO;
-        pos.y = -(pos.y * Settings.RATIO);
-
-        pos.x += this.me.playerController.xyInput.x * Settings.STAGE_WIDTH / 4;
-        pos.y += this.me.playerController.xyInput.y * Settings.STAGE_HEIGHT / 4;
-
-        return pos;
-    };
-
     ThreeView.prototype.setCameraPosition = function (x, y) {
         this.camera.position.x = x;
         this.camera.position.y = y;
@@ -175,16 +155,6 @@ function (Parent, DomController, Three, Settings) {
         this.camera.top    =   Settings.STAGE_HEIGHT / z;
         this.camera.bottom = - Settings.STAGE_HEIGHT / z;
         this.camera.updateProjectionMatrix();
-    };
-
-
-    ThreeView.prototype.tileAtPositionExists = function(objects, x, y) {
-
-        for (var i = 0; i < objects.length; i++) {
-            var o = objects[i];
-            if(o.x == x && o.y == y) return true;
-        }
-        return false;
     };
 
     return ThreeView;

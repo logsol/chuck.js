@@ -1,9 +1,10 @@
 define([
     "Game/Client/View/DomController", 
-    "Game/Config/Settings"
+    "Game/Config/Settings",
+    "Lib/Utilities/Exception"
 ],
 
-function (DomController, Settings) {
+function (DomController, Settings, Exception) {
     
     function AbstractView () {
     	this.me = null;
@@ -29,19 +30,19 @@ function (DomController, Settings) {
     }
 
     AbstractView.prototype.loadPlayerMesh = function(player) {
-        throw new Exception('Abstract Function not overwritten ' + arguments.callee.toString());
+        throw new Exception('Abstract Function loadPlayerMesh not overwritten ');
     };
 
     AbstractView.prototype.loadMeshes = function(objects) {
-    	throw new Exception('Abstract Function not overwritten ' + arguments.callee.toString());
+    	throw new Exception('Abstract Function loadMeshes not overwritten ');
     };
 
     AbstractView.prototype.render = function () {
-    	throw new Exception('Abstract Function not overwritten ' + arguments.callee.toString());
+    	throw new Exception('Abstract Function render not overwritten ');
     }
 
     AbstractView.prototype.createMesh = function (width, height, x, y, imgPath, callback) {
-    	throw new Exception('Abstract Function not overwritten ' + arguments.callee.toString());
+    	throw new Exception('Abstract Function createMesh not overwritten ');
     }
 
     AbstractView.prototype.setMe = function(player) {
@@ -49,20 +50,46 @@ function (DomController, Settings) {
     };
 
     AbstractView.prototype.addPlayer = function(player) {
- 		throw new Exception('Abstract Function not overwritten ' + arguments.callee.toString());
+ 		throw new Exception('Abstract Function addPlayer not overwritten ');
     };
 
     AbstractView.prototype.removPlayer = function(player) {
-    	throw new Exception('Abstract Function not overwritten ' + arguments.callee.toString());
+    	throw new Exception('Abstract Function removPlayer not overwritten ');
     };
 
     AbstractView.prototype.setCameraPosition = function (x, y) {
-    	throw new Exception('Abstract Function not overwritten ' + arguments.callee.toString());
+    	throw new Exception('Abstract Function setCameraPosition not overwritten ');
     }
 
+    AbstractView.prototype.calculateCameraPosition = function() {
+        var reference = this.me.getPosition();
+        var pos = {};
+
+        pos.x = reference.x;
+        pos.y = reference.y;
+
+        pos.x = pos.x * Settings.RATIO;
+        pos.y = -(pos.y * Settings.RATIO);
+
+        pos.x += this.me.playerController.xyInput.x * Settings.STAGE_WIDTH / 4;
+        pos.y += this.me.playerController.xyInput.y * Settings.STAGE_HEIGHT / 4;
+
+        return pos;
+    };
+
     AbstractView.prototype.setCameraZoom = function (z) {
-    	throw new Exception('Abstract Function not overwritten ' + arguments.callee.toString());
+    	throw new Exception('Abstract Function setCameraZoom not overwritten ');
     }
+
+    // TODO Move to Level
+    AbstractView.prototype.tileAtPositionExists = function(objects, x, y) {
+
+        for (var i = 0; i < objects.length; i++) {
+            var o = objects[i];
+            if(o.x == x && o.y == y) return true;
+        }
+        return false;
+    };
 
 
     return AbstractView;
