@@ -39,7 +39,7 @@ function (Settings) {
     }
 
     DomController.createDebugCanvas = function () {
-        
+        console.log('setHERE')
         var container = DomController.getCanvasContainer();
         if(DomController.debugCanvas) {
             container.removeChild(DomController.debugCanvas);

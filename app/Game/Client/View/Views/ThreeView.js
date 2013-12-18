@@ -1,25 +1,27 @@
 define([
-    "Game/Client/View/ViewController",
+    "Game/Client/View/Views/AbstractView",
     "Game/Client/View/DomController", 
     "Lib/Vendor/Three", 
-    "Game/Config/Settings", 
-    "Game/Client/View/CameraController"
+    "Game/Config/Settings"
 ], 
 
-function (Parent, DomController, Three, Settings, CameraController) {
+function (Parent, DomController, Three, Settings) {
     
     function ThreeView () {
-
         Parent.call(this);
+
+        this.mesh = null;
+        this.scene = null;
+        this.renderer = null;
+        this.movableObjects = [];
+        this.camera = null;
+
+        this.init();
     }
 
     ThreeView.prototype = Object.create(Parent.prototype);
 
     ThreeView.prototype.init = function () {
-
-        //Parent.prototype.init.call(this);
-
-        var self = this;
 
         var rendererOptions = {
             antialias: false,
@@ -35,35 +37,16 @@ function (Parent, DomController, Three, Settings, CameraController) {
         this.renderer.setClearColor("#333333", 1);
         this.renderer.setSize(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT);
 
-        DomController.setCanvas(this.renderer.domElement);
-
-        if(Settings.DEBUG_MODE) {
-            DomController.createDebugCanvas();
-        }
+        this.initCamera();
 
         this.scene = new Three.Scene();
-        this.scene.add(this.cameraController.getCamera());
+        this.scene.add(this.camera);
 
-
-        var ambientLight = new Three.AmbientLight(0xffaaaa);
+        var ambientLight = new Three.AmbientLight(0xffffff);
         this.scene.add(ambientLight);
 
-
-
-        //var directionalLight = new Three.DirectionalLight(0xffffff);
-        //directionalLight.position.set(1, 0, 10).normalize();
-        //this.scene.add(directionalLight);
-
-
-        //this.createMesh(100, 100, 100, 100, 'static/img/100.png', function (mesh) {
-        //    self.mesh = mesh;
-        //    self.scene.add(mesh);
-        //});
+        this.setCanvas(this.renderer.domElement);
     }
-
-    ThreeView.prototype.loadPlayerMesh = function(player) {
-        
-    };
 
     ThreeView.prototype.loadMeshes = function(objects) {
         var self = this;
@@ -86,26 +69,11 @@ function (Parent, DomController, Three, Settings, CameraController) {
         };
     };
 
-    ThreeView.prototype.tileAtPositionExists = function(objects, x, y) {
-
-        for (var i = 0; i < objects.length; i++) {
-            var o = objects[i];
-            if(o.x == x && o.y == y) return true;
-        }
-        return false;
-    };
-
     ThreeView.prototype.render = function () {
         
         if(this.me) {
-            var pos = this.me.getPosition();
-            var x = pos.x * Settings.RATIO;
-            var y = -(pos.y * Settings.RATIO);
-
-            x += this.me.playerController.xyInput.x * Settings.STAGE_WIDTH / 4;
-            y += this.me.playerController.xyInput.y * Settings.STAGE_HEIGHT / 4;
-
-            this.cameraController.setPosition(x, y);
+            var pos = this.calculateCameraPosition();
+            this.setCameraPosition(pos.x, pos.y);
         }
 
         for (var i = 0; i < this.movableObjects.length; i++) {
@@ -115,7 +83,7 @@ function (Parent, DomController, Three, Settings, CameraController) {
             obj.mesh.position.y = -pos.y * Settings.RATIO + 21;
         }
 
-        this.renderer.render(this.scene, this.cameraController.getCamera());
+        this.renderer.render(this.scene, this.camera);
     }
 
     ThreeView.prototype.createMesh = function (width, height, x, y, imgPath, callback) {
@@ -159,6 +127,64 @@ function (Parent, DomController, Three, Settings, CameraController) {
                 this.scene.remove(o.mesh);
             }
         };
+    };
+
+    ThreeView.prototype.initCamera = function () {
+        this.zoom = 1;
+
+        this.camera = new Three.OrthographicCamera(
+            -Settings.STAGE_WIDTH/2, 
+            Settings.STAGE_WIDTH/2, 
+            Settings.STAGE_HEIGHT/2, 
+            -Settings.STAGE_HEIGHT/2, 
+            0, 
+            1000 
+        );
+
+        this.camera.position.z = 1;
+        this.setCameraPosition(Settings.STAGE_WIDTH / 2, -Settings.STAGE_HEIGHT / 2);
+    }
+
+    ThreeView.prototype.calculateCameraPosition = function() {
+        var reference = this.me.getPosition();
+        var pos = {};
+
+        pos.x = reference.x;
+        pos.y = reference.y;
+
+        pos.x = pos.x * Settings.RATIO;
+        pos.y = -(pos.y * Settings.RATIO);
+
+        pos.x += this.me.playerController.xyInput.x * Settings.STAGE_WIDTH / 4;
+        pos.y += this.me.playerController.xyInput.y * Settings.STAGE_HEIGHT / 4;
+
+        return pos;
+    };
+
+    ThreeView.prototype.setCameraPosition = function (x, y) {
+        this.camera.position.x = x;
+        this.camera.position.y = y;
+    };
+
+    ThreeView.prototype.setCameraZoom = function (z) {
+        this.zoom = z;
+        z *= 2;
+        console.log(this.zoom)
+        this.camera.left   = - Settings.STAGE_WIDTH / z;
+        this.camera.right  =   Settings.STAGE_WIDTH / z;
+        this.camera.top    =   Settings.STAGE_HEIGHT / z;
+        this.camera.bottom = - Settings.STAGE_HEIGHT / z;
+        this.camera.updateProjectionMatrix();
+    };
+
+
+    ThreeView.prototype.tileAtPositionExists = function(objects, x, y) {
+
+        for (var i = 0; i < objects.length; i++) {
+            var o = objects[i];
+            if(o.x == x && o.y == y) return true;
+        }
+        return false;
     };
 
     return ThreeView;

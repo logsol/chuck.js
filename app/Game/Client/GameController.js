@@ -13,10 +13,10 @@ define([
 function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, NotificationCenter, requestAnimFrame, Settings, Stats) {
 
     function GameController () {
-        this.viewController = ViewManager.prototype.createView();
-
+        this.viewController = ViewManager.createView();
+        
         Parent.call(this, new PhysicsEngine());
-
+        
         this.physicsEngine.setCollisionDetector();
 
         this.me = null;

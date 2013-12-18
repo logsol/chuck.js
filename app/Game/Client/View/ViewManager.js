@@ -1,25 +1,41 @@
 define([
 	"Game/Config/Settings",
+    "Lib/Utilities/Exception",
+    "Game/Client/View/Views/AbstractView",
 	"Game/Client/View/Views/ThreeView",
 	"Game/Client/View/Views/PixiView",
 ],
  
-function (Settings, ThreeView, PixiView) {
+function (Settings, Exception, AbstractView, ThreeView, PixiView) {
  
-    function ViewManager() {
-    }
- 
-    ViewManager.prototype.createView = function(arguments) {
+    var ViewManager = {};
+
+    ViewManager.createView = function() {
+        var view = null
         switch(Settings.VIEW_CONTROLLER) {
             case 'Three': 
-                return new ThreeView();
+                view = new ThreeView();
                 break;
             case 'Pixi':
-                return new PixiView();
+                view = new PixiView();
                 break;
             default:
-                return false;
+                throw new Exception("A view called", Settings.VIEW_CONTROLLER, "has not been (fully) implemented.");
         }
+/*
+        if(!(view instanceof AbstractView)) {
+            throw new Exception("The view", Settings.VIEW_CONTROLLER + 'View', "must extend AbstractView!");
+        }
+
+        if(!view.canvas) {
+            throw new Exception("In the view", Settings.VIEW_CONTROLLER + 'View', "the method 'this.setCanvas(canvas)' has not been called");
+        }
+
+        if(!(view.canvas instanceof HTMLCanvasElement)) {
+            throw new Exception("In the view", Settings.VIEW_CONTROLLER + 'View', "this.setCanvas(canvas) has not been called with a valid HTMLCanvasElement!");
+        }
+*/
+        return view;
     }
  
     return ViewManager;
