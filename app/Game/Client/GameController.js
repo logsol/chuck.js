@@ -7,16 +7,16 @@ define([
     "Game/Core/NotificationCenter",
     "Lib/Utilities/RequestAnimFrame",
     "Game/Config/Settings",
-    "Lib/Vendor/Stats"
+    "Lib/Vendor/StatsÏ"
 ],
 
 function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, NotificationCenter, requestAnimFrame, Settings, Stats) {
 
     function GameController () {
-        this.viewController = ViewManager.createView();
+        this.view = ViewManager.createView();
         
         Parent.call(this, new PhysicsEngine());
-        
+
         this.physicsEngine.setCollisionDetector();
 
         this.me = null;
@@ -72,7 +72,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
             this.me.update();
         }
 
-        this.viewController.render();
+        this.view.render();
 
         this.stats.end();
     }
@@ -126,7 +126,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
         //this.onSpawnPlayer(options);
         this.me = this.players[playerId];
         this.me.setPlayerController(new PlayerController(this.me));
-        this.viewController.setMe(this.me);
+        this.view.setMe(this.me);
     }
 
     GameController.prototype.onSpawnPlayer = function(options) {
@@ -138,13 +138,13 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
         player.spawn(x, y);
 
         // add to view controller
-        this.viewController.addPlayer(player);
+        this.view.addPlayer(player);
     }
 
     GameController.prototype.loadLevel = function (path) {
         Parent.prototype.loadLevel.call(this, path);
         var tiles = this.level.levelObject.tiles;
-        this.viewController.loadMeshes(tiles);
+        this.view.loadMeshes(tiles);
     }
 
     return GameController;
