@@ -7,7 +7,7 @@ define([
     "Game/Core/NotificationCenter",
     "Lib/Utilities/RequestAnimFrame",
     "Game/Config/Settings",
-    "Lib/Vendor/StatsÏ"
+    "Lib/Vendor/Stats"
 ],
 
 function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, NotificationCenter, requestAnimFrame, Settings, Stats) {

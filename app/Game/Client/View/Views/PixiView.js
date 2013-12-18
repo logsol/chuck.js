@@ -1,12 +1,11 @@
 define([
-    "Game/Client/View/ViewController",
+    "Game/Client/View/Views/AbstractView",
     "Game/Client/View/DomController", 
     "Lib/Vendor/Pixi", 
-    "Game/Config/Settings", 
-    "Game/Client/View/CameraController"
+    "Game/Config/Settings"
 ], 
 
-function (Parent, DomController, Pixi, Settings, CameraController) {
+function (Parent, DomController, Pixi, Settings) {
     
     function PixiView () {
 
