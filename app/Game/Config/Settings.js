@@ -12,8 +12,9 @@ define({
 
     // GRAPHIC PATHS
     GRAPHICS_PATH: 'static/img/',
-    GRAPHICS_SUBPATH_ITEMS: 'items/',
-    GRAPHICS_SUBPATH_CHARACTERS: 'characters/',
+    GRAPHICS_SUBPATH_ITEMS: 'Items/',
+    GRAPHICS_SUBPATH_CHARACTERS: 'Characters/',
+    GRAPHICS_SUBPATH_TILES: 'Tiles/',
 
     RATIO: 35,
     TILE_SIZE: 15, //15

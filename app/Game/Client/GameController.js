@@ -72,6 +72,10 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
             this.me.update();
         }
 
+        for (var i = 0; i < this.gameObjects.animated.length; i++) {
+            this.gameObjects.animated[i].render();
+        }
+
         this.view.render();
 
         this.stats.end();

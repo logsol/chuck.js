@@ -61,7 +61,7 @@ function (Parent, DomController, Three, Settings) {
                 var material = self.tileAtPositionExists(objects, o.x, o.y -1) ? "Soil" : "GrassSoil";
                 
                 self.createMesh(Settings.TILE_SIZE, Settings.TILE_SIZE, x, y, 'static/img/Tiles/' + material + '/' + o.s + '' + o.r + '.gif', function(mesh) {
-                    self.scene.add(mesh);
+                    self.addMesh(mesh);
                     //console.log("img height:", mesh.material.map.image.height);
                     //mesh.rotation.z = rad;
                 });
@@ -86,6 +86,10 @@ function (Parent, DomController, Three, Settings) {
         this.renderer.render(this.scene, this.camera);
     }
 
+    ThreeView.prototype.addMesh = function(mesh) {
+        this.scene.add(mesh);
+    };
+
     ThreeView.prototype.createMesh = function (width, height, x, y, imgPath, callback) {
         var mesh;
         var material = new Three.MeshLambertMaterial({
@@ -101,13 +105,24 @@ function (Parent, DomController, Three, Settings) {
         mesh.position.y = y;
     }
 
+    ThreeView.prototype.updateMesh = function(mesh, options) {
+        if (options.x) mesh.position.x = options.x;
+        if (options.y) mesh.position.y = options.y;
+        if (options.rotation) mesh.rotation.z = options.rotation * (Math.PI / 180);
+        if (options.xScale) mesh.width *= options.xScale;
+        if (options.yScale) mesh.height *= options.yScale;
+        if (options.width) mesh.width = options.width;
+        if (options.height) mesh.height = options.height;
+    };
+
+
     ThreeView.prototype.addPlayer = function(player) {
         var self = this;
         var mesh = null;
         var pos = player.getPosition();
         var size = {w:10, h:42};
         var callback = function(mesh) {
-            self.scene.add(mesh);
+            self.addMesh(mesh);
             self.movableObjects.push({
                 player: player,
                 mesh: mesh

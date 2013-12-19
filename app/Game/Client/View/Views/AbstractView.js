@@ -29,6 +29,10 @@ function (DomController, Settings, Exception) {
         }
     }
 
+    AbstractView.prototype.addMesh = function(mesh) {
+        throw new Exception('Abstract Function addMesh not overwritten ');
+    };
+
     AbstractView.prototype.loadPlayerMesh = function(player) {
         throw new Exception('Abstract Function loadPlayerMesh not overwritten ');
     };

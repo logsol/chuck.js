@@ -1,20 +1,23 @@
 define([
     "Game/Config/Settings", 
     "Lib/Vendor/Box2D", 
-    "Game/" + GLOBALS.context + "/Collision/Detector"
+    "Game/" + GLOBALS.context + "/Collision/Detector",
+    "Game/" + GLOBALS.context + "/GameObjects/Tile"
 
-], function (Settings, Box2D, CollisionDetector) {
+], function (Settings, Box2D, CollisionDetector, Tile) {
     
     // Public
-    function Level (path, engine) {
+    function Level (path, engine, gameObjects, view) {
         this.path = path;
         this.engine = engine;
         this.levelObject = null;
+        this.gameObjects = gameObjects;
+        this.view = view;
     }
 
     Level.prototype.loadLevelInToEngine = function () {
         this.loadLevelObjectFromPath(this.path);
-        this.createPhysicTiles();
+        this.createTiles();
     }
 
     Level.prototype.unload = function () {
@@ -24,112 +27,15 @@ define([
 
     // Private
 
-    Level.prototype.createPhysicTiles = function () {
+    Level.prototype.createTiles = function () {
         if (!this.levelObject || !this.levelObject.tiles || this.levelObject.tiles.length < 1) {
             throw "Level: Can't create physic tiles, no tiles found";
         }
 
         var tiles = this.levelObject.tiles;
         for (var i = tiles.length - 1; i >= 0; i--) {
-            this.createPhysicTile(tiles[i]);
+            this.gameObjects.fixed.push(new Tile(this.engine, tiles[i]));
         }
-    }
-
-    Level.prototype.createPhysicTile = function (tile) {
-        tile.r = tile.r || 0;
-        var vertices = this.createVertices(tile);
-
-        var bodyDef = new Box2D.Dynamics.b2BodyDef();
-        bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
-        bodyDef.position.x = tile.x * Settings.TILE_SIZE / Settings.RATIO;
-        bodyDef.position.y = tile.y * Settings.TILE_SIZE / Settings.RATIO;
-        bodyDef.angle = tile.r * 90 * Math.PI / 180;
-
-        var tileShape = new Box2D.Collision.Shapes.b2PolygonShape();
-        
-        tileShape.SetAsArray(vertices, vertices.length);
-
-        var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
-        fixtureDef.shape = tileShape;
-        fixtureDef.density = 0;
-        fixtureDef.friction = Settings.TILE_FRICTION;
-        fixtureDef.restitution = Settings.TILE_RESTITUTION;
-        fixtureDef.isSensor = false;
-        fixtureDef.userData = CollisionDetector.IDENTIFIER.TILE;
-
-        this.engine.createBody(bodyDef).CreateFixture(fixtureDef);
-    }
-
-    Level.prototype.createVertices = function (tile) {
-        var vs = [];
-
-        switch(tile.s) {
-            case 1:
-                this.addVec(vs, -1, -1); // o o o
-                this.addVec(vs,  1, -1); // o o o
-                this.addVec(vs,  1,  1); // o o o
-                this.addVec(vs, -1,  1); 
-                break;
-
-            case 2:
-                this.addVec(vs, -1, -1); // o
-                this.addVec(vs,  1,  1); // o o
-                this.addVec(vs, -1,  1); // o o o
-                break;
-
-            case 3:
-                this.addVec(vs, -1, -1); // o
-                this.addVec(vs,  0,  1); // o
-                this.addVec(vs, -1,  1); // o o
-                break;
-
-            case 4:
-                this.addVec(vs, -1, -1); // o
-                this.addVec(vs,  1,  0); // o o o
-                this.addVec(vs,  1,  1); // o o o
-                this.addVec(vs, -1,  1);
-                break;
-
-            case 5:
-                this.addVec(vs,  1, -1); // o
-                this.addVec(vs,  1,  1); // o
-                this.addVec(vs,  0,  1); // o o
-                break;
-
-            case 6:
-                this.addVec(vs,  1, -1); //     o
-                this.addVec(vs,  1,  1); // o o o
-                this.addVec(vs, -1,  1); // o o o
-                this.addVec(vs, -1,  0);
-                break;
-
-            case 7:
-                this.addVec(vs, -1, 0); //
-                this.addVec(vs,  0, 1); // o
-                this.addVec(vs, -1, 1); // o o
-                break;
-
-            case 8:
-                this.addVec(vs, -1, -1); // o o
-                this.addVec(vs,  0, -1); // o o o
-                this.addVec(vs,  1,  0); // o o o
-                this.addVec(vs,  1,  1); 
-                this.addVec(vs, -1,  1);
-                break;
-
-            default:
-                break;
-        }
-
-        return vs;
-    }
-
-    Level.prototype.mkArg = function (multiplier) {
-        return Settings.TILE_SIZE / 2 / Settings.RATIO * multiplier;
-    }
-
-    Level.prototype.addVec = function (vs, m1, m2) {
-        return vs.push(new Box2D.Common.Math.b2Vec2(this.mkArg(m1), this.mkArg(m2)));
     }
 
     Level.prototype.loadLevelObjectFromPath = function (path) {
