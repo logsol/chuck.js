@@ -4,7 +4,7 @@ define([
 	"${2:Path}"
 ],
  
-function(Parent) {
+function (Parent) {
  
     function ${1:Module}() {
     	Parent.call(this);
