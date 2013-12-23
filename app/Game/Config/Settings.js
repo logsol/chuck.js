@@ -12,8 +12,9 @@ define({
 
     // GRAPHIC PATHS
     GRAPHICS_PATH: 'static/img/',
-    GRAPHICS_SUBPATH_ITEMS: 'items/',
-    GRAPHICS_SUBPATH_CHARACTERS: 'characters/',
+    GRAPHICS_SUBPATH_ITEMS: 'Items/',
+    GRAPHICS_SUBPATH_CHARACTERS: 'Characters/',
+    GRAPHICS_SUBPATH_TILES: 'Tiles/',
 
     RATIO: 35,
     TILE_SIZE: 15, //15
@@ -46,7 +47,7 @@ define({
     IS_BROWSER_ENVIRONMENT: typeof window !== 'undefined',
     USE_WEGBL: true, 
 
-    DEBUG_MODE: 0,
+    DEBUG_MODE: 1,
 
     // NETWORKING
     WORLD_UPDATE_BROADCAST_INTERVAL: 70,

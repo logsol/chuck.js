@@ -8,7 +8,11 @@ function (Engine, Level, Player) {
 
     function GameController (physicsEngine) {
         this.players = {};
-
+        this.gameObjects = {
+            animated: [],
+            fixed: []
+        };
+        
         if (! physicsEngine instanceof Engine) {
             throw physicsEngine + " is not of type Engine";
         }
@@ -25,7 +29,7 @@ function (Engine, Level, Player) {
             this.level.unload();
         }
 
-        this.level = new Level(path, this.physicsEngine);
+        this.level = new Level(path, this.physicsEngine, this.gameObjects);
         this.level.loadLevelInToEngine();
     }
 
