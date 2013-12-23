@@ -127,7 +127,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
     }
 
     GameController.prototype.onJoinMe = function (playerId) {
-        //this.onSpawnPlayer(options);
         this.me = this.players[playerId];
         this.me.setPlayerController(new PlayerController(this.me));
         this.view.setMe(this.me);
@@ -140,15 +139,11 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
 
         var player = this.players[playerId];
         player.spawn(x, y);
-
-        // add to view controller
-        this.view.addPlayer(player);
+        this.gameObjects.animated.push(player.getDoll());
     }
 
     GameController.prototype.loadLevel = function (path) {
         Parent.prototype.loadLevel.call(this, path);
-        var tiles = this.level.levelObject.tiles;
-        this.view.loadMeshes(tiles);
     }
 
     return GameController;

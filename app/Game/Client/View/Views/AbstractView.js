@@ -1,14 +1,19 @@
 define([
     "Game/Client/View/DomController", 
     "Game/Config/Settings",
-    "Lib/Utilities/Exception"
+    "Lib/Utilities/Exception",
+    "Game/Core/NotificationCenter"
 ],
 
-function (DomController, Settings, Exception) {
+function (DomController, Settings, Exception, NotificationCenter) {
     
     function AbstractView () {
     	this.me = null;
         this.canvas = null;
+
+        NotificationCenter.on("view/createMesh", this.createMesh, this);
+        NotificationCenter.on("view/addMesh", this.addMesh, this);
+        NotificationCenter.on("view/updateMesh", this.updateMesh, this);
     }
 
     AbstractView.prototype.isWebGlEnabled = function () { 
@@ -29,10 +34,6 @@ function (DomController, Settings, Exception) {
         }
     }
 
-    AbstractView.prototype.addMesh = function(mesh) {
-        throw new Exception('Abstract Function addMesh not overwritten ');
-    };
-
     AbstractView.prototype.loadPlayerMesh = function(player) {
         throw new Exception('Abstract Function loadPlayerMesh not overwritten ');
     };
@@ -48,6 +49,14 @@ function (DomController, Settings, Exception) {
     AbstractView.prototype.createMesh = function (width, height, x, y, imgPath, callback) {
     	throw new Exception('Abstract Function createMesh not overwritten ');
     }
+
+    AbstractView.prototype.addMesh = function(mesh) {
+        throw new Exception('Abstract Function addMesh not overwritten ');
+    };
+
+    AbstractView.prototype.updateMesh = function(mesh, options) {
+        throw new Exception('Abstract Function updateMesh not overwritten ');
+    };
 
     AbstractView.prototype.setMe = function(player) {
         this.me = player;

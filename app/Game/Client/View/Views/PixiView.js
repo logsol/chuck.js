@@ -35,41 +35,11 @@ function (Parent, DomController, PIXI, Settings) {
         this.setCanvas(this.renderer.view);
     }
 
-    PixiView.prototype.loadMeshes = function(objects) {
-        var self = this;
-        for (var i = 0; i < objects.length; i++) {
-            (function() {
-                var o = objects[i];
-                var x = o.x * Settings.TILE_SIZE;
-                var y = o.y * Settings.TILE_SIZE;
-                var r = o.r ? o.r : 0;
-                var rad = 0.5 * Math.PI * -r;
-
-                var material = self.tileAtPositionExists(objects, o.x, o.y -1) ? "Soil" : "GrassSoil";
-                var callback = function(mesh) {
-                    self.addMesh(mesh);
-                    //console.log("img height:", mesh.material.map.image.height);
-                    //mesh.rotation.z = rad;
-                };
-                self.createMesh(Settings.TILE_SIZE, Settings.TILE_SIZE, x, y, 'static/img/Tiles/' + material + '/' + o.s + '' + o.r + '.gif', callback, true);
-            })();
-        };
-    };
-
     PixiView.prototype.render = function () {
         if(this.me) {
             var pos = this.calculateCameraPosition();
             this.setCameraPosition(pos.x, pos.y);
         }
-
-        /*
-        for (var i = 0; i < this.movableObjects.length; i++) {
-            var obj = this.movableObjects[i];
-            var pos = obj.player.getPosition();
-            obj.mesh.position.x = pos.x * Settings.RATIO + 4 ;
-            obj.mesh.position.y = pos.y * Settings.RATIO - 34; // weirdly a different magic number as for three
-        }
-        */
 
         this.renderer.render(this.stage);
     }
@@ -99,25 +69,6 @@ function (Parent, DomController, PIXI, Settings) {
         if (options.yScale) mesh.scale.y = options.yScale;
         if (options.width) mesh.width = options.width;
         if (options.height) mesh.height = options.height;
-    };
-
-    PixiView.prototype.addPlayer = function(player) {
-        var self = this;
-        var mesh = null;
-        var pos = player.getPosition();
-        var size = {w:10, h:42};
-        var callback = function(mesh) {
-            self.addMesh(mesh);
-            self.movableObjects.push({
-                player: player,
-                mesh: mesh
-            });
-        }
-        this.createMesh(size.w, size.h, pos.x, pos.y, "static/img/Characters/Chuck/chuck.png", callback, false);
-    };
-
-    PixiView.prototype.removPlayer = function(player) {
-        // nothing
     };
 
     PixiView.prototype.initCamera = function () {

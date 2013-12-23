@@ -14,38 +14,35 @@ function (Box2D) {
 
     Detector.IDENTIFIER = {
         TILE: "tile",
-        PLAYER: "player",
-        PLAYER_HEAD: 'head',
-        PLAYER_CHEST: 'chest',
-        PLAYER_LEGS: 'legs',
-        PLAYER_FOOT_SENSOR: 'footsensor'
+        PLAYER: "player"
     }
 
     Detector.prototype.getListener = function () {
         return this.listener;
     }
 
-    Detector.prototype.handleStand = function (point, isColliding) {
+    Detector.prototype.onCollisionChange = function (point, isColliding) {
+        var userDataA = point.GetFixtureA().GetUserData();
+        var userDataB = point.GetFixtureB().GetUserData();
 
-        if (point.GetFixtureA().GetUserData().identifier == Detector.IDENTIFIER.PLAYER_FOOT_SENSOR) {
-            point.GetFixtureA().GetUserData().player.onFootSensorDetection(isColliding);
-        } else if (point.GetFixtureB().GetUserData().identifier == Detector.IDENTIFIER.PLAYER_FOOT_SENSOR) {
-            point.GetFixtureB().GetUserData().player.onFootSensorDetection(isColliding);
+        if (userDataA && userDataA.onCollisionChange) {
+            userDataA.onCollisionChange(isColliding);
+        } else if (userDataB && userDataB.onCollisionChange) {
+            userDataB.onCollisionChange(isColliding);
         }
     }
 
     /** Extension **/
 
     Detector.prototype.BeginContact = function (point) {
-        this.chuckDetector.handleStand(point, true);
+        this.chuckDetector.onCollisionChange(point, true);
     }
 
     Detector.prototype.PostSolve = function (point, impulse) {
-        //this.chuckDetector.handleStand(point, true);
     }
 
     Detector.prototype.EndContact = function (point) {
-        this.chuckDetector.handleStand(point, false);
+        this.chuckDetector.onCollisionChange(point, false);
     }
 
     return Detector;

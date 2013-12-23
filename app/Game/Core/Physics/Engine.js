@@ -13,7 +13,6 @@ function (Settings, Box2D, CollisionDetector) {
         );
         this.ground = null;
         this.lastStep = Date.now();
-        console.log(Settings.BOX2D_TIME_STEP)
     }
 
     Engine.prototype.getWorld = function () {

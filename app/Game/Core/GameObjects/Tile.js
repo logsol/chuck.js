@@ -21,17 +21,14 @@ function (Parent, Box2D, Settings, CollisionDetector) {
         bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
         bodyDef.position.x = this.options.x * Settings.TILE_SIZE / Settings.RATIO;
         bodyDef.position.y = this.options.y * Settings.TILE_SIZE / Settings.RATIO;
-        bodyDef.angle = this.options.r * 90 * Math.PI / 180;
+        bodyDef.angle = (this.options.r || 0) * 90 * Math.PI / 180;
 
         return bodyDef;
     }
 
     Tile.prototype.createPhysicTile = function (tile) {
-        tile.r = tile.r || 0;
         var vertices = this.createVertices(tile);
-
         var tileShape = new Box2D.Collision.Shapes.b2PolygonShape();
-        
         tileShape.SetAsArray(vertices, vertices.length);
 
         var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
@@ -41,7 +38,6 @@ function (Parent, Box2D, Settings, CollisionDetector) {
         fixtureDef.restitution = Settings.TILE_RESTITUTION;
         fixtureDef.isSensor = false;
         fixtureDef.userData = CollisionDetector.IDENTIFIER.TILE;
-
         this.body.CreateFixture(fixtureDef);
     }
 

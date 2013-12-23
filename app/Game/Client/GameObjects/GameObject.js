@@ -1,11 +1,11 @@
 define([
-	"Game/Core/GameObjects/GameObject"
+	"Game/Core/GameObjects/GameObject",
+    "Lib/Utilities/Exception"
 ],
  
-function(Parent) {
+function (Parent, Exception) {
  
-    function GameObject(physicsEngine, view) {
-    	this.view = view;
+    function GameObject(physicsEngine) {
     	Parent.call(this, physicsEngine);
     	this.createMesh();
     	this.render();
@@ -23,7 +23,7 @@ function(Parent) {
     }
 
     GameObject.prototype.createMesh = function() {
-    	throw new Exception('Abstract method GameObject.getMesh not overwritten');
+    	throw new Exception('Abstract method GameObject.createMesh not overwritten');
     };
  
     return GameObject;

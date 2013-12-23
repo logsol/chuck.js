@@ -7,12 +7,11 @@ define([
 ], function (Settings, Box2D, CollisionDetector, Tile) {
     
     // Public
-    function Level (path, engine, gameObjects, view) {
+    function Level (path, engine, gameObjects) {
         this.path = path;
         this.engine = engine;
         this.levelObject = null;
         this.gameObjects = gameObjects;
-        this.view = view;
     }
 
     Level.prototype.loadLevelInToEngine = function () {
@@ -33,7 +32,8 @@ define([
         }
 
         var tiles = this.levelObject.tiles;
-        for (var i = tiles.length - 1; i >= 0; i--) {
+
+        for (var i = 0; i < tiles.length; i++) {
             this.gameObjects.fixed.push(new Tile(this.engine, tiles[i]));
         }
     }
