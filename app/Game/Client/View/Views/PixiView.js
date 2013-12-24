@@ -48,15 +48,28 @@ function (Parent, DomController, PIXI, Settings) {
         this.container.addChild(mesh);
     };
 
-    PixiView.prototype.createMesh = function (width, height, x, y, imgPath, callback) {
+    PixiView.prototype.createMesh = function (texturePath, callback, options) {
 
-        var texture = PIXI.Texture.fromImage(imgPath);
+        var texture = PIXI.Texture.fromImage(texturePath);
 
         var mesh = new PIXI.Sprite(texture);
-        mesh.width = width;
-        mesh.height = height;
-        mesh.position.x = x;
-        mesh.position.y = y;
+        if(options) this.updateMesh(mesh, options);
+
+        callback(mesh);
+    }
+
+    PixiView.prototype.createAnimatedMesh = function (texturePaths, callback, options) {
+        var textures = [];
+        for (var i = 0; i < texturePaths.length; i++) {
+            var texture = PIXI.Texture.fromImage(texturePaths[i]);
+            textures.push(texture);
+        }
+
+        var mesh = new PIXI.MovieClip(textures);
+        if(options) this.updateMesh(mesh, options);
+        mesh.animationSpeed = 0.5;
+
+        mesh.play();
 
         callback(mesh);
     }
@@ -69,7 +82,22 @@ function (Parent, DomController, PIXI, Settings) {
         if (options.yScale) mesh.scale.y = options.yScale;
         if (options.width) mesh.width = options.width;
         if (options.height) mesh.height = options.height;
-    };
+        if (options.visible === true || options.visible === false) mesh.visible = options.visible;
+        if (options.pivot) {
+            switch(options.pivot) {
+                case "mb":
+                    mesh.pivot.x = mesh.width / 2;
+                    mesh.pivot.y = mesh.height;
+                    break;
+                case "mm":
+                default:
+                    mesh.pivot.x = mesh.width / 2;
+                    mesh.pivot.y = mesh.height / 2;
+                    break;
+
+            }
+        };
+    }
 
     PixiView.prototype.initCamera = function () {
         this.container = new PIXI.DisplayObjectContainer();

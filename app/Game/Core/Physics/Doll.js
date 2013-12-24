@@ -9,14 +9,15 @@ function (Parent, Box2D, Settings, CollisionDetector) {
 
     function Doll (physicsEngine, playerId) {
 
-        Parent.call(this, physicsEngine);
-
         this.playerId = playerId;
+
+        Parent.call(this, physicsEngine);
 
         this.standing = false;
         this.moveDirection = 0;
         this.lookDirection = 0;
         this.legs;
+        this.actionState = null;
         
         this.createFixtures();
         this.body.SetActive(false);
@@ -45,20 +46,20 @@ function (Parent, Box2D, Settings, CollisionDetector) {
 
         var headShape = new Box2D.Collision.Shapes.b2CircleShape();
         headShape.SetRadius(5 / Settings.RATIO);
-        headShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, -37 / Settings.RATIO));
+        headShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, -35 / Settings.RATIO));
         fixtureDef.shape = headShape;
         fixtureDef.isSensor = false;
         this.body.CreateFixture(fixtureDef);
 
         var bodyShape = new Box2D.Collision.Shapes.b2PolygonShape();
-        bodyShape.SetAsOrientedBox(5 / Settings.RATIO, 16 / Settings.RATIO, new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, -21 / Settings.RATIO));
+        bodyShape.SetAsOrientedBox(5 / Settings.RATIO, 16 / Settings.RATIO, new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, -19 / Settings.RATIO));
         fixtureDef.shape = bodyShape;
         fixtureDef.isSensor = false;
         this.body.CreateFixture(fixtureDef);
 
         var legsShape = new Box2D.Collision.Shapes.b2CircleShape();
         legsShape.SetRadius(5 / Settings.RATIO);
-        legsShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, -5 / Settings.RATIO));
+        legsShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, -3 / Settings.RATIO));
         fixtureDef.shape = legsShape;
         fixtureDef.friction = Settings.PLAYER_FRICTION;
         fixtureDef.isSensor = false;
@@ -67,7 +68,7 @@ function (Parent, Box2D, Settings, CollisionDetector) {
 
         var feetShape = new Box2D.Collision.Shapes.b2CircleShape();
         feetShape.SetRadius(4 / Settings.RATIO);
-        feetShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, 0 / Settings.RATIO));
+        feetShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, 2 / Settings.RATIO));
         fixtureDef.shape = feetShape;
         fixtureDef.isSensor = true;
 
@@ -78,9 +79,18 @@ function (Parent, Box2D, Settings, CollisionDetector) {
         this.body.CreateFixture(fixtureDef);
     }
 
+    Doll.prototype.setActionState = function(state) {
+        this.actionState = state;
+    }
+
+    Doll.prototype.isWalking = function() {
+        return ["walk", "walkback", "run"].indexOf(this.actionState) >= 0;
+    }
+
     Doll.prototype.spawn = function (x, y) {
         this.body.SetPosition(new Box2D.Common.Math.b2Vec2(x / Settings.RATIO, y / Settings.RATIO));
         this.body.SetActive(true);
+        this.setActionState("fall");
     }
 
     Doll.prototype.getPosition = function() {
@@ -118,6 +128,14 @@ function (Parent, Box2D, Settings, CollisionDetector) {
         this.body.SetAwake(true);
         var vector = new Box2D.Common.Math.b2Vec2(speed * direction, this.body.GetLinearVelocity().y);
         this.body.SetLinearVelocity(vector);
+
+        if(this.isStanding()) {
+            if(this.moveDirection == this.lookDirection) {
+                this.setActionState("run");
+            } else {
+                this.setActionState("walkback");
+            }
+        }
     }
 
     Doll.prototype.stop = function () {
@@ -133,6 +151,8 @@ function (Parent, Box2D, Settings, CollisionDetector) {
             this.body.ApplyImpulse(vector, this.body.GetPosition());
             
             this.setStanding(false);
+
+            this.setActionState("jump");
         }
     }
 
@@ -142,6 +162,7 @@ function (Parent, Box2D, Settings, CollisionDetector) {
 
     Doll.prototype.setStanding = function (isStanding) {
         this.standing = isStanding;
+        this.setActionState("stand");
     }
 
     Doll.prototype.isStanding = function () {
@@ -180,7 +201,7 @@ function (Parent, Box2D, Settings, CollisionDetector) {
 
     Doll.prototype.update = function() {
      
-        if (this.body.GetLinearVelocity().x == 0) {
+        if (this.body.GetLinearVelocity().x == 0 && this.isWalking()) {
             this.stop();
         }
 

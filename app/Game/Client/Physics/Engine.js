@@ -34,7 +34,7 @@ function (Parent, Settings, DomController, Box2D) {
             | Box2D.Dynamics.b2DebugDraw.e_jointBit 
             //| Box2D.Dynamics.b2DebugDraw.e_coreShapeBit
             //| Box2D.Dynamics.b2DebugDraw.e_aabbBit
-            //| Box2D.Dynamics.b2DebugDraw.e_centerOfMassBit
+            | Box2D.Dynamics.b2DebugDraw.e_centerOfMassBit
             //| Box2D.Dynamics.b2DebugDraw.e_obbBit
             //| Box2D.Dynamics.b2DebugDraw.e_pairBit
         );

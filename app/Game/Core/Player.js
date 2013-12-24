@@ -3,13 +3,13 @@ define([
     "Game/Config/Settings"
 ],
 
+
 function (Doll, Settings) {
 
     function Player (id, physicsEngine) {
         this.physicsEngine = physicsEngine;
         this.playerController = null;
         this.doll;
-
         this.id = id;
         this.isSpawned = false;
     }

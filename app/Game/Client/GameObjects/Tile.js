@@ -16,7 +16,7 @@ function (Parent, Settings, NotificationCenter) {
     	var self = this;
 
     	var material = "Stones";
-    	var imgPath = Settings.GRAPHICS_PATH
+    	var texturePath = Settings.GRAPHICS_PATH
     				+ Settings.GRAPHICS_SUBPATH_TILES
     				+ material + '/'
     				+ this.options.s + ''
@@ -28,12 +28,13 @@ function (Parent, Settings, NotificationCenter) {
     	}
    
         NotificationCenter.trigger("view/createMesh",
-            Settings.TILE_SIZE, 
-            Settings.TILE_SIZE, 
-            0, 
-            0, 
-            imgPath, 
-            callback
+            texturePath, 
+            callback,
+            {
+                width: Settings.TILE_SIZE, 
+                height: Settings.TILE_SIZE, 
+                pivot: "mb"
+            }
         );
     };
 

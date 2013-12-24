@@ -14,6 +14,7 @@ function (DomController, Settings, Exception, NotificationCenter) {
         NotificationCenter.on("view/createMesh", this.createMesh, this);
         NotificationCenter.on("view/addMesh", this.addMesh, this);
         NotificationCenter.on("view/updateMesh", this.updateMesh, this);
+        NotificationCenter.on("view/createAnimatedMesh", this.createAnimatedMesh, this);
     }
 
     AbstractView.prototype.isWebGlEnabled = function () { 
@@ -46,7 +47,7 @@ function (DomController, Settings, Exception, NotificationCenter) {
     	throw new Exception('Abstract Function render not overwritten ');
     }
 
-    AbstractView.prototype.createMesh = function (width, height, x, y, imgPath, callback) {
+    AbstractView.prototype.createMesh = function (texturePath, callback, options) {
     	throw new Exception('Abstract Function createMesh not overwritten ');
     }
 
@@ -57,6 +58,10 @@ function (DomController, Settings, Exception, NotificationCenter) {
     AbstractView.prototype.updateMesh = function(mesh, options) {
         throw new Exception('Abstract Function updateMesh not overwritten ');
     };
+
+    AbstractView.prototype.createAnimatedMesh = function (texturePaths, callback, options) {
+        throw new Exception('Abstract Function createAnimatedMesh not overwritten ');
+    }
 
     AbstractView.prototype.setMe = function(player) {
         this.me = player;
