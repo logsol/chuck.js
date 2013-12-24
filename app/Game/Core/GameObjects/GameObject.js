@@ -5,8 +5,11 @@ define([
  
 function (Box2D, Exception) {
  
-    function GameObject(physicsEngine) {
+    function GameObject(physicsEngine, uid) {
+        this.uid = uid;
+
         var def = this.getBodyDef();
+        def.userData = this;
         this.body = physicsEngine.getWorld().CreateBody(def);
     }
 

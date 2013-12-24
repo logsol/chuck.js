@@ -1,10 +1,11 @@
 define([
 	"Game/Core/Physics/Doll",
     "Game/Config/Settings",
-    "Game/Core/NotificationCenter"
+    "Game/Core/NotificationCenter",
+    "Lib/Utilities/Exception"
 ],
  
-function (Parent, Settings, NotificationCenter) {
+function (Parent, Settings, NotificationCenter, Exception) {
  
     function Doll(physicsEngine, playerId) {        
         this.animationDef = {
@@ -20,6 +21,7 @@ function (Parent, Settings, NotificationCenter) {
         }
 
         this.animatedMeshes = {};
+        this.headMesh = null;
 
         Parent.call(this, physicsEngine, playerId);
     }
@@ -29,6 +31,8 @@ function (Parent, Settings, NotificationCenter) {
     Doll.prototype.setActionState = function(state) {
 
         if(this.actionState == state) return;
+
+        if(!state) throw new Exception("action state is undefined");
 
         if(this.animatedMeshes[this.actionState]) {
             NotificationCenter.trigger("view/updateMesh", this.animatedMeshes[this.actionState], { visible: false });
@@ -40,6 +44,8 @@ function (Parent, Settings, NotificationCenter) {
     }
 
     Doll.prototype.createMesh = function() {
+
+        // Body
 
         var padF = function(n) {
             if(n<10) return "00" + n;
@@ -65,6 +71,16 @@ function (Parent, Settings, NotificationCenter) {
 
             NotificationCenter.trigger("view/createAnimatedMesh", texturePaths, callback, { visible: false, pivot: "mb" });
         }
+
+        // Head
+
+        var texturePath = Settings.GRAPHICS_PATH + "Characters/Chuck/head.png";
+        var callback = function (mesh) {
+            self.headMesh = mesh;
+            NotificationCenter.trigger("view/addMesh", mesh);
+        }
+        NotificationCenter.trigger("view/createMesh", texturePath, callback, { pivot: "mb" });
+
     }
 
     Doll.prototype.render = function() {
@@ -77,11 +93,19 @@ function (Parent, Settings, NotificationCenter) {
                 }
             );
 
+            NotificationCenter.trigger("view/updateMesh",
+                this.headMesh,
+                {
+                    x: this.body.GetPosition().x * Settings.RATIO,
+                    y: this.body.GetPosition().y * Settings.RATIO - 31
+                }
+            )
         }
     }
 
     Doll.prototype.lookAt = function(x, y) {
         var oldLookDirection = this.lookDirection;
+
         Parent.prototype.lookAt.call(this, x, y);
 
         if(oldLookDirection != this.lookDirection) {
@@ -94,9 +118,28 @@ function (Parent, Settings, NotificationCenter) {
                 );                   
             }
         }
-    };
 
-    // TODO: implement destroy
+        var angle = Math.atan2(this.lookAtXY.x, this.lookAtXY.y) / 2 - 0.7855 * this.lookDirection; // 0.7855 = 45°
+
+        NotificationCenter.trigger("view/updateMesh",
+            this.headMesh,
+            {
+                xScale: this.lookDirection,
+                rotation: angle
+            }
+        );
+    }
+
+
+    Doll.prototype.destroy = function () {
+        for (var key in this.animatedMeshes) {
+            NotificationCenter.trigger("view/removeMesh", this.animatedMeshes[key]);
+        }
+
+        NotificationCenter.trigger("view/removeMesh", this.headMesh);
+
+        Parent.prototype.destroy.call(this);
+    }
  
     return Doll;
  

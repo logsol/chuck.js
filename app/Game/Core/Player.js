@@ -19,7 +19,7 @@ function (Doll, Settings) {
     };
 
     Player.prototype.spawn = function (x, y) {
-        this.doll = new Doll(this.physicsEngine, this.id);
+        this.doll = new Doll(this.physicsEngine, "doll-" + this.id);
         this.doll.spawn(x, y);
         this.isSpawned = true;
     }

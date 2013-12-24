@@ -66,8 +66,9 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
     }
 
     PlayerController.prototype.setXY = function(x, y) {
-        Parent.prototype.lookAt.call(this, x, y);
-        NotificationCenter.trigger('sendGameCommand', 'lookAt', x, y); // implement that x and y are received
+        var options = {x:x, y:y};
+        Parent.prototype.lookAt.call(this, options);
+        NotificationCenter.trigger('sendGameCommand', 'lookAt', options);
     };
 
     PlayerController.prototype.update = function () {

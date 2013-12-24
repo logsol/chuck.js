@@ -29,8 +29,8 @@ define(function () {
         this.player.jump();
     }
 
-    PlayerController.prototype.lookAt = function (x, y) {
-        this.player.lookAt(x, y);
+    PlayerController.prototype.lookAt = function (options) {
+        if(options) this.player.lookAt(options.x, options.y);
     }
 
     PlayerController.prototype.update = function () {

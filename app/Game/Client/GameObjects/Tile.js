@@ -6,8 +6,8 @@ define([
  
 function (Parent, Settings, NotificationCenter) {
  
-    function Tile(physicsEngine, options) {
-    	Parent.call(this, physicsEngine, options);
+    function Tile(physicsEngine, uid, options) {
+    	Parent.call(this, physicsEngine, uid, options);
     }
 
     Tile.prototype = Object.create(Parent.prototype);

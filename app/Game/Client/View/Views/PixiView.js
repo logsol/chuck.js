@@ -48,6 +48,10 @@ function (Parent, DomController, PIXI, Settings) {
         this.container.addChild(mesh);
     };
 
+    PixiView.prototype.removeMesh = function(mesh) {
+        this.container.removeChild(mesh);
+    };
+
     PixiView.prototype.createMesh = function (texturePath, callback, options) {
 
         var texture = PIXI.Texture.fromImage(texturePath);
@@ -84,15 +88,10 @@ function (Parent, DomController, PIXI, Settings) {
         if (options.height) mesh.height = options.height;
         if (options.visible === true || options.visible === false) mesh.visible = options.visible;
         if (options.pivot) {
-            switch(options.pivot) {
-                case "mb":
-                    mesh.pivot.x = mesh.width / 2;
-                    mesh.pivot.y = mesh.height;
-                    break;
-                case "mm":
+            switch(options.pivot.length) {
                 default:
                     mesh.pivot.x = mesh.width / 2;
-                    mesh.pivot.y = mesh.height / 2;
+                    mesh.pivot.y = mesh.height;
                     break;
 
             }

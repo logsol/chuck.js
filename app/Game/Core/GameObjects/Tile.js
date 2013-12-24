@@ -7,9 +7,9 @@ define([
  
 function (Parent, Box2D, Settings, CollisionDetector) {
  
-    function Tile(physicsEngine, options) {
+    function Tile(physicsEngine, uid, options) {
     	this.options = options;
-    	Parent.call(this, physicsEngine);
+    	Parent.call(this, physicsEngine, uid);
     	this.createPhysicTile(this.options);
     }
 

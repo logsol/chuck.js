@@ -7,10 +7,12 @@ define([
     "Game/Core/NotificationCenter",
     "Lib/Utilities/RequestAnimFrame",
     "Game/Config/Settings",
-    "Lib/Vendor/Stats"
+    "Lib/Vendor/Stats",
+    "Game/Client/GameObjects/GameObject",
+    "Game/Client/Physics/Doll"
 ],
 
-function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, NotificationCenter, requestAnimFrame, Settings, Stats) {
+function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, NotificationCenter, requestAnimFrame, Settings, Stats, GameObject, Doll) {
 
     function GameController () {
         this.view = ViewManager.createView();
@@ -85,41 +87,21 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
 
         var body = this.physicsEngine.world.GetBodyList();
         do {
-            var bodyName = body.GetUserData();
-            if(bodyName && updateData[bodyName]) {
-                var update = updateData[bodyName];             
-                body.SetAwake(true);  
-
-                if(false && this.me && this.me.getBody() == body) {
-
-                    var p = body.GetPosition();
-                    var x = update.p.x - p.x;
-                    var y = update.p.y - p.y;
-
-                    var max = 0.5;
-                    var factor = 0.2;
-
-                    //if(x > max || x < -max || y > max || y < -max) {
-                        if(!this.mouse_joint) this.makeMouseJoint(update.p);
-                        else this.mouse_joint.SetTarget(update.p);
-                        var self = this;
-                        /*setTimeout(function() {
-                            self.physicsEngine.world.DestroyJoint(self.mouse_joint);
-                            self.mouse_joint = null;
-                        }, Settings.WORLD_UPDATE_BROADCAST_INTERVAL / 2)*/
-                    //} else {
-                        //this.physicsEngine.world.DestroyJoint(this.mouse_joint);
-                        //this.mouse_joint = null;
-                    //}
-
-                    // NEXT TIME, try to create a simple body, that gets position and velocities from server doll
-                    // and connect the joint to that.
-
-                } else {
+            var userData = body.GetUserData();
+            if (userData instanceof GameObject) {
+                var gameObject = userData;
+                if(updateData[gameObject.uid]) {
+                    var update = updateData[gameObject.uid];
+                    body.SetAwake(true);  
                     body.SetPosition(update.p);
                     body.SetAngle(update.a);
                     body.SetLinearVelocity(update.lv);
-                    body.SetAngularVelocity(update.av);                
+                    body.SetAngularVelocity(update.av);
+
+                    if (gameObject instanceof Doll) {
+                        gameObject.setActionState(update.as);
+                        gameObject.lookAt(update.laxy.x, update.laxy.y);
+                    }
                 }
             }
         } while (body = body.GetNext());

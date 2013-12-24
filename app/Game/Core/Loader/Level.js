@@ -34,7 +34,7 @@ define([
         var tiles = this.levelObject.tiles;
 
         for (var i = 0; i < tiles.length; i++) {
-            this.gameObjects.fixed.push(new Tile(this.engine, tiles[i]));
+            this.gameObjects.fixed.push(new Tile(this.engine, "tile-" + i, tiles[i]));
         }
     }
 

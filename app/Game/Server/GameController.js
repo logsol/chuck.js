@@ -5,10 +5,12 @@ define([
     "Game/Server/Control/PlayerController",
     "Lib/Utilities/RequestAnimFrame",
     "Game/Core/NotificationCenter",
-    "Game/Server/Player"
+    "Game/Server/Player",
+    "Game/Server/GameObjects/GameObject",
+    "Game/Server/Physics/Doll"
 ],
 
-function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, NotificationCenter, Player) {
+function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, NotificationCenter, Player, GameObject, Doll) {
 
     function GameController (channel) {
         Parent.call(this, new PhysicsEngine());
@@ -74,17 +76,28 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
         var body = this.physicsEngine.world.GetBodyList();
         do {
-            var userData = body.GetUserData();
+            if(body.IsAwake()) {
+                var userData = body.GetUserData();
 
-            if(userData && body.IsAwake()) {
-                update[userData] = {
-                    p: body.GetPosition(),
-                    a: body.GetAngle(),
-                    lv: body.GetLinearVelocity(),
-                    av: body.GetAngularVelocity()
-                };
-                isUpdateNeeded = true;
+                if (userData instanceof GameObject) {
+                    var gameObject = userData;
+
+                    update[gameObject.uid] = {
+                        p: body.GetPosition(),
+                        a: body.GetAngle(),
+                        lv: body.GetLinearVelocity(),
+                        av: body.GetAngularVelocity()
+                    };
+
+                    if(gameObject instanceof Doll) {
+                        update[gameObject.uid].as = gameObject.getActionState();
+                        update[gameObject.uid].laxy = gameObject.lookAtXY;
+                    }
+
+                    isUpdateNeeded = true;
+                }
             }
+
         } while (body = body.GetNext());
         
         if(isUpdateNeeded) {

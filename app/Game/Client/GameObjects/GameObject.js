@@ -5,8 +5,8 @@ define([
  
 function (Parent, Exception) {
  
-    function GameObject(physicsEngine) {
-    	Parent.call(this, physicsEngine);
+    function GameObject(physicsEngine, uid) {
+    	Parent.call(this, physicsEngine, uid);
     	this.createMesh();
     	this.render();
     }

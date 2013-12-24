@@ -7,17 +7,16 @@ define([
 
 function (Parent, Box2D, Settings, CollisionDetector) {
 
-    function Doll (physicsEngine, playerId) {
+    function Doll (physicsEngine, uid) {
 
-        this.playerId = playerId;
-
-        Parent.call(this, physicsEngine);
+        Parent.call(this, physicsEngine, uid);
 
         this.standing = false;
         this.moveDirection = 0;
         this.lookDirection = 0;
         this.legs;
         this.actionState = null;
+        this.lookAtXY = {x:0, y:0};
         
         this.createFixtures();
         this.body.SetActive(false);
@@ -32,8 +31,6 @@ function (Parent, Box2D, Settings, CollisionDetector) {
         bodyDef.fixedRotation = true;
         bodyDef.linearDamping = Settings.PLAYER_LINEAR_DAMPING;
         bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
-        bodyDef.userData = CollisionDetector.IDENTIFIER.PLAYER + '-' + this.playerId;
-
         return bodyDef;
     };
 
@@ -81,6 +78,10 @@ function (Parent, Box2D, Settings, CollisionDetector) {
 
     Doll.prototype.setActionState = function(state) {
         this.actionState = state;
+    }
+
+    Doll.prototype.getActionState = function() {
+        return this.actionState;
     }
 
     Doll.prototype.isWalking = function() {
@@ -141,6 +142,7 @@ function (Parent, Box2D, Settings, CollisionDetector) {
     Doll.prototype.stop = function () {
         this.moveDirection = 0;
         this.setFriction(Settings.PLAYER_FRICTION);
+        if(this.isStanding()) this.setActionState("stand");
     }
 
     Doll.prototype.jump = function () {
@@ -157,12 +159,13 @@ function (Parent, Box2D, Settings, CollisionDetector) {
     }
 
     Doll.prototype.destroy = function () {
-        this.body.GetWorld().DestroyBody(this.body);
+        Parent.prototype.destroy.call(this);
     }
 
     Doll.prototype.setStanding = function (isStanding) {
+        if (this.standing == isStanding) return;
         this.standing = isStanding;
-        this.setActionState("stand");
+        if(isStanding) this.setActionState("stand");
     }
 
     Doll.prototype.isStanding = function () {
@@ -170,33 +173,30 @@ function (Parent, Box2D, Settings, CollisionDetector) {
     }
 
     Doll.prototype.lookAt = function(x, y) {
-        var lastLookDirection = this.lookDirection;
-        /*
-        var degree = Math.atan2(Settings.STAGE_WIDTH / 2 - x, Settings.STAGE_HEIGHT / 2 - 25 - y) / (Math.PI / 180);
-        if (x < Settings.STAGE_WIDTH / 2) {
-            this.mc.scaleX = -1;
-            this.lookDirection = -1;
-            degree = (-45 + degree / 2);
-            this.mc.head.rotation = degree;
-        } else if (x >= Settings.STAGE_WIDTH / 2) {
-            this.mc.scaleX = 1;
-            this.lookDirection = 1;
-            degree = (45 + -degree / 2) - 90;
-            this.mc.head.rotation = degree;
-        }
-        */
-
+        this.body.SetAwake(true);
         if(x < 0) {
             this.lookDirection = -1;
         } else {
             this.lookDirection = 1;
         }
+
+        this.lookAtXY.x = x;
+        this.lookAtXY.y = y;
     };
 
     Doll.prototype.onFootSensorDetection = function(isColliding) {
-        if(isColliding && !(this.body.GetLinearVelocity().y < -Settings.JUMP_SPEED && !this.isStanding())) {
+        //if(isColliding && !(this.body.GetLinearVelocity().y < -Settings.JUMP_SPEED && !this.isStanding())) {
+        //    this.setStanding(true);
+        //}
+
+
+        var hasJumpStartVelocity = this.body.GetLinearVelocity().y < -Settings.JUMP_SPEED;
+
+        if(isColliding && !hasJumpStartVelocity) {
             this.setStanding(true);
         }
+
+
     };
 
     Doll.prototype.update = function() {
