@@ -1,25 +1,24 @@
 define([
-	"Game/Core/GameObjects/Tile",
+	"Game/Core/GameObjects/Item",
 	"Game/Config/Settings",
     "Game/Core/NotificationCenter"
 ],
  
 function (Parent, Settings, NotificationCenter) {
  
-    function Tile(physicsEngine, uid, options) {
+    function Item(physicsEngine, uid, options) {
     	Parent.call(this, physicsEngine, uid, options);
     }
 
-    Tile.prototype = Object.create(Parent.prototype);
-
-    Tile.prototype.createMesh = function() {
+    Item.prototype = Object.create(Parent.prototype);
+ 
+    Item.prototype.createMesh = function() {
     	var self = this;
 
     	var texturePath = Settings.GRAPHICS_PATH
-    				+ Settings.GRAPHICS_SUBPATH_TILES
-    				+ this.options.m + '/'
-    				+ this.options.s + ''
-    				+ (this.options.r || 0) + '.gif';
+    				+ Settings.GRAPHICS_SUBPATH_ITEMS
+    				+ this.options.category + '/'
+    				+ this.options.image;
 
     	var callback = function(mesh) {
     		self.mesh = mesh;
@@ -30,24 +29,25 @@ function (Parent, Settings, NotificationCenter) {
             texturePath, 
             callback,
             {
-                width: Settings.TILE_SIZE, 
-                height: Settings.TILE_SIZE, 
+                width: this.options.width, 
+                height: this.options.height, 
                 pivot: "mb"
             }
         );
     };
 
-    Tile.prototype.render = function() {
+    Item.prototype.render = function() {
 
         NotificationCenter.trigger("view/updateMesh",
             this.mesh,
             {
-                x: this.options.x * Settings.TILE_SIZE,
-                y: this.options.y * Settings.TILE_SIZE,
+                x: this.body.GetPosition().x * Settings.RATIO,
+                y: this.body.GetPosition().y * Settings.RATIO,
+                rotation: this.body.GetAngle()
             }
         );
     }
  
-    return Tile;
+    return Item;
  
 });

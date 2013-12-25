@@ -71,12 +71,23 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
     GameController.prototype.updateWorld = function () {
         
+        var update = this.getWorldUpdateObject(false);
+
+        if(Object.getOwnPropertyNames(update).length > 0) {
+            NotificationCenter.trigger("sendControlCommandToAllUsers", 'gameCommand', {worldUpdate:update});
+        }
+
+        setTimeout(this.updateWorld.bind(this), Settings.WORLD_UPDATE_BROADCAST_INTERVAL);
+    }
+
+    GameController.prototype.getWorldUpdateObject = function(getSleeping) {
+        getSleeping = getSleeping || false;
+
         var update = {};
-        var isUpdateNeeded = false;
 
         var body = this.physicsEngine.world.GetBodyList();
         do {
-            if(body.IsAwake()) {
+            if(getSleeping || body.IsAwake()) {
                 var userData = body.GetUserData();
 
                 if (userData instanceof GameObject) {
@@ -93,28 +104,12 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
                         update[gameObject.uid].as = gameObject.getActionState();
                         update[gameObject.uid].laxy = gameObject.lookAtXY;
                     }
-
-                    isUpdateNeeded = true;
                 }
             }
 
         } while (body = body.GetNext());
-        
-        if(isUpdateNeeded) {
-            NotificationCenter.trigger("sendControlCommandToAllUsers", 'gameCommand', {worldUpdate:update});
-        }
 
-        setTimeout(this.updateWorld.bind(this), Settings.WORLD_UPDATE_BROADCAST_INTERVAL);
-    }
-
-    GameController.prototype.getSpawnedPlayers = function() {
-        var spawnedPlayers = {};
-        for(player in this.players) {
-            if(player.isSpawned) {
-                spawnedPlayers[player.id] = player;
-            }
-        }
-        return spawnedPlayers;
+        return update;
     };
 
     GameController.prototype.getSpawnedPlayersAndTheirPositions = function() {
@@ -130,11 +125,9 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
             }
         }
 
-        // FIXME:  OR: use get Spawned Players and fetch them into a sort of transfer objects
-        //             that contains only necessary data 
-
         return spawnedPlayers;
     };
+
 
     return GameController;
 });

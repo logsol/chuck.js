@@ -1,11 +1,10 @@
 define([
 	"Game/" + GLOBALS.context + "/GameObjects/GameObject",
 	"Lib/Vendor/Box2D",
-	"Game/Config/Settings",
-	"Game/" + GLOBALS.context + "/Collision/Detector"
+	"Game/Config/Settings"
 ],
  
-function (Parent, Box2D, Settings, CollisionDetector) {
+function (Parent, Box2D, Settings) {
  
     function Tile(physicsEngine, uid, options) {
     	this.options = options;
@@ -37,7 +36,6 @@ function (Parent, Box2D, Settings, CollisionDetector) {
         fixtureDef.friction = Settings.TILE_FRICTION;
         fixtureDef.restitution = Settings.TILE_RESTITUTION;
         fixtureDef.isSensor = false;
-        fixtureDef.userData = CollisionDetector.IDENTIFIER.TILE;
         this.body.CreateFixture(fixtureDef);
     }
 

@@ -63,9 +63,11 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings) {
         if (options.spawnedPlayers) {
             for(var i = 0; i < options.spawnedPlayers.length; i++) {
                 this.gameController.onSpawnPlayer(options.spawnedPlayers[i]);
-
-                console.log("already spawned player, options: ", options.spawnedPlayers[i])
             }
+        }
+
+        if (options.worldUpdate) {
+            this.gameController.onWorldUpdate(options.worldUpdate);
         }
 
         this.initPing();

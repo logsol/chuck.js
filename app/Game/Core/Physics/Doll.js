@@ -158,10 +158,6 @@ function (Parent, Box2D, Settings, CollisionDetector) {
         }
     }
 
-    Doll.prototype.destroy = function () {
-        Parent.prototype.destroy.call(this);
-    }
-
     Doll.prototype.setStanding = function (isStanding) {
         if (this.standing == isStanding) return;
         this.standing = isStanding;

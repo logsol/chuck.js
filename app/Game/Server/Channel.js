@@ -40,6 +40,7 @@
             var user = new User(userId, this);
             var joinedUsers = Object.keys(this.users);
             var spawnedPlayers = this.gameController.getSpawnedPlayersAndTheirPositions();
+            var worldUpdate = this.gameController.getWorldUpdateObject(true);
 
             this.users[user.id] = user;
 
@@ -47,7 +48,9 @@
                 userId: user.id, 
                 channelName: this.name, 
                 joinedUsers: joinedUsers,
-                spawnedPlayers: spawnedPlayers
+                spawnedPlayers: spawnedPlayers,
+                worldUpdate: worldUpdate
+
             };
             
             NotificationCenter.trigger('user/' + user.id + "/joinSuccess", options);

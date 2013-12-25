@@ -104,16 +104,5 @@ function (DomController, Settings, Exception, NotificationCenter) {
     	throw new Exception('Abstract Function setCameraZoom not overwritten ');
     }
 
-    // TODO Move to Level
-    AbstractView.prototype.tileAtPositionExists = function(objects, x, y) {
-
-        for (var i = 0; i < objects.length; i++) {
-            var o = objects[i];
-            if(o.x == x && o.y == y) return true;
-        }
-        return false;
-    };
-
-
     return AbstractView;
 });

@@ -36,25 +36,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
         document.body.appendChild(this.stats.domElement);
     };
 
-    GameController.prototype.makeMouseJoint = function(p) {
-        var ground = this.physicsEngine.getGround();
-        var body = this.me.getBody();
-
-        var def = new Box2D.Dynamics.Joints.b2MouseJointDef();
- 
-        def.bodyA = ground;
-        def.bodyB = body;
-        def.target = p;
-         
-        def.collideConnected = false;
-        def.maxForce = 100;
-        def.dampingRatio = 0.99;
-         
-        this.mouse_joint = this.physicsEngine.world.CreateJoint(def);
-         
-        body.SetAwake(true);
-    }
-
     GameController.prototype.destruct = function() {
         //destroy box2d world etc.
     };
@@ -126,6 +107,14 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
 
     GameController.prototype.loadLevel = function (path) {
         Parent.prototype.loadLevel.call(this, path);
+    }
+
+    GameController.prototype.userLeft = function(user) {
+        var doll = this.players[user.id].doll;
+        var i = this.gameObjects.animated.indexOf(doll);
+        if(i>=0) this.gameObjects.animated.splice(i, 1);
+
+        Parent.prototype.userLeft.call(this, user);
     }
 
     return GameController;

@@ -83,26 +83,6 @@ function (Parent, Settings, NotificationCenter, Exception) {
 
     }
 
-    Doll.prototype.render = function() {
-        if(this.actionState) {
-            NotificationCenter.trigger("view/updateMesh",
-                this.animatedMeshes[this.actionState],
-                {
-                    x: this.body.GetPosition().x * Settings.RATIO,
-                    y: this.body.GetPosition().y * Settings.RATIO
-                }
-            );
-
-            NotificationCenter.trigger("view/updateMesh",
-                this.headMesh,
-                {
-                    x: this.body.GetPosition().x * Settings.RATIO,
-                    y: this.body.GetPosition().y * Settings.RATIO - 31
-                }
-            )
-        }
-    }
-
     Doll.prototype.lookAt = function(x, y) {
         var oldLookDirection = this.lookDirection;
 
@@ -139,6 +119,26 @@ function (Parent, Settings, NotificationCenter, Exception) {
         NotificationCenter.trigger("view/removeMesh", this.headMesh);
 
         Parent.prototype.destroy.call(this);
+    }
+
+    Doll.prototype.render = function() {
+        if(this.actionState) {
+            NotificationCenter.trigger("view/updateMesh",
+                this.animatedMeshes[this.actionState],
+                {
+                    x: this.body.GetPosition().x * Settings.RATIO,
+                    y: this.body.GetPosition().y * Settings.RATIO
+                }
+            );
+
+            NotificationCenter.trigger("view/updateMesh",
+                this.headMesh,
+                {
+                    x: this.body.GetPosition().x * Settings.RATIO,
+                    y: this.body.GetPosition().y * Settings.RATIO - 31
+                }
+            )
+        }
     }
  
     return Doll;
