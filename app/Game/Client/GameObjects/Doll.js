@@ -1,7 +1,7 @@
 define([
-	"Game/Core/Physics/Doll",
+	"Game/Core/GameObjects/Doll",
     "Game/Config/Settings",
-    "Game/Core/NotificationCenter",
+    "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Exception"
 ],
  

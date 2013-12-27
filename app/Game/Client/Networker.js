@@ -1,8 +1,8 @@
 define([
-    "Game/Core/Protocol/Helper", 
+    "Lib/Utilities/Protocol/Helper", 
     "Game/Client/GameController",
     "Game/Client/User",
-    "Game/Core/NotificationCenter",
+    "Lib/Utilities/NotificationCenter",
     "Game/Config/Settings"
 ], 
 

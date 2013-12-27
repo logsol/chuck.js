@@ -1,7 +1,7 @@
 define([
 	"Game/Core/Control/PlayerController",
-	"Game/Core/NotificationCenter",
-    "Game/Core/Protocol/Parser"
+	"Lib/Utilities/NotificationCenter",
+    "Lib/Utilities/Protocol/Parser"
 ],
  
 function(Parent, NotificationCenter, Parser) {

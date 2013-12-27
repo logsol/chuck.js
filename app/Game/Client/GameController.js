@@ -4,12 +4,12 @@ define([
     "Game/Client/Physics/Engine", 
     "Game/Client/View/ViewManager", 
     "Game/Client/Control/PlayerController", 
-    "Game/Core/NotificationCenter",
+    "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/RequestAnimFrame",
     "Game/Config/Settings",
     "Lib/Vendor/Stats",
     "Game/Client/GameObjects/GameObject",
-    "Game/Client/Physics/Doll"
+    "Game/Client/GameObjects/Doll"
 ],
 
 function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, NotificationCenter, requestAnimFrame, Settings, Stats, GameObject, Doll) {

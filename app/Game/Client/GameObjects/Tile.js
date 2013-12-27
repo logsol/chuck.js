@@ -1,7 +1,7 @@
 define([
 	"Game/Core/GameObjects/Tile",
 	"Game/Config/Settings",
-    "Game/Core/NotificationCenter"
+    "Lib/Utilities/NotificationCenter"
 ],
  
 function (Parent, Settings, NotificationCenter) {

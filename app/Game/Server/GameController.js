@@ -4,10 +4,10 @@ define([
     "Game/Config/Settings", 
     "Game/Server/Control/PlayerController",
     "Lib/Utilities/RequestAnimFrame",
-    "Game/Core/NotificationCenter",
+    "Lib/Utilities/NotificationCenter",
     "Game/Server/Player",
     "Game/Server/GameObjects/GameObject",
-    "Game/Server/Physics/Doll"
+    "Game/Server/GameObjects/Doll"
 ],
 
 function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, NotificationCenter, Player, GameObject, Doll) {

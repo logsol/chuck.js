@@ -2,7 +2,7 @@ define([
     "Lobby/User", 
     "Game/Server/Channel",
     "Lobby/PipeToChannel",
-    "Game/Core/NotificationCenter"
+    "Lib/Utilities/NotificationCenter"
 ], 
 
 function (User, Channel, PipeToChannel, NotificationCenter) {

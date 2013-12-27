@@ -2,7 +2,7 @@ define([
     "Game/Core/Control/PlayerController", 
     "Game/Client/Control/KeyboardInput",
     "Game/Client/Control/Input/MouseInput",
-    "Game/Core/NotificationCenter"
+    "Lib/Utilities/NotificationCenter"
 ], 
 
 function (Parent, KeyboardInput, MouseInput, NotificationCenter) {

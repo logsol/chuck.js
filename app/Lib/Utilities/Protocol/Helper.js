@@ -1,5 +1,5 @@
 define([
-    "Game/Core/Protocol/Parser",
+    "Lib/Utilities/Protocol/Parser",
     "Lib/Utilities/Exception"
 ],
 

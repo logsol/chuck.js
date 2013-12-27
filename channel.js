@@ -15,7 +15,7 @@ console.checkpoint = function (s) {
 
 requirejs([
     "Game/Server/PipeToLobby",
-    "Game/Core/NotificationCenter"
+    "Lib/Utilities/NotificationCenter"
 ], 
 
 function (PipeToLobby, nc) {

@@ -2,7 +2,7 @@ define([
     "Game/Client/View/DomController", 
     "Game/Config/Settings",
     "Lib/Utilities/Exception",
-    "Game/Core/NotificationCenter"
+    "Lib/Utilities/NotificationCenter"
 ],
 
 function (DomController, Settings, Exception, NotificationCenter) {

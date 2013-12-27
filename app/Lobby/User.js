@@ -1,7 +1,7 @@
 define([
     "Game/Core/User",
-    "Game/Core/Protocol/Helper",
-    "Game/Core/NotificationCenter"
+    "Lib/Utilities/Protocol/Helper",
+    "Lib/Utilities/NotificationCenter"
 ],
 
 function (Parent, ProtocolHelper, NotificationCenter) {

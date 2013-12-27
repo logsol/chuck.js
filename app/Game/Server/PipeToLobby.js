@@ -1,5 +1,5 @@
 define([
-    "Game/Core/NotificationCenter",
+    "Lib/Utilities/NotificationCenter",
     "Game/Server/Channel"
 ],
 
