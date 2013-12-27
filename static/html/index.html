@@ -12,22 +12,39 @@
                 height: 100%;
                 background: #000;
             }
+            
+            #loading {
+                border: 1px solid white;
+                width: 500px;
+                display: table-cell;
+                vertical-align: middle;
+                height: 100%;
+            }
+
+            #loaded {
+                height: 10px;
+                margin: 0;
+                padding: 0;
+                border: 1px solid black;
+                background: white;
+            }
+
             #canvasContainer { 
                 text-align: center; 
                 display: table-cell; 
                 vertical-align: middle; 
                 height: 100%;
             }
+
             canvas { 
                 background: #333;  
                 margin: 10px;
             }
-            #canvasContainer canvas:first-child {
-                
-            }
+
         </style>
     </head>
     <body>
+        <div id="loading"><p id="loaded"></p></div>
         <div id="canvasContainer">
         </div>
         <script data-main="client" src="require.js"></script>

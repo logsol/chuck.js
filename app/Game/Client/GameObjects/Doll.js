@@ -7,7 +7,7 @@ define([
  
 function (Parent, Settings, NotificationCenter, Exception) {
  
-    function Doll(physicsEngine, playerId) {        
+    function Doll(physicsEngine, playerId) {      
         this.animationDef = {
             "stand": [1,1],
             "walk": [2,28],
@@ -69,7 +69,10 @@ function (Parent, Settings, NotificationCenter, Exception) {
                 NotificationCenter.trigger("view/addMesh", mesh);
             };
 
-            NotificationCenter.trigger("view/createAnimatedMesh", texturePaths, callback, { visible: false, pivot: "mb" });
+            NotificationCenter.trigger("view/createAnimatedMesh", texturePaths, callback, { 
+                visible: false, 
+                pivot: "mb"
+            });
         }
 
         // Head

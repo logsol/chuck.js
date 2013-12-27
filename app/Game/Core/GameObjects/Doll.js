@@ -74,6 +74,18 @@ function (Parent, Box2D, Settings, CollisionDetector) {
         }
 
         this.body.CreateFixture(fixtureDef);
+
+        var grabSensorLeftShape = new Box2D.Collision.Shapes.b2PolygonShape();
+        grabSensorLeftShape.SetAsOrientedBox(10 / Settings.RATIO, 20 / Settings.RATIO, new Box2D.Common.Math.b2Vec2(-10 / Settings.RATIO, -10 / Settings.RATIO));
+        fixtureDef.shape = grabSensorLeftShape;
+        fixtureDef.isSensor = true;
+        this.body.CreateFixture(fixtureDef);
+
+        var grabSensorRightShape = new Box2D.Collision.Shapes.b2PolygonShape();
+        grabSensorRightShape.SetAsOrientedBox(10 / Settings.RATIO, 20 / Settings.RATIO, new Box2D.Common.Math.b2Vec2(10 / Settings.RATIO, -10 / Settings.RATIO));
+        fixtureDef.shape = grabSensorRightShape;
+        fixtureDef.isSensor = true;
+        this.body.CreateFixture(fixtureDef);
     }
 
     Doll.prototype.setActionState = function(state) {
