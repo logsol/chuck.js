@@ -2,10 +2,11 @@ define([
     "Game/" + GLOBALS.context + "/GameObjects/GameObject",
     "Lib/Vendor/Box2D", 
     "Game/Config/Settings", 
-    "Game/" + GLOBALS.context + "/Collision/Detector"
+    "Game/" + GLOBALS.context + "/Collision/Detector",
+    "Game/" + GLOBALS.context + "/GameObjects/Item"
 ], 
 
-function (Parent, Box2D, Settings, CollisionDetector) {
+function (Parent, Box2D, Settings, CollisionDetector, Item) {
 
     function Doll (physicsEngine, uid) {
 
@@ -16,7 +17,11 @@ function (Parent, Box2D, Settings, CollisionDetector) {
         this.lookDirection = 0;
         this.legs;
         this.actionState = null;
-        this.lookAtXY = {x:0, y:0};
+        this.lookAtXY = { x:0, y:0 };
+        this.reachableItems = {
+            left: [],
+            right: []
+        };
         
         this.createFixtures();
         this.body.SetActive(false);
@@ -35,6 +40,7 @@ function (Parent, Box2D, Settings, CollisionDetector) {
     };
 
     Doll.prototype.createFixtures = function () {
+        var self = this;
 
         var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
         fixtureDef.density = Settings.PLAYER_DENSITY;
@@ -63,6 +69,8 @@ function (Parent, Box2D, Settings, CollisionDetector) {
 
         this.legs = this.body.CreateFixture(fixtureDef);
 
+        fixtureDef.density = 0;
+
         var feetShape = new Box2D.Collision.Shapes.b2CircleShape();
         feetShape.SetRadius(4 / Settings.RATIO);
         feetShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, 2 / Settings.RATIO));
@@ -79,12 +87,24 @@ function (Parent, Box2D, Settings, CollisionDetector) {
         grabSensorLeftShape.SetAsOrientedBox(10 / Settings.RATIO, 20 / Settings.RATIO, new Box2D.Common.Math.b2Vec2(-10 / Settings.RATIO, -10 / Settings.RATIO));
         fixtureDef.shape = grabSensorLeftShape;
         fixtureDef.isSensor = true;
+        fixtureDef.userData = {
+            onCollisionChange: function(isColliding, fixture) {
+                self.onFixtureWithinReach(isColliding, "left", fixture);
+            }
+        }
         this.body.CreateFixture(fixtureDef);
 
         var grabSensorRightShape = new Box2D.Collision.Shapes.b2PolygonShape();
         grabSensorRightShape.SetAsOrientedBox(10 / Settings.RATIO, 20 / Settings.RATIO, new Box2D.Common.Math.b2Vec2(10 / Settings.RATIO, -10 / Settings.RATIO));
         fixtureDef.shape = grabSensorRightShape;
         fixtureDef.isSensor = true;
+        
+        fixtureDef.userData = {
+            onCollisionChange: function(isColliding, fixture) {
+                self.onFixtureWithinReach(isColliding, "right", fixture);
+            }
+        }
+
         this.body.CreateFixture(fixtureDef);
     }
 
@@ -192,20 +212,30 @@ function (Parent, Box2D, Settings, CollisionDetector) {
         this.lookAtXY.y = y;
     };
 
-    Doll.prototype.onFootSensorDetection = function(isColliding) {
-        //if(isColliding && !(this.body.GetLinearVelocity().y < -Settings.JUMP_SPEED && !this.isStanding())) {
-        //    this.setStanding(true);
-        //}
-
+    Doll.prototype.onFootSensorDetection = function(isColliding, fixture) {
 
         var hasJumpStartVelocity = this.body.GetLinearVelocity().y < -Settings.JUMP_SPEED;
 
         if(isColliding && !hasJumpStartVelocity) {
             this.setStanding(true);
         }
+    }
 
+    Doll.prototype.onFixtureWithinReach = function(isColliding, side, fixture) {
+        var item = fixture.GetBody().GetUserData();
+        if (!(item instanceof Item)) return;
 
-    };
+        if(isColliding) {
+
+            this.reachableItems[side].push(item);
+
+        } else {
+            var i = this.reachableItems[side].indexOf(item);
+            if (i >= 0) {
+                this.reachableItems[side].splice(i, 1);
+            }
+        }
+    }
 
     Doll.prototype.update = function() {
      

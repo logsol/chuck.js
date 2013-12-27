@@ -26,9 +26,9 @@ function (Box2D) {
         var userDataB = point.GetFixtureB().GetUserData();
 
         if (userDataA && userDataA.onCollisionChange) {
-            userDataA.onCollisionChange(isColliding);
+            userDataA.onCollisionChange(isColliding, point.GetFixtureB());
         } else if (userDataB && userDataB.onCollisionChange) {
-            userDataB.onCollisionChange(isColliding);
+            userDataB.onCollisionChange(isColliding, point.GetFixtureA());
         }
     }
 
