@@ -1,10 +1,11 @@
 define([
 	"Game/Client/Control/Input/XyInput",
 	"Game/Client/View/DomController",
-	"Game/Config/Settings"
+	"Game/Config/Settings",
+	"Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, DomController, Settings) {
+function (Parent, DomController, Settings, NotificationCenter) {
  
     function MouseInput() {
     	Parent.call(this);
@@ -29,6 +30,14 @@ function (Parent, DomController, Settings) {
 			var y = (((Settings.STAGE_HEIGHT - (e.clientY - this.offsetTop)) / Settings.STAGE_HEIGHT) * 2) -1;
 
 			self.onXyChange(x, y);
+		}
+
+		canvas.onmousedown = function(e) {
+
+			var x = (((e.clientX - this.offsetLeft) / Settings.STAGE_WIDTH) * 2) - 1;
+			var y = (((Settings.STAGE_HEIGHT - (e.clientY - this.offsetTop)) / Settings.STAGE_HEIGHT) * 2) -1;
+
+			NotificationCenter.trigger("input/onHandAction", x, y);
 		}
     };
 

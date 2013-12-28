@@ -16,22 +16,15 @@ function (NotificationCenter, Channel) {
 
         process.on('message', function (message, handle) {
 
-            for(var method in message.data) {
-                switch(method) {
-                    case 'CREATE':
-                        self.channel = new Channel(this, message.data[method]);
-                        break;
-
-                    case 'KILL':
-                        self.channel.destroy();
-                        process.exit(0);
-                        break;
-
-                    default:
-                        self.onMessage(message);
-                        break;
-                }
+            if(message.data.hasOwnProperty('CREATE')) {
+                self.channel = new Channel(this, message.data['CREATE']);
+            } else if (message.data.hasOwnProperty('KILL')) {
+                self.channel.destroy();
+                process.exit(0);
+            } else {
+                self.onMessage(message);
             }
+
         });    
     }
 

@@ -12,6 +12,7 @@ function (Doll, Settings) {
         this.doll;
         this.id = id;
         this.isSpawned = false;
+        this.holdingItem = null;
     }
 
     Player.prototype.getDoll = function() {
@@ -44,6 +45,21 @@ function (Doll, Settings) {
     Player.prototype.lookAt = function (x, y) {
         if(this.doll) this.doll.lookAt(x, y);
     }
+
+    Player.prototype.handAction = function(x, y) {
+        
+        if (this.holdingItem) {
+            // throw
+            this.doll.throw(this.holdingItem, x, y);
+            this.holdingItem = null;
+        } else {
+            // take
+            var item = this.doll.grab(x, y);
+            if(item) {
+                this.holdingItem = item;
+            }
+        }
+    };
 
     Player.prototype.update = function () {
 

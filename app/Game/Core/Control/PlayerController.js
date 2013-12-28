@@ -33,8 +33,11 @@ define(function () {
         if(options) this.player.lookAt(options.x, options.y);
     }
 
+    PlayerController.prototype.handAction = function(options) {
+        if (options) this.player.handAction(options.x, options.y);
+    };
+
     PlayerController.prototype.update = function () {
-        //console.log(this._walkingDirectionStatus)
         if(this._walkingDirectionStatus != 0) {
             this.player.move(this._walkingDirectionStatus);
         }

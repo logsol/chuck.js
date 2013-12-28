@@ -22,6 +22,8 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
             left: [],
             right: []
         };
+        this.holdingJoint = null;
+        this.holdingItem = null;
         
         this.createFixtures();
         this.body.SetActive(false);
@@ -201,6 +203,8 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
     }
 
     Doll.prototype.lookAt = function(x, y) {
+        var oldLookDirection = this.lookDirection;
+
         this.body.SetAwake(true);
         if(x < 0) {
             this.lookDirection = -1;
@@ -210,6 +214,62 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
 
         this.lookAtXY.x = x;
         this.lookAtXY.y = y;
+
+        if(oldLookDirection != this.lookDirection) {
+            this.positionHoldingItem();
+        }
+    };
+
+    Doll.prototype.grab = function(x, y) {
+        var item = null;
+        if (this.lookDirection == -1) {
+            item = this.reachableItems.left.shift();
+        } else {
+            item = this.reachableItems.right.shift();
+        }
+
+        if(item) {
+
+            this.holdingItem = item;
+
+            this.positionHoldingItem();            
+        }
+
+
+        return item;
+    };
+
+    Doll.prototype.positionHoldingItem = function() {
+        if(this.holdingItem) {
+
+            if(this.holdingJoint) {
+                this.body.GetWorld().DestroyJoint(this.holdingJoint);
+                this.holdingJoint = null;
+            }
+
+            var p = this.body.GetPosition();
+            this.holdingItem.body.SetPosition(new Box2D.Common.Math.b2Vec2(
+                p.x + ((this.holdingItem.options.width / Settings.RATIO / 2 + 5 / Settings.RATIO) * this.lookDirection),
+                p.y - (this.holdingItem.options.height / Settings.RATIO / 2)
+            ));
+            //this.holdingItem.body.SetAngle(Math.PI * 2 / 180 * 20 * -this.lookDirection);
+            this.holdingItem.body.SetAngle(0);
+
+            var jointDef = new Box2D.Dynamics.Joints.b2WeldJointDef();
+            jointDef.Initialize(this.body, this.holdingItem.body, this.holdingItem.body.GetWorldCenter());
+
+            this.holdingJoint = this.body.GetWorld().CreateJoint(jointDef);
+        }
+    };
+
+    Doll.prototype.throw = function(item, x, y) {
+        this.body.GetWorld().DestroyJoint(this.holdingJoint);
+        this.holdingJoint = null;
+        this.holdingItem = null;
+
+        var body = item.body;
+        body.SetAwake(true);
+        body.ApplyImpulse(new Box2D.Common.Math.b2Vec2(x * 3, -y * 3), body.GetPosition());
     };
 
     Doll.prototype.onFootSensorDetection = function(isColliding, fixture) {

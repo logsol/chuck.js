@@ -12,10 +12,8 @@ function (NotificationCenter) {
     XyInput.prototype.onXyChange = function(x, y) {
     	this.x = x;
     	this.y = y;
-    	NotificationCenter.trigger('onXyChange', x, y);
+    	NotificationCenter.trigger('input/onXyChange', x, y);
     }
-
-
  
     return XyInput;
  

@@ -23,7 +23,7 @@ function(Parent, NotificationCenter, Parser) {
         } else {
             message = options;
         }
-
+        
         for (var command in message) {
             this[command].call(this, message[command]);
         }

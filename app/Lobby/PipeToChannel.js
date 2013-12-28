@@ -26,6 +26,7 @@ function (NotificationCenter, childProcess) {
         var self = this;
 	}
 
+	// While creating user
 	PipeToChannel.prototype.send = function (recipient, data) {
         var message = {
             recipient: recipient,
@@ -35,6 +36,7 @@ function (NotificationCenter, childProcess) {
 		this.channelPipe.send(message);
 	}
 
+	// If user already created
 	PipeToChannel.prototype.sendToUser = function (id, data) {
         var message = {
             recipient: "user/" + id,
