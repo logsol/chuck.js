@@ -2,11 +2,11 @@ define([
 	"Game/Config/Settings",
     "Lib/Utilities/Exception",
     "Game/Client/View/Views/AbstractView",
-	"Game/Client/View/Views/ThreeView",
+	//"Game/Client/View/Views/ThreeView",
 	"Game/Client/View/Views/PixiView",
 ],
  
-function (Settings, Exception, AbstractView, ThreeView, PixiView) {
+function (Settings, Exception, AbstractView, PixiView) {
  
     var ViewManager = {};
 

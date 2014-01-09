@@ -2,7 +2,8 @@ GLOBALS = { context: "Client" };
 
 requirejs.config({
     baseUrl: 'app',
-    deps: ['Lib/Utilities/Extensions']
+    deps: ['Lib/Utilities/Extensions'],
+    waitSeconds: 0
 });
 
 var inspector = {};
