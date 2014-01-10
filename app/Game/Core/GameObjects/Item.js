@@ -10,6 +10,7 @@ function (Parent, Box2D, Settings) {
         this.options = options;
     	Parent.call(this, physicsEngine, uid);
         this.createFixture();
+        this.body.ResetMassData();
     }
 
     Item.prototype = Object.create(Parent.prototype);
@@ -28,16 +29,21 @@ function (Parent, Box2D, Settings) {
     Item.prototype.createFixture = function () {
 
         var itemShape = new Box2D.Collision.Shapes.b2PolygonShape();
-        var w = this.options.width / 2 / Settings.RATIO;
-        var h = this.options.height / 2 / Settings.RATIO;
-        itemShape.SetAsOrientedBox(w, h, new Box2D.Common.Math.b2Vec2(0, -h));
+        var w = this.options.width / Settings.RATIO;
+        var h = this.options.height / Settings.RATIO;
+        itemShape.SetAsOrientedBox(w / 2, h / 2, new Box2D.Common.Math.b2Vec2(0, -(h/2)));
 
         var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
         fixtureDef.shape = itemShape;
-        fixtureDef.density = Settings.ITEM_DENSITY;
+
+        var offset = 4,
+            factor = 80;
+        var density = ((this.options.weight + offset) / this.options.width / this.options.height) * factor;
+        fixtureDef.density = density;
         fixtureDef.friction = Settings.ITEM_FRICTION;
         fixtureDef.restitution = Settings.ITEM_RESTITUTION;
         fixtureDef.isSensor = false;
+
         this.body.CreateFixture(fixtureDef);
     }
  

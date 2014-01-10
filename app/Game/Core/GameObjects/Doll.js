@@ -269,7 +269,15 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
 
         var body = item.body;
         body.SetAwake(true);
-        body.ApplyImpulse(new Box2D.Common.Math.b2Vec2(x * 3, -y * 3), body.GetPosition());
+        
+        body.ApplyImpulse(
+            new Box2D.Common.Math.b2Vec2(
+                x * Settings.MAX_THROW_FORCE,
+                -y * Settings.MAX_THROW_FORCE * 2 // 2 is to throw higher then far
+            ),
+            body.GetLocalCenter()
+        );
+        body.SetAngularVelocity(5);
     };
 
     Doll.prototype.onFootSensorDetection = function(isColliding, fixture) {

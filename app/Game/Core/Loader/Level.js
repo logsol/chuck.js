@@ -104,16 +104,51 @@ define([
         // o o o
 
         this.levelObject = {
+            /*
+Material densities (g/cm^3):
+
+wood: 0.63
+steel: 7.859
+banana: 0.95
+microwave: 3.744
+
+            */
             items: [
                 {
                     name:'Banana',
                     image:'banana.gif',
                     shape:'rectangle',
                     category:'kitchen',
-                    weight:0.2,
+                    weight: 1,
                     width:5,
                     height:9,
-                    x:20,
+                    depth: 3,
+                    x:40,
+                    y:0,
+                    rotation: 0
+                },
+                {
+                    name:'Refridgerator',
+                    image:'fridge.gif',
+                    shape:'rectangle',
+                    category:'kitchen',
+                    weight: 10,
+                    width:31,
+                    height:53,
+                    x:120,
+                    y:0,
+                    rotation: 0
+                },
+                {
+                    name:'Microwave',
+                    image:'microwave.gif',
+                    shape:'rectangle',
+                    category:'kitchen',
+                    weight: 4,
+                    width:19,
+                    height:12,
+                    depth: 12,
+                    x:100,
                     y:0,
                     rotation: 0
                 },
@@ -122,7 +157,7 @@ define([
                     image:'cleaver_large.gif',
                     shape:'rectangle',
                     category:'kitchen',
-                    weight:1.1,
+                    weight: 3,
                     width:8,
                     height:22,
                     x:40,
@@ -134,7 +169,7 @@ define([
                     image:'cleaver_small.gif',
                     shape:'rectangle',
                     category:'kitchen',
-                    weight:0.8,
+                    weight:2,
                     width:6,
                     height:17,
                     x:60,
@@ -146,7 +181,7 @@ define([
                     image:'coffeemachine.gif',
                     shape:'rectangle',
                     category:'kitchen',
-                    weight:3,
+                    weight:2.4,
                     width:11,
                     height:14,
                     x:80,
@@ -154,35 +189,11 @@ define([
                     rotation: 0
                 },
                 {
-                    name:'Microwave',
-                    image:'microwave.gif',
-                    shape:'rectangle',
-                    category:'kitchen',
-                    weight:7,
-                    width:19,
-                    height:12,
-                    x:100,
-                    y:0,
-                    rotation: 0
-                },
-                {
-                    name:'Refridgerator',
-                    image:'fridge.gif',
-                    shape:'rectangle',
-                    category:'kitchen',
-                    weight:5,
-                    width:31,
-                    height:53,
-                    x:120,
-                    y:200,
-                    rotation: 0
-                },
-                {
                     name:'Knife',
                     image:'knife.gif',
                     shape:'rectangle',
                     category:'kitchen',
-                    weight:0.3,
+                    weight:1.5,
                     width:4,
                     height:15,
                     x:140,
@@ -190,7 +201,21 @@ define([
                     rotation: 0
                 }
             ],
-            tiles: [
+            tiles: /*
+            (function() {
+                var tiles = [];
+                for (var i = 0; i < 50; i++) {
+                    tiles.push({
+                        s:1,
+                        x:i,
+                        y:5
+                    })
+                };
+                return tiles;
+            })()
+*/
+
+            [
                 {s:1, x:1, y:1, r:0},
                 {s:1, x:3, y:18},
                 {s:1, x:37, y:27},
