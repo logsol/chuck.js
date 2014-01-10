@@ -250,10 +250,11 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
             var p = this.body.GetPosition();
             this.holdingItem.body.SetPosition(new Box2D.Common.Math.b2Vec2(
                 p.x + ((this.holdingItem.options.width / Settings.RATIO / 2 + 5 / Settings.RATIO) * this.lookDirection),
-                p.y - (this.holdingItem.options.height / Settings.RATIO / 2)
+                p.y - 1
             ));
+            this.holdingItem.flip(this.lookDirection);
             //this.holdingItem.body.SetAngle(Math.PI * 2 / 180 * 20 * -this.lookDirection);
-            this.holdingItem.body.SetAngle(0);
+            this.holdingItem.body.SetAngle((this.holdingItem.options.grabAngle || 0) * this.lookDirection);
 
             var jointDef = new Box2D.Dynamics.Joints.b2WeldJointDef();
             jointDef.Initialize(this.body, this.holdingItem.body, this.holdingItem.body.GetWorldCenter());
@@ -273,11 +274,11 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
         body.ApplyImpulse(
             new Box2D.Common.Math.b2Vec2(
                 x * Settings.MAX_THROW_FORCE,
-                -y * Settings.MAX_THROW_FORCE * 2 // 2 is to throw higher then far
+                -y * Settings.MAX_THROW_FORCE * 1.5 // 1.5 is to throw higher then far
             ),
             body.GetLocalCenter()
         );
-        body.SetAngularVelocity(5);
+        body.SetAngularVelocity(8 * x);
     };
 
     Doll.prototype.onFootSensorDetection = function(isColliding, fixture) {

@@ -11,6 +11,7 @@ function (Parent, Box2D, Settings) {
     	Parent.call(this, physicsEngine, uid);
         this.createFixture();
         this.body.ResetMassData();
+        this.flipDirection = 1;
     }
 
     Item.prototype = Object.create(Parent.prototype);
@@ -46,6 +47,12 @@ function (Parent, Box2D, Settings) {
 
         this.body.CreateFixture(fixtureDef);
     }
+
+    Item.prototype.flip = function(direction) {
+        this.flipDirection = direction;
+
+        // FIXME: implement body flip if necessary
+    };
  
     return Item;
  

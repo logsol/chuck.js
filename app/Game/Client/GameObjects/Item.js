@@ -47,6 +47,21 @@ function (Parent, Settings, NotificationCenter) {
             }
         );
     }
+
+    Item.prototype.flip = function(direction) {
+        var oldFlipDirection = this.flipDirection;
+        
+        Parent.prototype.flip.call(this, direction);
+
+        if(oldFlipDirection != direction) {
+            NotificationCenter.trigger("view/updateMesh",
+                this.mesh,
+                {
+                    xScale: direction
+                }
+            );
+        }
+    };
  
     return Item;
  

@@ -23,10 +23,10 @@ define({
 
     // GAME PLAY 
     WALK_SPEED: 4,
-    RUN_SPEED: 6.4,
-    FLY_SPEED: 5.12,
+    RUN_SPEED: 8,
+    FLY_SPEED: 6.2,
     JUMP_SPEED: 70,
-    MAX_THROW_FORCE: 15,
+    MAX_THROW_FORCE: 18,
 
     // restitution: bouncyness, friction: rubbing, density: mass
     TILE_FRICTION: 0.99,

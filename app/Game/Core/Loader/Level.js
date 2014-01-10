@@ -125,7 +125,8 @@ microwave: 3.744
                     depth: 3,
                     x:40,
                     y:0,
-                    rotation: 0
+                    rotation: 0,
+                    grabAngle: 0.5
                 },
                 {
                     name:'Refridgerator',
@@ -137,7 +138,8 @@ microwave: 3.744
                     height:53,
                     x:120,
                     y:0,
-                    rotation: 0
+                    rotation: 0,
+                    grabAngle: -0.5
                 },
                 {
                     name:'Microwave',
@@ -150,7 +152,8 @@ microwave: 3.744
                     depth: 12,
                     x:100,
                     y:0,
-                    rotation: 0
+                    rotation: 0,
+                    grabAngle: -0.1
                 },
                 {
                     name:'Large Cleaver',
@@ -162,7 +165,8 @@ microwave: 3.744
                     height:22,
                     x:40,
                     y:0,
-                    rotation: 0
+                    rotation: 0,
+                    grabAngle: 0.3
                 },
                 {
                     name:'Small Cleaver',
@@ -174,7 +178,8 @@ microwave: 3.744
                     height:17,
                     x:60,
                     y:0,
-                    rotation: 0
+                    rotation: 0,
+                    grabAngle: 0.3
                 },
                 {
                     name:'Coffeemachine',
@@ -198,7 +203,21 @@ microwave: 3.744
                     height:15,
                     x:140,
                     y:0,
-                    rotation: 0
+                    rotation: 0,
+                    grabAngle: 0.3
+                },
+                {
+                    name:'Laundry Machine',
+                    image:'laundry_machine.gif',
+                    shape:'rectangle',
+                    category:'laundry',
+                    weight: 15,
+                    width:24,
+                    height:31,
+                    x:600,
+                    y:0,
+                    rotation: 0,
+                    grabAngle: -0.5
                 }
             ],
             tiles: /*
