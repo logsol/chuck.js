@@ -3,9 +3,10 @@ define([
     "Lib/Vendor/Box2D", 
     "Game/" + GLOBALS.context + "/Collision/Detector",
     "Game/" + GLOBALS.context + "/GameObjects/Tile",
-    "Game/" + GLOBALS.context + "/GameObjects/Item"
+    "Game/" + GLOBALS.context + "/GameObjects/Item",
+    "Game/" + GLOBALS.context + "/GameObjects/Items/Skateboard",
 
-], function (Settings, Box2D, CollisionDetector, Tile, Item) {
+], function (Settings, Box2D, CollisionDetector, Tile, Item, Skateboard) {
     
     // Public
     function Level (path, engine, gameObjects) {
@@ -48,8 +49,18 @@ define([
 
         for (var i = 0; i < items.length; i++) {
             var options = items[i];
+            var item;
+            var uid = "item-" + i;
 
-            this.gameObjects.animated.push(new Item(this.engine, "item-" + i, options));
+            switch(options.type) {
+                case 'skateboard':
+                    item = new Skateboard(this.engine, uid, options);
+                    break;
+                default:
+                    item = new Item(this.engine, uid, options);
+                    break
+            }
+            this.gameObjects.animated.push(item);            
         };
     };
 
@@ -117,7 +128,7 @@ microwave: 3.744
                 {
                     name:'Banana',
                     image:'banana.gif',
-                    shape:'rectangle',
+                    type:'rectangle',
                     category:'kitchen',
                     weight: 1,
                     width:5,
@@ -131,7 +142,7 @@ microwave: 3.744
                 {
                     name:'Refridgerator',
                     image:'fridge.gif',
-                    shape:'rectangle',
+                    type:'rectangle',
                     category:'kitchen',
                     weight: 10,
                     width:31,
@@ -144,7 +155,7 @@ microwave: 3.744
                 {
                     name:'Microwave',
                     image:'microwave.gif',
-                    shape:'rectangle',
+                    type:'rectangle',
                     category:'kitchen',
                     weight: 4,
                     width:19,
@@ -158,7 +169,7 @@ microwave: 3.744
                 {
                     name:'Large Cleaver',
                     image:'cleaver_large.gif',
-                    shape:'rectangle',
+                    type:'rectangle',
                     category:'kitchen',
                     weight: 3,
                     width:8,
@@ -171,7 +182,7 @@ microwave: 3.744
                 {
                     name:'Small Cleaver',
                     image:'cleaver_small.gif',
-                    shape:'rectangle',
+                    type:'rectangle',
                     category:'kitchen',
                     weight:2,
                     width:6,
@@ -184,7 +195,7 @@ microwave: 3.744
                 {
                     name:'Coffeemachine',
                     image:'coffeemachine.gif',
-                    shape:'rectangle',
+                    type:'rectangle',
                     category:'kitchen',
                     weight:2.4,
                     width:11,
@@ -196,7 +207,7 @@ microwave: 3.744
                 {
                     name:'Knife',
                     image:'knife.gif',
-                    shape:'rectangle',
+                    type:'rectangle',
                     category:'kitchen',
                     weight:1.5,
                     width:4,
@@ -209,7 +220,7 @@ microwave: 3.744
                 {
                     name:'Laundry Machine',
                     image:'laundry_machine.gif',
-                    shape:'rectangle',
+                    type:'rectangle',
                     category:'laundry',
                     weight: 15,
                     width:24,
@@ -218,6 +229,19 @@ microwave: 3.744
                     y:0,
                     rotation: 0,
                     grabAngle: -0.5
+                },
+                {
+                    name:'Skateboard',
+                    image:'skateboard.gif',
+                    type:'skateboard',
+                    category:'outdoor',
+                    weight: 5,
+                    width:26,
+                    height:6,
+                    x:200,
+                    y:0,
+                    rotation: 0,
+                    grabAngle: -1.5
                 }
             ],
             tiles: /*
