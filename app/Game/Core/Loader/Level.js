@@ -246,6 +246,20 @@ microwave: 3.744
                     y:0,
                     rotation: 0,
                     grabAngle: -1.5
+                },
+                {
+                    name:'Football',
+                    image:'football.gif',
+                    type:'circle',
+                    category:'outdoor',
+                    weight: 2,
+                    width:10,
+                    height:10,
+                    x:350,
+                    y:0,
+                    rotation: 0,
+                    grabAngle: -1.5,
+                    bounce: 6
                 }
             ],
             tiles: /*
