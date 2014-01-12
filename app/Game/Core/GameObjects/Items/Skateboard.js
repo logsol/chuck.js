@@ -7,19 +7,19 @@ define([
 function (Parent, Box2D, Settings) {
  
     function Skateboard(physicsEngine, uid, options) {
-    	this.physicsEngine = physicsEngine;
 
     	Parent.call(this, physicsEngine, uid, options);
 
-    	this.addWheel(
-    		options.x + 8,
-    		options.y + 1.5
-    	);
-
-    	this.addWheel(
-    		options.x - 8,
-    		options.y + 1.5
-    	);
+        this.wheels = [
+        	this.addWheel(
+        		options.x + 8,
+        		options.y + 1.5
+        	),
+        	this.addWheel(
+        		options.x - 8,
+        		options.y + 1.5
+        	)
+        ];
     }
 
     Skateboard.prototype = Object.create(Parent.prototype);
@@ -60,28 +60,37 @@ function (Parent, Box2D, Settings) {
         var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
         var offset = 4,
             factor = 80;
-        var density = ((this.options.weight + offset) / this.options.width / this.options.height) * factor;
+        var density = ((0.1 + offset) / 3 / 3) * factor;
         fixtureDef.density = density;
         fixtureDef.shape = wheelShape;
         fixtureDef.isSensor = false;
 
-        var wheelBody = this.physicsEngine.getWorld().CreateBody(bodyDef);
+        var wheelBody = this.body.GetWorld().CreateBody(bodyDef);
         wheelBody.CreateFixture(fixtureDef);
             
 		var revoluteJointDef = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
 		revoluteJointDef.enableMotor = false;
 
 		revoluteJointDef.Initialize(this.body, wheelBody, wheelBody.GetWorldCenter());
-		this.physicsEngine.getWorld().CreateJoint(revoluteJointDef);
+		this.body.GetWorld().CreateJoint(revoluteJointDef);
 
 		// FIXME this means, that we will have bodies in the world, which must not be
 		// updated (wheels) because they are always connected to a body which will be updated.
+        return wheelBody;
     };
 
     Skateboard.prototype.flip = function(direction) {
         this.flipDirection = direction;
 
         // FIXME: implement body flip if necessary
+    };
+
+    Skateboard.prototype.destroy = function() {
+        for (var i = 0; i < this.wheels.length; i++) {
+            this.body.GetWorld().DestroyBody(this.wheels[i]);
+        }
+
+        Parent.prototype.destroy.call(this);
     };
  
     return Skateboard;

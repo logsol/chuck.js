@@ -22,9 +22,13 @@ define([
         this.createItems();
     }
 
-    Level.prototype.unload = function () {
-        // TODO unload level from engine if necessary
-        // Perhaps just remove all bodies?
+    Level.prototype.destroy = function () {
+        for (var key in this.gameObjects) {
+            for (var i = 0; i < this.gameObjects[key].length; i++) {
+                this.gameObjects[key][i].destroy();
+            }
+            //this.gameObjects[key] = [];
+        }
     }
 
     // Private
@@ -235,7 +239,7 @@ microwave: 3.744
                     image:'skateboard.gif',
                     type:'skateboard',
                     category:'outdoor',
-                    weight: 5,
+                    weight: 1.5,
                     width:26,
                     height:6,
                     x:200,

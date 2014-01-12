@@ -16,16 +16,10 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
 
     function GameController () {
         this.view = ViewManager.createView();
-        
-        Parent.call(this, new PhysicsEngine());
-
-        this.physicsEngine.setCollisionDetector();
-
+        this.initStats();
         this.me = null;
 
-        this.initStats();
-
-        this.update();
+        Parent.call(this);
     }
 
     GameController.prototype = Object.create(Parent.prototype);
@@ -34,6 +28,9 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
         this.stats = new Stats();
         this.stats.setMode(0);
         document.body.appendChild(this.stats.domElement);
+        var button = document.createElement("button");
+        button.onclick = inspector.resetLevel;
+        document.body.appendChild(button);
     };
 
     GameController.prototype.destruct = function() {

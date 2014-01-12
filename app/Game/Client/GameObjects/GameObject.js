@@ -1,9 +1,10 @@
 define([
 	"Game/Core/GameObjects/GameObject",
-    "Lib/Utilities/Exception"
+    "Lib/Utilities/Exception",
+    "Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, Exception) {
+function (Parent, Exception, NotificationCenter) {
  
     function GameObject(physicsEngine, uid) {
     	Parent.call(this, physicsEngine, uid);
@@ -14,7 +15,6 @@ function (Parent, Exception) {
     GameObject.prototype = Object.create(Parent.prototype);
 
     GameObject.prototype.destroy = function() {
-    	// view ...
     	Parent.prototype.destroy.call(this);
     };
  

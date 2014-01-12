@@ -58,6 +58,7 @@ function (Networker, SocketIO, Settings, Exception, PIXI) {
         var networker = new Networker(socket);
         inspector.networker = networker;
         inspector.settings = Settings;
+        inspector.resetLevel = function() { networker.sendGameCommand("resetLevel"); }
     });
 
 });

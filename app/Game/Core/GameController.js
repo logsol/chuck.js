@@ -4,34 +4,49 @@ define([
     "Game/" + GLOBALS.context + "/Player"
 ],
 
-function (Engine, Level, Player) {
+function (PhysicsEngine, Level, Player) {
 
-    function GameController (physicsEngine) {
+    function GameController () {
         this.players = {};
         this.gameObjects = {
             animated: [],
             fixed: []
         };
-        
-        if (! physicsEngine instanceof Engine) {
-            throw physicsEngine + " is not of type Engine";
-        }
+        this.levelPath = null;
 
-        this.physicsEngine = physicsEngine;
+        this.physicsEngine = new PhysicsEngine();
+        this.physicsEngine.setCollisionDetector();
+
+        this.update();
     }
+
+    GameController.prototype.update = function() {
+        
+    };
 
     GameController.prototype.getPhysicsEngine = function () {
         return this.physicsEngine;
     }
 
     GameController.prototype.loadLevel = function (path) {
+        this.levelPath = path;
+
         if (this.level) {
-            this.level.unload();
+            this.level.destroy();
+            this.gameObjects = {
+                animated: [],
+                fixed: []
+            };
         }
 
         this.level = new Level(path, this.physicsEngine, this.gameObjects);
         this.level.loadLevelInToEngine();
     }
+
+    GameController.prototype.onResetLevel = function() {
+        this.loadLevel(this.levelPath);
+    };
+
 
     GameController.prototype.destroy = function () {
         for(var player in this.players) {
@@ -52,7 +67,6 @@ function (Engine, Level, Player) {
     GameController.prototype.createPlayer = function(user) {
         return new Player(user.id, this.physicsEngine);
     };
-
 
     return GameController;
 });

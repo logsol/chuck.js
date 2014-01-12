@@ -1,10 +1,11 @@
 define([
 	"Game/Core/User",
 	"Lib/Utilities/NotificationCenter",
-	"Lib/Utilities/Protocol/Helper"
+	"Lib/Utilities/Protocol/Helper",
+    "Lib/Utilities/Protocol/Parser",
 ],
  
-function(Parent, NotificationCenter, ProtocolHelper) {
+function(Parent, NotificationCenter, ProtocolHelper, ProtocolParser) {
  
     function User(id, channel) {
     	Parent.call(this, id);
@@ -38,7 +39,16 @@ function(Parent, NotificationCenter, ProtocolHelper) {
     // User command callbacks
 
     User.prototype.onGameCommand = function(command) {
-        this.player.playerController.applyCommand(command);
+
+        if (typeof command == "string") {
+            command = ProtocolParser.decode(command);
+        } // FIXME: move this to Protocol helper as a function
+
+        if(command.hasOwnProperty("resetLevel")) {
+            NotificationCenter.trigger("user/resetLevel", this.id);
+        } else {
+            this.player.playerController.applyCommand(command);
+        }
     };
 
 

@@ -37,6 +37,11 @@ function (Parent, Settings, NotificationCenter) {
         );
     };
 
+    Tile.prototype.destroy = function() {
+        NotificationCenter.trigger("view/removeMesh", this.mesh);
+        Parent.prototype.destroy.call(this);
+    };
+
     Tile.prototype.render = function() {
 
         NotificationCenter.trigger("view/updateMesh",

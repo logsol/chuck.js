@@ -20,6 +20,8 @@ function (Box2D, Exception) {
     GameObject.prototype.destroy = function() {
         if(this.body instanceof Box2D.Dynamics.b2Body) {
             this.body.GetWorld().DestroyBody(this.body);   
+        } else {
+            throw new Exception("can not destroy body");
         }
     };
 

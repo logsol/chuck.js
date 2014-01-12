@@ -13,17 +13,16 @@ define([
 function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, NotificationCenter, Player, GameObject, Doll) {
 
     function GameController (channel) {
-        Parent.call(this, new PhysicsEngine());
-
-        this.physicsEngine.setCollisionDetector();
-
+        
         this.channel = channel;
 
-        this.update();
+        Parent.call(this);
+
         this.updateWorld();
 
         NotificationCenter.on('user/joined', this.userJoined, this);
-        NotificationCenter.on('user/left', this.userLeft, this);
+        NotificationCenter.on('user/left', this.userLeft, this); // FIXME: refactor this.userLeft -> this.onUserLeft, even in core and client
+        NotificationCenter.on('user/resetLevel', this.onResetLevel, this);
 
         console.checkpoint('starting game controller for channel ' + channel.name);
     }
@@ -48,9 +47,10 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
     }
 
     GameController.prototype.spawnPlayer = function(player) {
-        var x = 150,
+        var x = 150 + Math.random() * 300,
             y = 50;
         player.spawn(x, y);
+        this.gameObjects.animated.push(player.getDoll());
 
         var message = {
             spawnPlayer: {
@@ -126,6 +126,14 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         }
 
         return spawnedPlayers;
+    };
+
+    GameController.prototype.onResetLevel = function(userId) {
+        Parent.prototype.onResetLevel.call(this);
+        NotificationCenter.trigger("sendControlCommandToAllUsers", "gameCommand", {resetLevel:true});
+        for (var key in this.players) {
+            this.spawnPlayer(this.players[key]);
+        }
     };
 
 
