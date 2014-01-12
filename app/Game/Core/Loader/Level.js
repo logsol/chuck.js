@@ -138,7 +138,7 @@ microwave: 3.744
                     width:5,
                     height:9,
                     depth: 3,
-                    x:40,
+                    x:21,
                     y:0,
                     rotation: 0,
                     grabAngle: 0.5
