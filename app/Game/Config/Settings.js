@@ -47,7 +47,7 @@ define({
     IS_BROWSER_ENVIRONMENT: typeof window !== 'undefined',
     USE_WEGBL: true, 
 
-    DEBUG_MODE: 0,
+    DEBUG_MODE: 1,
 
     // NETWORKING
     WORLD_UPDATE_BROADCAST_INTERVAL: 70,
