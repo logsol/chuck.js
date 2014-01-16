@@ -89,12 +89,18 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
         if (options.height) mesh.height = options.height;
         if (options.visible === true || options.visible === false) mesh.visible = options.visible;
         if (options.pivot) {
-            switch(options.pivot.length) {
-                default:
-                    mesh.pivot.x = mesh.width / 2;
-                    mesh.pivot.y = mesh.height;
-                    break;
+            if(options.pivot.length) {
+                switch(options.pivot) {
+                    case "lb":
+                        mesh.pivot.x = mesh.width / 2;
+                        mesh.pivot.y = mesh.height / 2;
+                        break;
+                    default:
+                        mesh.pivot.x = mesh.width / 2;
+                        mesh.pivot.y = mesh.height;
+                        break;
 
+                }                
             }
         };
     }
@@ -105,16 +111,11 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
     }
 
     PixiView.prototype.calculateCameraPosition = function() {
-
-        var reference = this.me.getPosition();
-        var pos = {};
-
-        pos.x = -reference.x;
-        pos.y = reference.y;
-
         var zoom = this.container.scale.x;
-        pos.x = pos.x * Settings.RATIO * zoom;
-        pos.y = -(pos.y * Settings.RATIO) * zoom;
+
+        var pos = this.me.getHeadPosition();
+        pos.x *= -Settings.RATIO * zoom;
+        pos.y *= -Settings.RATIO * zoom;
 
         pos.x -= this.me.playerController.xyInput.x * Settings.STAGE_WIDTH / 4;
         pos.y += this.me.playerController.xyInput.y * Settings.STAGE_HEIGHT / 4;

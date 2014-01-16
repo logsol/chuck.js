@@ -43,7 +43,6 @@ define([
         for (var i = 0; i < tiles.length; i++) {
             var options = tiles[i];
             options.m = this.tileAtPositionExists(options.x, options.y - 1) ? "Soil" : "GrassSoil";
-
             this.gameObjects.fixed.push(new Tile(this.engine, "tile-" + i, options));
         }
     }
@@ -118,7 +117,7 @@ define([
         // o o o
         // o o o
 
-        this.levelObject = {
+        this.levelObject = this.levelObject || {
             /*
 Material densities (g/cm^3):
 
@@ -277,6 +276,7 @@ microwave: 3.744
 */
 
             [
+                {s:1, x:0, y:0, r:0},
                 {s:1, x:1, y:1, r:0},
                 {s:1, x:3, y:18},
                 {s:1, x:37, y:27},

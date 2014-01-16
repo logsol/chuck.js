@@ -17,7 +17,7 @@ define({
     GRAPHICS_SUBPATH_TILES: 'Tiles/',
 
     RATIO: 21, //35
-    TILE_SIZE: 15, //15
+    TILE_SIZE: 65, //15, 25 is original picture
     CAMERA_IS_ORTHOGRAPHIC: true,
     VIEW_CONTROLLER: 0 ? 'Three' : 'Pixi',
 
@@ -45,9 +45,7 @@ define({
     // BROWSER
     CANVAS_DOM_ID: 'canvasContainer',
     IS_BROWSER_ENVIRONMENT: typeof window !== 'undefined',
-    USE_WEGBL: true, 
-
-    DEBUG_MODE: 1,
+    USE_WEGBL: true,
 
     // NETWORKING
     WORLD_UPDATE_BROADCAST_INTERVAL: 70,

@@ -30,6 +30,12 @@ function (Doll, Settings) {
         return this.doll.getPosition();
     }
 
+    Player.prototype.getHeadPosition = function () {
+        if(!this.doll) return false;
+        return this.doll.getHeadPosition();
+    }
+
+
     Player.prototype.move = function (direction) {
         this.doll.move(direction);
     }

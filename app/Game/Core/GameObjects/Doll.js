@@ -10,6 +10,11 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
 
     function Doll (physicsEngine, uid) {
 
+        this.height = 43;
+        this.width = 9;
+        this.headHeight = 12;
+        this.reachDistance = 20;
+
         Parent.call(this, physicsEngine, uid);
 
         this.standing = false;
@@ -33,8 +38,8 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
 
     Doll.prototype.getBodyDef = function() {
         var bodyDef = new Box2D.Dynamics.b2BodyDef();
-        bodyDef.position.x = 220 / Settings.RATIO;
-        bodyDef.position.y = 0 / Settings.RATIO;
+        bodyDef.position.x = 0;
+        bodyDef.position.y = 0;
         bodyDef.fixedRotation = true;
         bodyDef.linearDamping = Settings.PLAYER_LINEAR_DAMPING;
         bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
@@ -50,21 +55,25 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
         fixtureDef.restitution = Settings.PLAYER_RESTITUTION;
 
         var headShape = new Box2D.Collision.Shapes.b2CircleShape();
-        headShape.SetRadius(5 / Settings.RATIO);
-        headShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, -35 / Settings.RATIO));
+        headShape.SetRadius(this.width / 2 / Settings.RATIO);
+        headShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0, -(this.height - (this.width / 2)) / Settings.RATIO));
         fixtureDef.shape = headShape;
         fixtureDef.isSensor = false;
         this.body.CreateFixture(fixtureDef);
 
         var bodyShape = new Box2D.Collision.Shapes.b2PolygonShape();
-        bodyShape.SetAsOrientedBox(5 / Settings.RATIO, 16 / Settings.RATIO, new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, -19 / Settings.RATIO));
+        bodyShape.SetAsOrientedBox(
+            this.width / 2 / Settings.RATIO, 
+            (this.height - this.width) / 2 / Settings.RATIO, 
+            new Box2D.Common.Math.b2Vec2(0, -this.height / 2 / Settings.RATIO)
+        );
         fixtureDef.shape = bodyShape;
         fixtureDef.isSensor = false;
         this.body.CreateFixture(fixtureDef);
 
         var legsShape = new Box2D.Collision.Shapes.b2CircleShape();
-        legsShape.SetRadius(5 / Settings.RATIO);
-        legsShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, -3 / Settings.RATIO));
+        legsShape.SetRadius(this.width / 2 / Settings.RATIO);
+        legsShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0, -this.width / 2 / Settings.RATIO));
         fixtureDef.shape = legsShape;
         fixtureDef.friction = Settings.PLAYER_FRICTION;
         fixtureDef.isSensor = false;
@@ -74,8 +83,8 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
         fixtureDef.density = 0;
 
         var feetShape = new Box2D.Collision.Shapes.b2CircleShape();
-        feetShape.SetRadius(4 / Settings.RATIO);
-        feetShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0 / Settings.RATIO, 2 / Settings.RATIO));
+        feetShape.SetRadius((this.width - 1) / 2 / Settings.RATIO); // the -1 one prevents collisions with walls
+        feetShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0, 2 / Settings.RATIO)); // 2 is offset into ground
         fixtureDef.shape = feetShape;
         fixtureDef.isSensor = true;
 
@@ -86,7 +95,14 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
         this.body.CreateFixture(fixtureDef);
 
         var grabSensorLeftShape = new Box2D.Collision.Shapes.b2PolygonShape();
-        grabSensorLeftShape.SetAsOrientedBox(10 / Settings.RATIO, 20 / Settings.RATIO, new Box2D.Common.Math.b2Vec2(-10 / Settings.RATIO, -10 / Settings.RATIO));
+        grabSensorLeftShape.SetAsOrientedBox(
+            this.reachDistance / 2 / Settings.RATIO,
+            ((this.height / 2) + this.reachDistance / 4) / Settings.RATIO, 
+            new Box2D.Common.Math.b2Vec2(
+                -this.reachDistance / 2 / Settings.RATIO, 
+                -this.height / 2 / Settings.RATIO
+            )
+        );
         fixtureDef.shape = grabSensorLeftShape;
         fixtureDef.isSensor = true;
         fixtureDef.userData = {
@@ -97,7 +113,14 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
         this.body.CreateFixture(fixtureDef);
 
         var grabSensorRightShape = new Box2D.Collision.Shapes.b2PolygonShape();
-        grabSensorRightShape.SetAsOrientedBox(10 / Settings.RATIO, 20 / Settings.RATIO, new Box2D.Common.Math.b2Vec2(10 / Settings.RATIO, -10 / Settings.RATIO));
+        grabSensorRightShape.SetAsOrientedBox(
+            this.reachDistance / 2 / Settings.RATIO,
+            ((this.height / 2) + this.reachDistance / 4) / Settings.RATIO, 
+            new Box2D.Common.Math.b2Vec2(
+                this.reachDistance / 2 / Settings.RATIO, 
+                -this.height / 2 / Settings.RATIO
+            )
+        );
         fixtureDef.shape = grabSensorRightShape;
         fixtureDef.isSensor = true;
         
@@ -129,7 +152,19 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
     }
 
     Doll.prototype.getPosition = function() {
-        return this.body.GetPosition();
+        var pos = this.body.GetPosition();
+        return {
+            x: pos.x,
+            y: pos.y
+        };
+    };
+
+    Doll.prototype.getHeadPosition = function() {
+        var pos = this.body.GetPosition();
+        return {
+            x: pos.x,
+            y: pos.y - (this.height - this.headHeight / 2) / Settings.RATIO
+        };
     };
 
     Doll.prototype.setFriction = function (friction) {
@@ -249,11 +284,10 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
 
             var p = this.body.GetPosition();
             this.holdingItem.body.SetPosition(new Box2D.Common.Math.b2Vec2(
-                p.x + ((this.holdingItem.options.width / Settings.RATIO / 2 + 5 / Settings.RATIO) * this.lookDirection),
-                p.y - 1
+                p.x + ((this.holdingItem.options.width / Settings.RATIO / 2 + this.width / 2 / Settings.RATIO) * this.lookDirection),
+                p.y - 1 // 1m in the air
             ));
             this.holdingItem.flip(this.lookDirection);
-            //this.holdingItem.body.SetAngle(Math.PI * 2 / 180 * 20 * -this.lookDirection);
             this.holdingItem.body.SetAngle((this.holdingItem.options.grabAngle || 0) * this.lookDirection);
 
             var jointDef = new Box2D.Dynamics.Joints.b2WeldJointDef();

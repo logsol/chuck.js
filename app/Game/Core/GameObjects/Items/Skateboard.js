@@ -13,11 +13,11 @@ function (Parent, Box2D, Settings) {
         this.wheels = [
         	this.addWheel(
         		options.x + 8,
-        		options.y + 1.5
+        		options.y - 1.5
         	),
         	this.addWheel(
         		options.x - 8,
-        		options.y + 1.5
+        		options.y - 1.5
         	)
         ];
     }
@@ -26,13 +26,13 @@ function (Parent, Box2D, Settings) {
 
     Skateboard.prototype.createFixture = function () {
 
-        var itemShape = new Box2D.Collision.Shapes.b2PolygonShape();
+        var deckShape = new Box2D.Collision.Shapes.b2PolygonShape();
         var w = this.options.width / Settings.RATIO;
         var h = 1.5 / Settings.RATIO;
-        itemShape.SetAsOrientedBox(w / 2, h / 2, new Box2D.Common.Math.b2Vec2(0, -(1.5 / Settings.RATIO)));
+        deckShape.SetAsOrientedBox(w / 2, h / 2, new Box2D.Common.Math.b2Vec2(0, -(4.5 / Settings.RATIO)));
 
         var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
-        fixtureDef.shape = itemShape;
+        fixtureDef.shape = deckShape;
 
         var offset = 4,
             factor = 80;

@@ -138,7 +138,7 @@ function (Parent, Settings, NotificationCenter, Exception) {
                 this.headMesh,
                 {
                     x: this.body.GetPosition().x * Settings.RATIO,
-                    y: this.body.GetPosition().y * Settings.RATIO - 31
+                    y: this.body.GetPosition().y * Settings.RATIO - this.height + this.headHeight
                 }
             )
         }
