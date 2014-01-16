@@ -8,7 +8,6 @@ function (http, nodeStatic) {
     function HttpServer (options) {
         options.port = options.port || 1234;
         options.caching = typeof options.caching != 'undefined' ? options.caching : 3600;
-        console.log(options.caching)
         options.rootDirectory = options.rootDirectory || './';
 
         this.server = null;

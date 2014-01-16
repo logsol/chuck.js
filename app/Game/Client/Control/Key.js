@@ -6,7 +6,6 @@
         this._activityUpdateNeeded = false;
         this._keyDownFunction = null;
         this._keyUpFunction = null;
-        this._keyFrameFunction = null;
     }
     
     Key.prototype.setActivityUpdateStatus = function (active)  {
@@ -47,14 +46,6 @@
 
     Key.prototype.getKeyUpFunction = function ()  {
         return this._keyUpFunction;
-    }
-
-    Key.prototype.setKeyFrameFunction = function (f)  {
-        this._keyFrameFunction = f;
-    }
-
-    Key.prototype.getKeyFrameFunction = function ()  {
-        return this._keyFrameFunction;
     }
 
     return Key;

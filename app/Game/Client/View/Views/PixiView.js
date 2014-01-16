@@ -130,8 +130,6 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
     };
 
     PixiView.prototype.setCameraZoom = function (z) {
-        //this.container.position.x = x;
-        //this.container.position.y = y;
         this.container.scale.x = z;
         this.container.scale.y = z;
 

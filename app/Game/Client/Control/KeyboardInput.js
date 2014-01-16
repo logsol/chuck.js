@@ -18,11 +18,10 @@ function (Key) {
         window.onkeyup = this._onKeyUp.bind(this);
     }
 
-    KeyboardInput.prototype.registerKey = function (keyCode, onKeyDown, onKeyUp, onKeyFrame) {
+    KeyboardInput.prototype.registerKey = function (keyCode, onKeyDown, onKeyUp) {
         var key = new Key();
         if(onKeyDown) key.setKeyDownFunction(onKeyDown);
         if(onKeyUp) key.setKeyUpFunction(onKeyUp);
-        if(onKeyFrame) key.setKeyFrameFunction(onKeyFrame);
         this._registry[keyCode] = key;
     }
 
@@ -46,26 +45,6 @@ function (Key) {
             var callback = key.getKeyUpFunction();
             if(callback) this._playerController[callback]();
             key.setActive(false);
-        }
-    }
-
-    /*
-     * If KeyFrameFunction was set, it is executed when key is active
-     */
-    KeyboardInput.prototype.update = function () {
-        var callback = null;
-
-        for (var keyCode in this._registry) {
-            var key = this._getKeyByKeyCode(keyCode);
-
-            if (key.getActive()) {
-                callback = key.getKeyFrameFunction();
-                if (callback) {
-                    this._playerController[callback]();
-                }
-            }
-            
-            callback = null;
         }
     }
 

@@ -26,7 +26,9 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
             up: 38,
             left: 37,
             down: 40,
-            right: 39
+            right: 39,
+
+            space: 32
         }
 
         this.init(keys);
@@ -44,6 +46,7 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
         
         this.keyboardInput.registerKey(keys.w, 'jump');
         this.keyboardInput.registerKey(keys.up, 'jump');
+        this.keyboardInput.registerKey(keys.space, 'jump');
     }
 
     PlayerController.prototype.moveLeft = function () {
@@ -77,13 +80,7 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
         Parent.prototype.handAction.call(this, options);
         NotificationCenter.trigger("sendGameCommand", "handAction", options);
     };
-
-    PlayerController.prototype.update = function () {
-        this.keyboardInput.update();
-        Parent.prototype.update.call(this);
-    }
-
-
+    
 
     return PlayerController;
 });
