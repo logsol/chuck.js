@@ -11,6 +11,7 @@ function (Settings, Box2D, CollisionDetector) {
             new Box2D.Common.Math.b2Vec2(0, Settings.BOX2D_GRAVITY),
             Settings.BOX2D_ALLOW_SLEEP
         );
+        this.world.SetWarmStarting(true);
         this.ground = null;
         this.lastStep = Date.now();
     }

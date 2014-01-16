@@ -10,7 +10,9 @@
                 display: table; 
                 width: 100%; 
                 height: 100%;
-                background: #000;
+                background: black;
+                color: white;
+                font-family: monospace;
             }
             
             #loading {
@@ -29,15 +31,40 @@
             }
 
             #canvasContainer { 
+                /*
                 text-align: center; 
                 display: table-cell; 
                 vertical-align: middle; 
+                */
                 height: 100%;
             }
 
             canvas { 
-                background: #333;  
-                margin: 10px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin-top: -200px;
+                margin-left: -300px;
+            }
+
+            :-webkit-full-screen {
+                top: 0;
+                left: 0;
+                margin: 0;
+                padding: 0;
+            }
+
+            #devtools {
+                position: absolute;
+                right: 0;
+                top: 0;
+                padding: 10px;
+                background: #222;
+            }
+
+            #devtools p {
+                padding: 5px 0 0 0;
+                margin: 0;
             }
 
         </style>

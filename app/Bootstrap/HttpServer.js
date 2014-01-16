@@ -7,7 +7,8 @@ function (http, nodeStatic) {
 
     function HttpServer (options) {
         options.port = options.port || 1234;
-        options.caching = typeof options.caching != 'undefined' ? options.caching : true;
+        options.caching = typeof options.caching != 'undefined' ? options.caching : 3600;
+        console.log(options.caching)
         options.rootDirectory = options.rootDirectory || './';
 
         this.server = null;
@@ -42,6 +43,10 @@ function (http, nodeStatic) {
 
                         case req.url == '/require.js':
                             fileServer.serveFile('./node_modules/requirejs/require.js', 200, {}, req, res);
+                            break;
+
+                        case req.url == '/screenfull.js':
+                            fileServer.serveFile('./node_modules/screenfull/dist/screenfull.js', 200, {}, req, res);
                             break;
 
                         case new RegExp(/^\/app/).test(req.url):

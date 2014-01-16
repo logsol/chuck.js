@@ -10,12 +10,16 @@ function (DomController, Settings, Exception, NotificationCenter) {
     function AbstractView () {
     	this.me = null;
         this.canvas = null;
+        this.debugMode = false;
 
         NotificationCenter.on("view/createMesh", this.createMesh, this);
         NotificationCenter.on("view/createAnimatedMesh", this.createAnimatedMesh, this);
         NotificationCenter.on("view/addMesh", this.addMesh, this);
         NotificationCenter.on("view/removeMesh", this.removeMesh, this);
         NotificationCenter.on("view/updateMesh", this.updateMesh, this);
+
+        NotificationCenter.on("view/fullscreenChange", this.onFullscreenChange, this);
+        NotificationCenter.on("view/toggleDebugMode", this.onToggleDebugMode, this);
     }
 
     AbstractView.prototype.isWebGlEnabled = function () { 
@@ -30,10 +34,6 @@ function (DomController, Settings, Exception, NotificationCenter) {
 
     	this.canvas = canvas;
         DomController.setCanvas(canvas);
-
-        if(Settings.DEBUG_MODE) {
-            DomController.createDebugCanvas();
-        }
     }
 
     AbstractView.prototype.loadPlayerMesh = function(player) {
@@ -102,7 +102,28 @@ function (DomController, Settings, Exception, NotificationCenter) {
 
     AbstractView.prototype.setCameraZoom = function (z) {
     	throw new Exception('Abstract Function setCameraZoom not overwritten ');
-    }
+    };
+
+    AbstractView.prototype.onFullscreenChange = function(isFullScreen) {
+
+        if (!isFullScreen) {
+            Settings.STAGE_WIDTH = 600;
+            Settings.STAGE_HEIGHT = 400;
+        } else {
+            // FIXME: Create FIXME meme (dumb and dumber)
+            // FIXME: don't overwrite Settings
+            Settings.STAGE_WIDTH = window.innerWidth;
+            Settings.STAGE_HEIGHT = window.innerHeight;
+        }
+    };
+
+    AbstractView.prototype.onToggleDebugMode = function(debugMode) {
+        if(debugMode) {
+            this.setCameraPosition(-Settings.STAGE_WIDTH / 2, -Settings.STAGE_HEIGHT / 2);
+        }
+
+        this.debugMode = debugMode;
+    };
 
     return AbstractView;
 });

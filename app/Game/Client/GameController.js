@@ -7,16 +7,15 @@ define([
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/RequestAnimFrame",
     "Game/Config/Settings",
-    "Lib/Vendor/Stats",
     "Game/Client/GameObjects/GameObject",
-    "Game/Client/GameObjects/Doll"
+    "Game/Client/GameObjects/Doll",
+    "Game/Client/View/DomController"
 ],
 
-function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, NotificationCenter, requestAnimFrame, Settings, Stats, GameObject, Doll) {
+function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, NotificationCenter, requestAnimFrame, Settings, GameObject, Doll, DomController) {
 
     function GameController () {
         this.view = ViewManager.createView();
-        this.initStats();
         this.me = null;
 
         Parent.call(this);
@@ -24,23 +23,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
 
     GameController.prototype = Object.create(Parent.prototype);
 
-    GameController.prototype.initStats = function() {
-        this.stats = new Stats();
-        this.stats.setMode(0);
-        document.body.appendChild(this.stats.domElement);
-        var p = document.createElement("p");
-        var button = document.createElement("button");
-        button.innerHTML = "Reset level";
-        button.onclick = function() {
-            inspector.resetLevel();
-            button.disabled = true;;
-            setTimeout(function() {
-                button.disabled = false;
-            }, 1000 * 30);
-        }
-        p.appendChild(button);
-        document.body.appendChild(p);
-    };
 
     GameController.prototype.destruct = function() {
         //destroy box2d world etc.
@@ -51,7 +33,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
     }
 
     GameController.prototype.update  = function () {
-        this.stats.begin();
+        DomController.statsBegin();
 
         requestAnimFrame(this.update.bind(this));
 
@@ -67,7 +49,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
 
         this.view.render();
 
-        this.stats.end();
+        DomController.statsEnd();
     }
 
     GameController.prototype.onWorldUpdate = function (updateData) {

@@ -2,34 +2,43 @@ define([
     "Game/Core/Physics/Engine",
     "Game/Config/Settings",
     "Game/Client/View/DomController",
-    "Lib/Vendor/Box2D"
+    "Lib/Vendor/Box2D",
+    "Lib/Utilities/NotificationCenter"
 ],
 
-function (Parent, Settings, DomController, Box2D) {
+function (Parent, Settings, DomController, Box2D, NotificationCenter) {
 
     function Engine () {
         Parent.call(this);
 
-        if(Settings.DEBUG_MODE) {
-            this.setupDebugDraw();
-        }
+        this.debugMode = false;
+
+        NotificationCenter.on("view/toggleDebugMode", this.onToggleDebugMode, this);
     }
 
     Engine.prototype = Object.create(Parent.prototype);
 
+    Engine.prototype.onToggleDebugMode = function(debugMode) {
+        this.debugMode = debugMode;
+
+        if(this.debugMode && !this.debugDraw) {
+            this.setupDebugDraw();
+        }
+    };
+
     Engine.prototype.setupDebugDraw = function () {
-        //var debugSprite = Settings.DEBUG_DRAW_CANVAS_SPRITE;
+
         var debugSprite = DomController.getDebugCanvas().getContext("2d");
 
         // set debug draw
-        var debugDraw = new Box2D.Dynamics.b2DebugDraw();
+        this.debugDraw = new Box2D.Dynamics.b2DebugDraw();
 
-        debugDraw.SetSprite(debugSprite);
-        debugDraw.SetDrawScale(Settings.RATIO);
-        debugDraw.SetFillAlpha(0.5);
-        debugDraw.SetLineThickness(1.0);
+        this.debugDraw.SetSprite(debugSprite);
+        this.debugDraw.SetDrawScale(Settings.RATIO);
+        this.debugDraw.SetFillAlpha(0.5);
+        this.debugDraw.SetLineThickness(1.0);
 
-        debugDraw.SetFlags(null
+        this.debugDraw.SetFlags(null
             | Box2D.Dynamics.b2DebugDraw.e_shapeBit 
             | Box2D.Dynamics.b2DebugDraw.e_jointBit 
             //| Box2D.Dynamics.b2DebugDraw.e_coreShapeBit
@@ -39,15 +48,15 @@ function (Parent, Settings, DomController, Box2D) {
             //| Box2D.Dynamics.b2DebugDraw.e_pairBit
         );
 
-        this.world.SetDebugDraw(debugDraw);
-        this.world.SetWarmStarting(true);
+        this.world.SetDebugDraw(this.debugDraw);
     }
-
 
     Engine.prototype.update = function () {
         Parent.prototype.update.call(this);
 
-        this.world.DrawDebugData();
+        if(this.debugMode) {
+            this.world.DrawDebugData();
+        }
     }
 
     return Engine;

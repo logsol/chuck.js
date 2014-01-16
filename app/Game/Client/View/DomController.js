@@ -1,15 +1,101 @@
 define([
-    'Game/Config/Settings'
+    'Game/Config/Settings',
+    'Lib/Utilities/NotificationCenter',
+    "Lib/Vendor/Stats",
+    "Lib/Vendor/Screenfull"
 ], 
 
-function (Settings) {
+function (Settings, NotificationCenter, Stats, Screenfull) {
 
-    var DomController = {
-        canvas: null,
-        debugCanvas: null
+    function DomController() {
+        this.canvas = null;
+        this.debugCanvas = null;
+        this.stats = null;
+        this.ping = null;
+
+        NotificationCenter.on("view/ready", this.initDevTools, this);
+    }
+
+    DomController.prototype.initDevTools = function() {
+
+        var self = this;
+
+        // create dev tools container
+        this.devToolsContainer = document.createElement("div");
+        this.devToolsContainer.id = "devtools";
+        document.body.appendChild(this.devToolsContainer);
+
+        // create Fullscreen
+        var p = document.createElement("p");
+        var button = document.createElement("button");
+        button.innerHTML = "Fullscreen";
+        button.onclick = function() {
+            if(Screenfull.enabled) {
+                Screenfull.request(self.canvas);
+            }
+        }
+        p.appendChild(button);
+        this.devToolsContainer.appendChild(p);
+
+        window.onresize = function() {
+            if(Screenfull.enabled) {
+                NotificationCenter.trigger("view/fullscreenChange", Screenfull.isFullscreen);
+            }
+        }
+
+        // create Ping: container
+        this.ping = document.createElement("span");
+        this.devToolsContainer.appendChild(this.ping);
+
+        // create FPS stats
+        this.stats = new Stats();
+        this.stats.setMode(0);
+        this.devToolsContainer.appendChild(this.stats.domElement);
+        
+        // create Reset level
+        p = document.createElement("p");
+        button = document.createElement("button");
+        button.innerHTML = "Reset level";
+        button.onclick = function() {
+            inspector.resetLevel();
+            button.disabled = true;;
+            setTimeout(function() {
+                button.disabled = false;
+            }, 1000 * 30);
+        }
+        p.appendChild(button);
+        this.devToolsContainer.appendChild(p);
+
+        // create debug mode
+        var label = document.createElement("label");
+        var checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.onclick = function(e) {
+            NotificationCenter.trigger("view/toggleDebugMode", e.target.checked);
+            self.getDebugCanvas().style.display = e.target.checked ? "" : "none";
+        }
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode("Debug"));
+        this.devToolsContainer.appendChild(label);
     };
 
-    DomController.getCanvasContainer = function () {
+    DomController.prototype.statsBegin = function() {
+        if(this.stats) {
+            this.stats.begin();
+        }
+    };
+
+    DomController.prototype.statsEnd = function() {
+        if(this.stats) {
+            this.stats.end();
+        }
+    };
+
+    DomController.prototype.setPing = function(ping) {
+        this.ping.innerHTML = "Ping: " + ping;
+    };
+
+    DomController.prototype.getCanvasContainer = function () {
         var container = document.getElementById(Settings.CANVAS_DOM_ID);
 
         if(container) {
@@ -19,38 +105,35 @@ function (Settings) {
         }
     }
 
-    DomController.getCanvas = function () {
-        return DomController.canvas;
+    DomController.prototype.getCanvas = function () {
+        return this.canvas;
     }
 
-    DomController.setCanvas = function (canvas) {
+    DomController.prototype.setCanvas = function (canvas) {
         
-        var container = DomController.getCanvasContainer();
-        if(DomController.canvas) {
-            container.removeChild(DomController.canvas);
+        var container = this.getCanvasContainer();
+        if(this.canvas) {
+            container.removeChild(this.canvas);
         }
 
-        DomController.canvas = canvas;
+        this.canvas = canvas;
         container.appendChild(canvas);
     }
 
-    DomController.getDebugCanvas = function () {
-        return DomController.debugCanvas;
-    }
+    DomController.prototype.getDebugCanvas = function () {
 
-    DomController.createDebugCanvas = function () {
-        var container = DomController.getCanvasContainer();
-        if(DomController.debugCanvas) {
-            container.removeChild(DomController.debugCanvas);
+        if(!this.debugCanvas) {
+            var canvas = document.createElement('canvas');
+            canvas.width = Settings.STAGE_WIDTH;
+            canvas.height = Settings.STAGE_HEIGHT;
+            this.debugCanvas = canvas;
+            this.getCanvasContainer().appendChild(canvas);
         }
 
-        var canvas = document.createElement('canvas');
-        canvas.width = Settings.STAGE_WIDTH;
-        canvas.height = Settings.STAGE_HEIGHT;
-        DomController.debugCanvas = canvas;
-        container.appendChild(canvas);
+        return this.debugCanvas;
     }
 
-    return DomController;
+
+    return new DomController();
     
 });

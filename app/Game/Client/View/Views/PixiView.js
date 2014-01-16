@@ -2,10 +2,11 @@ define([
     "Game/Client/View/Views/AbstractView",
     "Game/Client/View/DomController", 
     "Lib/Vendor/Pixi", 
-    "Game/Config/Settings"
+    "Game/Config/Settings",
+    "Lib/Utilities/NotificationCenter"
 ], 
 
-function (Parent, DomController, PIXI, Settings) {
+function (Parent, DomController, PIXI, Settings, NotificationCenter) {
     
     function PixiView () {
 
@@ -104,14 +105,16 @@ function (Parent, DomController, PIXI, Settings) {
     }
 
     PixiView.prototype.calculateCameraPosition = function() {
+
         var reference = this.me.getPosition();
         var pos = {};
 
         pos.x = -reference.x;
         pos.y = reference.y;
 
-        pos.x = pos.x * Settings.RATIO;
-        pos.y = -(pos.y * Settings.RATIO);
+        var zoom = this.container.scale.x;
+        pos.x = pos.x * Settings.RATIO * zoom;
+        pos.y = -(pos.y * Settings.RATIO) * zoom;
 
         pos.x -= this.me.playerController.xyInput.x * Settings.STAGE_WIDTH / 4;
         pos.y += this.me.playerController.xyInput.y * Settings.STAGE_HEIGHT / 4;
@@ -120,13 +123,30 @@ function (Parent, DomController, PIXI, Settings) {
     };
 
     PixiView.prototype.setCameraPosition = function (x, y) {
-        this.container.position.x = x + Settings.STAGE_WIDTH / 2;
-        this.container.position.y = y + Settings.STAGE_HEIGHT / 2;
+        if(!this.debugMode) {
+            this.container.position.x = x + Settings.STAGE_WIDTH / 2;
+            this.container.position.y = y + Settings.STAGE_HEIGHT / 2;
+        }
     };
 
     PixiView.prototype.setCameraZoom = function (z) {
         //this.container.position.x = x;
-        //this.container.position.y = y; 
+        //this.container.position.y = y;
+        this.container.scale.x = z;
+        this.container.scale.y = z;
+
+    };
+
+    PixiView.prototype.onFullscreenChange = function(isFullScreen) {
+        Parent.prototype.onFullscreenChange.call(this, isFullScreen);
+
+        if(isFullScreen) {
+            this.renderer.resize(window.innerWidth, window.innerHeight);
+            this.setCameraZoom(window.innerWidth / 600);
+        } else {
+            this.renderer.resize(600, 400);
+            this.setCameraZoom(1);
+        }
     };
 
     return PixiView;

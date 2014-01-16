@@ -3,10 +3,11 @@ define([
     "Game/Client/GameController",
     "Game/Client/User",
     "Lib/Utilities/NotificationCenter",
-    "Game/Config/Settings"
+    "Game/Config/Settings",
+    "Game/Client/View/DomController"
 ], 
 
-function (ProtocolHelper, GameController, User, NotificationCenter, Settings) {
+function (ProtocolHelper, GameController, User, NotificationCenter, Settings, DomController) {
 
     function Networker (socketLink) {
         this.socketLink = socketLink;
@@ -74,10 +75,7 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings) {
     }
 
     Networker.prototype.initPing = function() {
-        this.pingDOMElement = document.createElement("span");
-        this.pingDOMElement.style.color = "white";
-        this.pingDOMElement.style.fontFamily = "monospace";
-        document.body.appendChild(this.pingDOMElement);
+
         this.ping();
     };
 
@@ -121,7 +119,8 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings) {
     }
 
     Networker.prototype.onPong = function(timestamp) {
-        this.pingDOMElement.innerHTML = "Ping: " + (Date.now() - parseInt(timestamp, 10));
+        var ping = (Date.now() - parseInt(timestamp, 10));
+        DomController.setPing(ping);
         setTimeout(this.ping.bind(this), 1000);
     };
 

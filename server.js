@@ -16,7 +16,7 @@ var port = process.argv[2]
 var options = {
     port: port,
     rootDirectory: './',
-    caching: false,
+    caching: 0,
     logLevel: process.argv[3] || 0
 };
 

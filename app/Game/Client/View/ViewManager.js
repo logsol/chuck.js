@@ -4,9 +4,10 @@ define([
     "Game/Client/View/Views/AbstractView",
 	//"Game/Client/View/Views/ThreeView",
 	"Game/Client/View/Views/PixiView",
+    "Lib/Utilities/NotificationCenter"
 ],
  
-function (Settings, Exception, AbstractView, PixiView) {
+function (Settings, Exception, AbstractView, PixiView, NotificationCenter) {
  
     var ViewManager = {};
 
@@ -22,7 +23,7 @@ function (Settings, Exception, AbstractView, PixiView) {
             default:
                 throw new Exception("A view called", Settings.VIEW_CONTROLLER, "has not been (fully) implemented.");
         }
-/*
+
         if(!(view instanceof AbstractView)) {
             throw new Exception("The view", Settings.VIEW_CONTROLLER + 'View', "must extend AbstractView!");
         }
@@ -34,7 +35,9 @@ function (Settings, Exception, AbstractView, PixiView) {
         if(!(view.canvas instanceof HTMLCanvasElement)) {
             throw new Exception("In the view", Settings.VIEW_CONTROLLER + 'View', "this.setCanvas(canvas) has not been called with a valid HTMLCanvasElement!");
         }
-*/
+
+        NotificationCenter.trigger("view/ready", view);
+
         return view;
     }
  
