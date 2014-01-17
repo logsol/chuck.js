@@ -2047,10 +2047,10 @@ PIXI.MovieClip.prototype.constructor = PIXI.MovieClip;
 * @readOnly
 */
 Object.defineProperty( PIXI.MovieClip.prototype, 'totalFrames', {
-	get: function() {
+    get: function() {
 
-		return this.textures.length;
-	}
+        return this.textures.length;
+    }
 });
 
 
@@ -3685,11 +3685,11 @@ PIXI.EventTarget = function () {
 
     };
 
-	this.removeAllEventListeners = function( type ) {
-		var a = listeners[type];
-		if (a)
-			a.length = 0;
-	};
+    this.removeAllEventListeners = function( type ) {
+        var a = listeners[type];
+        if (a)
+            a.length = 0;
+    };
 };
 
 /**

@@ -17,6 +17,7 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
         this.stage = null;
         this.container = null;
         this.init();
+        this.pixi = PIXI;
     }
 
     PixiView.prototype = Object.create(Parent.prototype);
@@ -25,13 +26,24 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
 
         if(Settings.USE_WEBGL) {
             this.renderer = new PIXI.WebGLRenderer(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT);
+            console.log('WebGLRenderer')
         } else {
             this.renderer = new PIXI.CanvasRenderer(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT);
+            console.log('CanvasRenderer')
         }
 
-        this.stage = stage = new PIXI.Stage(0x333333);
-        
+        this.stage = new PIXI.Stage(0x333333);
+
         this.initCamera();
+
+        /*
+        var blurFilter = new PIXI.BlurFilter();
+        blurFilter.blurX = 12;
+        blurFilter.blurY = 0;
+        var grayFilter = new PIXI.GrayFilter();
+        grayFilter.gray = .6;
+        this.stage.filters = [grayFilter];
+        */
 
         this.setCanvas(this.renderer.view);
     }
@@ -106,6 +118,7 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
     }
 
     PixiView.prototype.initCamera = function () {
+
         this.container = new PIXI.DisplayObjectContainer();
         this.stage.addChild(this.container);
     }
