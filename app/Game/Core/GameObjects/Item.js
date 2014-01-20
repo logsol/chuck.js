@@ -60,13 +60,9 @@ function (Parent, Box2D, Settings) {
 
         fixtureDef.isSensor = false;
 
-        /*
         fixtureDef.userData = {
-            onCollisionChange: function(isColliding, fixture) {
-                self.onFixtureWithinReach(isColliding, "right", fixture);
-            }
+            onCollisionChange: this.onCollisionChange.bind(this)
         }
-        */
 
         this.body.CreateFixture(fixtureDef);
     }
@@ -82,6 +78,10 @@ function (Parent, Box2D, Settings) {
     };
 
     Item.prototype.beingReleased = function(player) {
+        // overwrite if necessary
+    };
+
+    Item.prototype.onCollisionChange = function(isColliding, fixture, info) {
         // overwrite if necessary
     };
  

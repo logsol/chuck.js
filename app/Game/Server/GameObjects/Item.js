@@ -54,6 +54,34 @@ function (Parent) {
         }
     };
 
+	Item.prototype.onCollisionChange = function(isColliding, fixture) {
+
+		if(isColliding) {
+			var otherBody = fixture.GetBody();
+			if(otherBody) {
+				var otherItem = otherBody.GetUserData();
+				if(otherItem instanceof Item) {
+					if(!this.lastMoved && !otherItem.lastMoved) return;
+
+					if(this.lastMoved && otherItem.lastMoved) {
+						if(this.lastMoved.timestamp > otherItem.lastMoved.timestamp) {
+							this.setLastMovedBy(otherItem.lastMoved.player);
+						} else {
+							otherItem.setLastMovedBy(this.lastMoved.player);
+						}
+					} else {
+						if(!this.lastMoved) {
+							this.setLastMovedBy(otherItem.lastMoved.player);
+						} else {
+							otherItem.setLastMovedBy(this.lastMoved.player);
+						}
+					}
+				}
+			}
+		}
+	}
+
+
     return Item;
  
 });
