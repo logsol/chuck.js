@@ -7,7 +7,7 @@ define([
  
 function (Parent, Settings, NotificationCenter, Exception) {
  
-    function Doll(physicsEngine, playerId) {      
+    function Doll(physicsEngine, uid, player) {      
         this.animationDef = {
             "stand": [1,1],
             "walk": [2,28],
@@ -23,7 +23,7 @@ function (Parent, Settings, NotificationCenter, Exception) {
         this.animatedMeshes = {};
         this.headMesh = null;
 
-        Parent.call(this, physicsEngine, playerId);
+        Parent.call(this, physicsEngine, uid, player);
     }
 
     Doll.prototype = Object.create(Parent.prototype);

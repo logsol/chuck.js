@@ -27,6 +27,8 @@ define({
     FLY_SPEED: 6.2,
     JUMP_SPEED: 20,
     MAX_THROW_FORCE: 18,
+    MAX_THROW_ANGULAR_VELOCITY: 8,
+    MAX_RUNNING_WEIGHT: 9,
 
     // restitution: bouncyness, friction: rubbing, density: mass
     TILE_FRICTION: 0.99,

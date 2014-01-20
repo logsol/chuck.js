@@ -8,8 +8,9 @@ define([
 
 function (Parent, Box2D, Settings, CollisionDetector, Item) {
 
-    function Doll (physicsEngine, uid) {
+    function Doll (physicsEngine, uid, player) {
 
+        this.player = player;
         this.height = 43;
         this.width = 9;
         this.headHeight = 12;
@@ -255,7 +256,14 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
         }
     };
 
-    Doll.prototype.grab = function(x, y) {
+    Doll.prototype.grab = function(item) {
+
+        this.holdingItem = item;
+        this.positionHoldingItem();
+
+
+
+        /*
         var item = null;
         if (this.lookDirection == -1) {
             item = this.reachableItems.left.shift();
@@ -272,6 +280,7 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
 
 
         return item;
+        */
     };
 
     Doll.prototype.positionHoldingItem = function() {
@@ -312,7 +321,7 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
             ),
             body.GetLocalCenter()
         );
-        body.SetAngularVelocity(8 * x);
+        body.SetAngularVelocity(Settings.MAX_THROW_ANGULAR_VELOCITY * x); // 
     };
 
     Doll.prototype.onFootSensorDetection = function(isColliding, fixture) {

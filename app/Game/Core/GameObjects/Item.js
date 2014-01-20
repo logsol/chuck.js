@@ -12,6 +12,7 @@ function (Parent, Box2D, Settings) {
         this.createFixture();
         this.body.ResetMassData();
         this.flipDirection = 1;
+        this.heldByPlayers = [];
     }
 
     Item.prototype = Object.create(Parent.prototype);
@@ -66,6 +67,31 @@ function (Parent, Box2D, Settings) {
         this.flipDirection = direction;
 
         // FIXME: implement body flip if necessary
+    };
+
+    Item.prototype.isGrabbingAllowed = function(player) {
+        return this.heldByPlayers.length == 0;
+    };
+
+    Item.prototype.beingGrabbed = function(player) {
+        if(this.isGrabbingAllowed(player)) {
+            this.heldByPlayers.push(player);
+            return true;
+        }
+        return false;
+    };
+
+    Item.prototype.isReleasingAllowed = function(player) {
+        return true;
+    };
+
+    Item.prototype.beingReleased = function(player) {
+        if(this.isReleasingAllowed(player)) {
+            var pos = this.heldByPlayers.indexOf(player);
+            if(pos >= 0) {
+                this.heldByPlayers.splice(pos, 1);            
+            }            
+        }
     };
  
     return Item;

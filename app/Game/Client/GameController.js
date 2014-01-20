@@ -93,6 +93,21 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
         this.gameObjects.animated.push(player.getDoll());
     }
 
+    GameController.prototype.onHandActionResponse = function(options) {
+        var player = this.players[options.playerId];
+
+        var item = null;
+        for (var i = 0; i < this.gameObjects.animated.length; i++) {
+            var currentItem = this.gameObjects.animated[i];
+            if(currentItem.uid == options.itemUid) {
+                item = currentItem;
+                break;
+            }
+        };
+
+        player.handAction(options.x, options.y, options.isHolding, item);
+    };
+
     GameController.prototype.loadLevel = function (path) {
         Parent.prototype.loadLevel.call(this, path);
     }

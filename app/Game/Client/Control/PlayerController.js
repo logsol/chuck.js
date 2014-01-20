@@ -15,7 +15,7 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
         this.xyInput = new MouseInput(this);
 
         NotificationCenter.on("input/onXyChange", this.setXY, this);
-        NotificationCenter.on("input/onHandAction", this.handAction, this);
+        NotificationCenter.on("input/onHandActionRequest", this.handActionRequest, this);
 
         var keys = {
             w:87,
@@ -75,12 +75,10 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
         NotificationCenter.trigger('sendGameCommand', 'lookAt', options);
     };
 
-    PlayerController.prototype.handAction = function(x, y) {
+    PlayerController.prototype.handActionRequest = function(x, y) {
         var options = {x:x, y:y};
-        Parent.prototype.handAction.call(this, options);
-        NotificationCenter.trigger("sendGameCommand", "handAction", options);
-    };
-    
+        NotificationCenter.trigger("sendGameCommand", "handActionRequest", options);
+    };    
 
     return PlayerController;
 });

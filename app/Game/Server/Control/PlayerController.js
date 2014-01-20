@@ -31,6 +31,10 @@ function(Parent, NotificationCenter, Parser) {
         }
     };
 
+    PlayerController.prototype.handActionRequest = function(options) {
+        if (options) this.player.handActionRequest(options.x, options.y);
+    };
+
     return PlayerController;
  
 });

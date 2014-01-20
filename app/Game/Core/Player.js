@@ -20,7 +20,7 @@ function (Doll, Settings) {
     };
 
     Player.prototype.spawn = function (x, y) {
-        this.doll = new Doll(this.physicsEngine, "doll-" + this.id);
+        this.doll = new Doll(this.physicsEngine, "doll-" + this.id, this);
         this.doll.spawn(x, y);
         this.isSpawned = true;
     }
@@ -52,17 +52,21 @@ function (Doll, Settings) {
         if(this.doll) this.doll.lookAt(x, y);
     }
 
-    Player.prototype.handAction = function(x, y) {
+    Player.prototype.handAction = function(x, y, isHolding, item) {
         
-        if (this.holdingItem) {
+        if (isHolding) {
             // throw
-            this.doll.throw(this.holdingItem, x, y);
-            this.holdingItem = null;
+            if(item.isReleasingAllowed()) {
+                item.beingReleased(this);
+                this.doll.throw(item, x, y);
+                this.holdingItem = null;                
+            }
         } else {
             // take
-            var item = this.doll.grab(x, y);
-            if(item) {
-                this.holdingItem = item;
+            if(item.isGrabbingAllowed()) {
+                item.beingGrabbed(this);
+                this.doll.grab(item);
+                this.holdingItem = item;                
             }
         }
     };
