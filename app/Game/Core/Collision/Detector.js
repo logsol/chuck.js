@@ -7,9 +7,9 @@ function (Box2D) {
     function Detector () { // FIXME evtl.bind(this) ?
         this.listener = new Box2D.Dynamics.b2ContactListener();
         this.listener.chuckDetector = this;
-        this.listener.BeginContact = this.BeginContact;
-        //this.listener.PostSolve = this.PostSolve;
-        this.listener.EndContact = this.EndContact;
+        this.listener.BeginContact = this.beginContact;
+        //this.listener.PostSolve = this.postSolve;
+        this.listener.EndContact = this.endContact;
     }
 
     Detector.IDENTIFIER = {
@@ -34,14 +34,14 @@ function (Box2D) {
 
     /** Extension **/
 
-    Detector.prototype.BeginContact = function (point) {
+    Detector.prototype.beginContact = function (point) {
         this.chuckDetector.onCollisionChange(point, true);
     }
 
-    Detector.prototype.PostSolve = function (point, impulse) {
+    Detector.prototype.postSolve = function (point, impulse) {
     }
 
-    Detector.prototype.EndContact = function (point) {
+    Detector.prototype.endContact = function (point) {
         this.chuckDetector.onCollisionChange(point, false);
     }
 

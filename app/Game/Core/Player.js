@@ -52,23 +52,16 @@ function (Doll, Settings) {
         if(this.doll) this.doll.lookAt(x, y);
     }
 
-    Player.prototype.handAction = function(x, y, isHolding, item) {
-        
-        if (isHolding) {
-            // throw
-            if(item.isReleasingAllowed()) {
-                item.beingReleased(this);
-                this.doll.throw(item, x, y);
-                this.holdingItem = null;                
-            }
-        } else {
-            // take
-            if(item.isGrabbingAllowed()) {
-                item.beingGrabbed(this);
-                this.doll.grab(item);
-                this.holdingItem = item;                
-            }
-        }
+    Player.prototype.grab = function(item) {
+        item.beingGrabbed(this);
+        this.doll.grab(item);
+        this.holdingItem = item;  
+    };
+
+    Player.prototype.throw = function(x, y, item) {
+        item.beingReleased(this);
+        this.doll.throw(item, x, y);
+        this.holdingItem = null; 
     };
 
     Player.prototype.update = function () {

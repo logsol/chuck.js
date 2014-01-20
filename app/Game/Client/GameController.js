@@ -105,7 +105,16 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
             }
         };
 
-        player.handAction(options.x, options.y, options.isHolding, item);
+        if(item) {
+            if(options.action == "throw") {
+                player.throw(options.x, options.y, item);
+            } else if(options.action == "grab") {
+                player.grab(item);
+            }            
+        } else {
+            console.warn("Item for joint can not be found locally.")
+        }
+
     };
 
     GameController.prototype.loadLevel = function (path) {

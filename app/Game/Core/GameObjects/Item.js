@@ -12,7 +12,6 @@ function (Parent, Box2D, Settings) {
         this.createFixture();
         this.body.ResetMassData();
         this.flipDirection = 1;
-        this.heldByPlayers = [];
     }
 
     Item.prototype = Object.create(Parent.prototype);
@@ -29,6 +28,7 @@ function (Parent, Box2D, Settings) {
     }
 
     Item.prototype.createFixture = function () {
+        var self = this;
 
         var itemShape;
         var w = this.options.width / Settings.RATIO;
@@ -60,6 +60,14 @@ function (Parent, Box2D, Settings) {
 
         fixtureDef.isSensor = false;
 
+        /*
+        fixtureDef.userData = {
+            onCollisionChange: function(isColliding, fixture) {
+                self.onFixtureWithinReach(isColliding, "right", fixture);
+            }
+        }
+        */
+
         this.body.CreateFixture(fixtureDef);
     }
 
@@ -69,29 +77,12 @@ function (Parent, Box2D, Settings) {
         // FIXME: implement body flip if necessary
     };
 
-    Item.prototype.isGrabbingAllowed = function(player) {
-        return this.heldByPlayers.length == 0;
-    };
-
     Item.prototype.beingGrabbed = function(player) {
-        if(this.isGrabbingAllowed(player)) {
-            this.heldByPlayers.push(player);
-            return true;
-        }
-        return false;
-    };
-
-    Item.prototype.isReleasingAllowed = function(player) {
-        return true;
+        // overwrite if necessary
     };
 
     Item.prototype.beingReleased = function(player) {
-        if(this.isReleasingAllowed(player)) {
-            var pos = this.heldByPlayers.indexOf(player);
-            if(pos >= 0) {
-                this.heldByPlayers.splice(pos, 1);            
-            }            
-        }
+        // overwrite if necessary
     };
  
     return Item;

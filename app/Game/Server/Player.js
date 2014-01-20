@@ -23,22 +23,41 @@ function (Parent, NotificationCenter) {
         }
 
         if(item) {
-
 	        this.handAction(x, y, isHolding, item);
-
-			var message = {
-	            handActionResponse: {
-	                playerId: this.id,
-	                isHolding: isHolding,
-	                itemUid: item.uid,
-	                x: x, 
-	                y: y
-	            }
-	        };
-	        
-	        NotificationCenter.trigger("sendControlCommandToAllUsers", "gameCommand", message);
         }
     }
+
+    Player.prototype.handAction = function(x, y, isHolding, item) {
+
+        var options = {
+            playerId: this.id,
+            itemUid: item.uid            
+        }
+
+        var message = {
+            handActionResponse: options
+        }
+        
+        if (isHolding) {
+            // throw
+            if(item.isReleasingAllowed()) {
+                this.throw(x, y, item);
+
+                options.action = "throw";
+                options.x = x;
+                options.y = y;                
+                NotificationCenter.trigger("sendControlCommandToAllUsers", "gameCommand", message);
+            }
+        } else {
+            // grab
+            if(item.isGrabbingAllowed()) {
+                this.grab(item); 
+
+                options.action = "grab";
+                NotificationCenter.trigger("sendControlCommandToAllUsers", "gameCommand", message);              
+            }
+        }
+    };
  
     return Player;
  
