@@ -25,7 +25,7 @@ define({
     WALK_SPEED: 4,
     RUN_SPEED: 8,
     FLY_SPEED: 6.2,
-    JUMP_SPEED: 70,
+    JUMP_SPEED: 20,
     MAX_THROW_FORCE: 18,
 
     // restitution: bouncyness, friction: rubbing, density: mass
