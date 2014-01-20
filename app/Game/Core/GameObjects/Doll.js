@@ -180,14 +180,21 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
 
         this.moveDirection = direction;
         var speed;
+        var isHoldingHeavyItem = this.holdingItem && this.holdingItem.options.weight > Settings.MAX_RUNNING_WEIGHT;
         
         switch(true) {
-            case direction == this.lookDirection && this.isStanding():
+            case direction == this.lookDirection && this.isStanding() && !isHoldingHeavyItem:
                 speed = Settings.RUN_SPEED;
                 break;
 
             case !this.isStanding():
                 speed = Settings.FLY_SPEED;
+                
+                if(isHoldingHeavyItem) {
+                    if(Settings.FLY_SPEED > Settings.WALK_SPEED) {
+                        speed = Settings.WALK_SPEED;
+                    }
+                }
                 break;
 
             default:
@@ -202,7 +209,13 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
 
         if(this.isStanding()) {
             if(this.moveDirection == this.lookDirection) {
-                this.setActionState("run");
+
+                if(isHoldingHeavyItem) {
+                    this.setActionState("walk");
+                } else {
+                    this.setActionState("run");
+                }
+            
             } else {
                 this.setActionState("walkback");
             }
