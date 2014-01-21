@@ -60,6 +60,10 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
         headShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0, -(this.height - (this.width / 2)) / Settings.RATIO));
         fixtureDef.shape = headShape;
         fixtureDef.isSensor = false;
+        fixtureDef.userData = {
+            onCollisionChange: this.onImpact.bind(this)
+        }
+
         this.body.CreateFixture(fixtureDef);
 
         var bodyShape = new Box2D.Collision.Shapes.b2PolygonShape();
@@ -270,30 +274,8 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
     };
 
     Doll.prototype.grab = function(item) {
-
         this.holdingItem = item;
         this.positionHoldingItem();
-
-
-
-        /*
-        var item = null;
-        if (this.lookDirection == -1) {
-            item = this.reachableItems.left.shift();
-        } else {
-            item = this.reachableItems.right.shift();
-        }
-
-        if(item) {
-
-            this.holdingItem = item;
-
-            this.positionHoldingItem();            
-        }
-
-
-        return item;
-        */
     };
 
     Doll.prototype.positionHoldingItem = function() {
@@ -345,6 +327,10 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
             this.setStanding(true);
         }
     }
+
+    Doll.prototype.onImpact = function(isColliding, fixture) {
+        // overwrite if necessary
+    };
 
     Doll.prototype.onFixtureWithinReach = function(isColliding, side, fixture) {
         var item = fixture.GetBody().GetUserData();

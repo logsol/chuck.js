@@ -1,10 +1,11 @@
 define([
     "Game/Config/Settings",
     "Lib/Vendor/Box2D",
-    "Game/" + GLOBALS.context + "/Collision/Detector"
+    "Game/" + GLOBALS.context + "/Collision/Detector",
+    "Lib/Utilities/NotificationCenter"
 ],
 
-function (Settings, Box2D, CollisionDetector) {
+function (Settings, Box2D, CollisionDetector, NotificationCenter) {
 
     function Engine () {
         this.world = new Box2D.Dynamics.b2World(
@@ -14,6 +15,9 @@ function (Settings, Box2D, CollisionDetector) {
         this.world.SetWarmStarting(true);
         this.ground = null;
         this.lastStep = Date.now();
+        this.worldQueue = [];
+
+        NotificationCenter.on("engine/addToWorldQueue", this.addToWorldQueue, this);
     }
 
     Engine.prototype.getWorld = function () {
@@ -24,9 +28,9 @@ function (Settings, Box2D, CollisionDetector) {
         return this.ground;
     }
 
-    Engine.prototype.setCollisionDetector = function (player) {
+    Engine.prototype.setCollisionDetector = function () {
         
-        var detector = new CollisionDetector(player); 
+        var detector = new CollisionDetector(); 
         this.world.SetContactListener(detector.getListener());
     }
 
@@ -36,12 +40,26 @@ function (Settings, Box2D, CollisionDetector) {
         return body;
     }
 
+    Engine.prototype.addToWorldQueue = function(callback) {
+        this.worldQueue.push(callback);
+    };
+
+    Engine.prototype.processWorldQueue = function() {
+        for (var i = 0; i < this.worldQueue.length; i++) {
+            this.worldQueue[i]();
+        };
+
+        this.worldQueue = [];
+    };
+
     Engine.prototype.update = function () {
         var stepLength = (Date.now() - this.lastStep) / 1000;
         this.world.Step(stepLength, Settings.BOX2D_VELOCITY_ITERATIONS, Settings.BOX2D_POSITION_ITERATIONS);
         this.lastStep = Date.now();
         this.world.ClearForces();
+        this.processWorldQueue();
     }
+
 
     return Engine;
 });

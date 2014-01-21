@@ -4,17 +4,11 @@ define([
 
 function (Box2D) {
 
-    function Detector () { // FIXME evtl.bind(this) ?
+    function Detector () {
         this.listener = new Box2D.Dynamics.b2ContactListener();
-        this.listener.chuckDetector = this;
-        this.listener.BeginContact = this.beginContact;
-        //this.listener.PostSolve = this.postSolve;
-        this.listener.EndContact = this.endContact;
-    }
-
-    Detector.IDENTIFIER = {
-        TILE: "tile",
-        PLAYER: "player"
+        this.listener.BeginContact = this.beginContact.bind(this);
+        //this.listener.PostSolve = this.postSolve.bind(this);
+        this.listener.EndContact = this.endContact.bind(this);
     }
 
     Detector.prototype.getListener = function () {
@@ -27,7 +21,9 @@ function (Box2D) {
 
         if (userDataA && userDataA.onCollisionChange) {
             userDataA.onCollisionChange(isColliding, point.GetFixtureB());
-        } else if (userDataB && userDataB.onCollisionChange) {
+        } 
+
+        if (userDataB && userDataB.onCollisionChange) {
             userDataB.onCollisionChange(isColliding, point.GetFixtureA());
         }
     }
@@ -35,14 +31,24 @@ function (Box2D) {
     /** Extension **/
 
     Detector.prototype.beginContact = function (point) {
-        this.chuckDetector.onCollisionChange(point, true);
+        this.onCollisionChange(point, true);
     }
 
+/*
     Detector.prototype.postSolve = function (point, impulse) {
+        var userDataA = point.GetFixtureA().GetUserData();
+        var userDataB = point.GetFixtureB().GetUserData();
+
+        if (userDataA && userDataA.onImpulse) {
+            userDataA.onImpulse(impulse, point.GetFixtureB());
+        } else if (userDataB && userDataB.onImpulse) {
+            userDataB.onImpulse(impulse, point.GetFixtureA());
+        }
     }
+*/
 
     Detector.prototype.endContact = function (point) {
-        this.chuckDetector.onCollisionChange(point, false);
+        this.onCollisionChange(point, false);
     }
 
     return Detector;

@@ -23,6 +23,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         NotificationCenter.on('user/joined', this.userJoined, this);
         NotificationCenter.on('user/left', this.userLeft, this); // FIXME: refactor this.userLeft -> this.onUserLeft, even in core and client
         NotificationCenter.on('user/resetLevel', this.onResetLevel, this);
+        NotificationCenter.on('player/killed', this.spawnPlayer, this);
 
         console.checkpoint('starting game controller for channel ' + channel.name);
     }

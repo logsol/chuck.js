@@ -58,6 +58,15 @@ function (Parent, NotificationCenter) {
             }
         }
     };
+
+    Player.prototype.addDamage = function(damage, enemy) {
+        this.stats.health -= damage;
+        if(this.stats.health <= 0) {
+            this.stats.deaths++;
+            enemy.stats.kills++;
+            this.kill();
+        }
+    };
  
     return Player;
  

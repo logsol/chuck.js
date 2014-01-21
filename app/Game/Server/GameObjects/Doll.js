@@ -1,8 +1,11 @@
 define([
-	"Game/Core/GameObjects/Doll"
+	"Game/Core/GameObjects/Doll",
+    "Game/Server/GameObjects/Item",
+    "Lib/Vendor/Box2D",
+    "Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent) {
+function (Parent, Item, Box2D, NotificationCenter) {
  
     function Doll(physicsEngine, uid, player) {
     	Parent.call(this, physicsEngine, uid, player);
@@ -25,6 +28,46 @@ function (Parent) {
         	return findItem(this.reachableItems.left);
         } else {
         	return findItem(this.reachableItems.right);
+        }
+    }
+
+    Doll.prototype.onImpact = function(isColliding, fixture) {
+        var self = this;
+
+        Parent.prototype.onImpact.call(this, isColliding, fixture);
+
+        if(isColliding) {
+            var otherBody = fixture.GetBody();
+            if(otherBody) {
+                var item = otherBody.GetUserData();
+                if(item instanceof Item) {
+                    var itemVelocity = item.body.GetLinearVelocity();
+                    var itemMass = item.body.GetMass();
+
+                    var ownVelocity = this.body.GetLinearVelocity();
+
+                    var b2Math = Box2D.Common.Math.b2Math;
+
+                    var absItemVelocity = b2Math.AbsV(itemVelocity)
+                    var max = 1;
+                    
+                    if(absItemVelocity.x > max || absItemVelocity.y > max) {
+                        if(item.lastMoved && item.lastMoved.player != this.player) {
+                            var damage = b2Math.SubtractVV(itemVelocity, ownVelocity);
+                            damage.Abs();
+                            damage.Multiply(itemMass);
+
+                            var callback = function() {
+                                self.player.addDamage(damage.Length() * 2, item.lastMoved.player);
+                            }
+
+                            NotificationCenter.trigger("engine/addToWorldQueue", callback)
+                        }
+                    }
+
+                    item.setLastMovedBy(this.player);
+                }
+            }
         }
     }
  

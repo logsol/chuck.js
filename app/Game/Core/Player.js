@@ -1,12 +1,19 @@
 define([
     "Game/" + GLOBALS.context + "/GameObjects/Doll",
-    "Game/Config/Settings"
+    "Game/Config/Settings",
+    "Lib/Utilities/NotificationCenter"
 ],
 
 
-function (Doll, Settings) {
+function (Doll, Settings, NotificationCenter) {
 
     function Player (id, physicsEngine) {
+        this.stats = {
+            health: 100,
+            deaths: 0,
+            kills: 0
+        }
+
         this.physicsEngine = physicsEngine;
         this.playerController = null;
         this.doll;
@@ -20,6 +27,9 @@ function (Doll, Settings) {
     };
 
     Player.prototype.spawn = function (x, y) {
+        if(this.doll) {
+            this.doll.destroy();
+        }
         this.doll = new Doll(this.physicsEngine, "doll-" + this.id, this);
         this.doll.spawn(x, y);
         this.isSpawned = true;
@@ -62,6 +72,10 @@ function (Doll, Settings) {
         item.beingReleased(this);
         this.doll.throw(item, x, y);
         this.holdingItem = null; 
+    };
+
+    Player.prototype.kill = function(killedBy) {
+        NotificationCenter.trigger("player/killed", this);
     };
 
     Player.prototype.update = function () {
