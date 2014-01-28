@@ -16,10 +16,12 @@ define([
         this.gameObjects = gameObjects;
     }
 
-    Level.prototype.loadLevelInToEngine = function () {
-        this.loadLevelObjectFromPath(this.path);
-        this.createTiles();
-        this.createItems();
+    Level.prototype.loadLevelInToEngine = function (callback) {
+        this.loadLevelObjectFromPath(this.path, function(levelData){
+            this.createTiles(levelData);
+            this.createItems(levelData);
+            callback();
+        });
     }
 
     Level.prototype.destroy = function () {
@@ -33,22 +35,26 @@ define([
 
     // Private
 
-    Level.prototype.createTiles = function () {
-        if (!this.levelObject || !this.levelObject.tiles || this.levelObject.tiles.length < 1) {
+    Level.prototype.createTiles = function (levelData) {
+
+        if (!levelData || !levelData.tiles || levelData.tiles.length < 1) {
             throw "Level: Can't create physic tiles, no tiles found";
         }
 
-        var tiles = this.levelObject.tiles;
+        var tiles = levelData.tiles;
 
         for (var i = 0; i < tiles.length; i++) {
             var options = tiles[i];
-            options.m = this.tileAtPositionExists(options.x, options.y - 1) ? "Soil" : "GrassSoil";
+            //options.m = this.tileAtPositionExists(options.x, options.y - 1) ? "Soil" : "GrassSoil";
             this.gameObjects.fixed.push(new Tile(this.engine, "tile-" + i, options));
         }
     }
 
     Level.prototype.createItems = function() {
-        var items = this.levelObject.items;
+        if (!levelData || !levelData.tiles) {
+            return;
+        }
+        var items = levelData.items;
 
         for (var i = 0; i < items.length; i++) {
             var options = items[i];
@@ -358,6 +364,7 @@ microwave: 3.744
     }
 
     // TODO remove hack
+    /*
     Level.prototype.tileAtPositionExists = function(x, y) {
 
         for (var i = 0; i < this.levelObject.tiles.length; i++) {
@@ -366,6 +373,7 @@ microwave: 3.744
         }
         return false;
     };
+    */
 
     return Level;
 })

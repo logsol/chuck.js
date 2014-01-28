@@ -10,11 +10,12 @@ define({
     BOX2D_POSITION_ITERATIONS: 5,
     BOX2D_TIME_STEP: 1 / 60,
 
-    // GRAPHIC PATHS
+    //  PATHS
     GRAPHICS_PATH: 'static/img/',
     GRAPHICS_SUBPATH_ITEMS: 'Items/',
     GRAPHICS_SUBPATH_CHARACTERS: 'Characters/',
     GRAPHICS_SUBPATH_TILES: 'Tiles/',
+    MAPS_PATH: 'static/maps/'
 
     RATIO: 21, //35
     TILE_SIZE: 15, //15, 25 is original picture
