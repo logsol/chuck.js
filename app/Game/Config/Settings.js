@@ -15,7 +15,7 @@ define({
     GRAPHICS_SUBPATH_ITEMS: 'Items/',
     GRAPHICS_SUBPATH_CHARACTERS: 'Characters/',
     GRAPHICS_SUBPATH_TILES: 'Tiles/',
-    MAPS_PATH: 'static/maps/'
+    MAPS_PATH: 'static/maps/chuck/',
 
     RATIO: 21, //35
     TILE_SIZE: 15, //15, 25 is original picture

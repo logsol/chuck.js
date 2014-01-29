@@ -11,7 +11,7 @@ function () {
     NotificationCenter.prototype.trigger = function (topic /*, arguments*/) {
 
         if (!this.topics[topic]) {
-            throw "No such topic " + topic + ". Could not trigger. arguments: " + arguments.join;
+            console.warn("No such topic " + topic + ". Could not trigger. arguments: " + arguments.join);
         }
 
         var args = Array.prototype.slice.call(arguments, 1);

@@ -12,7 +12,6 @@ function (PhysicsEngine, Level, Player) {
             animated: [],
             fixed: []
         };
-        this.levelPath = null;
 
         this.physicsEngine = new PhysicsEngine();
         this.physicsEngine.setCollisionDetector();
@@ -28,8 +27,7 @@ function (PhysicsEngine, Level, Player) {
         return this.physicsEngine;
     }
 
-    GameController.prototype.loadLevel = function (path) {
-        this.levelPath = path;
+    GameController.prototype.loadLevel = function (levelUid) {
 
         if (this.level) {
             this.level.destroy();
@@ -39,12 +37,11 @@ function (PhysicsEngine, Level, Player) {
             };
         }
 
-        this.level = new Level(path, this.physicsEngine, this.gameObjects);
-        this.level.loadLevelInToEngine();
+        this.level = new Level(levelUid, this.physicsEngine, this.gameObjects);
     }
 
     GameController.prototype.onResetLevel = function() {
-        this.loadLevel(this.levelPath);
+        this.loadLevel(this.level.uid);
     };
 
 

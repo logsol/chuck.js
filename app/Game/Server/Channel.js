@@ -2,22 +2,26 @@
         "Game/Server/GameController",
         "Lib/Utilities/NotificationCenter",
         "Game/Server/User",
-        "Lib/Utilities/Protocol/Helper"
+        "Lib/Utilities/Protocol/Helper",
+        "Lib/Utilities/Options"
     ], 
 
-    function (GameController, NotificationCenter, User, ProtocolHelper) {
+    function (GameController, NotificationCenter, User, ProtocolHelper, Options) {
 
-        function Channel (pipeToLobby, name) {
+        function Channel (pipeToLobby, name, options) {
 
             var self = this;
 
+            this.options = options = Options.merge(options, {
+                levelUids: ["dungeon"]
+            });
+            
             this.name = name;
             this.users = {};
 
             this.pipeToLobby = pipeToLobby;
 
             this.gameController = new GameController(this);
-            this.gameController.loadLevel("default.json");
             
             NotificationCenter.on('channel/controlCommand', function (message) {
                 ProtocolHelper.applyCommand(message.data, self);
@@ -41,6 +45,11 @@
             var joinedUsers = Object.keys(this.users);
             var spawnedPlayers = this.gameController.getSpawnedPlayersAndTheirPositions();
             var worldUpdate = this.gameController.getWorldUpdateObject(true);
+            
+            var levelUid = null;
+            if(this.gameController.level) {
+                levelUid = this.gameController.level.uid;
+            }
 
             this.users[user.id] = user;
 
@@ -49,8 +58,8 @@
                 channelName: this.name, 
                 joinedUsers: joinedUsers,
                 spawnedPlayers: spawnedPlayers,
-                worldUpdate: worldUpdate
-
+                worldUpdate: worldUpdate,
+                levelUid: levelUid
             };
             
             NotificationCenter.trigger('user/' + user.id + "/joinSuccess", options);

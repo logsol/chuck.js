@@ -50,7 +50,7 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings, Do
 
     Networker.prototype.onJoinSuccess = function (options) {
         this.gameController = new GameController();
-        this.gameController.loadLevel("default.json");
+        this.gameController.loadLevel(options.levelUid);
 
         this.onUserJoined(options.userId);
         this.gameController.onJoinMe(options.userId);

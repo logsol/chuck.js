@@ -1,23 +1,23 @@
 define([
 	"Game/Core/Loader/Level",
-	"Game/Config/Settings"
+	"Game/Config/Settings",
 	"fs"
 ],
 
-function (Parent, Fs) {
+function (Parent, Settings, fs) {
 
-    function Level () {
-        Parent.call(this);
+    function Level (uid, engine, gameObjects) {
+        Parent.call(this, uid, engine, gameObjects);
     }
 
     Level.prototype = Object.create(Parent.prototype);
 
-    Level.prototype.loadLevelObjectFromPath = function (path, callback) {
+    Level.prototype.loadLevelDataFromPath = function (path, callback) {
     	// overwriting parent
 
-    	fs.readFile( + path, function (err, data) {
+    	fs.readFile(path, "utf8", function (err, data) {
 		  if (err) throw err;
-		  callback(data);
+		  callback(JSON.parse(data));
 		});
     }
 

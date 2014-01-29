@@ -18,14 +18,16 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
         Parent.call(this);
 
-        this.updateWorld();
-
         NotificationCenter.on('user/joined', this.userJoined, this);
         NotificationCenter.on('user/left', this.userLeft, this); // FIXME: refactor this.userLeft -> this.onUserLeft, even in core and client
         NotificationCenter.on('user/resetLevel', this.onResetLevel, this);
         NotificationCenter.on('player/killed', this.spawnPlayer, this);
+        NotificationCenter.on('game/level/loaded', this.onLevelLoaded, this);
 
         console.checkpoint('starting game controller for channel ' + channel.name);
+        
+        var nextUid = this.getNextLevelUid();
+        this.loadLevel(nextUid);
     }
 
     GameController.prototype = Object.create(Parent.prototype);
@@ -39,6 +41,10 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
             this.players[id].update();
         }
     }
+
+    GameController.prototype.onLevelLoaded = function() {
+        this.updateWorld();
+    };
 
     GameController.prototype.userJoined = function (user) {
         Parent.prototype.userJoined.call(this, user);
@@ -135,6 +141,23 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         for (var key in this.players) {
             this.spawnPlayer(this.players[key]);
         }
+    };
+
+    GameController.prototype.getNextLevelUid = function() {
+        if(!this.level) return this.channel.options.levelUids[0];
+
+        var levelCount = this.channel.options.levelUids.length;
+
+        for (var i = 0; i < levelCount; i++) {
+            var uid = this.channel.options.levelUids[i];
+            if(uid == this.level.uid) {
+                break;
+            }
+        };
+
+        var next = i + 1;
+
+        return this.channel.options.levelUids[next % levelCount];
     };
 
 

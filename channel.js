@@ -14,11 +14,10 @@ console.checkpoint = function (s) {
 }
 
 requirejs([
-    "Game/Server/PipeToLobby",
-    "Lib/Utilities/NotificationCenter"
+    "Game/Server/PipeToLobby"
 ], 
 
-function (PipeToLobby, nc) {
+function (PipeToLobby) {
 	var PipeToLobby = new PipeToLobby(process);
     
     inspector.PipeToLobby = PipeToLobby;
