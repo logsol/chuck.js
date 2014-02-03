@@ -54,16 +54,17 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
     }
 
     GameController.prototype.spawnPlayer = function(player) {
-        var x = 150 + Math.random() * 300,
-            y = 0;
-        player.spawn(x, y);
+
+        var spawnPoint = this.level.getRandomSpawnPoint();
+
+        player.spawn(spawnPoint.x, spawnPoint.y);
         this.gameObjects.animated.push(player.getDoll());
 
         var message = {
             spawnPlayer: {
                 id: player.id, 
-                x: x, 
-                y: y
+                x: spawnPoint.x, 
+                y: spawnPoint.y
             }
         };
         NotificationCenter.trigger("sendControlCommandToAllUsers", "gameCommand", message);

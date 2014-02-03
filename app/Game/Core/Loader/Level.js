@@ -75,5 +75,12 @@ define([
         };
     };
 
+    Level.prototype.getRandomSpawnPoint = function() {
+        return {
+            x: 150 + Math.random() * 300,
+            y: 0
+        };
+    };
+
     return Level;
 })

@@ -62,8 +62,6 @@ define([
         } else {
             console.warn("Level: No collision Layer given");
         }
-
-        this.levelData = null; // free up memory
     }
 
     TiledLevel.prototype.getTileImagePath = function(gid) {
@@ -76,6 +74,27 @@ define([
             }
         }
     }
+
+    TiledLevel.prototype.getRandomSpawnPoint = function() {
+
+        if(!this.levelData) {
+            return Parent.prototype.getRandomSpawnPoint.call(this);
+        }
+
+        for (var i = 0; i < this.levelData.layers.length; i++) {
+            if(this.levelData.layers[i].name === "spawnpoints") {
+                var spawnLayer = this.levelData.layers[i];
+
+                var size = spawnLayer.objects.length;
+                var object = spawnLayer.objects[parseInt(Math.random() * (size -1), 10)];
+
+                return {
+                    x: object.x,
+                    y: object.y
+                }
+            }
+        }
+    };
 
     return TiledLevel;
 })

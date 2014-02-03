@@ -8,6 +8,7 @@ function (PhysicsEngine, TiledLevel, Player) {
 
     function GameController () {
         this.players = {};
+        this.level = null;
         this.gameObjects = {
             animated: [],
             fixed: []

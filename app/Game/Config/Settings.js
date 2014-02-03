@@ -16,6 +16,7 @@ define({
     GRAPHICS_SUBPATH_CHARACTERS: 'Characters/',
     GRAPHICS_SUBPATH_TILES: 'Tiles/',
     MAPS_PATH: 'static/maps/tiled/',
+    DEFAULT_LEVELS: ['stones'],
 
     RATIO: 21, //35
     TILE_SIZE: 25, //15, 25 is original picture

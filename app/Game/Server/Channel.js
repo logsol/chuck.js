@@ -3,17 +3,18 @@
         "Lib/Utilities/NotificationCenter",
         "Game/Server/User",
         "Lib/Utilities/Protocol/Helper",
-        "Lib/Utilities/Options"
+        "Lib/Utilities/Options",
+        "Game/Config/Settings"
     ], 
 
-    function (GameController, NotificationCenter, User, ProtocolHelper, Options) {
+    function (GameController, NotificationCenter, User, ProtocolHelper, Options, Settings) {
 
         function Channel (pipeToLobby, name, options) {
 
             var self = this;
 
             this.options = options = Options.merge(options, {
-                levelUids: ["circles", "dungeon"]
+                levelUids: Settings.DEFAULT_LEVELS
             });
             
             this.name = name;
