@@ -1,10 +1,11 @@
 define([
 	"Game/" + GLOBALS.context + "/GameObjects/GameObject",
 	"Lib/Vendor/Box2D",
-	"Game/Config/Settings"
+	"Game/Config/Settings",
+    "Lib/Utilities/Exception"
 ],
  
-function (Parent, Box2D, Settings) {
+function (Parent, Box2D, Settings, Exception) {
  
     function Tile(physicsEngine, uid, options) {
     	this.options = options;
@@ -97,6 +98,7 @@ function (Parent, Box2D, Settings) {
                 break;
 
             default:
+                throw new Exception("Tile Creation - no shape given");
                 break;
         }
 

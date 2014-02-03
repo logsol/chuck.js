@@ -1,10 +1,10 @@
 define([
     "Game/" + GLOBALS.context + "/Physics/Engine",
-    "Game/" + GLOBALS.context + "/Loader/Level",
+    "Game/" + GLOBALS.context + "/Loader/TiledLevel",
     "Game/" + GLOBALS.context + "/Player"
 ],
 
-function (PhysicsEngine, Level, Player) {
+function (PhysicsEngine, TiledLevel, Player) {
 
     function GameController () {
         this.players = {};
@@ -37,7 +37,7 @@ function (PhysicsEngine, Level, Player) {
             };
         }
 
-        this.level = new Level(levelUid, this.physicsEngine, this.gameObjects);
+        this.level = new TiledLevel(levelUid, this.physicsEngine, this.gameObjects);
     }
 
     GameController.prototype.onResetLevel = function() {

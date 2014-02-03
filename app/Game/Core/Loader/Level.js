@@ -9,7 +9,6 @@ define([
 
 ], function (Settings, Box2D, NotificationCenter, CollisionDetector, Tile, Item, Skateboard) {
     
-    // Public
     function Level (uid, engine, gameObjects) {
         this.uid = uid;
         this.engine = engine;
@@ -23,7 +22,7 @@ define([
         var path = Settings.MAPS_PATH + uid + ".json"
         this.loadLevelDataFromPath(path, function(levelData) {
             self.createTiles(levelData);
-            self.createItems(levelData);
+            //self.createItems(levelData);
             NotificationCenter.trigger("game/level/loaded");
         });
     }
@@ -36,8 +35,6 @@ define([
             //this.gameObjects[key] = [];
         }
     }
-
-    // Private
 
     Level.prototype.createTiles = function (levelData) {
 

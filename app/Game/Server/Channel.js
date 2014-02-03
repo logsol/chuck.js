@@ -13,7 +13,7 @@
             var self = this;
 
             this.options = options = Options.merge(options, {
-                levelUids: ["dungeon"]
+                levelUids: ["circles", "dungeon"]
             });
             
             this.name = name;

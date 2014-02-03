@@ -55,7 +55,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
     GameController.prototype.spawnPlayer = function(player) {
         var x = 150 + Math.random() * 300,
-            y = 50;
+            y = 0;
         player.spawn(x, y);
         this.gameObjects.animated.push(player.getDoll());
 

@@ -15,11 +15,15 @@ function (Parent, Settings, NotificationCenter) {
     Tile.prototype.createMesh = function() {
     	var self = this;
 
+        /*
     	var texturePath = Settings.GRAPHICS_PATH
     				+ Settings.GRAPHICS_SUBPATH_TILES
     				+ this.options.m + '/'
     				+ this.options.s + ''
     				+ (this.options.r || 0) + '.gif';
+                    */
+                    
+        var texturePath = Settings.MAPS_PATH + this.options.t;
 
     	var callback = function(mesh) {
     		self.mesh = mesh;

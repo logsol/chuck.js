@@ -1,0 +1,18 @@
+<snippet>
+    <content><![CDATA[
+define([
+	"${1:Path}"
+],
+ 
+function (Parent) {
+
+    return Parent;
+ 
+});
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>defc</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.js</scope>
+    <description>define(Child) - create a new empty child require.js module</description>
+</snippet>

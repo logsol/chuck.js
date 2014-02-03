@@ -15,10 +15,10 @@ define({
     GRAPHICS_SUBPATH_ITEMS: 'Items/',
     GRAPHICS_SUBPATH_CHARACTERS: 'Characters/',
     GRAPHICS_SUBPATH_TILES: 'Tiles/',
-    MAPS_PATH: 'static/maps/chuck/',
+    MAPS_PATH: 'static/maps/tiled/',
 
     RATIO: 21, //35
-    TILE_SIZE: 15, //15, 25 is original picture
+    TILE_SIZE: 25, //15, 25 is original picture
     CAMERA_IS_ORTHOGRAPHIC: true,
     VIEW_CONTROLLER: 0 ? 'Three' : 'Pixi',
 
