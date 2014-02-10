@@ -77,6 +77,13 @@ function (Settings, NotificationCenter, Stats, Screenfull) {
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode("Debug"));
         this.devToolsContainer.appendChild(label);
+
+        // create health
+        this.health = document.createElement("span");
+        this.health.innerHTML = "Health: 100";
+        p = document.createElement("p");
+        p.appendChild(this.health);
+        this.devToolsContainer.appendChild(p);
     };
 
     DomController.prototype.statsBegin = function() {
@@ -132,6 +139,10 @@ function (Settings, NotificationCenter, Stats, Screenfull) {
 
         return this.debugCanvas;
     }
+
+    DomController.prototype.setHealth = function(health) {
+        this.health.innerHTML = "Health: " + parseInt(health, 10);     
+    };
 
 
     return new DomController();

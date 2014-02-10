@@ -117,6 +117,16 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
 
     };
 
+    GameController.prototype.onUpdateStats = function(options) {
+        var player = this.players[options.playerId];
+        player.stats = options.stats;
+
+        // FIXME: move to canvas later
+        if(player == this.me) {
+            DomController.setHealth(player.stats.health);
+        }
+    };
+
     GameController.prototype.loadLevel = function (path) {
         Parent.prototype.loadLevel.call(this, path);
     }

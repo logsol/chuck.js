@@ -67,7 +67,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
                 y: spawnPoint.y
             }
         };
-        NotificationCenter.trigger("sendControlCommandToAllUsers", "gameCommand", message);
+        NotificationCenter.trigger("broadcastControlCommand", "gameCommand", message);
     };
 
     GameController.prototype.createPlayer = function(user) {
@@ -82,7 +82,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         var update = this.getWorldUpdateObject(false);
 
         if(Object.getOwnPropertyNames(update).length > 0) {
-            NotificationCenter.trigger("sendControlCommandToAllUsers", 'gameCommand', {worldUpdate:update});
+            NotificationCenter.trigger("broadcastControlCommand", 'gameCommand', {worldUpdate:update});
         }
 
         setTimeout(this.updateWorld.bind(this), Settings.WORLD_UPDATE_BROADCAST_INTERVAL);
@@ -138,7 +138,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
     GameController.prototype.onResetLevel = function(userId) {
         Parent.prototype.onResetLevel.call(this);
-        NotificationCenter.trigger("sendControlCommandToAllUsers", "gameCommand", {resetLevel:true});
+        NotificationCenter.trigger("broadcastControlCommand", "gameCommand", {resetLevel:true});
         for (var key in this.players) {
             this.spawnPlayer(this.players[key]);
         }

@@ -11,7 +11,7 @@ function (Doll, Settings, NotificationCenter) {
         this.stats = {
             health: 100,
             deaths: 0,
-            kills: 0
+            score: 0
         }
 
         this.physicsEngine = physicsEngine;

@@ -33,10 +33,6 @@ function (Parent, NotificationCenter) {
             playerId: this.id,
             itemUid: item.uid            
         }
-
-        var message = {
-            handActionResponse: options
-        }
         
         if (isHolding) {
             // throw
@@ -46,7 +42,7 @@ function (Parent, NotificationCenter) {
                 options.action = "throw";
                 options.x = x;
                 options.y = y;                
-                NotificationCenter.trigger("sendControlCommandToAllUsers", "gameCommand", message);
+                NotificationCenter.trigger("broadcastGameCommand", "handActionResponse", options);
             }
         } else {
             // grab
@@ -54,19 +50,52 @@ function (Parent, NotificationCenter) {
                 this.grab(item); 
 
                 options.action = "grab";
-                NotificationCenter.trigger("sendControlCommandToAllUsers", "gameCommand", message);              
+                NotificationCenter.trigger("broadcastGameCommand", "handActionResponse", options);
             }
         }
     };
 
     Player.prototype.addDamage = function(damage, enemy) {
-        this.stats.health -= damage;
+        this.updateHealth(this.stats.health - damage);
+
         if(this.stats.health <= 0) {
-            this.stats.deaths++;
-            enemy.stats.kills++;
+            enemy.score();
             this.kill();
         }
     };
+
+    Player.prototype.spawn = function(x, y) {
+        Parent.prototype.spawn.call(this, x, y);
+        this.updateHealth(100);
+    };
+
+    Player.prototype.updateHealth = function(health) {
+        this.stats.health = health;
+        NotificationCenter.trigger("user/" + this.id + "/gameCommand", "updateStats", {
+            playerId: this.id,
+            stats: this.stats
+        });
+    };
+
+    Player.prototype.kill = function() {
+        Parent.prototype.kill.call(this);
+        this.stats.deaths++;
+        this.broadcastStats();
+    };
+
+    Player.prototype.score = function() {
+        this.stats.score++;
+        this.broadcastStats();
+    };
+
+    Player.prototype.broadcastStats = function() {
+        NotificationCenter.trigger("broadcastGameCommand", "updateStats", {
+            playerId: this.id,
+            stats: this.stats
+        });
+    };
+
+
  
     return Player;
  

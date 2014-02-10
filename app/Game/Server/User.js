@@ -27,6 +27,10 @@ function(Parent, NotificationCenter, ProtocolHelper, ProtocolParser) {
         NotificationCenter.on('user/' + this.id + "/controlCommand", function(message) {
             ProtocolHelper.applyCommand(message.data, self);
         });
+
+        NotificationCenter.on('user/' + this.id + "/gameCommand", function(command, options) {
+            self.sendGameCommand(command, options);
+        });
     }
 
     User.prototype = Object.create(Parent.prototype);
