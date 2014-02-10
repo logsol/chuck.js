@@ -150,7 +150,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "width":100,
          "x":0,
          "y":0
@@ -161,6 +161,85 @@
          "name":"collision",
          "opacity":1,
          "type":"tilelayer",
+         "visible":true,
+         "width":100,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "height":100,
+         "name":"items",
+         "objects":[
+                {
+                 "height":0,
+                 "name":"",
+                 "properties":
+                    {
+                     "bounce":"6",
+                     "category":"outdoor",
+                     "grabAngle":"-1.5",
+                     "height":"10",
+                     "image":"football.gif",
+                     "name":"Football",
+                     "rotation":"0",
+                     "type":"circle",
+                     "weight":"2",
+                     "width":"10"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":959.274468548212,
+                 "y":245.422331858086
+                }, 
+                {
+                 "height":0,
+                 "name":"",
+                 "properties":
+                    {
+                     "category":"kitchen",
+                     "grabAngle":"-0.5",
+                     "height":"53",
+                     "image":"fridge.gif",
+                     "name":"Refridgerator",
+                     "rotation":"0",
+                     "type":"rectangle",
+                     "weight":"10",
+                     "width":"31"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":843.274468548212,
+                 "y":246.147863309874
+                }, 
+                {
+                 "height":0,
+                 "name":"",
+                 "properties":
+                    {
+                     "category":"kitchen",
+                     "grabAngle":"0.3",
+                     "height":"15",
+                     "image":"knife.gif",
+                     "name":"Knife",
+                     "rotation":"0",
+                     "type":"rectangle",
+                     "weight":"1.5",
+                     "width":"4"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1083,
+                 "y":246.510629035769
+                }],
+         "opacity":1,
+         "type":"objectgroup",
          "visible":true,
          "width":100,
          "x":0,

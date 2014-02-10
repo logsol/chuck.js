@@ -732,7 +732,7 @@
    eJzt0VEJACAUBEHtaRHbKxhAvx4nzMAm2NYAAAAAAACOueuXqOVHFj+y+AEAAPCf8RB1/MjiBwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQJYFUysKTg==
   </data>
  </layer>
- <objectgroup name="spawnpoints">
+ <objectgroup name="spawnpoints" visible="0">
   <object x="218.087" y="735.194">
    <ellipse/>
   </object>
@@ -763,4 +763,46 @@
    eJzt2D9L5EAYx/HHyvregIWFhVf4AlxPD+5URLCzEi0EGzsXTk4QQQSxUVHfiZXvwP+n4Aty5nYDMWaTyc6zk8n6/cDTLBP2GX6TySQiAIbVlam/HnURvuVK9sVtHpd1NajoXDpziZnt76zuJgJqQh5fSezzjb0/bbHPN/b+tMU+32x/15kaNk3LY9jFPt8Q/c2ZmlaoWYVeyKNjx/P6tkoX5BEbO9/TupsoYPs7qLuJPryZeimp15zr0t9bDk0dh2i2gqbeHyOOVeTE1JGUfyva02+/pybnoTGmTOhvXv38108pP/88mPonn99nHk3devSb+OYwZlThf6yY87BZtEytZ37Pnp+e5XMWST1Vb7NWofNwfZ73ymLYxXZ/rJpalDBZ3Ju6cRg3LuXvjz+Ueootj4TWO5mv76bGTK2V1IzoZBJrHrGYFLc8kkx8v9O0wkzrv6blYfcp1yw0K5Sy9aO1B2twycI+3zZNbXevsXusPfttlFxjx211r8kbH4rv/b4QoMcJU1NSnEWSQ5G8TNLnk+yZPT0+lGx/dl215eO62U6Ntz0mfbfF/7ttniX5uHdr7ie2Z/uuat9JXXqvI49kjaTX11bOWE2/pPj5Ocj93Z6p7xzH1pFHnkGs+yqSe9SnNN6VYskjBrvSfxZ/Kv5X0fO+KXn8NrUi/Z3p500te/z3IMSSB6X7fAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADg5h2zV8bD
   </data>
  </layer>
+ <objectgroup name="items">
+  <object x="959.274" y="245.422">
+   <properties>
+    <property name="bounce" value="6"/>
+    <property name="category" value="outdoor"/>
+    <property name="grabAngle" value="-1.5"/>
+    <property name="height" value="10"/>
+    <property name="image" value="football.gif"/>
+    <property name="name" value="Football"/>
+    <property name="rotation" value="0"/>
+    <property name="type" value="circle"/>
+    <property name="weight" value="2"/>
+    <property name="width" value="10"/>
+   </properties>
+  </object>
+  <object x="843.274" y="246.148">
+   <properties>
+    <property name="category" value="kitchen"/>
+    <property name="grabAngle" value="-0.5"/>
+    <property name="height" value="53"/>
+    <property name="image" value="fridge.gif"/>
+    <property name="name" value="Refridgerator"/>
+    <property name="rotation" value="0"/>
+    <property name="type" value="rectangle"/>
+    <property name="weight" value="10"/>
+    <property name="width" value="31"/>
+   </properties>
+  </object>
+  <object x="1083" y="246.511">
+   <properties>
+    <property name="category" value="kitchen"/>
+    <property name="grabAngle" value="0.3"/>
+    <property name="height" value="15"/>
+    <property name="image" value="knife.gif"/>
+    <property name="name" value="Knife"/>
+    <property name="rotation" value="0"/>
+    <property name="type" value="rectangle"/>
+    <property name="weight" value="1.5"/>
+    <property name="width" value="4"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>
