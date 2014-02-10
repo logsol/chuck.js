@@ -5,12 +5,13 @@ define([
     "Game/Server/Control/PlayerController",
     "Lib/Utilities/RequestAnimFrame",
     "Lib/Utilities/NotificationCenter",
+    "Lib/Vendor/Box2D",
     "Game/Server/Player",
     "Game/Server/GameObjects/GameObject",
     "Game/Server/GameObjects/Doll"
 ],
 
-function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, NotificationCenter, Player, GameObject, Doll) {
+function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, NotificationCenter, Box2D, Player, GameObject, Doll) {
 
     function GameController (channel) {
         
@@ -22,7 +23,6 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         NotificationCenter.on('user/left', this.userLeft, this); // FIXME: refactor this.userLeft -> this.onUserLeft, even in core and client
         NotificationCenter.on('user/resetLevel', this.onResetLevel, this);
         NotificationCenter.on('player/killed', this.spawnPlayer, this);
-        NotificationCenter.on('game/level/loaded', this.onLevelLoaded, this);
 
         console.checkpoint('starting game controller for channel ' + channel.name);
         
@@ -43,6 +43,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
     }
 
     GameController.prototype.onLevelLoaded = function() {
+        Parent.prototype.onLevelLoaded.call(this);
         this.updateWorld();
     };
 
@@ -95,7 +96,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
         var body = this.physicsEngine.world.GetBodyList();
         do {
-            if(getSleeping || body.IsAwake()) {
+            if((getSleeping || body.IsAwake()) && body.GetType() === Box2D.Dynamics.b2Body.b2_dynamicBody) {
                 var userData = body.GetUserData();
 
                 if (userData instanceof GameObject) {
@@ -125,11 +126,18 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         for(id in this.players) {
             var player = this.players[id];
             if(player.isSpawned) {
-                spawnedPlayers.push({
+                
+                var options = {
                     id: id,
                     x: player.getPosition().x * Settings.RATIO,
                     y: player.getPosition().y * Settings.RATIO
-                });
+                };
+                
+                if(player.holdingItem) {
+                    options.holdingItemUid = player.holdingItem.uid;
+                }
+
+                spawnedPlayers.push(options);
             }
         }
 

@@ -73,6 +73,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
                     }
                 }
             }
+            
         } while (body = body.GetNext());
 
     }
@@ -91,6 +92,14 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
         var player = this.players[playerId];
         player.spawn(x, y);
         this.gameObjects.animated.push(player.getDoll());
+        
+        if(options.holdingItemUid) {
+            this.onHandActionResponse({
+                itemUid: options.holdingItemUid,
+                action: "grab",
+                playerId: playerId
+            });
+        }
     }
 
     GameController.prototype.onHandActionResponse = function(options) {
@@ -112,7 +121,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
                 player.grab(item);
             }            
         } else {
-            console.warn("Item for joint can not be found locally.")
+            console.warn("Item for joint can not be found locally. " + options.itemUid)
         }
 
     };

@@ -2,18 +2,20 @@ define([
     "Game/Config/Settings", 
     "Lib/Vendor/Box2D",
     "Lib/Utilities/NotificationCenter",
+    "Lib/Utilities/Exception",
     "Game/" + GLOBALS.context + "/Collision/Detector",
     "Game/" + GLOBALS.context + "/GameObjects/Tile",
     "Game/" + GLOBALS.context + "/GameObjects/Item",
     "Game/" + GLOBALS.context + "/GameObjects/Items/Skateboard"
 
-], function (Settings, Box2D, NotificationCenter, CollisionDetector, Tile, Item, Skateboard) {
+], function (Settings, Box2D, NotificationCenter, Exception, CollisionDetector, Tile, Item, Skateboard) {
     
     function Level (uid, engine, gameObjects) {
         this.uid = uid;
         this.engine = engine;
         this.levelObject = null;
         this.gameObjects = gameObjects;
+        this.isLoaded = false;
         this.load(this.uid);
     }
 
@@ -24,6 +26,7 @@ define([
             self.levelData = levelData;
             self.createTiles();
             self.createItems();
+            self.isLoaded = true;
             NotificationCenter.trigger("game/level/loaded");
         });
     }
@@ -33,8 +36,8 @@ define([
             for (var i = 0; i < this.gameObjects[key].length; i++) {
                 this.gameObjects[key][i].destroy();
             }
-            //this.gameObjects[key] = [];
         }
+        this.isLoaded = false;
     }
 
     Level.prototype.createTiles = function () {
@@ -77,9 +80,10 @@ define([
     };
 
     Level.prototype.getRandomSpawnPoint = function() {
+        throw new Error("Level not loaded.");
         return {
             x: 150 + Math.random() * 300,
-            y: 0
+            y: -500
         };
     };
 

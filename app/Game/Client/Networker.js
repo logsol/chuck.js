@@ -14,11 +14,6 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings, Do
         this.gameController = null;
         this.users = {};
 
-        this.init();
-    }
-
-    Networker.prototype.init = function () {
-        
         this.socketLink.on('connect', this.onConnect.bind(this));
         this.socketLink.on('disconnect', this.onDisconnect.bind(this));
 
@@ -32,7 +27,6 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings, Do
 
         NotificationCenter.on("sendGameCommand", this.sendGameCommand, this);
     }
-
 
     // Socket callbacks
 
@@ -49,6 +43,10 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings, Do
     }
 
     Networker.prototype.onJoinSuccess = function (options) {
+        NotificationCenter.on("game/level/loaded", function() {
+            this.onLevelLoaded(options);
+        }, this);
+
         this.gameController = new GameController();
         this.gameController.loadLevel(options.levelUid);
 
@@ -61,6 +59,10 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings, Do
             }
         }
 
+        this.initPing();
+    }
+
+    Networker.prototype.onLevelLoaded = function(options) {        
         if (options.spawnedPlayers) {
             for(var i = 0; i < options.spawnedPlayers.length; i++) {
                 this.gameController.onSpawnPlayer(options.spawnedPlayers[i]);
@@ -70,9 +72,7 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings, Do
         if (options.worldUpdate) {
             this.gameController.onWorldUpdate(options.worldUpdate);
         }
-
-        this.initPing();
-    }
+    };
 
     Networker.prototype.initPing = function() {
 

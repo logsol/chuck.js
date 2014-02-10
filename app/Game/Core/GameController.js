@@ -1,10 +1,11 @@
 define([
     "Game/" + GLOBALS.context + "/Physics/Engine",
     "Game/" + GLOBALS.context + "/Loader/TiledLevel",
-    "Game/" + GLOBALS.context + "/Player"
+    "Game/" + GLOBALS.context + "/Player",
+    "Lib/Utilities/NotificationCenter"
 ],
 
-function (PhysicsEngine, TiledLevel, Player) {
+function (PhysicsEngine, TiledLevel, Player, NotificationCenter) {
 
     function GameController () {
         this.players = {};
@@ -17,7 +18,7 @@ function (PhysicsEngine, TiledLevel, Player) {
         this.physicsEngine = new PhysicsEngine();
         this.physicsEngine.setCollisionDetector();
 
-        this.update();
+        NotificationCenter.on("game/level/loaded", this.onLevelLoaded, this);
     }
 
     GameController.prototype.update = function() {
@@ -43,6 +44,10 @@ function (PhysicsEngine, TiledLevel, Player) {
 
     GameController.prototype.onResetLevel = function() {
         this.loadLevel(this.level.uid);
+    };
+
+    GameController.prototype.onLevelLoaded = function() {
+        this.update();
     };
 
 

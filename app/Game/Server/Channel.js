@@ -45,6 +45,19 @@
         // Channel command callbacks
 
         Channel.prototype.onAddUser = function (userId) {
+            var self = this;
+
+            if(!this.gameController.level || !this.gameController.level.isLoaded) {
+                var token = NotificationCenter.on("game/level/loaded", function() {
+                    self.sendJoinSuccess(userId);
+                    NotificationCenter.off(token);
+                });
+            } else {
+                self.sendJoinSuccess(userId);
+            }
+        }
+
+        Channel.prototype.sendJoinSuccess = function(userId) {
             var user = new User(userId, this);
             var joinedUsers = Object.keys(this.users);
             var spawnedPlayers = this.gameController.getSpawnedPlayersAndTheirPositions();
@@ -64,11 +77,11 @@
                 spawnedPlayers: spawnedPlayers,
                 worldUpdate: worldUpdate,
                 levelUid: levelUid
-            };
-            
+            };                 
+
             NotificationCenter.trigger('user/' + user.id + "/joinSuccess", options);
-            NotificationCenter.trigger('user/joined', user);
-        }
+            NotificationCenter.trigger('user/joined', user);  
+        };
 
         Channel.prototype.onReleaseUser = function (userId) {
             var user = this.users[userId];
