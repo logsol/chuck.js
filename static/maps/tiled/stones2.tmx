@@ -732,7 +732,7 @@
    eJzt0VEJACAUBEHtaRHbKxhAvx4nzMAm2NYAAAAAAACOueuXqOVHFj+y+AEAAPCf8RB1/MjiBwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQJYFUysKTg==
   </data>
  </layer>
- <objectgroup name="spawnpoints" visible="0">
+ <objectgroup name="spawnpoints">
   <object x="218.087" y="735.194">
    <ellipse/>
   </object>
@@ -764,7 +764,7 @@
   </data>
  </layer>
  <objectgroup name="items">
-  <object x="959.274" y="245.422">
+  <object x="959.274" y="215.422">
    <properties>
     <property name="bounce" value="6"/>
     <property name="category" value="outdoor"/>
@@ -778,7 +778,7 @@
     <property name="width" value="10"/>
    </properties>
   </object>
-  <object x="843.274" y="246.148">
+  <object x="843.274" y="207.148">
    <properties>
     <property name="category" value="kitchen"/>
     <property name="grabAngle" value="-0.5"/>
@@ -791,7 +791,7 @@
     <property name="width" value="31"/>
    </properties>
   </object>
-  <object x="1083" y="246.511">
+  <object x="1083" y="217.511">
    <properties>
     <property name="category" value="kitchen"/>
     <property name="grabAngle" value="0.3"/>
