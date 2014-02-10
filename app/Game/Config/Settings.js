@@ -19,7 +19,7 @@ define({
     DEFAULT_LEVELS: ['stones2'],
 
     RATIO: 21, //35
-    OBJECT_RATIO: 21 / 25,
+    OBJECT_RATIO: 20 / 25,
     TILE_SIZE: 20, //15, 25 is original picture
     CAMERA_IS_ORTHOGRAPHIC: true,
     VIEW_CONTROLLER: 0 ? 'Three' : 'Pixi',

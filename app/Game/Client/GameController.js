@@ -18,6 +18,8 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
         this.view = ViewManager.createView();
         this.me = null;
 
+        NotificationCenter.on("game/toggleInfo", this.toggleInfo, this);
+
         Parent.call(this);
     }
 
@@ -136,6 +138,11 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
         }
     };
 
+    GameController.prototype.onPlayerKill = function(playerId) {
+        var player = this.players[options.playerId];
+        player.kill();
+    };
+
     GameController.prototype.loadLevel = function (path) {
         Parent.prototype.loadLevel.call(this, path);
     }
@@ -147,6 +154,57 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
 
         Parent.prototype.userLeft.call(this, user);
     }
+
+    GameController.prototype.toggleInfo = function(show) {
+
+        var playersArray = [];
+        for (var key in this.players) {
+            playersArray.push(this.players[key]);
+        };
+
+        var sortedPlayers = playersArray.sort(function(a,b) {
+            if(a.score > b.score) return 1;
+            if(a.score < b.score) return -1;
+            if(a.deaths < b.deaths) return 1;
+            if(a.deaths > b.deaths) return -1;
+            return 0;
+        });
+
+        function pad(string, max, alignLeft) {
+            string = string.substring(0, max - 1);
+
+            var spaces = new Array( max - string.length + 1 ).join(" ");
+            if(alignLeft) {
+                return string + spaces;
+            } else {
+                return spaces + string;
+            }
+        }
+
+        var string = "" +
+                     pad("#", 2, false) + " " +
+                     pad("Name", 12, true) +
+                     pad("Score", 6, false) +
+                     pad("Deaths", 7, false) +
+                     pad("Health", 7, false) +
+                     "\n-----------------------------------\n";
+
+        var lines = [];
+        sortedPlayers.forEach(function(player, i) {
+            var name = player == this.me ? "You" : "Player " + (Object.keys(this.players).indexOf(player.id) + 1);
+            lines.push(
+                pad("" + (i + 1) + ".", 2, false) + " " + 
+                pad(name, 12, true) + 
+                pad("" + player.stats.score, 6, false) +
+                pad("" + player.stats.deaths, 7, false) +
+                pad("" + parseInt(player.stats.health, 10), 7, false)
+            );
+        }, this);
+
+        string += lines.join("\n");
+
+        this.view.toggleInfo(show, string);
+    };
 
     return GameController;
 });

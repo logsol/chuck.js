@@ -28,7 +28,9 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
             down: 40,
             right: 39,
 
-            space: 32
+            space: 32,
+
+            tab: 9
         }
 
         this.init(keys);
@@ -47,6 +49,8 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
         this.keyboardInput.registerKey(keys.w, 'jump');
         this.keyboardInput.registerKey(keys.up, 'jump');
         this.keyboardInput.registerKey(keys.space, 'jump');
+
+        this.keyboardInput.registerKey(keys.tab, 'showInfo', 'hideInfo');
     }
 
     PlayerController.prototype.moveLeft = function () {
@@ -78,7 +82,16 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
     PlayerController.prototype.handActionRequest = function(x, y) {
         var options = {x:x, y:y};
         NotificationCenter.trigger("sendGameCommand", "handActionRequest", options);
-    };    
+    };
+
+    PlayerController.prototype.showInfo = function() {
+        NotificationCenter.trigger("game/toggleInfo", true);
+    };
+
+    PlayerController.prototype.hideInfo = function() {
+        NotificationCenter.trigger("game/toggleInfo", false);
+    };
+
 
     return PlayerController;
 });

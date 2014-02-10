@@ -745,13 +745,13 @@
   <object x="1379" y="459">
    <ellipse/>
   </object>
-  <object x="587" y="287">
+  <object x="578.5" y="386">
    <ellipse/>
   </object>
   <object x="253" y="186">
    <ellipse/>
   </object>
-  <object x="973.554" y="229.589">
+  <object x="974.054" y="235.589">
    <ellipse/>
   </object>
   <object x="1891.66" y="507.864" rotation="-26.5663">
@@ -760,11 +760,11 @@
  </objectgroup>
  <layer name="collision" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt2D9L5EAYx/HHyvregIWFhVf4AlxPD+5URLCzEi0EGzsXTk4QQQSxUVHfiZXvwP+n4Aty5nYDMWaTyc6zk8n6/cDTLBP2GX6TySQiAIbVlam/HnURvuVK9sVtHpd1NajoXDpziZnt76zuJgJqQh5fSezzjb0/bbHPN/b+tMU+32x/15kaNk3LY9jFPt8Q/c2ZmlaoWYVeyKNjx/P6tkoX5BEbO9/TupsoYPs7qLuJPryZeimp15zr0t9bDk0dh2i2gqbeHyOOVeTE1JGUfyva02+/pybnoTGmTOhvXv38108pP/88mPonn99nHk3devSb+OYwZlThf6yY87BZtEytZ37Pnp+e5XMWST1Vb7NWofNwfZ73ymLYxXZ/rJpalDBZ3Ju6cRg3LuXvjz+Ueootj4TWO5mv76bGTK2V1IzoZBJrHrGYFLc8kkx8v9O0wkzrv6blYfcp1yw0K5Sy9aO1B2twycI+3zZNbXevsXusPfttlFxjx211r8kbH4rv/b4QoMcJU1NSnEWSQ5G8TNLnk+yZPT0+lGx/dl215eO62U6Ntz0mfbfF/7ttniX5uHdr7ie2Z/uuat9JXXqvI49kjaTX11bOWE2/pPj5Ocj93Z6p7xzH1pFHnkGs+yqSe9SnNN6VYskjBrvSfxZ/Kv5X0fO+KXn8NrUi/Z3p500te/z3IMSSB6X7fAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADg5h2zV8bD
+   eJzt2M1KHEEUhuHjKmtvYBZZZGEWuQAniYIxIoHsspJkEZjN7DKgKARBAsGNiuZOsvIOjJo/yAWlKjMNPT09XdVTp6urJ+8DZyPV9qn5+qeqewJgWX0xdRhQl/FbruWj+M3jqq0GFV3IeC4ps/2dt91ERF3I43+S+nxT709b6vNNvT9tqc+32N/XQi2bruWx7FKfb4z+NkytK9RzhV7IY+xD4PEjlS7IIzV2vmdtN1HB9nfcdhML+GPql6N+lxyX/95yYupzjGZr6Or9seJZVU5NfRL3t6Ij/fbnajqPXkP/1/Vb+45xif3Na5FzbYp7/XNn6qfM7mfuTd0E9JtZ9RjzQOE8Vsp52Cz6pt4W/l5cP/2Q2Syy+l6/zVbFzsP3fT4vi2WX2v3xxtSOxMni1tS1x7iH4t4/PlPqKbU8Mlp7slCPZbxO2HPUU9HJJNU8UrEmfnlkmYR+p+nHmdY/XcvDPqd8s9CsWFzXj9YzWINPFvb99t7UcHKMfcbatd87xzF23GByTNn4WELv95cRenxk6olUZ5HlUKUsk/z6pLhmz4+Ppdifva5GMn3dDHPjbY9Z3yMJ/25bZlemn92azxPbs92r2j2pT+9t5JFdI/nra1AyVtOWVL8/m3y+2zX1N8+xbeRRponrvo7sHg0pjb1SKnmk4EAWz2K/5rmq3vddyeOFqdey2Jp+29SrgHM3IZU8KN33EwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/fwGIFcb/
   </data>
  </layer>
  <objectgroup name="items">
-  <object x="959.274" y="215.422">
+  <object x="749.607" y="237.255">
    <properties>
     <property name="bounce" value="6"/>
     <property name="category" value="outdoor"/>
@@ -778,7 +778,7 @@
     <property name="width" value="10"/>
    </properties>
   </object>
-  <object x="843.274" y="207.148">
+  <object x="789.774" y="236.815">
    <properties>
     <property name="category" value="kitchen"/>
     <property name="grabAngle" value="-0.5"/>
@@ -791,7 +791,7 @@
     <property name="width" value="31"/>
    </properties>
   </object>
-  <object x="1083" y="217.511">
+  <object x="538.333" y="388.678">
    <properties>
     <property name="category" value="kitchen"/>
     <property name="grabAngle" value="0.3"/>
@@ -802,6 +802,18 @@
     <property name="type" value="rectangle"/>
     <property name="weight" value="1.5"/>
     <property name="width" value="4"/>
+   </properties>
+  </object>
+  <object x="1309" y="461.5">
+   <properties>
+    <property name="category" value="outdoor"/>
+    <property name="grabAngle" value="-1,5"/>
+    <property name="height" value="6"/>
+    <property name="image" value="skateboard.gif"/>
+    <property name="name" value="Skateboard"/>
+    <property name="type" value="skateboard"/>
+    <property name="weight" value="1,5"/>
+    <property name="width" value="26"/>
    </properties>
   </object>
  </objectgroup>

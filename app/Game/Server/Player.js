@@ -12,6 +12,7 @@ function (Parent, NotificationCenter) {
     Player.prototype = Object.create(Parent.prototype);
  
     Player.prototype.handActionRequest = function(x, y) {
+        if(!this.doll) return false;
 
     	var item = null;
     	var isHolding = !!this.holdingItem;
@@ -56,31 +57,27 @@ function (Parent, NotificationCenter) {
     };
 
     Player.prototype.addDamage = function(damage, enemy) {
-        this.updateHealth(this.stats.health - damage);
+        this.stats.health -= damage;
 
         if(this.stats.health <= 0) {
             enemy.score();
             this.kill();
+        } else {
+            this.broadcastStats();
         }
     };
 
     Player.prototype.spawn = function(x, y) {
         Parent.prototype.spawn.call(this, x, y);
-        this.updateHealth(100);
-    };
-
-    Player.prototype.updateHealth = function(health) {
-        this.stats.health = health;
-        NotificationCenter.trigger("user/" + this.id + "/gameCommand", "updateStats", {
-            playerId: this.id,
-            stats: this.stats
-        });
+        this.stats.health = 100;
+        this.broadcastStats();
     };
 
     Player.prototype.kill = function() {
         Parent.prototype.kill.call(this);
         this.stats.deaths++;
         this.broadcastStats();
+        NotificationCenter.trigger("broadcastGameCommand", "playerKill", this.id);
     };
 
     Player.prototype.score = function() {

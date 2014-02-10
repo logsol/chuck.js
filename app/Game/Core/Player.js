@@ -36,45 +36,58 @@ function (Doll, Settings, NotificationCenter) {
     }
 
     Player.prototype.getPosition = function () {
-        if(!this.doll) return false;
         return this.doll.getPosition();
     }
 
     Player.prototype.getHeadPosition = function () {
-        if(!this.doll) return false;
+        if(!this.isSpawned) return false;
         return this.doll.getHeadPosition();
     }
 
 
     Player.prototype.move = function (direction) {
+        if(!this.isSpawned) return false;
         this.doll.move(direction);
     }
 
     Player.prototype.stop = function () {
+        if(!this.isSpawned) return false;
         this.doll.stop();
     }
 
     Player.prototype.jump = function () {
+        if(!this.isSpawned) return false;
         this.doll.jump();
     }
 
     Player.prototype.lookAt = function (x, y) {
-        if(this.doll) this.doll.lookAt(x, y);
+        if(!this.isSpawned) return false;
+        this.doll.lookAt(x, y);
     }
 
     Player.prototype.grab = function(item) {
+        if(!this.isSpawned) return false;
         item.beingGrabbed(this);
         this.doll.grab(item);
         this.holdingItem = item;  
     };
 
     Player.prototype.throw = function(x, y, item) {
+        if(!this.isSpawned) return false;
         item.beingReleased(this);
         this.doll.throw(item, x, y);
         this.holdingItem = null; 
     };
 
     Player.prototype.kill = function(killedBy) {
+        if(!this.isSpawned) return false;
+
+        // FIXME: do something better then just respawn in GameController
+        if(this.holdingItem) {
+            this.throw(0, 0, this.holdingItem)
+        }
+        this.doll.kill();
+        this.isSpawned = false;
         NotificationCenter.trigger("player/killed", this);
     };
 
@@ -90,6 +103,9 @@ function (Doll, Settings, NotificationCenter) {
     }
 
     Player.prototype.destroy = function () {
+        if(this.holdingItem) {
+            this.throw(0, 0, this.holdingItem);
+        }
         this.doll.destroy();
     }
 

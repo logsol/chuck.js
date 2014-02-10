@@ -16,6 +16,9 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
         this.camera = null;
         this.stage = null;
         this.container = null;
+        this.infoContainer = null;
+        this.infoFilters = [];
+        this.infoBox = null;
         this.init();
         this.pixi = PIXI;
     }
@@ -35,21 +38,40 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
         this.stage = new PIXI.Stage(0x333333);
 
         this.initCamera();
-
-        /*
-        var blurFilter = new PIXI.BlurFilter();
-        blurFilter.blurX = 12;
-        blurFilter.blurY = 0;
-        var grayFilter = new PIXI.GrayFilter();
-        grayFilter.gray = .6;
-        this.stage.filters = [grayFilter];
-        */
+        this.initInfo();
 
         this.setCanvas(this.renderer.view);
     }
 
+
+    PixiView.prototype.initCamera = function () {
+        this.container = new PIXI.DisplayObjectContainer();
+        this.stage.addChild(this.container);
+    }
+
+    PixiView.prototype.initInfo = function() {
+        this.infoContainer = new PIXI.DisplayObjectContainer();
+        this.stage.addChild(this.infoContainer);
+
+        var blurFilter = new PIXI.BlurFilter();
+        blurFilter.blurX = 12;
+        blurFilter.blurY = 12;
+        var grayFilter = new PIXI.GrayFilter();
+        grayFilter.gray = 0.85;
+        this.infoFilters = [blurFilter, grayFilter];
+
+        this.infoText = new PIXI.Text("", {font: "normal 20px monospace", fill: "red", align: "center"});
+        this.infoBox = new PIXI.Graphics();
+        this.infoBox.alpha = 0.7;
+
+        this.infoContainer.addChild(this.infoBox);
+        this.infoContainer.addChild(this.infoText);
+
+        this.infoContainer.visible = false;
+    };
+
     PixiView.prototype.render = function () {
-        if(this.me) {
+        if(this.me && this.me.isSpawned) {
             var pos = this.calculateCameraPosition();
             this.setCameraPosition(pos.x, pos.y);
         }
@@ -79,11 +101,15 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
         var textures = [];
         for (var i = 0; i < texturePaths.length; i++) {
             var texture = PIXI.Texture.fromImage(texturePaths[i]);
+            texture.width = options.width;
+            texture.height = options.height;
+            PIXI.texturesToUpdate.push(texture);
             textures.push(texture);
         }
 
         var mesh = new PIXI.MovieClip(textures);
         if(options) this.updateMesh(mesh, options);
+
         mesh.animationSpeed = 0.5;
 
         mesh.play();
@@ -115,12 +141,6 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
                 }                
             }
         };
-    }
-
-    PixiView.prototype.initCamera = function () {
-
-        this.container = new PIXI.DisplayObjectContainer();
-        this.stage.addChild(this.container);
     }
 
     PixiView.prototype.calculateCameraPosition = function() {
@@ -158,6 +178,36 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
         } else {
             this.renderer.resize(600, 400);
             this.setCameraZoom(1);
+        }
+    };
+
+    PixiView.prototype.toggleInfo = function(show, string) {
+        if(show) {
+            this.infoText.setText(string);
+            this.infoText.updateText();
+            this.infoText.dirty = false;
+
+            var x = Settings.STAGE_WIDTH / 2 - this.infoText.width / 2,
+                y = Settings.STAGE_HEIGHT / 2 - this.infoText.height / 2;
+            this.infoText.position = new PIXI.Point(x, y);
+
+            var borderWidth = 3;
+            var padding = 20;
+            this.infoBox.clear();
+            this.infoBox.beginFill(0x000000);
+            this.infoBox.lineStyle(borderWidth, 0xAA0000);
+            this.infoBox.drawRect(0, 0, this.infoText.width - borderWidth + 2 * padding * 2, this.infoText.height - borderWidth + 2 * padding);
+            this.infoBox.endFill();
+            this.infoBox.position.x = this.infoText.position.x + borderWidth/2 - padding * 2;
+            this.infoBox.position.y = this.infoText.position.y + borderWidth/2 - padding;
+
+            this.infoContainer.visible = true;
+            this.container.filters = this.infoFilters;
+            this.infoFilters.forEach(function(filter) { filter.dirty = true; });
+        } else {
+            this.infoText.setText("...");
+            this.infoContainer.visible = false;
+            this.container.filters = null;
         }
     };
 

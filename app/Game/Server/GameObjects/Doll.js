@@ -57,8 +57,10 @@ function (Parent, Item, Box2D, NotificationCenter) {
                             damage.Abs();
                             damage.Multiply(itemMass);
 
+                            var player = item.lastMoved.player;
+
                             var callback = function() {
-                                self.player.addDamage(damage.Length() * 2, item.lastMoved.player);
+                                self.player.addDamage(damage.Length() * 2, player);
                             }
 
                             NotificationCenter.trigger("engine/addToWorldQueue", callback)

@@ -156,6 +156,10 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
         this.setActionState("fall");
     }
 
+    Doll.prototype.kill = function() {
+        this.body.SetFixedRotation(false);
+    };
+
     Doll.prototype.getPosition = function() {
         var pos = this.body.GetPosition();
         return {

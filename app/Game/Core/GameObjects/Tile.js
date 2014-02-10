@@ -19,8 +19,8 @@ function (Parent, Box2D, Settings, Exception) {
 
     	var bodyDef = new Box2D.Dynamics.b2BodyDef();
         bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
-        bodyDef.position.x = this.options.x * Settings.TILE_SIZE / Settings.RATIO;
-        bodyDef.position.y = this.options.y * Settings.TILE_SIZE / Settings.RATIO;
+        bodyDef.position.x = (this.options.x * Settings.TILE_SIZE + Settings.TILE_SIZE / 2) / Settings.RATIO;
+        bodyDef.position.y = (this.options.y * Settings.TILE_SIZE + Settings.TILE_SIZE / 2) / Settings.RATIO;
         bodyDef.angle = (this.options.r || 0) * 90 * Math.PI / 180;
 
         return bodyDef;

@@ -55,20 +55,23 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
     }
 
     GameController.prototype.spawnPlayer = function(player) {
-
+        var self = this;
         var spawnPoint = this.level.getRandomSpawnPoint();
 
-        player.spawn(spawnPoint.x, spawnPoint.y);
-        this.gameObjects.animated.push(player.getDoll());
+        setTimeout(function() {
+            player.spawn(spawnPoint.x, spawnPoint.y);
+            self.gameObjects.animated.push(player.getDoll());
 
-        var message = {
-            spawnPlayer: {
-                id: player.id, 
-                x: spawnPoint.x, 
-                y: spawnPoint.y
-            }
-        };
-        NotificationCenter.trigger("broadcastControlCommand", "gameCommand", message);
+            var message = {
+                spawnPlayer: {
+                    id: player.id, 
+                    x: spawnPoint.x, 
+                    y: spawnPoint.y
+                }
+            };
+
+            NotificationCenter.trigger("broadcastControlCommand", "gameCommand", message);
+        }, 5000);
     };
 
     GameController.prototype.createPlayer = function(user) {

@@ -37,6 +37,9 @@ function (Key) {
             if(callback) this._playerController[callback]();
             key.setActive(true);
         }
+        
+        // Prevent tab from changing focus
+        if(e.keyCode == 9) return false;
     }
 
     KeyboardInput.prototype._onKeyUp = function (e) {
@@ -46,6 +49,9 @@ function (Key) {
             if(callback) this._playerController[callback]();
             key.setActive(false);
         }
+
+        // Prevent tab from changing focus
+        if(e.keyCode == 9) return false;
     }
 
     return KeyboardInput;

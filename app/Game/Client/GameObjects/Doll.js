@@ -71,7 +71,9 @@ function (Parent, Settings, NotificationCenter, Exception) {
 
             NotificationCenter.trigger("view/createAnimatedMesh", texturePaths, callback, { 
                 visible: false, 
-                pivot: "mb"
+                pivot: "mb",
+                width: 35,
+                height: 40
             });
         }
 
@@ -82,7 +84,11 @@ function (Parent, Settings, NotificationCenter, Exception) {
             self.headMesh = mesh;
             NotificationCenter.trigger("view/addMesh", mesh);
         }
-        NotificationCenter.trigger("view/createMesh", texturePath, callback, { pivot: "mb" });
+        NotificationCenter.trigger("view/createMesh", texturePath, callback, {
+            pivot: "mb",
+            width: 10,
+            height: 12
+        });
 
     }
 
@@ -130,7 +136,8 @@ function (Parent, Settings, NotificationCenter, Exception) {
                 this.animatedMeshes[this.actionState],
                 {
                     x: this.body.GetPosition().x * Settings.RATIO,
-                    y: this.body.GetPosition().y * Settings.RATIO
+                    y: this.body.GetPosition().y * Settings.RATIO,
+                    rotation: this.body.GetAngle()
                 }
             );
 

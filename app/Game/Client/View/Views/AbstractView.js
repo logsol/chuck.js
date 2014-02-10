@@ -20,6 +20,8 @@ function (DomController, Settings, Exception, NotificationCenter) {
 
         NotificationCenter.on("view/fullscreenChange", this.onFullscreenChange, this);
         NotificationCenter.on("view/toggleDebugMode", this.onToggleDebugMode, this);
+
+        NotificationCenter.on("view/toggleInfo", this.onToggleInfo, this);
     }
 
     AbstractView.prototype.isWebGlEnabled = function () { 
@@ -37,35 +39,35 @@ function (DomController, Settings, Exception, NotificationCenter) {
     }
 
     AbstractView.prototype.loadPlayerMesh = function(player) {
-        throw new Exception('Abstract Function loadPlayerMesh not overwritten ');
+        throw new Exception('Abstract Function loadPlayerMesh not overwritten');
     };
 
     AbstractView.prototype.loadMeshes = function(objects) {
-    	throw new Exception('Abstract Function loadMeshes not overwritten ');
+    	throw new Exception('Abstract Function loadMeshes not overwritten');
     };
 
     AbstractView.prototype.render = function () {
-    	throw new Exception('Abstract Function render not overwritten ');
+    	throw new Exception('Abstract Function render not overwritten');
     }
 
     AbstractView.prototype.createMesh = function (texturePath, callback, options) {
-    	throw new Exception('Abstract Function createMesh not overwritten ');
+    	throw new Exception('Abstract Function createMesh not overwritten');
     }
 
     AbstractView.prototype.createAnimatedMesh = function (texturePaths, callback, options) {
-        throw new Exception('Abstract Function createAnimatedMesh not overwritten ');
+        throw new Exception('Abstract Function createAnimatedMesh not overwritten');
     }
 
     AbstractView.prototype.addMesh = function(mesh) {
-        throw new Exception('Abstract Function addMesh not overwritten ');
+        throw new Exception('Abstract Function addMesh not overwritten');
     };
 
     AbstractView.prototype.removeMesh = function(mesh) {
-        throw new Exception('Abstract Function removeMesh not overwritten ');
+        throw new Exception('Abstract Function removeMesh not overwritten');
     };
 
     AbstractView.prototype.updateMesh = function(mesh, options) {
-        throw new Exception('Abstract Function updateMesh not overwritten ');
+        throw new Exception('Abstract Function updateMesh not overwritten');
     };
 
     AbstractView.prototype.setMe = function(player) {
@@ -73,15 +75,15 @@ function (DomController, Settings, Exception, NotificationCenter) {
     };
 
     AbstractView.prototype.addPlayer = function(player) {
- 		throw new Exception('Abstract Function addPlayer not overwritten ');
+ 		throw new Exception('Abstract Function addPlayer not overwritten');
     };
 
     AbstractView.prototype.removPlayer = function(player) {
-    	throw new Exception('Abstract Function removPlayer not overwritten ');
+    	throw new Exception('Abstract Function removPlayer not overwritten');
     };
 
     AbstractView.prototype.setCameraPosition = function (x, y) {
-    	throw new Exception('Abstract Function setCameraPosition not overwritten ');
+    	throw new Exception('Abstract Function setCameraPosition not overwritten');
     }
 
     AbstractView.prototype.calculateCameraPosition = function() {
@@ -101,7 +103,7 @@ function (DomController, Settings, Exception, NotificationCenter) {
     };
 
     AbstractView.prototype.setCameraZoom = function (z) {
-    	throw new Exception('Abstract Function setCameraZoom not overwritten ');
+    	throw new Exception('Abstract Function setCameraZoom not overwritten');
     };
 
     AbstractView.prototype.onFullscreenChange = function(isFullScreen) {
@@ -123,6 +125,10 @@ function (DomController, Settings, Exception, NotificationCenter) {
         }
 
         this.debugMode = debugMode;
+    };
+
+    AbstractView.prototype.toggleInfo = function(show, string) {
+        throw new Exception('Abstract Function showInfo not overwritten');
     };
 
     return AbstractView;
