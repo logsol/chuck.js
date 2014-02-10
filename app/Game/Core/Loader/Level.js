@@ -21,8 +21,9 @@ define([
         var self = this;
         var path = Settings.MAPS_PATH + uid + ".json"
         this.loadLevelDataFromPath(path, function(levelData) {
-            self.createTiles(levelData);
-            //self.createItems(levelData);
+            self.levelData = levelData;
+            self.createTiles();
+            self.createItems();
             NotificationCenter.trigger("game/level/loaded");
         });
     }
@@ -36,13 +37,13 @@ define([
         }
     }
 
-    Level.prototype.createTiles = function (levelData) {
+    Level.prototype.createTiles = function () {
 
-        if (!levelData || !levelData.tiles || levelData.tiles.length < 1) {
+        if (!this.levelData || !this.levelData.tiles || this.levelData.tiles.length < 1) {
             throw "Level: Can't create physic tiles, no tiles found";
         }
 
-        var tiles = levelData.tiles;
+        var tiles = this.levelData.tiles;
 
         for (var i = 0; i < tiles.length; i++) {
             var options = tiles[i];
@@ -52,11 +53,11 @@ define([
         }
     }
 
-    Level.prototype.createItems = function(levelData) {
-        if (!levelData || !levelData.items) {
+    Level.prototype.createItems = function() {
+        if (!this.levelData || !this.levelData.items) {
             return;
         }
-        var items = levelData.items;
+        var items = this.levelData.items;
 
         for (var i = 0; i < items.length; i++) {
             var options = items[i];

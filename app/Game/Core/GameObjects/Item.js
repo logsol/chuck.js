@@ -7,7 +7,20 @@ define([
 function (Parent, Box2D, Settings) {
  
     function Item(physicsEngine, uid, options) {
-        this.options = options;
+        this.options = {
+            category: options.category,
+            image: options.image,
+            name: options.name,
+            type: options.type,
+            grabAngle: parseFloat(options.grabAngle),
+            weight: parseFloat(options.weight),
+            width: parseFloat(options.width),
+            height: parseFloat(options.height),
+            rotation: parseFloat(options.rotation),
+            bounce: parseFloat(options.bounce),
+            x: parseFloat(options.x),
+            y: parseFloat(options.y)
+        };
     	Parent.call(this, physicsEngine, uid);
         this.createFixture();
         this.body.ResetMassData();
