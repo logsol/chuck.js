@@ -733,19 +733,19 @@
   </data>
  </layer>
  <objectgroup name="spawnpoints">
-  <object x="219.202" y="399.192">
+  <object x="248.535" y="176.525">
    <ellipse/>
   </object>
-  <object x="631.833" y="296.667">
+  <object x="362.5" y="286">
    <ellipse/>
   </object>
-  <object x="137.383" y="311.064">
+  <object x="48.0496" y="352.397">
    <ellipse/>
   </object>
  </objectgroup>
  <layer name="collision" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt2E8KgkAUB+C5l4tatO1Anstd0AXadKUUEkIdpLCZJ34fvJXCwPvNP21TeW2FMfeiRm/kkTf25tJX81HXAmMyV7I3t766d7HMfhWLPGLZqjffnD/yyLM+YhnO1nvm2XTOb3Xvkkee9RGLPGKRRyy/9qapMOYRWB+xyCOW8X9S7s77D/LI26I35zT/ThnqNHnvmfxPXFNyrnZJHmtK7x2PCmPuifM8lqV9v0QBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8bwA3nooIw==
+   eJzt2E8KgkAUB+C5l4tatO1Anstd0AXadKUUEkKdpLCZJ30fvJXCwPvNP21TeW2FMfeiRm/kkTf25tRX81LnAmMyV7I3l766Z7HMfhWLPGLZqjefnD/yyLM+YhnO1mvm2XTOb3Xvkkee9RGLPGKRRyzf9qapMOY/sD5ikUcs4/+k3J33F+SRt0Vvjmn+nTLUYfLePfmfuKbkXO2SPNaU3jtuFcbck6V9pkQBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8N4DOHonMQ==
   </data>
  </layer>
  <objectgroup name="items">
@@ -839,22 +839,7 @@
     <property name="y" value="0"/>
    </properties>
   </object>
-  <object x="350.653" y="-19.0099">
-   <properties>
-    <property name="category" value="laundry"/>
-    <property name="grabAngle" value="-0.5"/>
-    <property name="height" value="31"/>
-    <property name="image" value="laundry_machine.gif"/>
-    <property name="name" value="Laundry Machine"/>
-    <property name="rotation" value="0"/>
-    <property name="type" value="rectangle"/>
-    <property name="weight" value="15"/>
-    <property name="width" value="24"/>
-    <property name="x" value="600"/>
-    <property name="y" value="0"/>
-   </properties>
-  </object>
-  <object x="244" y="478.667">
+  <object x="244" y="448">
    <properties>
     <property name="category" value="graveyard"/>
     <property name="grabAngle" value="0"/>
