@@ -35,7 +35,11 @@ function (Parent, Settings, NotificationCenter) {
             callback,
             {
                 width: Settings.TILE_SIZE, 
-                height: Settings.TILE_SIZE
+                height: Settings.TILE_SIZE,
+                pivot: {
+                    x: Settings.TILE_SIZE / 2 * Settings.TILE_RATIO,
+                    y: Settings.TILE_SIZE / 2 * Settings.TILE_RATIO
+                }
             }
         );
     };
@@ -50,8 +54,8 @@ function (Parent, Settings, NotificationCenter) {
         NotificationCenter.trigger("view/updateMesh",
             this.mesh,
             {
-                x: this.body.GetPosition().x * Settings.RATIO - Settings.TILE_SIZE / 2,
-                y: this.body.GetPosition().y * Settings.RATIO - Settings.TILE_SIZE / 2
+                x: this.body.GetPosition().x * Settings.RATIO,
+                y: this.body.GetPosition().y * Settings.RATIO
             }
         );
     }

@@ -221,6 +221,28 @@
                  "name":"",
                  "properties":
                     {
+                     "category":"graveyard",
+                     "grabAngle":"-0.5",
+                     "height":"12",
+                     "image":"chest.png",
+                     "name":"RagDoll",
+                     "rotation":"0",
+                     "type":"ragdoll",
+                     "weight":"5",
+                     "width":"6"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":250.0,
+                 "y":186.0
+                }, 
+                {
+                 "height":0,
+                 "name":"",
+                 "properties":
+                    {
                      "category":"kitchen",
                      "grabAngle":"0.3",
                      "height":"15",
@@ -651,7 +673,7 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":250.60285170588,
+                 "x":550.60285170588,
                  "y":186.328663790974
                 }, 
                 {

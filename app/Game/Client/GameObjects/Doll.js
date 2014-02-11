@@ -71,7 +71,10 @@ function (Parent, Settings, NotificationCenter, Exception) {
 
             NotificationCenter.trigger("view/createAnimatedMesh", texturePaths, callback, { 
                 visible: false, 
-                pivot: "mb",
+                pivot: {
+                    x: 35/2,
+                    y: 40
+                },
                 width: 35,
                 height: 40
             });
@@ -85,7 +88,10 @@ function (Parent, Settings, NotificationCenter, Exception) {
             NotificationCenter.trigger("view/addMesh", mesh);
         }
         NotificationCenter.trigger("view/createMesh", texturePath, callback, {
-            pivot: "mb",
+            pivot: {
+                x: 5,
+                y: 12
+            },
             width: 10,
             height: 12
         });

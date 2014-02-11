@@ -71,7 +71,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
             };
 
             NotificationCenter.trigger("broadcastControlCommand", "gameCommand", message);
-        }, 5000);
+        }, Settings.RESPAWN_TIME * 1000);
     };
 
     GameController.prototype.createPlayer = function(user) {

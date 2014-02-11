@@ -23,6 +23,9 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
             s:83,
             d:68,
 
+            f:70,
+            g:71,
+
             up: 38,
             left: 37,
             down: 40,
@@ -51,6 +54,9 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
         this.keyboardInput.registerKey(keys.space, 'jump');
 
         this.keyboardInput.registerKey(keys.tab, 'showInfo', 'hideInfo');
+
+        this.keyboardInput.registerKey(keys.f, 'handActionLeft');
+        this.keyboardInput.registerKey(keys.g, 'handActionRight');
     }
 
     PlayerController.prototype.moveLeft = function () {
@@ -77,6 +83,14 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
         var options = {x:x, y:y};
         Parent.prototype.lookAt.call(this, options);
         NotificationCenter.trigger('sendGameCommand', 'lookAt', options);
+    };
+
+    PlayerController.prototype.handActionLeft = function() {
+        this.handActionRequest(-0.5, 0.5);
+    };
+
+    PlayerController.prototype.handActionRight = function() {
+        this.handActionRequest(0.5, 0.5);
     };
 
     PlayerController.prototype.handActionRequest = function(x, y) {

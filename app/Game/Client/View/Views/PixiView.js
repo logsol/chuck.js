@@ -121,26 +121,12 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
         if (options.x) mesh.position.x = options.x;
         if (options.y) mesh.position.y = options.y;
         if (options.rotation) mesh.rotation = options.rotation;
-        if (options.xScale) mesh.scale.x = options.xScale;
-        if (options.yScale) mesh.scale.y = options.yScale;
         if (options.width) mesh.width = options.width;
         if (options.height) mesh.height = options.height;
+        if (options.xScale) mesh.width = Math.abs(mesh.width) * options.xScale;
+        if (options.yScale) mesh.scale.y = options.yScale;
         if (options.visible === true || options.visible === false) mesh.visible = options.visible;
-        if (options.pivot) {
-            if(options.pivot.length) {
-                switch(options.pivot) {
-                    case "lb":
-                        mesh.pivot.x = mesh.width / 2;
-                        mesh.pivot.y = mesh.height / 2;
-                        break;
-                    default:
-                        mesh.pivot.x = mesh.width / 2;
-                        mesh.pivot.y = mesh.height;
-                        break;
-
-                }                
-            }
-        };
+        if (options.pivot) mesh.pivot = new PIXI.Point(options.pivot.x, options.pivot.y);
     }
 
     PixiView.prototype.calculateCameraPosition = function() {

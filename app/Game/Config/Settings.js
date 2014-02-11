@@ -1,59 +1,68 @@
-define({
-    STAGE_WIDTH: 600,
-    STAGE_HEIGHT: 400,
+define(function() {
 
-    // BOX2D INITIALATORS
-    BOX2D_WORLD_AABB_SIZE: 3000,
-    BOX2D_ALLOW_SLEEP: true,
-    BOX2D_GRAVITY: 26,
-    BOX2D_VELOCITY_ITERATIONS: 5,
-    BOX2D_POSITION_ITERATIONS: 5,
-    BOX2D_TIME_STEP: 1 / 60,
+    var Settings = {
+        STAGE_WIDTH: 600,
+        STAGE_HEIGHT: 400,
 
-    //  PATHS
-    GRAPHICS_PATH: 'static/img/',
-    GRAPHICS_SUBPATH_ITEMS: 'Items/',
-    GRAPHICS_SUBPATH_CHARACTERS: 'Characters/',
-    GRAPHICS_SUBPATH_TILES: 'Tiles/',
-    MAPS_PATH: 'static/maps/tiled/',
-    DEFAULT_LEVELS: ['stones2'],
+        // BOX2D INITIALATORS
+        BOX2D_WORLD_AABB_SIZE: 3000,
+        BOX2D_ALLOW_SLEEP: true,
+        BOX2D_GRAVITY: 26,
+        BOX2D_VELOCITY_ITERATIONS: 5,
+        BOX2D_POSITION_ITERATIONS: 5,
+        BOX2D_TIME_STEP: 1 / 60,
 
-    RATIO: 21, //35
-    OBJECT_RATIO: 20 / 25,
-    TILE_SIZE: 20, //15, 25 is original picture
-    CAMERA_IS_ORTHOGRAPHIC: true,
-    VIEW_CONTROLLER: 0 ? 'Three' : 'Pixi',
+        //  PATHS
+        GRAPHICS_PATH: 'static/img/',
+        GRAPHICS_SUBPATH_ITEMS: 'Items/',
+        GRAPHICS_SUBPATH_CHARACTERS: 'Characters/',
+        GRAPHICS_SUBPATH_TILES: 'Tiles/',
+        MAPS_PATH: 'static/maps/tiled/',
+        DEFAULT_LEVELS: ['debug', 'stones2'],
 
-    // GAME PLAY 
-    WALK_SPEED: 4,
-    RUN_SPEED: 8,
-    FLY_SPEED: 6.2,
-    JUMP_SPEED: 20,
-    MAX_THROW_FORCE: 18,
-    MAX_THROW_ANGULAR_VELOCITY: 8,
-    MAX_RUNNING_WEIGHT: 9,
+        RATIO: 21, //35
+        // original tile size is 25 but we want it to resize to 20
+        ORIGINAL_TILE_SIZE: 25,
+        TILE_SIZE: 20,
+        CAMERA_IS_ORTHOGRAPHIC: true,
+        VIEW_CONTROLLER: 0 ? 'Three' : 'Pixi',
 
-    // restitution: bouncyness, friction: rubbing, density: mass
-    TILE_FRICTION: 0.99,
-    TILE_RESTITUTION: 0.1,
+        // GAME PLAY 
+        WALK_SPEED: 4,
+        RUN_SPEED: 8,
+        FLY_SPEED: 6.2,
+        JUMP_SPEED: 20,
+        MAX_THROW_FORCE: 18,
+        MAX_THROW_ANGULAR_VELOCITY: 0,
+        MAX_RUNNING_WEIGHT: 9,
+        RESPAWN_TIME: 0.5,
 
-    PLAYER_DENSITY: 3.68,
-    PLAYER_FRICTION: 5,
-    PLAYER_MOTION_FRICTION: 0.1,
-    PLAYER_RESTITUTION: 0.0,
-    PLAYER_LINEAR_DAMPING: 0.8,
+        // restitution: bouncyness, friction: rubbing, density: mass
+        TILE_FRICTION: 0.99,
+        TILE_RESTITUTION: 0.1,
 
-    ITEM_DENSITY: 0.9,
-    ITEM_FRICTION: 0.99,
-    ITEM_RESTITUTION: 0.02,
+        PLAYER_DENSITY: 3.68,
+        PLAYER_FRICTION: 5,
+        PLAYER_MOTION_FRICTION: 0.1,
+        PLAYER_RESTITUTION: 0.0,
+        PLAYER_LINEAR_DAMPING: 0.8,
 
-    // BROWSER
-    CANVAS_DOM_ID: 'canvasContainer',
-    IS_BROWSER_ENVIRONMENT: typeof window !== 'undefined',
-    USE_WEBGL: true,
+        ITEM_DENSITY: 0.9,
+        ITEM_FRICTION: 0.99,
+        ITEM_RESTITUTION: 0.02,
 
-    // NETWORKING
-    WORLD_UPDATE_BROADCAST_INTERVAL: 70,
-    NETWORK_LOG_INCOMING: false,
-    NETWORK_LOG_OUTGOING: false
-})
+        // BROWSER
+        CANVAS_DOM_ID: 'canvasContainer',
+        IS_BROWSER_ENVIRONMENT: typeof window !== 'undefined',
+        USE_WEBGL: true,
+
+        // NETWORKING
+        WORLD_UPDATE_BROADCAST_INTERVAL: 70,
+        NETWORK_LOG_INCOMING: false,
+        NETWORK_LOG_OUTGOING: false
+    }
+
+    Settings.TILE_RATIO = Settings.ORIGINAL_TILE_SIZE / Settings.TILE_SIZE;
+
+    return Settings;
+});

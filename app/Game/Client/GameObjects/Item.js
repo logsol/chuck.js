@@ -31,7 +31,10 @@ function (Parent, Settings, NotificationCenter) {
             {
                 width: this.options.width, 
                 height: this.options.height, 
-                pivot: "mb"
+                pivot: {
+                    x: this.options.width / 2,
+                    y: this.options.height
+                }
             }
         );
     };

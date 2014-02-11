@@ -30,6 +30,8 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
         };
         this.holdingJoint = null;
         this.holdingItem = null;
+
+        this.ragDoll = {head: null, body: null};
         
         this.createFixtures();
         this.body.SetActive(false);
@@ -290,16 +292,16 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
                 this.holdingJoint = null;
             }
 
-            var p = this.body.GetPosition();
-            this.holdingItem.body.SetPosition(new Box2D.Common.Math.b2Vec2(
-                p.x + ((this.holdingItem.options.width / Settings.RATIO / 2 + this.width / 2 / Settings.RATIO) * this.lookDirection),
-                p.y - 1 // 1m in the air
-            ));
-            this.holdingItem.flip(this.lookDirection);
-            this.holdingItem.body.SetAngle((this.holdingItem.options.grabAngle || 0) * this.lookDirection);
+            var bodyPosition = this.body.GetPosition();
+            var handPosition = new Box2D.Common.Math.b2Vec2(
+                bodyPosition.x + ((this.width / 2 / Settings.RATIO) * this.lookDirection),
+                bodyPosition.y - this.height / 3 * 2 / Settings.RATIO // 2/3 of the body height
+            );
+
+            this.holdingItem.reposition(handPosition, this.lookDirection);
 
             var jointDef = new Box2D.Dynamics.Joints.b2WeldJointDef();
-            jointDef.Initialize(this.body, this.holdingItem.body, this.holdingItem.body.GetWorldCenter());
+            jointDef.Initialize(this.body, this.holdingItem.body, this.holdingItem.getGrabPoint());
 
             this.holdingJoint = this.body.GetWorld().CreateJoint(jointDef);
         }
@@ -310,17 +312,7 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
         this.holdingJoint = null;
         this.holdingItem = null;
 
-        var body = item.body;
-        body.SetAwake(true);
-        
-        body.ApplyImpulse(
-            new Box2D.Common.Math.b2Vec2(
-                x * Settings.MAX_THROW_FORCE,
-                -y * Settings.MAX_THROW_FORCE * 1.5 // 1.5 is to throw higher then far
-            ),
-            body.GetLocalCenter()
-        );
-        body.SetAngularVelocity(Settings.MAX_THROW_ANGULAR_VELOCITY * x); // 
+        item.throw(x, y);
     };
 
     Doll.prototype.onFootSensorDetection = function(isColliding, fixture) {

@@ -60,19 +60,10 @@ define([
         for (var i = 0; i < objects.length; i++) {
             var object = objects[i];
             var options = object.properties;
-            options.x = object.x * Settings.OBJECT_RATIO;
-            options.y = object.y * Settings.OBJECT_RATIO;
-            var item;
+            options.x = object.x / Settings.TILE_RATIO;
+            options.y = object.y / Settings.TILE_RATIO;
             var uid = "item-" + i;
-
-            switch(options.type) {
-                case 'skateboard':
-                    item = new Skateboard(this.engine, uid, options);
-                    break;
-                default:
-                    item = new Item(this.engine, uid, options);
-                    break
-            }
+            var item = this.createItem(uid, options);
             this.gameObjects.animated.push(item);  
         };
     };
@@ -99,8 +90,8 @@ define([
             var object = spawnLayer.objects[parseInt(Math.random() * (size -1), 10)];
 
             return {
-                x: object.x * Settings.OBJECT_RATIO,
-                y: object.y * Settings.OBJECT_RATIO
+                x: object.x / Settings.TILE_RATIO,
+                y: object.y / Settings.TILE_RATIO
             }
 
         }

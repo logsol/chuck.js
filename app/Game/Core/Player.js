@@ -67,15 +67,15 @@ function (Doll, Settings, NotificationCenter) {
 
     Player.prototype.grab = function(item) {
         if(!this.isSpawned) return false;
-        item.beingGrabbed(this);
         this.doll.grab(item);
+        item.beingGrabbed(this);
         this.holdingItem = item;  
     };
 
     Player.prototype.throw = function(x, y, item) {
         if(!this.isSpawned) return false;
-        item.beingReleased(this);
         this.doll.throw(item, x, y);
+        item.beingReleased(this);
         this.holdingItem = null; 
     };
 

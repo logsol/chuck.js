@@ -33,7 +33,7 @@ function (Exception) {
 				if(options[key].constructor !== Object) {
 					preset[key] = options[key];
 				} else {
-					preset[key] = mergeOptions(options[key], preset[key]);
+					preset[key] = Options.prototype.merge.call(this, options[key], preset[key]);
 				}
 			}
 		}

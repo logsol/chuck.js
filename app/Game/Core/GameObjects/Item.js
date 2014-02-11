@@ -1,17 +1,14 @@
 define([
 	"Game/" + GLOBALS.context + "/GameObjects/GameObject",
 	"Lib/Vendor/Box2D",
+    "Lib/Utilities/Options",
 	"Game/Config/Settings"
 ],
  
-function (Parent, Box2D, Settings) {
+function (Parent, Box2D, Options, Settings) {
  
     function Item(physicsEngine, uid, options) {
-        this.options = {
-            category: options.category,
-            image: options.image,
-            name: options.name,
-            type: options.type,
+        var floatOptions = {
             grabAngle: parseFloat(options.grabAngle),
             weight: parseFloat(options.weight),
             width: parseFloat(options.width),
@@ -21,6 +18,9 @@ function (Parent, Box2D, Settings) {
             x: parseFloat(options.x),
             y: parseFloat(options.y)
         };
+
+        this.options = Options.merge(floatOptions, options);
+
     	Parent.call(this, physicsEngine, uid);
         this.createFixture();
         this.body.ResetMassData();
@@ -40,9 +40,7 @@ function (Parent, Box2D, Settings) {
         return bodyDef;
     }
 
-    Item.prototype.createFixture = function () {
-        var self = this;
-
+    Item.prototype.getFixtureDef = function() {
         var itemShape;
         var w = this.options.width / Settings.RATIO;
         var h = this.options.height / Settings.RATIO;
@@ -77,6 +75,11 @@ function (Parent, Box2D, Settings) {
             onCollisionChange: this.onCollisionChange.bind(this)
         }
 
+        return fixtureDef;
+    };
+
+    Item.prototype.createFixture = function () {
+        var fixtureDef = this.getFixtureDef();
         this.body.CreateFixture(fixtureDef);
     }
 
@@ -96,6 +99,42 @@ function (Parent, Box2D, Settings) {
 
     Item.prototype.onCollisionChange = function(isColliding, fixture, info) {
         // overwrite if necessary
+    };
+
+    Item.prototype.reposition = function(handPosition, direction) {
+        var position = new Box2D.Common.Math.b2Vec2(
+            handPosition.x + ((this.options.width / Settings.RATIO / 2) * direction),
+            handPosition.y
+        )
+        this.body.SetPosition(position);
+        this.flip(direction);
+        this.body.SetAngle((this.options.grabAngle || 0) * direction);
+    };
+
+    Item.prototype.getGrabPoint = function() {
+        return this.body.GetWorldCenter();
+    };
+
+    Item.prototype.throw = function(x, y) {
+        var body = this.body;
+        body.SetAwake(true);
+        /*
+        body.ApplyImpulse(
+            new Box2D.Common.Math.b2Vec2(
+                x * Settings.MAX_THROW_FORCE,
+                -y * Settings.MAX_THROW_FORCE * 1.5 // 1.5 is to throw higher then far
+            ),
+            body.GetLocalCenter()
+        );
+        */
+        
+        var vector = new Box2D.Common.Math.b2Vec2(
+            x * Settings.MAX_THROW_FORCE,
+            -y * Settings.MAX_THROW_FORCE * 1.5 // 1.5 is to throw higher then far
+        );
+        this.body.SetLinearVelocity(vector);
+
+        body.SetAngularVelocity(Settings.MAX_THROW_ANGULAR_VELOCITY * x);
     };
  
     return Item;

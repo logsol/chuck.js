@@ -6,9 +6,10 @@ define([
     "Game/" + GLOBALS.context + "/Collision/Detector",
     "Game/" + GLOBALS.context + "/GameObjects/Tile",
     "Game/" + GLOBALS.context + "/GameObjects/Item",
-    "Game/" + GLOBALS.context + "/GameObjects/Items/Skateboard"
+    "Game/" + GLOBALS.context + "/GameObjects/Items/Skateboard",
+    "Game/" + GLOBALS.context + "/GameObjects/Items/RagDoll"
 
-], function (Settings, Box2D, NotificationCenter, Exception, CollisionDetector, Tile, Item, Skateboard) {
+], function (Settings, Box2D, NotificationCenter, Exception, CollisionDetector, Tile, Item, Skateboard, RagDoll) {
     
     function Level (uid, engine, gameObjects) {
         this.uid = uid;
@@ -64,19 +65,21 @@ define([
 
         for (var i = 0; i < items.length; i++) {
             var options = items[i];
-            var item;
             var uid = "item-" + i;
-
-            switch(options.type) {
-                case 'skateboard':
-                    item = new Skateboard(this.engine, uid, options);
-                    break;
-                default:
-                    item = new Item(this.engine, uid, options);
-                    break
-            }
+            var item = this.createItem(uid, options);
             this.gameObjects.animated.push(item);            
         };
+    };
+
+    Level.prototype.createItem = function(uid, options) {
+        switch(options.type) {
+            case 'skateboard':
+                return new Skateboard(this.engine, uid, options);
+            case 'ragdoll':
+                return new RagDoll(this.engine, uid, options);
+            default:
+                return new Item(this.engine, uid, options);
+        }
     };
 
     Level.prototype.getRandomSpawnPoint = function() {
