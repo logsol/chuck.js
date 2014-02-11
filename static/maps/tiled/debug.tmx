@@ -1,0 +1,871 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="25" tileheight="25" backgroundcolor="#171b1d">
+ <tileset firstgid="1" name="Stones" tilewidth="25" tileheight="25">
+  <tile id="0">
+   <image width="25" height="25" source="../../img/Tiles/Stones/10.gif"/>
+  </tile>
+  <tile id="1">
+   <image width="25" height="25" source="../../img/Tiles/Stones/20.gif"/>
+  </tile>
+  <tile id="2">
+   <image width="25" height="25" source="../../img/Tiles/Stones/21.gif"/>
+  </tile>
+  <tile id="3">
+   <image width="25" height="25" source="../../img/Tiles/Stones/22.gif"/>
+  </tile>
+  <tile id="4">
+   <image width="25" height="25" source="../../img/Tiles/Stones/23.gif"/>
+  </tile>
+  <tile id="5">
+   <image width="25" height="25" source="../../img/Tiles/Stones/30.gif"/>
+  </tile>
+  <tile id="6">
+   <image width="25" height="25" source="../../img/Tiles/Stones/31.gif"/>
+  </tile>
+  <tile id="7">
+   <image width="25" height="25" source="../../img/Tiles/Stones/32.gif"/>
+  </tile>
+  <tile id="8">
+   <image width="25" height="25" source="../../img/Tiles/Stones/33.gif"/>
+  </tile>
+  <tile id="9">
+   <image width="25" height="25" source="../../img/Tiles/Stones/40.gif"/>
+  </tile>
+  <tile id="10">
+   <image width="25" height="25" source="../../img/Tiles/Stones/41.gif"/>
+  </tile>
+  <tile id="11">
+   <image width="25" height="25" source="../../img/Tiles/Stones/42.gif"/>
+  </tile>
+  <tile id="12">
+   <image width="25" height="25" source="../../img/Tiles/Stones/43.gif"/>
+  </tile>
+  <tile id="13">
+   <image width="25" height="25" source="../../img/Tiles/Stones/50.gif"/>
+  </tile>
+  <tile id="14">
+   <image width="25" height="25" source="../../img/Tiles/Stones/51.gif"/>
+  </tile>
+  <tile id="15">
+   <image width="25" height="25" source="../../img/Tiles/Stones/52.gif"/>
+  </tile>
+  <tile id="16">
+   <image width="25" height="25" source="../../img/Tiles/Stones/53.gif"/>
+  </tile>
+  <tile id="17">
+   <image width="25" height="25" source="../../img/Tiles/Stones/60.gif"/>
+  </tile>
+  <tile id="18">
+   <image width="25" height="25" source="../../img/Tiles/Stones/61.gif"/>
+  </tile>
+  <tile id="19">
+   <image width="25" height="25" source="../../img/Tiles/Stones/62.gif"/>
+  </tile>
+  <tile id="20">
+   <image width="25" height="25" source="../../img/Tiles/Stones/63.gif"/>
+  </tile>
+  <tile id="21">
+   <image width="25" height="25" source="../../img/Tiles/Stones/70.gif"/>
+  </tile>
+  <tile id="22">
+   <image width="25" height="25" source="../../img/Tiles/Stones/71.gif"/>
+  </tile>
+  <tile id="23">
+   <image width="25" height="25" source="../../img/Tiles/Stones/72.gif"/>
+  </tile>
+  <tile id="24">
+   <image width="25" height="25" source="../../img/Tiles/Stones/73.gif"/>
+  </tile>
+  <tile id="25">
+   <image width="25" height="25" source="../../img/Tiles/Stones/80.gif"/>
+  </tile>
+  <tile id="26">
+   <image width="25" height="25" source="../../img/Tiles/Stones/81.gif"/>
+  </tile>
+  <tile id="27">
+   <image width="25" height="25" source="../../img/Tiles/Stones/82.gif"/>
+  </tile>
+  <tile id="28">
+   <image width="25" height="25" source="../../img/Tiles/Stones/83.gif"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="30" name="Wood" tilewidth="25" tileheight="25">
+  <tile id="0">
+   <image width="25" height="25" source="../../img/Tiles/Wood/10.gif"/>
+  </tile>
+  <tile id="1">
+   <image width="25" height="25" source="../../img/Tiles/Wood/20.gif"/>
+  </tile>
+  <tile id="2">
+   <image width="25" height="25" source="../../img/Tiles/Wood/21.gif"/>
+  </tile>
+  <tile id="3">
+   <image width="25" height="25" source="../../img/Tiles/Wood/22.gif"/>
+  </tile>
+  <tile id="4">
+   <image width="25" height="25" source="../../img/Tiles/Wood/23.gif"/>
+  </tile>
+  <tile id="5">
+   <image width="25" height="25" source="../../img/Tiles/Wood/30.gif"/>
+  </tile>
+  <tile id="6">
+   <image width="25" height="25" source="../../img/Tiles/Wood/31.gif"/>
+  </tile>
+  <tile id="7">
+   <image width="25" height="25" source="../../img/Tiles/Wood/32.gif"/>
+  </tile>
+  <tile id="8">
+   <image width="25" height="25" source="../../img/Tiles/Wood/33.gif"/>
+  </tile>
+  <tile id="9">
+   <image width="25" height="25" source="../../img/Tiles/Wood/40.gif"/>
+  </tile>
+  <tile id="10">
+   <image width="25" height="25" source="../../img/Tiles/Wood/41.gif"/>
+  </tile>
+  <tile id="11">
+   <image width="25" height="25" source="../../img/Tiles/Wood/42.gif"/>
+  </tile>
+  <tile id="12">
+   <image width="25" height="25" source="../../img/Tiles/Wood/43.gif"/>
+  </tile>
+  <tile id="13">
+   <image width="25" height="25" source="../../img/Tiles/Wood/50.gif"/>
+  </tile>
+  <tile id="14">
+   <image width="25" height="25" source="../../img/Tiles/Wood/51.gif"/>
+  </tile>
+  <tile id="15">
+   <image width="25" height="25" source="../../img/Tiles/Wood/52.gif"/>
+  </tile>
+  <tile id="16">
+   <image width="25" height="25" source="../../img/Tiles/Wood/53.gif"/>
+  </tile>
+  <tile id="17">
+   <image width="25" height="25" source="../../img/Tiles/Wood/60.gif"/>
+  </tile>
+  <tile id="18">
+   <image width="25" height="25" source="../../img/Tiles/Wood/61.gif"/>
+  </tile>
+  <tile id="19">
+   <image width="25" height="25" source="../../img/Tiles/Wood/62.gif"/>
+  </tile>
+  <tile id="20">
+   <image width="25" height="25" source="../../img/Tiles/Wood/63.gif"/>
+  </tile>
+  <tile id="21">
+   <image width="25" height="25" source="../../img/Tiles/Wood/70.gif"/>
+  </tile>
+  <tile id="22">
+   <image width="25" height="25" source="../../img/Tiles/Wood/71.gif"/>
+  </tile>
+  <tile id="23">
+   <image width="25" height="25" source="../../img/Tiles/Wood/72.gif"/>
+  </tile>
+  <tile id="24">
+   <image width="25" height="25" source="../../img/Tiles/Wood/73.gif"/>
+  </tile>
+  <tile id="25">
+   <image width="25" height="25" source="../../img/Tiles/Wood/80.gif"/>
+  </tile>
+  <tile id="26">
+   <image width="25" height="25" source="../../img/Tiles/Wood/81.gif"/>
+  </tile>
+  <tile id="27">
+   <image width="25" height="25" source="../../img/Tiles/Wood/82.gif"/>
+  </tile>
+  <tile id="28">
+   <image width="25" height="25" source="../../img/Tiles/Wood/83.gif"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="59" name="GrassSoil" tilewidth="25" tileheight="25">
+  <tile id="0">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/10.gif"/>
+  </tile>
+  <tile id="1">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/10c.gif"/>
+  </tile>
+  <tile id="2">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/13c.gif"/>
+  </tile>
+  <tile id="3">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/20.gif"/>
+  </tile>
+  <tile id="4">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/21.gif"/>
+  </tile>
+  <tile id="5">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/22.gif"/>
+  </tile>
+  <tile id="6">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/23.gif"/>
+  </tile>
+  <tile id="7">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/30.gif"/>
+  </tile>
+  <tile id="8">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/31.gif"/>
+  </tile>
+  <tile id="9">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/32.gif"/>
+  </tile>
+  <tile id="10">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/33.gif"/>
+  </tile>
+  <tile id="11">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/40.gif"/>
+  </tile>
+  <tile id="12">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/41.gif"/>
+  </tile>
+  <tile id="13">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/42.gif"/>
+  </tile>
+  <tile id="14">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/43.gif"/>
+  </tile>
+  <tile id="15">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/43c.gif"/>
+  </tile>
+  <tile id="16">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/50.gif"/>
+  </tile>
+  <tile id="17">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/51.gif"/>
+  </tile>
+  <tile id="18">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/52.gif"/>
+  </tile>
+  <tile id="19">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/53.gif"/>
+  </tile>
+  <tile id="20">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/60.gif"/>
+  </tile>
+  <tile id="21">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/61.gif"/>
+  </tile>
+  <tile id="22">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/61c.gif"/>
+  </tile>
+  <tile id="23">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/62.gif"/>
+  </tile>
+  <tile id="24">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/63.gif"/>
+  </tile>
+  <tile id="25">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/70.gif"/>
+  </tile>
+  <tile id="26">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/71.gif"/>
+  </tile>
+  <tile id="27">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/72.gif"/>
+  </tile>
+  <tile id="28">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/73.gif"/>
+  </tile>
+  <tile id="29">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/80.gif"/>
+  </tile>
+  <tile id="30">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/81.gif"/>
+  </tile>
+  <tile id="31">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/82.gif"/>
+  </tile>
+  <tile id="32">
+   <image width="25" height="25" source="../../img/Tiles/GrassSoil/83.gif"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="92" name="Soil" tilewidth="25" tileheight="25">
+  <tile id="0">
+   <image width="25" height="25" source="../../img/Tiles/Soil/10.gif"/>
+  </tile>
+  <tile id="1">
+   <image width="25" height="25" source="../../img/Tiles/Soil/20.gif"/>
+  </tile>
+  <tile id="2">
+   <image width="25" height="25" source="../../img/Tiles/Soil/21.gif"/>
+  </tile>
+  <tile id="3">
+   <image width="25" height="25" source="../../img/Tiles/Soil/22.gif"/>
+  </tile>
+  <tile id="4">
+   <image width="25" height="25" source="../../img/Tiles/Soil/23.gif"/>
+  </tile>
+  <tile id="5">
+   <image width="25" height="25" source="../../img/Tiles/Soil/30.gif"/>
+  </tile>
+  <tile id="6">
+   <image width="25" height="25" source="../../img/Tiles/Soil/31.gif"/>
+  </tile>
+  <tile id="7">
+   <image width="25" height="25" source="../../img/Tiles/Soil/32.gif"/>
+  </tile>
+  <tile id="8">
+   <image width="25" height="25" source="../../img/Tiles/Soil/33.gif"/>
+  </tile>
+  <tile id="9">
+   <image width="25" height="25" source="../../img/Tiles/Soil/40.gif"/>
+  </tile>
+  <tile id="10">
+   <image width="25" height="25" source="../../img/Tiles/Soil/41.gif"/>
+  </tile>
+  <tile id="11">
+   <image width="25" height="25" source="../../img/Tiles/Soil/42.gif"/>
+  </tile>
+  <tile id="12">
+   <image width="25" height="25" source="../../img/Tiles/Soil/43.gif"/>
+  </tile>
+  <tile id="13">
+   <image width="25" height="25" source="../../img/Tiles/Soil/50.gif"/>
+  </tile>
+  <tile id="14">
+   <image width="25" height="25" source="../../img/Tiles/Soil/51.gif"/>
+  </tile>
+  <tile id="15">
+   <image width="25" height="25" source="../../img/Tiles/Soil/52.gif"/>
+  </tile>
+  <tile id="16">
+   <image width="25" height="25" source="../../img/Tiles/Soil/53.gif"/>
+  </tile>
+  <tile id="17">
+   <image width="25" height="25" source="../../img/Tiles/Soil/60.gif"/>
+  </tile>
+  <tile id="18">
+   <image width="25" height="25" source="../../img/Tiles/Soil/61.gif"/>
+  </tile>
+  <tile id="19">
+   <image width="25" height="25" source="../../img/Tiles/Soil/62.gif"/>
+  </tile>
+  <tile id="20">
+   <image width="25" height="25" source="../../img/Tiles/Soil/63.gif"/>
+  </tile>
+  <tile id="21">
+   <image width="25" height="25" source="../../img/Tiles/Soil/70.gif"/>
+  </tile>
+  <tile id="22">
+   <image width="25" height="25" source="../../img/Tiles/Soil/71.gif"/>
+  </tile>
+  <tile id="23">
+   <image width="25" height="25" source="../../img/Tiles/Soil/72.gif"/>
+  </tile>
+  <tile id="24">
+   <image width="25" height="25" source="../../img/Tiles/Soil/73.gif"/>
+  </tile>
+  <tile id="25">
+   <image width="25" height="25" source="../../img/Tiles/Soil/80.gif"/>
+  </tile>
+  <tile id="26">
+   <image width="25" height="25" source="../../img/Tiles/Soil/81.gif"/>
+  </tile>
+  <tile id="27">
+   <image width="25" height="25" source="../../img/Tiles/Soil/82.gif"/>
+  </tile>
+  <tile id="28">
+   <image width="25" height="25" source="../../img/Tiles/Soil/83.gif"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="121" name="Rock" tilewidth="25" tileheight="25">
+  <tile id="0">
+   <image width="25" height="25" source="../../img/Tiles/Rock/10.gif"/>
+  </tile>
+  <tile id="1">
+   <image width="25" height="25" source="../../img/Tiles/Rock/20.gif"/>
+  </tile>
+  <tile id="2">
+   <image width="25" height="25" source="../../img/Tiles/Rock/21.gif"/>
+  </tile>
+  <tile id="3">
+   <image width="25" height="25" source="../../img/Tiles/Rock/22.gif"/>
+  </tile>
+  <tile id="4">
+   <image width="25" height="25" source="../../img/Tiles/Rock/23.gif"/>
+  </tile>
+  <tile id="5">
+   <image width="25" height="25" source="../../img/Tiles/Rock/30.gif"/>
+  </tile>
+  <tile id="6">
+   <image width="25" height="25" source="../../img/Tiles/Rock/31.gif"/>
+  </tile>
+  <tile id="7">
+   <image width="25" height="25" source="../../img/Tiles/Rock/32.gif"/>
+  </tile>
+  <tile id="8">
+   <image width="25" height="25" source="../../img/Tiles/Rock/33.gif"/>
+  </tile>
+  <tile id="9">
+   <image width="25" height="25" source="../../img/Tiles/Rock/40.gif"/>
+  </tile>
+  <tile id="10">
+   <image width="25" height="25" source="../../img/Tiles/Rock/41.gif"/>
+  </tile>
+  <tile id="11">
+   <image width="25" height="25" source="../../img/Tiles/Rock/42.gif"/>
+  </tile>
+  <tile id="12">
+   <image width="25" height="25" source="../../img/Tiles/Rock/43.gif"/>
+  </tile>
+  <tile id="13">
+   <image width="25" height="25" source="../../img/Tiles/Rock/50.gif"/>
+  </tile>
+  <tile id="14">
+   <image width="25" height="25" source="../../img/Tiles/Rock/51.gif"/>
+  </tile>
+  <tile id="15">
+   <image width="25" height="25" source="../../img/Tiles/Rock/52.gif"/>
+  </tile>
+  <tile id="16">
+   <image width="25" height="25" source="../../img/Tiles/Rock/53.gif"/>
+  </tile>
+  <tile id="17">
+   <image width="25" height="25" source="../../img/Tiles/Rock/60.gif"/>
+  </tile>
+  <tile id="18">
+   <image width="25" height="25" source="../../img/Tiles/Rock/61.gif"/>
+  </tile>
+  <tile id="19">
+   <image width="25" height="25" source="../../img/Tiles/Rock/62.gif"/>
+  </tile>
+  <tile id="20">
+   <image width="25" height="25" source="../../img/Tiles/Rock/63.gif"/>
+  </tile>
+  <tile id="21">
+   <image width="25" height="25" source="../../img/Tiles/Rock/70.gif"/>
+  </tile>
+  <tile id="22">
+   <image width="25" height="25" source="../../img/Tiles/Rock/71.gif"/>
+  </tile>
+  <tile id="23">
+   <image width="25" height="25" source="../../img/Tiles/Rock/72.gif"/>
+  </tile>
+  <tile id="24">
+   <image width="25" height="25" source="../../img/Tiles/Rock/73.gif"/>
+  </tile>
+  <tile id="25">
+   <image width="25" height="25" source="../../img/Tiles/Rock/80.gif"/>
+  </tile>
+  <tile id="26">
+   <image width="25" height="25" source="../../img/Tiles/Rock/81.gif"/>
+  </tile>
+  <tile id="27">
+   <image width="25" height="25" source="../../img/Tiles/Rock/82.gif"/>
+  </tile>
+  <tile id="28">
+   <image width="25" height="25" source="../../img/Tiles/Rock/83.gif"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="150" name="Metal" tilewidth="25" tileheight="25">
+  <tile id="0">
+   <image width="25" height="25" source="../../img/Tiles/Metal/10.gif"/>
+  </tile>
+  <tile id="1">
+   <image width="25" height="25" source="../../img/Tiles/Metal/20.gif"/>
+  </tile>
+  <tile id="2">
+   <image width="25" height="25" source="../../img/Tiles/Metal/21.gif"/>
+  </tile>
+  <tile id="3">
+   <image width="25" height="25" source="../../img/Tiles/Metal/22.gif"/>
+  </tile>
+  <tile id="4">
+   <image width="25" height="25" source="../../img/Tiles/Metal/23.gif"/>
+  </tile>
+  <tile id="5">
+   <image width="25" height="25" source="../../img/Tiles/Metal/30.gif"/>
+  </tile>
+  <tile id="6">
+   <image width="25" height="25" source="../../img/Tiles/Metal/31.gif"/>
+  </tile>
+  <tile id="7">
+   <image width="25" height="25" source="../../img/Tiles/Metal/32.gif"/>
+  </tile>
+  <tile id="8">
+   <image width="25" height="25" source="../../img/Tiles/Metal/33.gif"/>
+  </tile>
+  <tile id="9">
+   <image width="25" height="25" source="../../img/Tiles/Metal/40.gif"/>
+  </tile>
+  <tile id="10">
+   <image width="25" height="25" source="../../img/Tiles/Metal/41.gif"/>
+  </tile>
+  <tile id="11">
+   <image width="25" height="25" source="../../img/Tiles/Metal/42.gif"/>
+  </tile>
+  <tile id="12">
+   <image width="25" height="25" source="../../img/Tiles/Metal/43.gif"/>
+  </tile>
+  <tile id="13">
+   <image width="25" height="25" source="../../img/Tiles/Metal/50.gif"/>
+  </tile>
+  <tile id="14">
+   <image width="25" height="25" source="../../img/Tiles/Metal/51.gif"/>
+  </tile>
+  <tile id="15">
+   <image width="25" height="25" source="../../img/Tiles/Metal/52.gif"/>
+  </tile>
+  <tile id="16">
+   <image width="25" height="25" source="../../img/Tiles/Metal/53.gif"/>
+  </tile>
+  <tile id="17">
+   <image width="25" height="25" source="../../img/Tiles/Metal/60.gif"/>
+  </tile>
+  <tile id="18">
+   <image width="25" height="25" source="../../img/Tiles/Metal/61.gif"/>
+  </tile>
+  <tile id="19">
+   <image width="25" height="25" source="../../img/Tiles/Metal/62.gif"/>
+  </tile>
+  <tile id="20">
+   <image width="25" height="25" source="../../img/Tiles/Metal/63.gif"/>
+  </tile>
+  <tile id="21">
+   <image width="25" height="25" source="../../img/Tiles/Metal/70.gif"/>
+  </tile>
+  <tile id="22">
+   <image width="25" height="25" source="../../img/Tiles/Metal/71.gif"/>
+  </tile>
+  <tile id="23">
+   <image width="25" height="25" source="../../img/Tiles/Metal/72.gif"/>
+  </tile>
+  <tile id="24">
+   <image width="25" height="25" source="../../img/Tiles/Metal/73.gif"/>
+  </tile>
+  <tile id="25">
+   <image width="25" height="25" source="../../img/Tiles/Metal/80.gif"/>
+  </tile>
+  <tile id="26">
+   <image width="25" height="25" source="../../img/Tiles/Metal/81.gif"/>
+  </tile>
+  <tile id="27">
+   <image width="25" height="25" source="../../img/Tiles/Metal/82.gif"/>
+  </tile>
+  <tile id="28">
+   <image width="25" height="25" source="../../img/Tiles/Metal/83.gif"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="179" name="Metal3" tilewidth="25" tileheight="25">
+  <tile id="0">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/10.gif"/>
+  </tile>
+  <tile id="1">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/20.gif"/>
+  </tile>
+  <tile id="2">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/21.gif"/>
+  </tile>
+  <tile id="3">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/22.gif"/>
+  </tile>
+  <tile id="4">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/23.gif"/>
+  </tile>
+  <tile id="5">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/30.gif"/>
+  </tile>
+  <tile id="6">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/31.gif"/>
+  </tile>
+  <tile id="7">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/32.gif"/>
+  </tile>
+  <tile id="8">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/33.gif"/>
+  </tile>
+  <tile id="9">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/40.gif"/>
+  </tile>
+  <tile id="10">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/41.gif"/>
+  </tile>
+  <tile id="11">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/42.gif"/>
+  </tile>
+  <tile id="12">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/43.gif"/>
+  </tile>
+  <tile id="13">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/50.gif"/>
+  </tile>
+  <tile id="14">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/51.gif"/>
+  </tile>
+  <tile id="15">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/52.gif"/>
+  </tile>
+  <tile id="16">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/53.gif"/>
+  </tile>
+  <tile id="17">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/60.gif"/>
+  </tile>
+  <tile id="18">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/61.gif"/>
+  </tile>
+  <tile id="19">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/62.gif"/>
+  </tile>
+  <tile id="20">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/63.gif"/>
+  </tile>
+  <tile id="21">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/70.gif"/>
+  </tile>
+  <tile id="22">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/71.gif"/>
+  </tile>
+  <tile id="23">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/72.gif"/>
+  </tile>
+  <tile id="24">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/73.gif"/>
+  </tile>
+  <tile id="25">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/80.gif"/>
+  </tile>
+  <tile id="26">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/81.gif"/>
+  </tile>
+  <tile id="27">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/82.gif"/>
+  </tile>
+  <tile id="28">
+   <image width="25" height="25" source="../../img/Tiles/Metal3/83.gif"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="208" name="Rooftop" tilewidth="25" tileheight="25">
+  <tile id="0">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/10.gif"/>
+  </tile>
+  <tile id="1">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/20.gif"/>
+  </tile>
+  <tile id="2">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/21.gif"/>
+  </tile>
+  <tile id="3">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/22.gif"/>
+  </tile>
+  <tile id="4">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/23.gif"/>
+  </tile>
+  <tile id="5">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/30.gif"/>
+  </tile>
+  <tile id="6">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/31.gif"/>
+  </tile>
+  <tile id="7">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/32.gif"/>
+  </tile>
+  <tile id="8">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/33.gif"/>
+  </tile>
+  <tile id="9">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/40.gif"/>
+  </tile>
+  <tile id="10">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/41.gif"/>
+  </tile>
+  <tile id="11">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/42.gif"/>
+  </tile>
+  <tile id="12">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/43.gif"/>
+  </tile>
+  <tile id="13">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/50.gif"/>
+  </tile>
+  <tile id="14">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/51.gif"/>
+  </tile>
+  <tile id="15">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/52.gif"/>
+  </tile>
+  <tile id="16">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/53.gif"/>
+  </tile>
+  <tile id="17">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/60.gif"/>
+  </tile>
+  <tile id="18">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/61.gif"/>
+  </tile>
+  <tile id="19">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/62.gif"/>
+  </tile>
+  <tile id="20">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/63.gif"/>
+  </tile>
+  <tile id="21">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/70.gif"/>
+  </tile>
+  <tile id="22">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/71.gif"/>
+  </tile>
+  <tile id="23">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/72.gif"/>
+  </tile>
+  <tile id="24">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/73.gif"/>
+  </tile>
+  <tile id="25">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/80.gif"/>
+  </tile>
+  <tile id="26">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/81.gif"/>
+  </tile>
+  <tile id="27">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/82.gif"/>
+  </tile>
+  <tile id="28">
+   <image width="25" height="25" source="../../img/Tiles/Rooftop/83.gif"/>
+  </tile>
+ </tileset>
+ <imagelayer name="background" visible="0">
+  <image source="../../img/Backgrounds/londonatnight.jpg"/>
+ </imagelayer>
+ <layer name="noncollision" width="100" height="100" visible="0" opacity="0.3">
+  <data encoding="base64" compression="zlib">
+   eJzt0VEJACAUBEHtaRHbKxhAvx4nzMAm2NYAAAAAAACOueuXqOVHFj+y+AEAAPCf8RB1/MjiBwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQJYFUysKTg==
+  </data>
+ </layer>
+ <objectgroup name="spawnpoints">
+  <object x="219.202" y="399.192">
+   <ellipse/>
+  </object>
+  <object x="631.833" y="296.667">
+   <ellipse/>
+  </object>
+  <object x="137.383" y="311.064">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <layer name="collision" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2E8KgkAUB+C5l4tatO1Anstd0AXadKUUEkIdpLCZJ34fvJXCwPvNP21TeW2FMfeiRm/kkTf25tJX81HXAmMyV7I3t766d7HMfhWLPGLZqjffnD/yyLM+YhnO1nvm2XTOb3Xvkkee9RGLPGKRRyy/9qapMOYRWB+xyCOW8X9S7s77D/LI26I35zT/ThnqNHnvmfxPXFNyrnZJHmtK7x2PCmPuifM8lqV9v0QBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8bwA3nooIw==
+  </data>
+ </layer>
+ <objectgroup name="items">
+  <object x="502.607" y="384.589">
+   <properties>
+    <property name="category" value="kitchen"/>
+    <property name="grabAngle" value="0.3"/>
+    <property name="height" value="22"/>
+    <property name="image" value="cleaver_large.gif"/>
+    <property name="name" value="Large Cleaver"/>
+    <property name="rotation" value="0"/>
+    <property name="type" value="rectangle"/>
+    <property name="weight" value="3"/>
+    <property name="width" value="8"/>
+    <property name="x" value="40"/>
+    <property name="y" value="0"/>
+   </properties>
+  </object>
+  <object x="515.607" y="384.589">
+   <properties>
+    <property name="category" value="kitchen"/>
+    <property name="grabAngle" value="0.3"/>
+    <property name="height" value="17"/>
+    <property name="image" value="cleaver_small.gif"/>
+    <property name="name" value="Small Cleaver"/>
+    <property name="rotation" value="0"/>
+    <property name="type" value="rectangle"/>
+    <property name="weight" value="2"/>
+    <property name="width" value="6"/>
+    <property name="x" value="60"/>
+    <property name="y" value="0"/>
+   </properties>
+  </object>
+  <object x="462.607" y="385.255">
+   <properties>
+    <property name="category" value="kitchen"/>
+    <property name="grabAngle" value="0.3"/>
+    <property name="height" value="15"/>
+    <property name="image" value="knife.gif"/>
+    <property name="name" value="Knife"/>
+    <property name="rotation" value="0"/>
+    <property name="type" value="rectangle"/>
+    <property name="weight" value="1.5"/>
+    <property name="width" value="4"/>
+    <property name="x" value="140"/>
+    <property name="y" value="0"/>
+   </properties>
+  </object>
+  <object x="588" y="386">
+   <properties>
+    <property name="category" value="kitchen"/>
+    <property name="grabAngle" value="0.3"/>
+    <property name="height" value="15"/>
+    <property name="image" value="knife.gif"/>
+    <property name="name" value="Knife"/>
+    <property name="rotation" value="0"/>
+    <property name="type" value="rectangle"/>
+    <property name="weight" value="1.5"/>
+    <property name="width" value="4"/>
+    <property name="x" value="140"/>
+    <property name="y" value="0"/>
+   </properties>
+  </object>
+  <object x="530" y="384.333">
+   <properties>
+    <property name="category" value="kitchen"/>
+    <property name="grabAngle" value="0.3"/>
+    <property name="height" value="22"/>
+    <property name="image" value="cleaver_large.gif"/>
+    <property name="name" value="Large Cleaver"/>
+    <property name="rotation" value="0"/>
+    <property name="type" value="rectangle"/>
+    <property name="weight" value="3"/>
+    <property name="width" value="8"/>
+    <property name="x" value="40"/>
+    <property name="y" value="0"/>
+   </properties>
+  </object>
+  <object x="543" y="384.333">
+   <properties>
+    <property name="category" value="kitchen"/>
+    <property name="grabAngle" value="0.3"/>
+    <property name="height" value="17"/>
+    <property name="image" value="cleaver_small.gif"/>
+    <property name="name" value="Small Cleaver"/>
+    <property name="rotation" value="0"/>
+    <property name="type" value="rectangle"/>
+    <property name="weight" value="2"/>
+    <property name="width" value="6"/>
+    <property name="x" value="60"/>
+    <property name="y" value="0"/>
+   </properties>
+  </object>
+  <object x="350.653" y="-19.0099">
+   <properties>
+    <property name="category" value="laundry"/>
+    <property name="grabAngle" value="-0.5"/>
+    <property name="height" value="31"/>
+    <property name="image" value="laundry_machine.gif"/>
+    <property name="name" value="Laundry Machine"/>
+    <property name="rotation" value="0"/>
+    <property name="type" value="rectangle"/>
+    <property name="weight" value="15"/>
+    <property name="width" value="24"/>
+    <property name="x" value="600"/>
+    <property name="y" value="0"/>
+   </properties>
+  </object>
+  <object x="244" y="478.667">
+   <properties>
+    <property name="category" value="graveyard"/>
+    <property name="grabAngle" value="0"/>
+    <property name="height" value="12"/>
+    <property name="image" value="chest.png"/>
+    <property name="name" value="RagDoll"/>
+    <property name="rotation" value="0"/>
+    <property name="type" value="ragdoll"/>
+    <property name="weight" value="3"/>
+    <property name="width" value="5"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
