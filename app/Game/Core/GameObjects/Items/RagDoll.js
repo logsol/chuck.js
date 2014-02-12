@@ -15,7 +15,7 @@ function (Parent, Box2D, Settings) {
         options.limbs = {};
         options.limbs.chest = {
             width: 6,
-            height: 12,
+            height: 18,
             x: 0,
             y: 0
         };
@@ -24,29 +24,154 @@ function (Parent, Box2D, Settings) {
             width: 10,
             height: 12,
             x: 0,
-            y: - options.limbs.chest.height / 2 - 5
+            y: - options.limbs.chest.height / 2 - 7
         };
+
+        options.limbs.upperLeftLeg = {
+            width: 3,
+            height: 4,
+            x: -2,
+            y: options.limbs.chest.height / 2
+        };
+
+        options.limbs.upperRightLeg = {
+            width: 3,
+            height: 4,
+            x: 2,
+            y: options.limbs.chest.height / 2
+        };
+
+        options.limbs.lowerLeftLeg = {
+            width: 4,
+            height: 4,
+            x: -2,
+            y: options.limbs.chest.height / 2 + options.limbs.upperLeftLeg.height
+        };
+
+        options.limbs.lowerRightLeg = {
+            width: 4,
+            height: 4,
+            x: 2,
+            y: options.limbs.chest.height / 2 + options.limbs.upperRightLeg.height
+        };
+
+
+
+
+
+        options.limbs.upperLeftArm = {
+            width: 2,
+            height: 8,
+            x: -2,
+            y: -options.limbs.chest.height / 2
+        };
+
+        options.limbs.upperRightArm = {
+            width: 3,
+            height: 8,
+            x: 2,
+            y: -options.limbs.chest.height / 2
+        };
+
+        options.limbs.lowerLeftArm = {
+            width: 2,
+            height: 5,
+            x: -2,
+            y: -options.limbs.chest.height / 2 + options.limbs.upperLeftArm.height
+        };
+
+        options.limbs.lowerRightArm = {
+            width: 2,
+            height: 5,
+            x: 2,
+            y: -options.limbs.chest.height / 2 + options.limbs.upperRightArm.height
+        };
+
+
+
+
+
+
 
         Parent.call(this, physicsEngine, uid, options);
-        this.createSensor();
+        //this.createSensor();
 
-        this.limbs = {
-            head: null
-        };
+        this.limbs = {};
+
     	this.addHead();
 
+
+        this.addLimb(
+            "upperLeftLeg", 
+            this.body, 
+            options.limbs.upperLeftLeg.x, 
+            options.limbs.chest.height / 2
+        );
+
+        this.addLimb(
+            "upperRightLeg", 
+            this.body, 
+            options.limbs.upperRightLeg.x, 
+            options.limbs.chest.height / 2
+        );
+
+        this.addLimb(
+            "lowerLeftLeg", 
+            this.limbs.upperLeftLeg, 
+            0, 
+            options.limbs.upperLeftLeg.height / 2
+        );
+
+        this.addLimb(
+            "lowerRightLeg", 
+            this.limbs.upperRightLeg, 
+            0, 
+            options.limbs.upperRightLeg.height / 2
+        );
+
+
+
+
+
+        this.addLimb(
+            "upperLeftArm", 
+            this.body, 
+            options.limbs.upperLeftArm.x, 
+            -options.limbs.chest.height / 2
+        );
+
+        this.addLimb(
+            "upperRightArm", 
+            this.body, 
+            options.limbs.upperRightArm.x, 
+            -options.limbs.chest.height / 2
+        );
+
+        this.addLimb(
+            "lowerLeftArm", 
+            this.limbs.upperLeftArm, 
+            0, 
+            options.limbs.upperLeftArm.height / 2
+        );
+
+        this.addLimb(
+            "lowerRightArm", 
+            this.limbs.upperRightArm, 
+            0, 
+            options.limbs.upperRightArm.height / 2
+        );
     }
 
     RagDoll.prototype = Object.create(Parent.prototype);
 
     RagDoll.prototype.getId = function() {
-        return 1; parseInt(this.uid.split("-")[1], 10);
+        return 55; //parseInt(this.uid.split("-")[1], 10);
     };
 
     RagDoll.prototype.getBodyDef = function() {
         var bodyDef = Parent.prototype.getBodyDef.call(this);
         bodyDef.linearDamping = Settings.PLAYER_LINEAR_DAMPING;
-        //bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
+        bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
         return bodyDef;
     };
 
@@ -123,23 +248,61 @@ function (Parent, Box2D, Settings) {
     };
 
     RagDoll.prototype.attachHead = function() {
-        var chestPosition = this.body.GetPosition();
-        
-        var x = chestPosition.x + this.options.limbs.head.x / Settings.RATIO,
-            y = chestPosition.y + this.options.limbs.head.y / Settings.RATIO;
-
         var head = this.limbs.head;
-        head.SetPosition(new Box2D.Common.Math.b2Vec2(x, y));
-        head.SetAngle(0);
 
         var jointDef = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
         jointDef.enableMotor = false;
 
-        var point = chestPosition;
-        //point.y -= this.options.limbs.chest.height / 2 / Settings.RATIO;
-        jointDef.Initialize(this.body, head, point);
+        var pos = this.body.GetWorldCenter().Copy();
+        pos.y -= this.options.limbs.chest.height / 2 / Settings.RATIO;
+        jointDef.Initialize(this.body, head, pos);
         jointDef.lowerAngle = -0.25 * Box2D.Common.b2Settings.b2_pi; // -45 degrees
         jointDef.upperAngle = 0.25 * Box2D.Common.b2Settings.b2_pi; // 45 degrees
+        jointDef.enableLimit = true;
+
+        this.body.GetWorld().CreateJoint(jointDef);
+    };
+
+    RagDoll.prototype.addLimb = function(name, connectTo, xOffset, yOffset) {
+        var x = this.options.x + this.options.limbs[name].x,
+            y = this.options.y + this.options.limbs[name].y;
+
+        var bodyDef = new Box2D.Dynamics.b2BodyDef();
+        bodyDef.linearDamping = Settings.PLAYER_LINEAR_DAMPING;
+        bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+        bodyDef.position.x = x / Settings.RATIO;
+        bodyDef.position.y = y / Settings.RATIO;
+        bodyDef.angle = 0;
+
+        var shape = new Box2D.Collision.Shapes.b2PolygonShape();
+        shape.SetAsOrientedBox(
+            this.options.limbs[name].width / 2 / Settings.RATIO,
+            this.options.limbs[name].height / 2 / Settings.RATIO,
+            new Box2D.Common.Math.b2Vec2(0, this.options.limbs[name].height / 2 / Settings.RATIO)
+        );
+
+        var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
+        fixtureDef.density = Settings.PLAYER_DENSITY;
+        fixtureDef.friction = Settings.PLAYER_FRICTION;
+        fixtureDef.restitution = Settings.PLAYER_RESTITUTION;
+        fixtureDef.shape = shape;
+        fixtureDef.isSensor = false;
+        fixtureDef.filter.groupIndex = -this.getId();
+
+        var limb = this.body.GetWorld().CreateBody(bodyDef);
+        limb.CreateFixture(fixtureDef);
+        
+        this.limbs[name] = limb;
+
+        var jointDef = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
+        jointDef.enableMotor = false;
+
+        var pos = connectTo.GetWorldCenter().Copy();
+        pos.x += (xOffset / Settings.RATIO);
+        pos.y += (yOffset / Settings.RATIO);
+        jointDef.Initialize(connectTo, limb, pos);
+        jointDef.lowerAngle = -0.15 * Box2D.Common.b2Settings.b2_pi; // -45 degrees
+        jointDef.upperAngle = 0.15 * Box2D.Common.b2Settings.b2_pi; // 45 degrees
         jointDef.enableLimit = true;
 
         this.body.GetWorld().CreateJoint(jointDef);
@@ -173,15 +336,6 @@ function (Parent, Box2D, Settings) {
         for(var name in this.limbs) {
             var body = this.limbs[name];
             body.SetAwake(true);
-            /*
-            body.ApplyImpulse(
-                new Box2D.Common.Math.b2Vec2(
-                    x * Settings.MAX_THROW_FORCE * limbDampingFactor,
-                    -y * Settings.MAX_THROW_FORCE * 1.5 *limbDampingFactor // 1.5 is to throw higher then far
-                ),
-                body.GetLocalCenter()
-            );
-            */
 
             var vector = new Box2D.Common.Math.b2Vec2(
                 x * Settings.MAX_THROW_FORCE * limbDampingFactor,

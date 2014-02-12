@@ -246,7 +246,7 @@
                  "properties":
                     {
                      "category":"graveyard",
-                     "grabAngle":"0",
+                     "grabAngle":"-0.3",
                      "height":"12",
                      "image":"chest.png",
                      "name":"RagDoll",
@@ -260,7 +260,7 @@
                  "visible":true,
                  "width":0,
                  "x":244,
-                 "y":448
+                 "y":388
                 }],
          "opacity":1,
          "type":"objectgroup",

@@ -102,6 +102,7 @@ function (Parent, Box2D, Options, Settings) {
     };
 
     Item.prototype.reposition = function(handPosition, direction) {
+        this.body.SetAwake(true);
         var position = new Box2D.Common.Math.b2Vec2(
             handPosition.x + ((this.options.width / Settings.RATIO / 2) * direction),
             handPosition.y
@@ -118,16 +119,7 @@ function (Parent, Box2D, Options, Settings) {
     Item.prototype.throw = function(x, y) {
         var body = this.body;
         body.SetAwake(true);
-        /*
-        body.ApplyImpulse(
-            new Box2D.Common.Math.b2Vec2(
-                x * Settings.MAX_THROW_FORCE,
-                -y * Settings.MAX_THROW_FORCE * 1.5 // 1.5 is to throw higher then far
-            ),
-            body.GetLocalCenter()
-        );
-        */
-        
+
         var vector = new Box2D.Common.Math.b2Vec2(
             x * Settings.MAX_THROW_FORCE,
             -y * Settings.MAX_THROW_FORCE * 1.5 // 1.5 is to throw higher then far
