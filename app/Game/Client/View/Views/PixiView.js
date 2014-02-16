@@ -32,7 +32,7 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
             console.log('WebGLRenderer')
         } else {
             this.renderer = new PIXI.CanvasRenderer(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT);
-            console.log('CanvasRenderer')
+            console.log('CanvasRenderer - not using WebGL!')
         }
 
         this.stage = new PIXI.Stage(0x333333);
@@ -89,9 +89,12 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
 
     PixiView.prototype.createMesh = function (texturePath, callback, options) {
 
-        var texture = PIXI.Texture.fromImage(texturePath);
+        var texture = PIXI.Texture.fromImage(texturePath, true, PIXI.BaseTexture.SCALE_MODE.NEAREST);
+        //texture.filter =  PIXI.BaseTexture.FILTER.LINEAR;
+        console.log(PIXI.BaseTexture);
 
         var mesh = new PIXI.Sprite(texture);
+
         if(options) this.updateMesh(mesh, options);
 
         callback(mesh);
