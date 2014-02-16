@@ -12,10 +12,17 @@
         <script type="text/javascript" src="ragdoll-min.js"></script>
         <script type="text/javascript" src="ragdoll.js"></script>
         
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+
     </head>
     <body>
-
-        <div style="text-align:center">
+        <canvas id="canvas" width="640" height="480" tabindex='1'></canvas>
+        <div style="display: none;text-align:center">
             <br>
             Try the latest version of Chrome or Firefox for best performance.<br>                        
             <br>  
@@ -24,7 +31,7 @@
                     If you change the size of the canvas, you'll also need to change 
                     the value of 'viewCenterPixel' in testbed.js
                 -->
-                <canvas id="canvas" width="640" height="480" tabindex='1'></canvas>
+                
                 <div style="width:636px;padding:2px;background-color:#ddd">
                 <div style="text-align:center">
                     Select test: <select id="testSelection" onchange="changeTest();">
