@@ -45,6 +45,10 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
             this.me.update();
         }
 
+        for (var key in this.players) {
+            this.players[key].render();
+        }
+
         for (var i = 0; i < this.gameObjects.animated.length; i++) {
             this.gameObjects.animated[i].render();
         }
@@ -130,7 +134,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
 
     GameController.prototype.onUpdateStats = function(options) {
         var player = this.players[options.playerId];
-        player.stats = options.stats;
+        player.setStats(options.stats);
 
         // FIXME: move to canvas later
         if(player == this.me) {
@@ -138,9 +142,10 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
         }
     };
 
-    GameController.prototype.onPlayerKill = function(playerId) {
+    GameController.prototype.onPlayerKill = function(options) {
         var player = this.players[options.playerId];
-        player.kill();
+        var killedByPlayer = this.players[options.killedByPlayerId];
+        player.kill(killedByPlayer);
     };
 
     GameController.prototype.loadLevel = function (path) {

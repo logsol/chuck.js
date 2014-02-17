@@ -79,7 +79,7 @@ function (Doll, Settings, NotificationCenter) {
         this.holdingItem = null; 
     };
 
-    Player.prototype.kill = function(killedBy) {
+    Player.prototype.kill = function(killedByPlayer) {
         if(!this.isSpawned) return false;
 
         // FIXME: do something better then just respawn in GameController

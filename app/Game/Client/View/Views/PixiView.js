@@ -43,33 +43,6 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
         this.setCanvas(this.renderer.view);
     }
 
-
-    PixiView.prototype.initCamera = function () {
-        this.container = new PIXI.DisplayObjectContainer();
-        this.stage.addChild(this.container);
-    }
-
-    PixiView.prototype.initInfo = function() {
-        this.infoContainer = new PIXI.DisplayObjectContainer();
-        this.stage.addChild(this.infoContainer);
-
-        var blurFilter = new PIXI.BlurFilter();
-        blurFilter.blurX = 12;
-        blurFilter.blurY = 12;
-        var grayFilter = new PIXI.GrayFilter();
-        grayFilter.gray = 0.85;
-        this.infoFilters = [blurFilter, grayFilter];
-
-        this.infoText = new PIXI.Text("", {font: "normal 20px monospace", fill: "red", align: "center"});
-        this.infoBox = new PIXI.Graphics();
-        this.infoBox.alpha = 0.7;
-
-        this.infoContainer.addChild(this.infoBox);
-        this.infoContainer.addChild(this.infoText);
-
-        this.infoContainer.visible = false;
-    };
-
     PixiView.prototype.render = function () {
         if(this.me && this.me.isSpawned) {
             var pos = this.calculateCameraPosition();
@@ -78,6 +51,8 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
 
         this.renderer.render(this.stage);
     }
+
+    // Meshes
 
     PixiView.prototype.addMesh = function(mesh) {
         this.container.addChild(mesh);
@@ -89,9 +64,7 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
 
     PixiView.prototype.createMesh = function (texturePath, callback, options) {
 
-        var texture = PIXI.Texture.fromImage(texturePath, true, PIXI.BaseTexture.SCALE_MODE.NEAREST);
-        //texture.filter =  PIXI.BaseTexture.FILTER.LINEAR;
-        console.log(PIXI.BaseTexture);
+        var texture = PIXI.Texture.fromImage(texturePath, false, PIXI.BaseTexture.SCALE_MODE.NEAREST);
 
         var mesh = new PIXI.Sprite(texture);
 
@@ -132,6 +105,13 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
         if (options.pivot) mesh.pivot = new PIXI.Point(options.pivot.x, options.pivot.y);
     }
 
+    // Camera
+
+    PixiView.prototype.initCamera = function () {
+        this.container = new PIXI.DisplayObjectContainer();
+        this.stage.addChild(this.container);
+    }
+
     PixiView.prototype.calculateCameraPosition = function() {
         var zoom = this.container.scale.x;
 
@@ -170,6 +150,29 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
         }
     };
 
+    // Info Overlay
+
+    PixiView.prototype.initInfo = function() {
+        this.infoContainer = new PIXI.DisplayObjectContainer();
+        this.stage.addChild(this.infoContainer);
+
+        var blurFilter = new PIXI.BlurFilter();
+        blurFilter.blurX = 12;
+        blurFilter.blurY = 12;
+        var grayFilter = new PIXI.GrayFilter();
+        grayFilter.gray = 0.85;
+        this.infoFilters = [blurFilter, grayFilter];
+
+        this.infoText = new PIXI.Text("", {font: "normal 20px monospace", fill: "red", align: "center"});
+        this.infoBox = new PIXI.Graphics();
+        this.infoBox.alpha = 0.7;
+
+        this.infoContainer.addChild(this.infoBox);
+        this.infoContainer.addChild(this.infoText);
+
+        this.infoContainer.visible = false;
+    };
+
     PixiView.prototype.toggleInfo = function(show, string) {
         if(show) {
             this.infoText.setText(string);
@@ -198,6 +201,48 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
             this.infoContainer.visible = false;
             this.container.filters = null;
         }
+    };
+
+    // Player Info
+
+    PixiView.prototype.onCreateAndAddPlayerInfo = function(callback, options) {
+        var playerInfo = new PIXI.Graphics();
+        this.container.addChild(playerInfo);
+
+        this.onUpdatePlayerInfo(playerInfo, options);
+
+        callback(playerInfo);
+    };
+
+    PixiView.prototype.onUpdatePlayerInfo = function(playerInfo, options) {
+        var width = 14,
+            height = 2,
+            borderWidth = 1,
+            offsetX = -8,
+            offsetY = -52;
+
+        if(typeof options.healthFactor != 'undefined') {
+            playerInfo.clear();
+
+            playerInfo.beginFill(0x000000);
+            playerInfo.lineStyle(borderWidth, 0x000000);
+            playerInfo.drawRect(0, 0, width, height);
+            playerInfo.endFill();
+
+            if(options.healthFactor > 0) {
+                playerInfo.beginFill(0x00FF00);
+                playerInfo.lineStyle(0, 0x000000);
+                playerInfo.drawRect(borderWidth, borderWidth, width * options.healthFactor, height);
+                playerInfo.endFill();
+            }
+        }
+
+        if (options.x && options.y) playerInfo.position = new PIXI.Point(offsetX + options.x, offsetY + options.y);
+        if (options.visible === true || options.visible === false) playerInfo.visible = options.visible;
+    };
+
+    PixiView.prototype.onRemovePlayerInfo = function(playerInfo) {
+        this.container.removeChild(playerInfo);
     };
 
     return PixiView;

@@ -31,7 +31,6 @@ function (Parent, CoreItem, Settings, NotificationCenter) {
     		+ this.characterName + '/';
 
     	var callback = function(mesh) {
-    		console.log(name, self.baseMeshName)
     		if(name == self.baseMeshName) {
     			self.mesh = mesh;
     		} else {
