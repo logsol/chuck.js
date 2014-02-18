@@ -87,6 +87,9 @@ function (Parent, NotificationCenter, Settings) {
     };
 
     Player.prototype.render = function() {
+
+        // dolls are self responsible
+
     	if(this.playerInfoViewVisible) {
 	    	var position = this.getPosition();
 	    	var options = {

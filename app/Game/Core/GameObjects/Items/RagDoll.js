@@ -1,10 +1,11 @@
 define([
 	"Game/" + GLOBALS.context + "/GameObjects/Item",
 	"Lib/Vendor/Box2D",
-	"Game/Config/Settings"
+	"Game/Config/Settings",
+    "Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, Box2D, Settings) {
+function (Parent, Box2D, Settings, NotificationCenter) {
  
     function RagDoll(physicsEngine, uid, options) {
 
@@ -160,12 +161,23 @@ function (Parent, Box2D, Settings) {
             0, 
             options.limbs.upperRightArm.height / 2
         );
+
+
+        NotificationCenter.trigger("game/object/add", 'animated', this);
     }
 
     RagDoll.prototype = Object.create(Parent.prototype);
 
     RagDoll.prototype.getId = function() {
         return 55; //parseInt(this.uid.split("-")[1], 10);
+    };
+
+    RagDoll.prototype.getPosition = function() {
+        return this.body.GetPosition().Copy();
+    };
+
+    RagDoll.prototype.getHeadPosition = function() {
+        return this.limbs.head.GetPosition().Copy();
     };
 
     RagDoll.prototype.getBodyDef = function() {
@@ -210,11 +222,6 @@ function (Parent, Box2D, Settings) {
         }
 
         this.body.CreateFixture(fixtureDef);
-    };
-
-    RagDoll.prototype.destroy = function() {
-    	Parent.prototype.destroy.call(this);
-    	// remove head!!11
     };
 
     RagDoll.prototype.addHead = function() {
@@ -341,8 +348,26 @@ function (Parent, Box2D, Settings) {
                 x * Settings.MAX_THROW_FORCE * limbDampingFactor,
                 -y * Settings.MAX_THROW_FORCE * 1.5 *limbDampingFactor // 1.5 is to throw higher then far
             );
-            this.body.SetLinearVelocity(vector);
+            body.SetLinearVelocity(vector);
             // body.SetAngularVelocity(Settings.MAX_THROW_ANGULAR_VELOCITY * x);
+        }
+    };
+
+    RagDoll.prototype.setVelocities = function(options) {
+        this.body.SetLinearVelocity(options.linearVelocity);
+        this.body.SetAngularVelocity(options.angularVelocity);
+        for(var name in this.limbs) {
+            this.limbs[name].SetLinearVelocity(options.linearVelocity);
+        }
+    };
+
+    RagDoll.prototype.destroy = function() {
+        NotificationCenter.trigger("game/object/remove", 'animated', this);
+        var world = this.body.GetWorld();
+        Parent.prototype.destroy.call(this);
+        
+        for (var name in this.limbs) {
+            world.DestroyBody(this.limbs[name]);
         }
     };
 

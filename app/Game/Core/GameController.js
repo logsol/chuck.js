@@ -10,19 +10,36 @@ function (PhysicsEngine, TiledLevel, Player, NotificationCenter) {
     function GameController () {
         this.players = {};
         this.level = null;
-        this.gameObjects = {
-            animated: [],
-            fixed: []
-        };
+        this.gameObjects = null;
+        this.resetGameObjects();
 
         this.physicsEngine = new PhysicsEngine();
         this.physicsEngine.setCollisionDetector();
 
         NotificationCenter.on("game/level/loaded", this.onLevelLoaded, this);
+
+        NotificationCenter.on("game/object/add", this.onGameObjectAdd, this);
+        NotificationCenter.on("game/object/remove", this.onGameObjectRemove, this);
     }
 
     GameController.prototype.update = function() {
-        
+        // extend for both sides if necessary
+    };
+
+    GameController.prototype.resetGameObjects = function() {
+        this.gameObjects = {
+            fixed: [],
+            animated: []
+        };
+    };
+
+    GameController.prototype.onGameObjectAdd = function(type, object) {
+        this.gameObjects[type].push(object);
+    };
+
+    GameController.prototype.onGameObjectRemove = function(type, object) {
+        var i = this.gameObjects[type].indexOf(object);
+        if(i>=0) this.gameObjects[type].splice(i, 1);
     };
 
     GameController.prototype.getPhysicsEngine = function () {
@@ -33,10 +50,7 @@ function (PhysicsEngine, TiledLevel, Player, NotificationCenter) {
 
         if (this.level) {
             this.level.destroy();
-            this.gameObjects = {
-                animated: [],
-                fixed: []
-            };
+            this.resetGameObjects();
         }
 
         this.level = new TiledLevel(levelUid, this.physicsEngine, this.gameObjects);
@@ -63,6 +77,10 @@ function (PhysicsEngine, TiledLevel, Player, NotificationCenter) {
 
     GameController.prototype.userLeft = function (user) {
         var player = this.players[user.id];
+
+        var i = this.gameObjects.animated.indexOf(player);
+        if(i>=0) this.gameObjects.animated.splice(i, 1);
+
         player.destroy();
         delete this.players[user.id];
     }

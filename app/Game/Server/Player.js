@@ -56,13 +56,17 @@ function (Parent, NotificationCenter) {
         }
     };
 
+    Player.prototype.suicide = function() {
+        this.addDamage(100, this);
+    };
+
     Player.prototype.addDamage = function(damage, enemy) {
         this.stats.health -= damage;
         
         if(this.stats.health < 0) this.stats.health = 0;
 
         if(this.stats.health <= 0) {
-            enemy.score();
+            if(enemy != this) enemy.score();
             this.kill(enemy);
         } else {
             this.broadcastStats();
@@ -83,6 +87,10 @@ function (Parent, NotificationCenter) {
             playerId: this.id,
             killedByPlayerId: killedByPlayer.id
         });
+
+        if(this.ragDoll) {
+            this.ragDoll.delayedDestroy();
+        }
     };
 
     Player.prototype.score = function() {

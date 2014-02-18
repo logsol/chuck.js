@@ -44,7 +44,7 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
     }
 
     PixiView.prototype.render = function () {
-        if(this.me && this.me.isSpawned) {
+        if(this.me) {
             var pos = this.calculateCameraPosition();
             this.setCameraPosition(pos.x, pos.y);
         }

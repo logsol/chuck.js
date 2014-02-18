@@ -239,28 +239,6 @@
                  "width":0,
                  "x":543.000000000001,
                  "y":384.333333333333
-                }, 
-                {
-                 "height":0,
-                 "name":"",
-                 "properties":
-                    {
-                     "category":"graveyard",
-                     "grabAngle":"-0.3",
-                     "height":"12",
-                     "image":"chest.png",
-                     "name":"RagDoll",
-                     "rotation":"0",
-                     "type":"ragdoll",
-                     "weight":"3",
-                     "width":"5"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":244,
-                 "y":388
                 }],
          "opacity":1,
          "type":"objectgroup",

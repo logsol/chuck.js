@@ -1,11 +1,14 @@
 define([
     "Game/" + GLOBALS.context + "/GameObjects/Doll",
     "Game/Config/Settings",
-    "Lib/Utilities/NotificationCenter"
+    "Lib/Utilities/NotificationCenter",
+    "Lib/Utilities/Exception",
+    "Game/" + GLOBALS.context + "/GameObjects/SpectatorDoll",
+    "Game/" + GLOBALS.context + "/GameObjects/Items/RagDoll"
 ],
 
 
-function (Doll, Settings, NotificationCenter) {
+function (Doll, Settings, NotificationCenter, Exception, SpectatorDoll, RagDoll) {
 
     function Player (id, physicsEngine) {
         this.stats = {
@@ -20,28 +23,36 @@ function (Doll, Settings, NotificationCenter) {
         this.id = id;
         this.isSpawned = false;
         this.holdingItem = null;
+        this.spectatorDoll = new SpectatorDoll(this.physicsEngine, "spectatorDoll-" + this.id, this);
     }
 
     Player.prototype.getDoll = function() {
+        throw new Exception('-- PLEASE REMOVE getDoll Calls --');
         return this.doll;
     };
 
-    Player.prototype.spawn = function (x, y) {
-        if(this.doll) {
-            this.doll.destroy();
+    Player.prototype.getActiveDoll = function() {
+        if(this.isSpawned) {
+            return this.doll;
+        } else if (this.ragDoll) {
+            return this.ragDoll;
         }
+        return this.spectatorDoll;
+    };
+
+    Player.prototype.spawn = function (x, y) {
         this.doll = new Doll(this.physicsEngine, "doll-" + this.id, this);
         this.doll.spawn(x, y);
         this.isSpawned = true;
+        NotificationCenter.trigger("game/object/add", 'animated', this.doll);
     }
 
     Player.prototype.getPosition = function () {
-        return this.doll.getPosition();
+        return this.getActiveDoll().getPosition();
     }
 
     Player.prototype.getHeadPosition = function () {
-        if(!this.isSpawned) return false;
-        return this.doll.getHeadPosition();
+        return this.getActiveDoll().getHeadPosition();
     }
 
 
@@ -60,8 +71,14 @@ function (Doll, Settings, NotificationCenter) {
         this.doll.jump();
     }
 
+    Player.prototype.jumpStop = function () {
+        if(!this.isSpawned) return false;
+        this.doll.jumpStop();
+    }
+
     Player.prototype.lookAt = function (x, y) {
         if(!this.isSpawned) return false;
+        // FIXME implement spectator movement here
         this.doll.lookAt(x, y);
     }
 
@@ -86,8 +103,35 @@ function (Doll, Settings, NotificationCenter) {
         if(this.holdingItem) {
             this.throw(0, 0, this.holdingItem)
         }
-        this.doll.kill();
+
+        // get forces
+        var options = {
+            x: this.getPosition().x * Settings.RATIO, 
+            y: this.getPosition().y * Settings.RATIO,
+            category: "graveyard",
+            grabAngle: -0.3,
+            image: "chest.png",
+            name: "RagDoll",
+            rotation: 0,
+            type: "ragdoll",
+            weight: 3,
+            width: 5,
+            height: 12
+        };
+
+        var ragDoll = new RagDoll(this.physicsEngine, "ragDoll-" + this.id, options);
+        ragDoll.setVelocities(this.doll.getVelocities());
+
+
         this.isSpawned = false;
+
+        NotificationCenter.trigger("game/object/remove", 'animated', this.doll);
+        this.doll.destroy();
+        this.doll = null;
+
+        this.ragDoll = ragDoll;
+        
+
         NotificationCenter.trigger("player/killed", this);
     };
 
@@ -106,7 +150,10 @@ function (Doll, Settings, NotificationCenter) {
         if(this.holdingItem) {
             this.throw(0, 0, this.holdingItem);
         }
-        this.doll.destroy();
+        
+        this.spectatorDoll.destroy();
+        if(this.doll) this.doll.destroy();
+        if(this.ragDoll) this.ragDoll.destroy();
     }
 
     Player.prototype.setPlayerController = function(playerController) {

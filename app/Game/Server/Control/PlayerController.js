@@ -35,6 +35,10 @@ function(Parent, NotificationCenter, Parser) {
         if (options) this.player.handActionRequest(options.x, options.y);
     };
 
+    PlayerController.prototype.suicide = function() {
+        this.player.suicide();
+    };
+
     return PlayerController;
  
 });

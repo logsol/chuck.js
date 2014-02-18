@@ -96,8 +96,14 @@ function (Parent, CoreItem, Settings, NotificationCenter) {
 	            );
             };
         }
+    };
 
+    RagDoll.prototype.destroy = function() {
+        for (var name in this.limbMeshes) {
+            NotificationCenter.trigger("view/removeMesh", this.limbMeshes[name]);
+        };
 
+        Parent.prototype.destroy.call(this);
     };
  
     return RagDoll;
