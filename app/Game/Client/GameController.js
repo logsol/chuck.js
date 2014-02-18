@@ -63,8 +63,8 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
                 var gameObject = userData;
                 if(updateData[gameObject.uid]) {
                     var update = updateData[gameObject.uid];
-                    body.SetAwake(true);  
-                    body.SetPosition(update.p);
+                    body.SetAwake(true);
+                    body.SetPosition(this.centerBetween(update.p, body.GetPosition()));
                     body.SetAngle(update.a);
                     body.SetLinearVelocity(update.lv);
                     body.SetAngularVelocity(update.av);
@@ -79,6 +79,24 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
         } while (body = body.GetNext());
 
     }
+
+    GameController.prototype.centerBetween = function(n, o) {
+        var x, y;
+
+        if(n.x > o.x) {
+            x = o.x + (n.x - o.x) / 2;
+        } else {
+            x = o.x - (o.x - n.x) / 2;
+        }
+
+        if(n.y > o.y) {
+            y = o.y + (n.y - o.y) / 2;
+        } else {
+            y = o.y - (o.y - n.y) / 2;
+        }
+
+        return {x:x, y:y};
+    };
 
     GameController.prototype.onJoinMe = function (playerId) {
         this.me = this.players[playerId];
