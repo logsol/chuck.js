@@ -33,7 +33,7 @@ define(function() {
         FLY_SPEED: 6.2,
         JUMP_SPEED: 20,
         JUMP_STOP_DAMPING_FACTOR: 0.5,
-        MAX_THROW_FORCE: 18,
+        MAX_THROW_FORCE: 18 * 3.5,
         MAX_THROW_ANGULAR_VELOCITY: 0,
         MAX_RUNNING_WEIGHT: 9,
         RESPAWN_TIME: 6,
