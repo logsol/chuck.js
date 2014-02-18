@@ -25,7 +25,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
 
     GameController.prototype = Object.create(Parent.prototype);
 
-
     GameController.prototype.destruct = function() {
         //destroy box2d world etc.
     };
@@ -35,6 +34,9 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
     }
 
     GameController.prototype.update  = function () {
+
+        Parent.prototype.update.call(this);
+
         DomController.statsBegin();
 
         requestAnimFrame(this.update.bind(this));
@@ -111,7 +113,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
 
         var player = this.players[playerId];
         player.spawn(x, y);
-        this.gameObjects.animated.push(player.getDoll());
+        this.gameObjects.animated.push(player);
         
         if(options.holdingItemUid) {
             this.onHandActionResponse({
@@ -148,7 +150,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
 
     GameController.prototype.onUpdateStats = function(options) {
         var player = this.players[options.playerId];
-        player.stats = options.stats;
+        player.setStats(options.stats);
 
         // FIXME: move to canvas later
         if(player == this.me) {
@@ -156,21 +158,30 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
         }
     };
 
-    GameController.prototype.onPlayerKill = function(playerId) {
+    GameController.prototype.onPlayerKill = function(options) {
         var player = this.players[options.playerId];
-        player.kill();
+        var killedByPlayer = this.players[options.killedByPlayerId];
+        player.kill(killedByPlayer);
+    };
+
+    GameController.prototype.onRemoveGameObject = function(options) {
+        var object = null;
+        for (var i = 0; i < this.gameObjects[options.type].length; i++) {
+            if(this.gameObjects[options.type][i].uid == options.uid) {
+                object = this.gameObjects[options.type][i];
+                break;
+            }
+        }
+        if(object) {
+            this.onGameObjectRemove(options.type, object);
+            object.destroy();
+        } else {
+            console.warn("GameObject for removal can not be found locally. " + options.uid);
+        }
     };
 
     GameController.prototype.loadLevel = function (path) {
         Parent.prototype.loadLevel.call(this, path);
-    }
-
-    GameController.prototype.userLeft = function(user) {
-        var doll = this.players[user.id].doll;
-        var i = this.gameObjects.animated.indexOf(doll);
-        if(i>=0) this.gameObjects.animated.splice(i, 1);
-
-        Parent.prototype.userLeft.call(this, user);
     }
 
     GameController.prototype.toggleInfo = function(show) {

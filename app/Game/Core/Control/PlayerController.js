@@ -29,6 +29,10 @@ define(function () {
         this.player.jump();
     }
 
+    PlayerController.prototype.jumpStop = function () {
+        this.player.jumpStop();
+    }
+
     PlayerController.prototype.lookAt = function (options) {
         if(options) this.player.lookAt(options.x, options.y);
     }

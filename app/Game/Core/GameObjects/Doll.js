@@ -158,16 +158,8 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
         this.setActionState("fall");
     }
 
-    Doll.prototype.kill = function() {
-        this.body.SetFixedRotation(false);
-    };
-
     Doll.prototype.getPosition = function() {
-        var pos = this.body.GetPosition();
-        return {
-            x: pos.x,
-            y: pos.y
-        };
+        return this.body.GetPosition().Copy();
     };
 
     Doll.prototype.getHeadPosition = function() {
@@ -235,7 +227,13 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
     Doll.prototype.stop = function () {
         this.moveDirection = 0;
         this.setFriction(Settings.PLAYER_FRICTION);
-        if(this.isStanding()) this.setActionState("stand");
+        if(this.isStanding()) {
+            this.setActionState("stand");
+        } else {
+            var vector = this.body.GetLinearVelocity().Copy();
+            vector.x *= Settings.JUMP_STOP_DAMPING_FACTOR;
+            this.body.SetLinearVelocity(vector);
+        }
     }
 
     Doll.prototype.jump = function () {
@@ -248,6 +246,17 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
             this.setStanding(false);
 
             this.setActionState("jump");
+        }
+    }
+
+    Doll.prototype.jumpStop = function () {
+        if (!this.isStanding() ) {
+            this.body.SetAwake(true);
+            var vector = this.body.GetLinearVelocity().Copy();
+            if(vector.y < 0) {
+                vector.y *= Settings.JUMP_STOP_DAMPING_FACTOR;
+                this.body.SetLinearVelocity(vector);
+            }
         }
     }
 
@@ -343,6 +352,13 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
             }
         }
     }
+
+    Doll.prototype.getVelocities = function() {
+        return {
+            linearVelocity: this.body.GetLinearVelocity(),
+            angularVelocity: this.body.GetAngularVelocity()
+        };
+    };
 
     Doll.prototype.update = function() {
      

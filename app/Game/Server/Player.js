@@ -56,12 +56,18 @@ function (Parent, NotificationCenter) {
         }
     };
 
+    Player.prototype.suicide = function() {
+        this.addDamage(100, this);
+    };
+
     Player.prototype.addDamage = function(damage, enemy) {
         this.stats.health -= damage;
+        
+        if(this.stats.health < 0) this.stats.health = 0;
 
         if(this.stats.health <= 0) {
-            enemy.score();
-            this.kill();
+            if(enemy != this) enemy.score();
+            this.kill(enemy);
         } else {
             this.broadcastStats();
         }
@@ -73,11 +79,18 @@ function (Parent, NotificationCenter) {
         this.broadcastStats();
     };
 
-    Player.prototype.kill = function() {
-        Parent.prototype.kill.call(this);
+    Player.prototype.kill = function(killedByPlayer) {
+        Parent.prototype.kill.call(this, killedByPlayer);
         this.stats.deaths++;
         this.broadcastStats();
-        NotificationCenter.trigger("broadcastGameCommand", "playerKill", this.id);
+        NotificationCenter.trigger("broadcastGameCommand", "playerKill", {
+            playerId: this.id,
+            killedByPlayerId: killedByPlayer.id
+        });
+
+        if(this.ragDoll) {
+            this.ragDoll.delayedDestroy();
+        }
     };
 
     Player.prototype.score = function() {

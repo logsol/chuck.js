@@ -22,6 +22,10 @@ function (DomController, Settings, Exception, NotificationCenter) {
         NotificationCenter.on("view/toggleDebugMode", this.onToggleDebugMode, this);
 
         NotificationCenter.on("view/toggleInfo", this.onToggleInfo, this);
+
+        NotificationCenter.on("view/createAndAddPlayerInfo", this.onCreateAndAddPlayerInfo, this);
+        NotificationCenter.on("view/updatePlayerInfo", this.onUpdatePlayerInfo, this);
+        NotificationCenter.on("view/removePlayerInfo", this.onRemovePlayerInfo, this);
     }
 
     AbstractView.prototype.isWebGlEnabled = function () { 
@@ -129,6 +133,18 @@ function (DomController, Settings, Exception, NotificationCenter) {
 
     AbstractView.prototype.toggleInfo = function(show, string) {
         throw new Exception('Abstract Function showInfo not overwritten');
+    };
+
+    AbstractView.prototype.onCreateAndAddPlayerInfo = function(options) {
+        throw new Exception('Abstract Function onCreateAndAddPlayerInfo not overwritten');
+    };
+
+    AbstractView.prototype.onUpdatePlayerInfo = function(playerInfo, options) {
+        throw new Exception('Abstract Function onUpdatePlayerInfo not overwritten');
+    };
+
+    AbstractView.prototype.onRemovePlayerInfo = function(playerInfo) {
+        throw new Exception('Abstract Function onRemovePlayerInfo not overwritten');
     };
 
     return AbstractView;

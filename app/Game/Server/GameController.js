@@ -34,6 +34,8 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
     GameController.prototype.update  = function () {
 
+        Parent.prototype.update.call(this);
+
         requestAnimFrame(this.update.bind(this));
 
         this.physicsEngine.update();
@@ -51,16 +53,21 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         Parent.prototype.userJoined.call(this, user);
         var player = this.players[user.id];
         user.setPlayer(player);
-        this.spawnPlayer(player);
+        this.spawnPlayer(player, 0);
     }
 
-    GameController.prototype.spawnPlayer = function(player) {
+    GameController.prototype.spawnPlayer = function(player, respawnTime) {
         var self = this;
         var spawnPoint = this.level.getRandomSpawnPoint();
 
+        respawnTime = typeof respawnTime == 'undefined' 
+            ? Settings.RESPAWN_TIME
+            : respawnTime;
+
         setTimeout(function() {
             player.spawn(spawnPoint.x, spawnPoint.y);
-            self.gameObjects.animated.push(player.getDoll());
+            // put it into 
+            self.gameObjects.animated.push(player);
 
             var message = {
                 spawnPlayer: {
@@ -71,7 +78,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
             };
 
             NotificationCenter.trigger("broadcastControlCommand", "gameCommand", message);
-        }, Settings.RESPAWN_TIME * 1000);
+        }, respawnTime * 1000);
     };
 
     GameController.prototype.createPlayer = function(user) {

@@ -18,7 +18,7 @@ define(function() {
         GRAPHICS_SUBPATH_CHARACTERS: 'Characters/',
         GRAPHICS_SUBPATH_TILES: 'Tiles/',
         MAPS_PATH: 'static/maps/tiled/',
-        DEFAULT_LEVELS: ['debug', 'stones2'],
+        DEFAULT_LEVELS: ['stones2', 'debug'],
 
         RATIO: 21, //35
         // original tile size is 25 but we want it to resize to 20
@@ -32,10 +32,13 @@ define(function() {
         RUN_SPEED: 8,
         FLY_SPEED: 6.2,
         JUMP_SPEED: 20,
+        JUMP_STOP_DAMPING_FACTOR: 0.5,
         MAX_THROW_FORCE: 18,
         MAX_THROW_ANGULAR_VELOCITY: 0,
         MAX_RUNNING_WEIGHT: 9,
-        RESPAWN_TIME: 0.5,
+        RESPAWN_TIME: 6,
+        HEALTH_DISPLAY_TIME: 2,
+        RAGDOLL_DESTRUCTION_TIME: 25,
 
         // restitution: bouncyness, friction: rubbing, density: mass
         TILE_FRICTION: 0.99,
@@ -45,11 +48,12 @@ define(function() {
         PLAYER_FRICTION: 5,
         PLAYER_MOTION_FRICTION: 0.1,
         PLAYER_RESTITUTION: 0.0,
-        PLAYER_LINEAR_DAMPING: 0.8,
+        PLAYER_LINEAR_DAMPING: 0.4,
 
         ITEM_DENSITY: 0.9,
         ITEM_FRICTION: 0.99,
         ITEM_RESTITUTION: 0.02,
+        ITEM_LINEAR_DAMPING: 0.02,
 
         // BROWSER
         CANVAS_DOM_ID: 'canvasContainer',

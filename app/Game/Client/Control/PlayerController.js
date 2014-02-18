@@ -25,6 +25,7 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
 
             f:70,
             g:71,
+            k:75,
 
             up: 38,
             left: 37,
@@ -49,14 +50,16 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
         this.keyboardInput.registerKey(keys.d, 'moveRight', 'stop');
         this.keyboardInput.registerKey(keys.right, 'moveRight', 'stop');
         
-        this.keyboardInput.registerKey(keys.w, 'jump');
-        this.keyboardInput.registerKey(keys.up, 'jump');
-        this.keyboardInput.registerKey(keys.space, 'jump');
+        this.keyboardInput.registerKey(keys.w, 'jump', 'jumpStop');
+        this.keyboardInput.registerKey(keys.up, 'jump', 'jumpStop');
+        this.keyboardInput.registerKey(keys.space, 'jump', 'jumpStop');
 
         this.keyboardInput.registerKey(keys.tab, 'showInfo', 'hideInfo');
 
         this.keyboardInput.registerKey(keys.f, 'handActionLeft');
         this.keyboardInput.registerKey(keys.g, 'handActionRight');
+
+        this.keyboardInput.registerKey(keys.k, 'suicide');
     }
 
     PlayerController.prototype.moveLeft = function () {
@@ -79,6 +82,11 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
         NotificationCenter.trigger('sendGameCommand', 'jump');
     }
 
+    PlayerController.prototype.jumpStop = function () {
+        Parent.prototype.jumpStop.call(this);
+        NotificationCenter.trigger('sendGameCommand', 'jumpStop');
+    }
+
     PlayerController.prototype.setXY = function(x, y) {
         var options = {x:x, y:y};
         Parent.prototype.lookAt.call(this, options);
@@ -91,6 +99,10 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
 
     PlayerController.prototype.handActionRight = function() {
         this.handActionRequest(0.5, 0.5);
+    };
+
+    PlayerController.prototype.suicide = function() {
+        NotificationCenter.trigger("sendGameCommand", "suicide");
     };
 
     PlayerController.prototype.handActionRequest = function(x, y) {
