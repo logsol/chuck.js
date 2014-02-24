@@ -20,11 +20,7 @@ function (Parent, ProtocolHelper, NotificationCenter) {
     }
 
     User.prototype = Object.create(Parent.prototype);
-
-    User.prototype.setChannelProcess = function (channelProcess) {
-        this.channelProcess = channelProcess;
-    }
-
+    
     
     // Socket callbacks
 

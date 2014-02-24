@@ -1,16 +1,18 @@
 define([
     'http', 
-    'node-static'
+    'node-static',
+    'Lobby/Api'
 ], 
 
-function (http, nodeStatic) {
+function (http, nodeStatic, Api) {
 
-    function HttpServer (options) {
+    function HttpServer (options, coordinator) {
         options.port = options.port || 1234;
         options.caching = typeof options.caching != 'undefined' ? options.caching : 3600;
         options.rootDirectory = options.rootDirectory || './';
 
         this.server = null;
+        this.api = new Api(coordinator);
 
         this.init(options);
     }
@@ -22,22 +24,28 @@ function (http, nodeStatic) {
 
         this.server = http.createServer(
             function (req, res) {
-
-                req.addListener('data', function() { // doesn't work on Jeenas computer without this
-                    //console.log("data")
+                
+                var fullBody = '';
+                req.addListener('data', function(chunk) { // doesn't work on Jeenas computer without this
+                    fullBody += chunk.toString();
                 });
 
                 req.addListener('error', function(err) {
                     console.log('');
                 });
 
+
                 req.addListener('end', function () {
 
                     switch(true) {
                         case req.url == '/':
-
                             fileServer.serveFile('./static/html/index.html', 200, {}, req, res);
                             console.checkpoint('HTTP Server serves index');
+                            break;
+
+                        case req.url == '/game.html':
+                            fileServer.serveFile('./static/html/game.html', 200, {}, req, res);
+                            console.checkpoint('HTTP Server serves game');
                             break;
 
                         case req.url == '/client.js':
@@ -50,6 +58,13 @@ function (http, nodeStatic) {
 
                         case req.url == '/screenfull.js':
                             fileServer.serveFile('./node_modules/screenfull/dist/screenfull.js', 200, {}, req, res);
+                            break;
+
+                        case req.url == '/api':
+                            self.api.handleCall(fullBody);
+                            var status = self.api.isError ? 400 : 200;
+                            res.writeHead(status, {"Content-Type": self.api.getContentType()});
+                            res.end(self.api.getOutput());
                             break;
 
                         case new RegExp(/^\/app/).test(req.url):

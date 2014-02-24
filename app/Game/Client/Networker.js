@@ -34,7 +34,12 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings, Do
 
     Networker.prototype.onConnect = function () {
         console.log('connected.')
-        this.sendCommand('join', 'dungeon');
+        var channel = JSON.parse(localStorage["channel"]);
+        if(channel.name) {
+            this.sendCommand('join', channel.name);
+        } else {
+            window.location.href = "/";
+        }
     }
 
     Networker.prototype.onDisconnect = function () {
@@ -45,6 +50,7 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings, Do
     }
 
     Networker.prototype.onJoinSuccess = function (options) {
+        console.log("join success")
         this.userId = options.userId;
 
         this.gameController = new GameController();

@@ -13,6 +13,7 @@ function (NotificationCenter, childProcess) {
 
 		try {
             this.channelPipe = fork('channel.js');
+            console.log(this.channelPipe)
         } catch (err) {
             throw 'Failed to fork channel! (' + err + ')';
         }

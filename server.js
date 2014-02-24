@@ -28,7 +28,7 @@ requirejs([
 
 function (HttpServer, Socket, Coordinator) {
     var coordinator = new Coordinator();
-    var httpServer = new HttpServer(options);
+    var httpServer = new HttpServer(options, coordinator);
     var socket = new Socket(httpServer.getServer(), options, coordinator);
 
     inspector = {

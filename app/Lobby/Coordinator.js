@@ -92,6 +92,16 @@ function (User, Channel, PipeToChannel, NotificationCenter) {
         return channelPipe;
     };
 
+    Coordinator.prototype.getChannels = function(options) {
+        var list = [];
+        for (var channelName in this.channelPipes) {
+            list.push({
+                name: channelName
+            });
+        }
+        return list;
+    };
+
     return Coordinator;
 
 });

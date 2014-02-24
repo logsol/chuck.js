@@ -27,7 +27,7 @@ function (Networker, SocketIO, Settings, Exception, PIXI) {
             "flashsocket"
         ]
     };
-    var socket = SocketIO.connect(location.href, options);
+    var socket = SocketIO.connect("/", options);
     var networker = new Networker(socket);
     inspector.networker = networker;
     inspector.settings = Settings;

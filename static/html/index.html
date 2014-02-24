@@ -1,61 +1,137 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Chuck</title>
-        <style>
-            html, body { 
-                margin: 0; 
-                padding: 0; 
-                display: table; 
-                width: 100%; 
-                height: 100%;
-                background: black;
-                color: white;
-                font-family: monospace;
-            }
+<head>
+	<title>Chuck Lobby</title>
+</head>
+<body>
+<form action="game.html" method="POST">
+	<p>
+		<label>
+			Nickname:<br>
+			<input id="nick" name="nick" type="text">
+		</label>
+	</p>
+	
+	<table>
+		<thead>
+			<tr><th>Name</th></tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<td>
+					<label>
+						<input type="radio" name="channel" id="radiochannel" checked>
+						custom channel: <input id="customname">
+					</label>
+				</td>
+			</tr>
+		</tfoot>
+		<tbody id="list"></tbody>
+	</table>
+	<p>
+		<button>Join</button>
+		<button id="refresh">Refresh list</button>
+	</p>
+</form>
+<script>
+	function $(selector) {
+		return document.querySelector(selector);
+	}
 
-            #canvasContainer { 
-                /*
-                text-align: center; 
-                display: table-cell; 
-                vertical-align: middle; 
-                */
-                height: 100%;
-            }
+	if(localStorage["player"]) {
+		var player = JSON.parse(localStorage["player"]);
+		if(player.nickname) {
+			$("#nick").value = player.nickname;
+		}
+	}
 
-            canvas { 
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                margin-top: -200px;
-                margin-left: -300px;
-            }
+	$("#customname").onfocus = function() {
+		$("#radiochannel").checked = true;
+	}
 
-            :-webkit-full-screen {
-                top: 0;
-                left: 0;
-                margin: 0;
-                padding: 0;
-            }
+	if(localStorage["channel"]) {
+		var channel = JSON.parse(localStorage["channel"])
+		if(channel.customname) {
+			$("#customname").value = channel.customname;
+		}
+	}
 
-            #devtools {
-                position: absolute;
-                right: 0;
-                top: 0;
-                padding: 10px;
-                background: #222;
-            }
+	var hash = window.location.hash.split("#").join("");
+	if(hash) {
+		$("#customname").value = hash;
+		$("#radiochannel").checked = true;		
+	}
 
-            #devtools p {
-                padding: 5px 0 0 0;
-                margin: 0;
-            }
+	function refresh() {
+		$("#list").innerHTML = "";
+		var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+                if(xhr.readyState == 4) {
+                        if(xhr.status == 200) {
+                                populate(JSON.parse(xhr.responseText).success);
+                        } else {
+                                console.error("Ajax error: " + xhr.status + " " + xhr.statusText)
+                        }
+                }
+        }
+        xhr.open("POST", "/api", true);
+        xhr.send(JSON.stringify({command:"getChannels"}));
+        return false
+	}
 
-        </style>
-    </head>
-    <body>
-        <div id="canvasContainer"></div>
-        <script data-main="client" src="require.js"></script>
-    </body>
+	function populate(list) {
+		var html = "";
+		for (var i = 0; i < list.length; i++) {
+			var channel = list[i];
+			html += "<tr><td><label>";
+			html += "<input name='channel' type='radio' value='" + channel.name + "'"
+			if(!hash && i == 0) html += " checked"
+			html += "> ";
+			html += channel.name
+			html += "</label></td></tr>";
+		};
+		$("#list").innerHTML = html;
+	}
+
+	$("form").onsubmit = function(e) {
+		var nickname = $("#nick").value;
+		if(!nickname || nickname.length < 3) {
+			alert("nickname too short")
+			return false;
+		}
+		localStorage["player"] = JSON.stringify({nickname: nickname});
+		if ($("#radiochannel").checked) {
+			var name = $("#customname").value;
+			if(name) {
+				$("#radiochannel").value = name;
+			} else {
+				alert("custom channel empty")
+				return false;
+			}			
+		} else {
+			var radios = document.querySelectorAll("form input[name=channel]");
+			for (var i = 0; i < radios.length; i++) {
+				var radio = radios[i];
+				if(radio.checked) {
+					name = radio.value;
+					break;
+				}
+			};		
+		}
+
+		if(name) {
+			localStorage["channel"] = JSON.stringify({
+				name: name,
+				customname: $("#customname").value
+			});
+		} else {
+			alert("no channel selected")
+			return false;
+		}
+	}
+
+	$("#refresh").onclick = refresh;
+	refresh();
+</script>
+</body>
 </html>
