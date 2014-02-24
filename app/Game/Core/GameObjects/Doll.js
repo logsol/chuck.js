@@ -10,6 +10,7 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
 
     function Doll (physicsEngine, uid, player) {
 
+        this.characterName = "Chuck";
         this.player = player;
         this.height = 43;
         this.width = 9;

@@ -50,9 +50,12 @@ function(Parent, NotificationCenter, ProtocolHelper, ProtocolParser) {
 
         if(command.hasOwnProperty("resetLevel")) {
             NotificationCenter.trigger("user/resetLevel", this.id);
+        } else if(command.hasOwnProperty("clientReady")) {
+            NotificationCenter.trigger("user/clientReady", this.id);
         } else {
             this.player.playerController.applyCommand(command);
         }
+
     };
 
 

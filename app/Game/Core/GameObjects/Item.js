@@ -122,7 +122,7 @@ function (Parent, Box2D, Options, Settings) {
 
         var vector = new Box2D.Common.Math.b2Vec2(
             x * Settings.MAX_THROW_FORCE / this.options.weight,
-            -y * Settings.MAX_THROW_FORCE * 1.5 / this.options.weight // 1.5 is to throw higher then far
+            -y * Settings.MAX_THROW_FORCE / this.options.weight
         );
         this.body.SetLinearVelocity(vector);
 

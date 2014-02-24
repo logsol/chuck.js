@@ -60,8 +60,6 @@
         Channel.prototype.sendJoinSuccess = function(userId) {
             var user = new User(userId, this);
             var joinedUsers = Object.keys(this.users);
-            var spawnedPlayers = this.gameController.getSpawnedPlayersAndTheirPositions();
-            var worldUpdate = this.gameController.getWorldUpdateObject(true);
             
             var levelUid = null;
             if(this.gameController.level) {
@@ -74,8 +72,6 @@
                 userId: user.id, 
                 channelName: this.name, 
                 joinedUsers: joinedUsers,
-                spawnedPlayers: spawnedPlayers,
-                worldUpdate: worldUpdate,
                 levelUid: levelUid
             };                 
 

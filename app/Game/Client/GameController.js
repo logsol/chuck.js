@@ -56,6 +56,21 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
         DomController.statsEnd();
     }
 
+    GameController.prototype.onClientReadyResponse = function(options) {
+        
+        if (options.spawnedPlayers) {
+            for(var i = 0; i < options.spawnedPlayers.length; i++) {
+                this.onSpawnPlayer(options.spawnedPlayers[i]);
+            }
+        }
+
+        if (options.worldUpdate) {
+            this.onWorldUpdate(options.worldUpdate);
+        }
+
+        this.createMe(options.userId);
+    };
+
     GameController.prototype.onWorldUpdate = function (updateData) {
 
         var body = this.physicsEngine.world.GetBodyList();
@@ -66,7 +81,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
                 if(updateData[gameObject.uid]) {
                     var update = updateData[gameObject.uid];
                     body.SetAwake(true);
-                    body.SetPosition(this.centerBetween(update.p, body.GetPosition()));
+                    body.SetPosition(update.p);
                     body.SetAngle(update.a);
                     body.SetLinearVelocity(update.lv);
                     body.SetAngularVelocity(update.av);
@@ -82,25 +97,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
 
     }
 
-    GameController.prototype.centerBetween = function(n, o) {
-        var x, y;
-
-        if(n.x > o.x) {
-            x = o.x + (n.x - o.x) / 2;
-        } else {
-            x = o.x - (o.x - n.x) / 2;
-        }
-
-        if(n.y > o.y) {
-            y = o.y + (n.y - o.y) / 2;
-        } else {
-            y = o.y - (o.y - n.y) / 2;
-        }
-
-        return {x:x, y:y};
-    };
-
-    GameController.prototype.onJoinMe = function (playerId) {
+    GameController.prototype.createMe = function (playerId) {
         this.me = this.players[playerId];
         this.me.setPlayerController(new PlayerController(this.me));
         this.view.setMe(this.me);
@@ -161,7 +158,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
     GameController.prototype.onPlayerKill = function(options) {
         var player = this.players[options.playerId];
         var killedByPlayer = this.players[options.killedByPlayerId];
-        player.kill(killedByPlayer);
+        player.kill(killedByPlayer, options.ragDollId);
     };
 
     GameController.prototype.onRemoveGameObject = function(options) {

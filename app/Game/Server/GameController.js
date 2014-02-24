@@ -19,10 +19,11 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
         Parent.call(this);
 
-        NotificationCenter.on('user/joined', this.userJoined, this);
-        NotificationCenter.on('user/left', this.userLeft, this); // FIXME: refactor this.userLeft -> this.onUserLeft, even in core and client
+        NotificationCenter.on('user/joined', this.onUserJoined, this);
+        NotificationCenter.on('user/left', this.onUserLeft, this); // FIXME: refactor this.userLeft -> this.onUserLeft, even in core and client
         NotificationCenter.on('user/resetLevel', this.onResetLevel, this);
-        NotificationCenter.on('player/killed', this.spawnPlayer, this);
+        NotificationCenter.on('user/clientReady', this.onClientReady, this);
+        NotificationCenter.on('player/killed', this.onPlayerKilled, this);
 
         console.checkpoint('starting game controller for channel ' + channel.name);
         
@@ -49,12 +50,19 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         this.updateWorld();
     };
 
-    GameController.prototype.userJoined = function (user) {
-        Parent.prototype.userJoined.call(this, user);
-        var player = this.players[user.id];
-        user.setPlayer(player);
-        this.spawnPlayer(player, 0);
+    GameController.prototype.onUserJoined = function (user) {
+        this.createPlayer(user);
     }
+
+    GameController.prototype.createPlayer = function(user) {
+        var player = Parent.prototype.createPlayer.call(this, user);
+        player.setPlayerController(new PlayerController(player))
+        user.setPlayer(player);
+    };
+
+    GameController.prototype.onPlayerKilled = function(player, respawnTime) {
+        this.spawnPlayer(player, respawnTime);
+    };
 
     GameController.prototype.spawnPlayer = function(player, respawnTime) {
         var self = this;
@@ -81,12 +89,14 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         }, respawnTime * 1000);
     };
 
+    /*
     GameController.prototype.createPlayer = function(user) {
         var player = new Player(user.id, this.physicsEngine);
         player.setPlayerController(new PlayerController(player))
         
         return player;
     };
+    */
 
     GameController.prototype.updateWorld = function () {
         
@@ -152,6 +162,40 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         }
 
         return spawnedPlayers;
+    };
+
+    GameController.prototype.getAdditionalObjects = function() {
+        var objects = []
+
+        for (var i = 0; i < this.gameObjects.animated.length; i++) {
+            if(this.gameObjects.animated[i] instanceof RagDoll) {
+                var object = this.gameObjects.animated[i];
+                objects.push({
+                    uid: objects.uid,
+                    options: object.options,
+                    x: object.getPosition().x,
+                    y: object.getPosition().y
+                });
+            }
+        };
+        var object = {
+            // FIXME: finish it!
+        }
+
+        return objects;
+    };
+
+    GameController.prototype.onClientReady = function(userId) {
+        var player = this.players[userId];
+        this.spawnPlayer(player, 0);
+
+        var options = {
+            spawnedPlayers: this.getSpawnedPlayersAndTheirPositions(),
+            worldUpdate: this.getWorldUpdateObject(true),
+            userId: userId
+        }
+
+        NotificationCenter.trigger('user/' + userId + "/gameCommand", "clientReadyResponse", options);
     };
 
     GameController.prototype.onResetLevel = function(userId) {

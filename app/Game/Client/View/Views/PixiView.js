@@ -19,6 +19,7 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
         this.infoContainer = null;
         this.infoFilters = [];
         this.infoBox = null;
+        this.loader = null;
         this.init();
         this.pixi = PIXI;
     }
@@ -39,6 +40,7 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
 
         this.initCamera();
         this.initInfo();
+        this.initLoader();
 
         this.setCanvas(this.renderer.view);
     }
@@ -245,6 +247,42 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
 
     PixiView.prototype.onRemovePlayerInfo = function(playerInfo) {
         this.container.removeChild(playerInfo);
+    };
+
+    PixiView.prototype.initLoader = function() {
+        this.loader = new PIXI.Graphics();
+        this.stage.addChild(this.loader);
+        this.onUpdateLoader(0);
+    };
+
+    PixiView.prototype.onUpdateLoader = function(progress) {
+        var width = 200,
+            height = 5,
+            borderWidth = 1;
+
+        if(progress < 100) {
+            this.loader.clear();
+
+            this.loader.beginFill(0x000000);
+            this.loader.lineStyle(borderWidth, 0x000000);
+            this.loader.drawRect(0, 0, width, height);
+            this.loader.endFill();
+
+            if(progress > 0) {
+                var color = 0xFF0FA3;
+                this.loader.beginFill(color);
+                this.loader.lineStyle(0, 0x000000);
+                this.loader.drawRect(borderWidth, borderWidth, width * progress / 100, height);
+                this.loader.endFill();
+            }
+
+            this.loader.position = new PIXI.Point(
+                Settings.STAGE_WIDTH / 2 - width / 2 - borderWidth,
+                Settings.STAGE_HEIGHT / 2 - height / 2 - borderWidth
+            );
+        }
+
+        this.loader.visible = progress < 100;
     };
 
     return PixiView;

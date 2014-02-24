@@ -22,7 +22,7 @@ define([
             throw "Level: Can't create level, nothing found";
         }
 
-        var collisionLayer = this.getLayer("collision");
+        var collisionLayer = this.getLayer(this.levelData, "collision");
 
         if(collisionLayer) {
 
@@ -56,7 +56,7 @@ define([
     }
 
     TiledLevel.prototype.createItems = function() {
-        var objects = this.getLayer("items").objects;
+        var objects = this.getLayer(this.levelData, "items").objects;
         for (var i = 0; i < objects.length; i++) {
             var object = objects[i];
             var options = object.properties;
@@ -84,7 +84,7 @@ define([
             return Parent.prototype.getRandomSpawnPoint.call(this);
         } else {
 
-            var spawnLayer = this.getLayer("spawnpoints");
+            var spawnLayer = this.getLayer(this.levelData, "spawnpoints");
 
             var size = spawnLayer.objects.length;
             var object = spawnLayer.objects[parseInt(Math.random() * (size -1), 10)];
@@ -97,10 +97,10 @@ define([
         }
     };
 
-    TiledLevel.prototype.getLayer = function(name) {
-        for (var i = 0; i < this.levelData.layers.length; i++) {
-            if(this.levelData.layers[i].name === name) {
-                return this.levelData.layers[i];
+    TiledLevel.prototype.getLayer = function(levelData, name) {
+        for (var i = 0; i < levelData.layers.length; i++) {
+            if(levelData.layers[i].name === name) {
+                return levelData.layers[i];
             }
         }
 

@@ -61,7 +61,14 @@ function (Parent, Settings, NotificationCenter, Exception) {
 
             var texturePaths = [];
             for (var i = start; i <= end; i++) {
-                texturePaths.push(Settings.GRAPHICS_PATH + "Animation/WithArms/ChuckAnimations0" + padF(i) + ".png");
+                texturePaths.push(
+                      Settings.GRAPHICS_PATH 
+                    + Settings.GRAPHICS_SUBPATH_CHARACTERS 
+                    + this.characterName 
+                    + "/Animation/WithArms/ChuckAnimations0" 
+                    + padF(i) 
+                    + ".png"
+                );
             }
 
             var callback = function(mesh) {

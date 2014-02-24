@@ -38,6 +38,7 @@ function (Parent, ProtocolHelper, NotificationCenter) {
 
 
     // User command callbacks
+    // Remember: control commands are coordinator relevant commands
 
     User.prototype.onJoin = function(options) {
         this.coordinator.assignUserToChannel(this, options);

@@ -20,6 +20,8 @@ function (PhysicsEngine, TiledLevel, Player, NotificationCenter) {
 
         NotificationCenter.on("game/object/add", this.onGameObjectAdd, this);
         NotificationCenter.on("game/object/remove", this.onGameObjectRemove, this);
+
+        this.update();
     }
 
     GameController.prototype.update = function() {
@@ -61,7 +63,7 @@ function (PhysicsEngine, TiledLevel, Player, NotificationCenter) {
     };
 
     GameController.prototype.onLevelLoaded = function() {
-        this.update();
+        
     };
 
 
@@ -71,11 +73,13 @@ function (PhysicsEngine, TiledLevel, Player, NotificationCenter) {
         }
     }
 
+    /*
     GameController.prototype.userJoined = function (user) {
         this.players[user.id] = this.createPlayer(user);
     }
+    */
 
-    GameController.prototype.userLeft = function (user) {
+    GameController.prototype.onUserLeft = function (user) {
         var player = this.players[user.id];
 
         var i = this.gameObjects.animated.indexOf(player);
@@ -86,7 +90,9 @@ function (PhysicsEngine, TiledLevel, Player, NotificationCenter) {
     }
 
     GameController.prototype.createPlayer = function(user) {
-        return new Player(user.id, this.physicsEngine);
+        var player = new Player(user.id, this.physicsEngine);
+        this.players[user.id] = player;
+        return player;
     };
 
     return GameController;

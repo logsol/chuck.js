@@ -80,12 +80,15 @@ function (Parent, NotificationCenter) {
     };
 
     Player.prototype.kill = function(killedByPlayer) {
-        Parent.prototype.kill.call(this, killedByPlayer);
         this.stats.deaths++;
+        var ragDollId = this.stats.deaths;
+        Parent.prototype.kill.call(this, killedByPlayer, ragDollId);
+
         this.broadcastStats();
         NotificationCenter.trigger("broadcastGameCommand", "playerKill", {
             playerId: this.id,
-            killedByPlayerId: killedByPlayer.id
+            killedByPlayerId: killedByPlayer.id,
+            ragDollId: ragDollId
         });
 
         if(this.ragDoll) {

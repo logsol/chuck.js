@@ -26,6 +26,8 @@ function (DomController, Settings, Exception, NotificationCenter) {
         NotificationCenter.on("view/createAndAddPlayerInfo", this.onCreateAndAddPlayerInfo, this);
         NotificationCenter.on("view/updatePlayerInfo", this.onUpdatePlayerInfo, this);
         NotificationCenter.on("view/removePlayerInfo", this.onRemovePlayerInfo, this);
+
+        NotificationCenter.on("view/updateLoader", this.onUpdateLoader, this);
     }
 
     AbstractView.prototype.isWebGlEnabled = function () { 
@@ -145,6 +147,10 @@ function (DomController, Settings, Exception, NotificationCenter) {
 
     AbstractView.prototype.onRemovePlayerInfo = function(playerInfo) {
         throw new Exception('Abstract Function onRemovePlayerInfo not overwritten');
+    };
+
+    AbstractView.prototype.onUpdateLoader = function(progress) {
+        throw new Exception('Abstract Function onUpdateLoader not overwritten');
     };
 
     return AbstractView;

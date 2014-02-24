@@ -26,11 +26,6 @@ function (Doll, Settings, NotificationCenter, Exception, SpectatorDoll, RagDoll)
         this.spectatorDoll = new SpectatorDoll(this.physicsEngine, "spectatorDoll-" + this.id, this);
     }
 
-    Player.prototype.getDoll = function() {
-        throw new Exception('-- PLEASE REMOVE getDoll Calls --');
-        return this.doll;
-    };
-
     Player.prototype.getActiveDoll = function() {
         if(this.isSpawned) {
             return this.doll;
@@ -96,7 +91,7 @@ function (Doll, Settings, NotificationCenter, Exception, SpectatorDoll, RagDoll)
         this.holdingItem = null; 
     };
 
-    Player.prototype.kill = function(killedByPlayer) {
+    Player.prototype.kill = function(killedByPlayer, ragDollId) {
         if(!this.isSpawned) return false;
 
         // FIXME: do something better then just respawn in GameController
@@ -119,9 +114,9 @@ function (Doll, Settings, NotificationCenter, Exception, SpectatorDoll, RagDoll)
             height: 12
         };
 
-        var ragDoll = new RagDoll(this.physicsEngine, "ragDoll-" + this.id, options);
+        var ragDoll = new RagDoll(this.physicsEngine, "ragDoll-" + this.id + "-" + ragDollId, options);
         ragDoll.setVelocities(this.doll.getVelocities());
-
+        console.log(ragDoll.uid)
 
         this.isSpawned = false;
 

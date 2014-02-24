@@ -13,6 +13,7 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings, Do
         this.socketLink = socketLink;
         this.gameController = null;
         this.users = {};
+        this.userId = null;
 
         this.socketLink.on('connect', this.onConnect.bind(this));
         this.socketLink.on('disconnect', this.onDisconnect.bind(this));
@@ -26,6 +27,7 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings, Do
         });
 
         NotificationCenter.on("sendGameCommand", this.sendGameCommand, this);
+        NotificationCenter.on("game/level/loaded", this.onLevelLoaded, this);
     }
 
     // Socket callbacks
@@ -43,15 +45,12 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings, Do
     }
 
     Networker.prototype.onJoinSuccess = function (options) {
-        NotificationCenter.on("game/level/loaded", function() {
-            this.onLevelLoaded(options);
-        }, this);
+        this.userId = options.userId;
 
         this.gameController = new GameController();
         this.gameController.loadLevel(options.levelUid);
 
         this.onUserJoined(options.userId);
-        this.gameController.onJoinMe(options.userId);
 
         if (options.joinedUsers) {
             for(var i = 0; i < options.joinedUsers.length; i++) {
@@ -62,20 +61,15 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings, Do
         this.initPing();
     }
 
-    Networker.prototype.onLevelLoaded = function(options) {        
-        if (options.spawnedPlayers) {
-            for(var i = 0; i < options.spawnedPlayers.length; i++) {
-                this.gameController.onSpawnPlayer(options.spawnedPlayers[i]);
-            }
+    Networker.prototype.onLevelLoaded = function() {  
+        for (var userId in this.users) {
+            this.gameController.createPlayer(this.users[userId]);
         }
 
-        if (options.worldUpdate) {
-            this.gameController.onWorldUpdate(options.worldUpdate);
-        }
+        this.sendGameCommand("clientReady");
     };
 
     Networker.prototype.initPing = function() {
-
         this.ping();
     };
 
@@ -85,7 +79,8 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings, Do
 
 
     // Sending commands
-
+    
+    // Remember: control commands are coordinator relevant commands
     Networker.prototype.sendCommand = function (command, options) {
         var message = ProtocolHelper.encodeCommand(command, options);
         this.socketLink.send(message);
@@ -105,12 +100,18 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings, Do
     Networker.prototype.onUserJoined = function (userId) {
         var user = new User(userId);
         this.users[userId] = user;
-        this.gameController.userJoined(user);
+
+        if (this.gameController 
+            && this.gameController.level 
+            && this.gameController.level.isLoaded) {
+
+            this.gameController.createPlayer(user);
+        };
     }
 
     Networker.prototype.onUserLeft = function (userId) {
         var user = this.users[userId];
-        this.gameController.userLeft(user);
+        this.gameController.onUserLeft(user);
         delete this.users[userId];
     }
 

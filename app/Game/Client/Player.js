@@ -50,11 +50,6 @@ function (Parent, NotificationCenter, Settings) {
     	} 
     };
 
-	
-    Player.prototype.kill = function(killedByPlayer) {
-    	Parent.prototype.kill.call(this, killedByPlayer);
-    };
-    
     Player.prototype.spawn = function(x, y) {
     	Parent.prototype.spawn.call(this, x, y);
     	this.setPlayerInfoVisible(false);
