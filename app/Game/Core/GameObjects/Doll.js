@@ -159,10 +159,6 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
         this.setActionState("fall");
     }
 
-    Doll.prototype.getPosition = function() {
-        return this.body.GetPosition().Copy();
-    };
-
     Doll.prototype.getHeadPosition = function() {
         var pos = this.body.GetPosition();
         return {

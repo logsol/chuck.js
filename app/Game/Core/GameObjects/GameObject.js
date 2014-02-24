@@ -28,6 +28,10 @@ function (Box2D, Exception) {
     GameObject.prototype.getBody = function() {
     	return this.body;
     };
+
+    GameObject.prototype.getPosition = function() {
+        return this.body.GetPosition().Copy();
+    };
  
     return GameObject;
  

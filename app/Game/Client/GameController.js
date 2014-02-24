@@ -68,6 +68,25 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Notificat
             this.onWorldUpdate(options.worldUpdate);
         }
 
+        if (options.runtimeItems) {
+            for (var i = 0; i < options.runtimeItems.length; i++) {
+                var itemDef = options.runtimeItems[i];
+
+                var alreadyExists = false;
+                for (var i = 0; i < this.gameObjects.animated.length; i++) {
+                    if(this.gameObjects.animated[i].uid == itemDef.uid) {
+                        alreadyExists = true;
+                        break;
+                    } 
+                };
+
+                if(!alreadyExists) {
+                    var item = this.level.createItem(itemDef.uid, itemDef.options);
+                    this.onGameObjectAdd("animated", item);                    
+                }
+            };
+        }
+
         this.createMe(options.userId);
     };
 

@@ -116,7 +116,6 @@ function (Doll, Settings, NotificationCenter, Exception, SpectatorDoll, RagDoll)
 
         var ragDoll = new RagDoll(this.physicsEngine, "ragDoll-" + this.id + "-" + ragDollId, options);
         ragDoll.setVelocities(this.doll.getVelocities());
-        console.log(ragDoll.uid)
 
         this.isSpawned = false;
 

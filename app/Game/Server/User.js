@@ -12,6 +12,7 @@ function(Parent, NotificationCenter, ProtocolHelper, ProtocolParser) {
 
     	this.channel = channel;
         this.player = null;
+        this.isReady = false;
     	var self = this;
 
     	NotificationCenter.on('user/joined', function(user) { // FIXME: use sendToAllUsersExcept instead
@@ -51,6 +52,7 @@ function(Parent, NotificationCenter, ProtocolHelper, ProtocolParser) {
         if(command.hasOwnProperty("resetLevel")) {
             NotificationCenter.trigger("user/resetLevel", this.id);
         } else if(command.hasOwnProperty("clientReady")) {
+            this.isReady = true;
             NotificationCenter.trigger("user/clientReady", this.id);
         } else {
             this.player.playerController.applyCommand(command);
@@ -69,8 +71,10 @@ function(Parent, NotificationCenter, ProtocolHelper, ProtocolParser) {
     };
 
     User.prototype.sendGameCommand = function(command, options) {
-    	var data = ProtocolHelper.encodeCommand(command, options);
-    	this.sendControlCommand("gameCommand", data);
+        if(this.isReady) {
+            var data = ProtocolHelper.encodeCommand(command, options);
+            this.sendControlCommand("gameCommand", data);            
+        }
     };
 
 

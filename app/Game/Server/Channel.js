@@ -104,11 +104,17 @@
         }
 
         Channel.prototype.broadcastGameCommand = function (command, options) {
-            this.broadcastControlCommand("gameCommand", ProtocolHelper.encodeCommand(command, options));
+            for(var id in this.users) {
+                this.users[id].sendGameCommand(command, options);
+            }
         }
 
         Channel.prototype.broadcastGameCommandExcept = function (command, options, exceptUser) {
-            this.broadcastControlCommandExcept("gameCommand", ProtocolHelper.encodeCommand(command, options), exceptUser);
+            for(var id in this.users) {
+                if (id != exceptUser.id) {
+                    this.users[id].sendGameCommand(command, options);
+                }
+            }
         }
 
         return Channel;

@@ -8,10 +8,11 @@ define([
     "Lib/Vendor/Box2D",
     "Game/Server/Player",
     "Game/Server/GameObjects/GameObject",
-    "Game/Server/GameObjects/Doll"
+    "Game/Server/GameObjects/Doll",
+    "Game/Server/GameObjects/Items/RagDoll"
 ],
 
-function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, NotificationCenter, Box2D, Player, GameObject, Doll) {
+function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, NotificationCenter, Box2D, Player, GameObject, Doll, RagDoll) {
 
     function GameController (channel) {
         
@@ -77,15 +78,13 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
             // put it into 
             self.gameObjects.animated.push(player);
 
-            var message = {
-                spawnPlayer: {
-                    id: player.id, 
-                    x: spawnPoint.x, 
-                    y: spawnPoint.y
-                }
+            var options = {
+                id: player.id, 
+                x: spawnPoint.x, 
+                y: spawnPoint.y
             };
 
-            NotificationCenter.trigger("broadcastControlCommand", "gameCommand", message);
+            NotificationCenter.trigger("broadcastGameCommand", "spawnPlayer", options);
         }, respawnTime * 1000);
     };
 
@@ -103,7 +102,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         var update = this.getWorldUpdateObject(false);
 
         if(Object.getOwnPropertyNames(update).length > 0) {
-            NotificationCenter.trigger("broadcastControlCommand", 'gameCommand', {worldUpdate:update});
+            NotificationCenter.trigger("broadcastGameCommand", 'worldUpdate', update);
         }
 
         setTimeout(this.updateWorld.bind(this), Settings.WORLD_UPDATE_BROADCAST_INTERVAL);
@@ -143,7 +142,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
     GameController.prototype.getSpawnedPlayersAndTheirPositions = function() {
         var spawnedPlayers = [];
-        for(id in this.players) {
+        for(var id in this.players) {
             var player = this.players[id];
             if(player.isSpawned) {
                 
@@ -164,23 +163,21 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         return spawnedPlayers;
     };
 
-    GameController.prototype.getAdditionalObjects = function() {
+    GameController.prototype.getRuntimeItems = function() {
         var objects = []
 
         for (var i = 0; i < this.gameObjects.animated.length; i++) {
             if(this.gameObjects.animated[i] instanceof RagDoll) {
                 var object = this.gameObjects.animated[i];
+                var options = object.options;
+                options.x = object.getPosition().x;
+                options.y = object.getPosition().y;
                 objects.push({
-                    uid: objects.uid,
-                    options: object.options,
-                    x: object.getPosition().x,
-                    y: object.getPosition().y
+                    uid: object.uid,
+                    options: object.options
                 });
             }
         };
-        var object = {
-            // FIXME: finish it!
-        }
 
         return objects;
     };
@@ -192,6 +189,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         var options = {
             spawnedPlayers: this.getSpawnedPlayersAndTheirPositions(),
             worldUpdate: this.getWorldUpdateObject(true),
+            runtimeItems: this.getRuntimeItems(),
             userId: userId
         }
 
@@ -200,7 +198,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
     GameController.prototype.onResetLevel = function(userId) {
         Parent.prototype.onResetLevel.call(this);
-        NotificationCenter.trigger("broadcastControlCommand", "gameCommand", {resetLevel:true});
+        NotificationCenter.trigger("broadcastGameCommand", "resetLevel", true);
         for (var key in this.players) {
             this.spawnPlayer(this.players[key]);
         }

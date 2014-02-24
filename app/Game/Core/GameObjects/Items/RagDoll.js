@@ -345,8 +345,8 @@ function (Parent, Box2D, Settings, NotificationCenter) {
             body.SetAwake(true);
 
             var vector = new Box2D.Common.Math.b2Vec2(
-                x * Settings.MAX_THROW_FORCE * limbDampingFactor,
-                -y * Settings.MAX_THROW_FORCE * 1.5 *limbDampingFactor // 1.5 is to throw higher then far
+                x * Settings.MAX_THROW_FORCE * limbDampingFactor / this.options.weight,
+                -y * Settings.MAX_THROW_FORCE * limbDampingFactor / this.options.weight
             );
             body.SetLinearVelocity(vector);
             // body.SetAngularVelocity(Settings.MAX_THROW_ANGULAR_VELOCITY * x);

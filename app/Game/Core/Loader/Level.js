@@ -67,7 +67,7 @@ define([
             var options = items[i];
             var uid = "item-" + i;
             var item = this.createItem(uid, options);
-            this.gameObjects.animated.push(item);            
+            this.gameObjects.animated.push(item); // FIXME: use NotificationCenter
         };
     };
 
