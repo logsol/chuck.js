@@ -21,7 +21,15 @@ var options = {
 };
 
 console.checkpoint = function (s) {
-    console.log('   \033[34mbeep  - \033[0m' + s);
+    console.log('   \033[32mbeep  - \033[0m' + s);
+}
+
+console.warn = function (s) {
+    console.log('   \033[33mwarn  - \033[0m' + s);
+}
+
+console.error = function (s) {
+    console.log('   \033[31merror - \033[0m' + s);
 }
 
 requirejs([

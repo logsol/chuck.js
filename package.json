@@ -1,7 +1,7 @@
 {
   "name": "chuck.js",
   "author": "logsol <fartman@gmx.de>",
-  "contributors": ["Jeena Paradies <spam@jeenaparadies.net> (http://jeena.net)"],
+  "contributors": ["Jeena Paradies <spam@jeenaparadies.net> (https://jeena.net)"],
   "description": "Multiplayer browser jump and run game",
   "version": "0.1.0",
   "homepage": "http://chuck-game.tumblr.com/",

@@ -27,6 +27,10 @@ function (http, nodeStatic) {
                     //console.log("data")
                 });
 
+                req.addListener('error', function(err) {
+                    console.log('');
+                });
+
                 req.addListener('end', function () {
 
                     switch(true) {
@@ -67,6 +71,15 @@ function (http, nodeStatic) {
                 });
             }
         );
+
+        this.server.once('error', function(err) {
+            if(err.code == 'EADDRINUSE') {
+                console.error('port already in use. Closing.');
+            } else {
+                throw new Error(err);
+            }
+        });
+
         this.server.listen(options.port);
 
         console.checkpoint('start HTTP server');
