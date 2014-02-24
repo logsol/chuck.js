@@ -230,7 +230,9 @@ function (Parent, DomController, PIXI, Settings, NotificationCenter) {
             playerInfo.endFill();
 
             if(options.healthFactor > 0) {
-                playerInfo.beginFill(0x00FF00);
+                var color = 0x00FF00;
+                if(options.healthFactor < 0.30) color = 0xFF0000;
+                playerInfo.beginFill(color);
                 playerInfo.lineStyle(0, 0x000000);
                 playerInfo.drawRect(borderWidth, borderWidth, width * options.healthFactor, height);
                 playerInfo.endFill();

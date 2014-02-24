@@ -121,8 +121,8 @@ function (Parent, Box2D, Options, Settings) {
         body.SetAwake(true);
 
         var vector = new Box2D.Common.Math.b2Vec2(
-            x * Settings.MAX_THROW_FORCE,
-            -y * Settings.MAX_THROW_FORCE * 1.5 // 1.5 is to throw higher then far
+            x * Settings.MAX_THROW_FORCE / this.options.weight,
+            -y * Settings.MAX_THROW_FORCE * 1.5 / this.options.weight // 1.5 is to throw higher then far
         );
         this.body.SetLinearVelocity(vector);
 
