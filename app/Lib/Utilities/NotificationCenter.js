@@ -6,6 +6,74 @@ function () {
     function NotificationCenter () {
         this.topics = {};
         this.subUid = -1;
+/*
+        var i = 0;
+        this.nc = {
+            client: {
+                view: {
+                    mesh: {
+                        create: i++,
+                        add: i++,
+                        remove: i++,
+                        update: i++
+                    },
+                    playerInfo: {
+                        createAndAdd: i++,
+                        remove: i++,
+                        update: i++
+                    },
+                    preloadBar: {
+                        update: i++
+                    },
+                    fullScreen: {
+                        change: i++
+                    },
+                    debugMode: {
+                        toggle: i++
+                    },
+                    gameInfo: {
+                        toggle: i++
+                    }
+                    events: {
+                        ready: i++
+                    }
+                },
+                input: {
+                    handAction: {
+                        request: i++
+                    },
+                    xy: {
+                        change: i++
+                    }
+                },
+                server: {
+                    gameCommand: {
+                        send: i++
+                    }
+                }
+            },
+            core: {
+                game: {
+                    gameObject: {
+                        add: i++,
+                        remove: i++
+                    }
+                    events: {
+                        level: {
+                            loaded: i++
+                        }
+                    }
+                }
+            },
+            server: {
+                pipeToLobby: function(v) { return v + "-ns.server.pipeToLobby")}
+            },
+            lobby: {
+
+            }
+
+        };
+        */
     }
 
     NotificationCenter.prototype.trigger = function (topic /*, arguments*/) {
