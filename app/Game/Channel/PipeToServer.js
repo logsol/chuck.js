@@ -1,11 +1,11 @@
 define([
     "Lib/Utilities/NotificationCenter",
-    "Game/Server/Channel"
+    "Game/Channel/Channel"
 ],
 
 function (Nc, Channel) {
 
-    function PipeToLobby (process) {
+    function PipeToServer (process) {
 
         var self = this;
 
@@ -28,7 +28,7 @@ function (Nc, Channel) {
         });    
     }
 
-    PipeToLobby.prototype.send = function (recipient, data) {
+    PipeToServer.prototype.send = function (recipient, data) {
         var message = {
             recipient: recipient,
             data: data
@@ -37,10 +37,10 @@ function (Nc, Channel) {
         this.process.send(message);
     };
 
-    PipeToLobby.prototype.onMessage = function (message) {
+    PipeToServer.prototype.onMessage = function (message) {
         Nc.trigger(message.recipient + '/controlCommand', message);    
     }
 
-    return PipeToLobby;
+    return PipeToServer;
 
 });

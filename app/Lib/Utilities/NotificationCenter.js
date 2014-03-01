@@ -66,7 +66,7 @@ function () {
                 }
             },
             server: {
-                pipeToLobby: function(v) { return v + "-ns.server.pipeToLobby")}
+                pipeToServer: function(v) { return v + "-ns.server.pipeToServer")}
             },
             lobby: {
 

@@ -1,7 +1,7 @@
     define([
-        "Game/Server/GameController",
+        "Game/Channel/GameController",
         "Lib/Utilities/NotificationCenter",
-        "Game/Server/User",
+        "Game/Channel/User",
         "Lib/Utilities/Protocol/Helper",
         "Lib/Utilities/Options",
         "Game/Config/Settings"
@@ -9,7 +9,7 @@
 
     function (GameController, Nc, User, ProtocolHelper, Options, Settings) {
 
-        function Channel (pipeToLobby, name, options) {
+        function Channel (pipeToServer, name, options) {
 
             var self = this;
 
@@ -20,7 +20,7 @@
             this.name = name;
             this.users = {};
 
-            this.pipeToLobby = pipeToLobby;
+            this.pipeToServer = pipeToServer;
 
             this.gameController = new GameController(this);
             

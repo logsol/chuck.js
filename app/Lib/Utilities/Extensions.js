@@ -8,7 +8,7 @@ function() {
 		return f + this.substr(1);
 	}
 
-	if(GLOBALS.context == "Server") {
+	if(GLOBALS.context == "Channel") {
 		
 		console.checkpoint = function (s) {
 			console.log('   \033[32mbeep  - \033[0m' + s);

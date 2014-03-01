@@ -1,15 +1,15 @@
 define([
     "Game/Core/GameController",
-    "Game/Server/Physics/Engine",
+    "Game/Channel/Physics/Engine",
     "Game/Config/Settings", 
-    "Game/Server/Control/PlayerController",
+    "Game/Channel/Control/PlayerController",
     "Lib/Utilities/RequestAnimFrame",
     "Lib/Utilities/NotificationCenter",
     "Lib/Vendor/Box2D",
-    "Game/Server/Player",
-    "Game/Server/GameObjects/GameObject",
-    "Game/Server/GameObjects/Doll",
-    "Game/Server/GameObjects/Items/RagDoll"
+    "Game/Channel/Player",
+    "Game/Channel/GameObjects/GameObject",
+    "Game/Channel/GameObjects/Doll",
+    "Game/Channel/GameObjects/Items/RagDoll"
 ],
 
 function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, Nc, Box2D, Player, GameObject, Doll, RagDoll) {

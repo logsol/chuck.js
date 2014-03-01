@@ -1,7 +1,7 @@
 define([
-    "Lobby/User", 
-    "Game/Server/Channel",
-    "Lobby/PipeToChannel",
+    "Server/User", 
+    "Game/Channel/Channel",
+    "Server/PipeToChannel",
     "Lib/Utilities/NotificationCenter"
 ], 
 
