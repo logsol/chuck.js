@@ -9,7 +9,7 @@ define([
     "Game/" + GLOBALS.context + "/GameObjects/Items/Skateboard",
     "Game/" + GLOBALS.context + "/GameObjects/Items/RagDoll"
 
-], function (Settings, Box2D, NotificationCenter, Exception, CollisionDetector, Tile, Item, Skateboard, RagDoll) {
+], function (Settings, Box2D, Nc, Exception, CollisionDetector, Tile, Item, Skateboard, RagDoll) {
     
     function Level (uid, engine, gameObjects) {
         this.uid = uid;
@@ -28,7 +28,7 @@ define([
             self.createTiles();
             self.createItems();
             self.isLoaded = true;
-            NotificationCenter.trigger("game/level/loaded");
+            Nc.trigger("game/level/loaded");
         });
     }
 
@@ -67,7 +67,7 @@ define([
             var options = items[i];
             var uid = "item-" + i;
             var item = this.createItem(uid, options);
-            this.gameObjects.animated.push(item); // FIXME: use NotificationCenter
+            this.gameObjects.animated.push(item); // FIXME: use Nc
         };
     };
 

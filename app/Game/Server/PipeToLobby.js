@@ -3,7 +3,7 @@ define([
     "Game/Server/Channel"
 ],
 
-function (NotificationCenter, Channel) {
+function (Nc, Channel) {
 
     function PipeToLobby (process) {
 
@@ -12,7 +12,7 @@ function (NotificationCenter, Channel) {
         this.channel = null;
         this.process = process;
 
-        NotificationCenter.on('process/message', this.send, this);
+        Nc.on('process/message', this.send, this);
 
         process.on('message', function (message, handle) {
 
@@ -38,7 +38,7 @@ function (NotificationCenter, Channel) {
     };
 
     PipeToLobby.prototype.onMessage = function (message) {
-        NotificationCenter.trigger(message.recipient + '/controlCommand', message);    
+        Nc.trigger(message.recipient + '/controlCommand', message);    
     }
 
     return PipeToLobby;

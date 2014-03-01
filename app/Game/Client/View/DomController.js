@@ -5,7 +5,7 @@ define([
     "Lib/Vendor/Screenfull"
 ], 
 
-function (Settings, NotificationCenter, Stats, Screenfull) {
+function (Settings, Nc, Stats, Screenfull) {
 
     function DomController() {
         this.canvas = null;
@@ -13,7 +13,7 @@ function (Settings, NotificationCenter, Stats, Screenfull) {
         this.stats = null;
         this.ping = null;
 
-        NotificationCenter.on("view/ready", this.initDevTools, this);
+        Nc.on("view/ready", this.initDevTools, this);
     }
 
     DomController.prototype.initDevTools = function() {
@@ -39,7 +39,7 @@ function (Settings, NotificationCenter, Stats, Screenfull) {
 
         window.onresize = function() {
             if(Screenfull.enabled) {
-                NotificationCenter.trigger("view/fullscreenChange", Screenfull.isFullscreen);
+                Nc.trigger("view/fullscreenChange", Screenfull.isFullscreen);
             }
         }
 
@@ -71,7 +71,7 @@ function (Settings, NotificationCenter, Stats, Screenfull) {
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.onclick = function(e) {
-            NotificationCenter.trigger("view/toggleDebugMode", e.target.checked);
+            Nc.trigger("view/toggleDebugMode", e.target.checked);
             self.getDebugCanvas().style.display = e.target.checked ? "" : "none";
         }
         label.appendChild(checkbox);

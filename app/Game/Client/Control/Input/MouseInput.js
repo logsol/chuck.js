@@ -5,7 +5,7 @@ define([
 	"Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, DomController, Settings, NotificationCenter) {
+function (Parent, DomController, Settings, Nc) {
  
     function MouseInput() {
     	Parent.call(this);
@@ -37,7 +37,7 @@ function (Parent, DomController, Settings, NotificationCenter) {
 			var x = (((e.clientX - this.offsetLeft) / Settings.STAGE_WIDTH) * 2) - 1;
 			var y = (((Settings.STAGE_HEIGHT - (e.clientY - this.offsetTop)) / Settings.STAGE_HEIGHT) * 2) -1;
 
-			NotificationCenter.trigger("input/onHandActionRequest", x, y);
+			Nc.trigger("input/onHandActionRequest", x, y);
 		}
     };
 

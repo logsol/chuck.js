@@ -4,7 +4,7 @@ define([
 	"Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, Settings, NotificationCenter) {
+function (Parent, Settings, Nc) {
  
     function RagDoll(physicsEngine, uid, options) {
         this.scheduledForDestruction = false;
@@ -35,7 +35,7 @@ function (Parent, Settings, NotificationCenter) {
     };
 
     RagDoll.prototype.destroy = function() {
-    	NotificationCenter.trigger("broadcastGameCommand", 'removeGameObject', {
+    	Nc.trigger("broadcastGameCommand", 'removeGameObject', {
     		type: 'animated',
     		uid: this.uid
     	});

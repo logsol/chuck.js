@@ -2,7 +2,7 @@ define([
 	"Lib/Utilities/NotificationCenter"
 ],
  
-function (NotificationCenter) {
+function (Nc) {
  
     function XyInput() {
     	this.x = null;
@@ -12,7 +12,7 @@ function (NotificationCenter) {
     XyInput.prototype.onXyChange = function(x, y) {
     	this.x = x;
     	this.y = y;
-    	NotificationCenter.trigger('input/onXyChange', x, y);
+    	Nc.trigger('input/onXyChange', x, y);
     }
  
     return XyInput;

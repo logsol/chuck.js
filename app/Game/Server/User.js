@@ -5,7 +5,7 @@ define([
     "Lib/Utilities/Protocol/Parser",
 ],
  
-function(Parent, NotificationCenter, ProtocolHelper, ProtocolParser) {
+function(Parent, Nc, ProtocolHelper, ProtocolParser) {
  
     function User(id, channel) {
     	Parent.call(this, id);
@@ -15,21 +15,21 @@ function(Parent, NotificationCenter, ProtocolHelper, ProtocolParser) {
         this.isReady = false;
     	var self = this;
 
-    	NotificationCenter.on('user/joined', function(user) { // FIXME: use sendToAllUsersExcept instead
+    	Nc.on('user/joined', function(user) { // FIXME: use sendToAllUsersExcept instead
     		if(user.id != self.id) {
     			self.sendControlCommand("userJoined", user.id);    			
     		}
     	});
 
-    	NotificationCenter.on('user/' + this.id + "/joinSuccess", function(options) {
+    	Nc.on('user/' + this.id + "/joinSuccess", function(options) {
     		self.sendControlCommand("joinSuccess", options);
     	});
 
-        NotificationCenter.on('user/' + this.id + "/controlCommand", function(message) {
+        Nc.on('user/' + this.id + "/controlCommand", function(message) {
             ProtocolHelper.applyCommand(message.data, self);
         });
 
-        NotificationCenter.on('user/' + this.id + "/gameCommand", function(command, options) {
+        Nc.on('user/' + this.id + "/gameCommand", function(command, options) {
             self.sendGameCommand(command, options);
         });
     }
@@ -50,10 +50,10 @@ function(Parent, NotificationCenter, ProtocolHelper, ProtocolParser) {
         } // FIXME: move this to Protocol helper as a function
 
         if(command.hasOwnProperty("resetLevel")) {
-            NotificationCenter.trigger("user/resetLevel", this.id);
+            Nc.trigger("user/resetLevel", this.id);
         } else if(command.hasOwnProperty("clientReady")) {
             this.isReady = true;
-            NotificationCenter.trigger("user/clientReady", this.id);
+            Nc.trigger("user/clientReady", this.id);
         } else {
             this.player.playerController.applyCommand(command);
         }
@@ -67,7 +67,7 @@ function(Parent, NotificationCenter, ProtocolHelper, ProtocolParser) {
     	var recipient = "user/" + this.id;
 		var data = ProtocolHelper.encodeCommand(command, options);
 
-    	NotificationCenter.trigger("process/message", recipient, data);
+    	Nc.trigger("process/message", recipient, data);
     };
 
     User.prototype.sendGameCommand = function(command, options) {

@@ -5,7 +5,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ], 
 
-function (User, Channel, PipeToChannel, NotificationCenter) {
+function (User, Channel, PipeToChannel, Nc) {
 
     function Coordinator () {
         this.channelPipes = {};
@@ -46,14 +46,14 @@ function (User, Channel, PipeToChannel, NotificationCenter) {
 
         //channel.addUser(user);
         //user.setChannel(channel);
-        NotificationCenter.trigger('user/joined', user);
+        Nc.trigger('user/joined', user);
 
         delete this.lobbyUsers[user.id];
     }
 
     Coordinator.prototype.removeUser = function (user) {
 
-        NotificationCenter.trigger('user/left', user);
+        Nc.trigger('user/left', user);
         //NotificationCenter.off('channel/' + user.channel.channelName + '/user/' + user.id);
 
         delete this.lobbyUsers[user.id];
@@ -65,14 +65,14 @@ function (User, Channel, PipeToChannel, NotificationCenter) {
         this.channelPipes[channelName] = channelPipe;
 
         
-        NotificationCenter.on('channel/' + channelName + '/message', function (data) {
+        Nc.on('channel/' + channelName + '/message', function (data) {
             channelPipe.send('channel', data);
         }, this);
 
         // sending info to user
-        NotificationCenter.on('user/joined', function (user) {
+        Nc.on('user/joined', function (user) {
             /*
-            NotificationCenter.on('channel/' + channelName + '/user/' + user.id, function (recipient, data) {
+            Nc.on('channel/' + channelName + '/user/' + user.id, function (recipient, data) {
                 channelPipe.send(recipient, data);
             }, this);
             */
@@ -81,11 +81,11 @@ function (User, Channel, PipeToChannel, NotificationCenter) {
 
         }, this);
 
-        NotificationCenter.on('user/left', function (user) {
+        Nc.on('user/left', function (user) {
             channelPipe.send('channel', { releaseUser: user.id });
         }, this);
 
-        NotificationCenter.on('user/controlCommand', function (userId, data) {
+        Nc.on('user/controlCommand', function (userId, data) {
             channelPipe.sendToUser(userId, data);
         }, this);
         

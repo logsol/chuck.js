@@ -4,7 +4,7 @@ define([
 	"Game/Config/Settings"
 ],
  
-function (Parent, NotificationCenter, Settings) {
+function (Parent, Nc, Settings) {
  
     function Player(id, physicsEngine) {
     	Parent.call(this, id, physicsEngine);
@@ -41,7 +41,7 @@ function (Parent, NotificationCenter, Settings) {
     	var callback = function(playerInfoView) {
     		self.playerInfoView = playerInfoView;
     	}
-    	NotificationCenter.trigger("view/createAndAddPlayerInfo", callback, options);
+    	Nc.trigger("view/createAndAddPlayerInfo", callback, options);
     };
 
     Player.prototype.onHealthChange = function() {
@@ -69,15 +69,15 @@ function (Parent, NotificationCenter, Settings) {
 	    		healthFactor: this.stats.health / 100,
 	    		visible: this.playerInfoViewVisible
 	    	};
-	    	NotificationCenter.trigger("view/updatePlayerInfo", this.playerInfoView, options);
+	    	Nc.trigger("view/updatePlayerInfo", this.playerInfoView, options);
 
 	    	this.playerInfoViewVisibleTimeout = setTimeout(function() {
 	    		self.playerInfoViewVisible = false;
-	    		NotificationCenter.trigger("view/updatePlayerInfo", self.playerInfoView, {visible: self.playerInfoViewVisible});
+	    		Nc.trigger("view/updatePlayerInfo", self.playerInfoView, {visible: self.playerInfoViewVisible});
 	    	}, Settings.HEALTH_DISPLAY_TIME * 1000);
 
     	} else {
-    		NotificationCenter.trigger("view/updatePlayerInfo", this.playerInfoView, {visible: this.playerInfoViewVisible});
+    		Nc.trigger("view/updatePlayerInfo", this.playerInfoView, {visible: this.playerInfoViewVisible});
     	}
     };
 
@@ -92,13 +92,13 @@ function (Parent, NotificationCenter, Settings) {
 				x: position.x * Settings.RATIO,
 	    		y: position.y * Settings.RATIO,
 	    	}
-	    	NotificationCenter.trigger("view/updatePlayerInfo", this.playerInfoView, options);
+	    	Nc.trigger("view/updatePlayerInfo", this.playerInfoView, options);
     	}
     };
 
     Player.prototype.destroy = function() {
     	Parent.prototype.destroy.call(this);
-    	NotificationCenter.trigger("view/removePlayerInfo", this.playerInfoView);
+    	Nc.trigger("view/removePlayerInfo", this.playerInfoView);
     };
  
     return Player;

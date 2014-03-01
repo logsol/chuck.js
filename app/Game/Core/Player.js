@@ -8,7 +8,7 @@ define([
 ],
 
 
-function (Doll, Settings, NotificationCenter, Exception, SpectatorDoll, RagDoll) {
+function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
 
     function Player (id, physicsEngine) {
         this.stats = {
@@ -39,7 +39,7 @@ function (Doll, Settings, NotificationCenter, Exception, SpectatorDoll, RagDoll)
         this.doll = new Doll(this.physicsEngine, "doll-" + this.id, this);
         this.doll.spawn(x, y);
         this.isSpawned = true;
-        NotificationCenter.trigger("game/object/add", 'animated', this.doll);
+        Nc.trigger("game/object/add", 'animated', this.doll);
     }
 
     Player.prototype.getPosition = function () {
@@ -119,14 +119,14 @@ function (Doll, Settings, NotificationCenter, Exception, SpectatorDoll, RagDoll)
 
         this.isSpawned = false;
 
-        NotificationCenter.trigger("game/object/remove", 'animated', this.doll);
+        Nc.trigger("game/object/remove", 'animated', this.doll);
         this.doll.destroy();
         this.doll = null;
 
         this.ragDoll = ragDoll;
         
 
-        NotificationCenter.trigger("player/killed", this);
+        Nc.trigger("player/killed", this);
     };
 
     Player.prototype.update = function () {

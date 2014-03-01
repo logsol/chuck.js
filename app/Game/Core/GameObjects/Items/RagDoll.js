@@ -5,7 +5,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, Box2D, Settings, NotificationCenter) {
+function (Parent, Box2D, Settings, Nc) {
  
     function RagDoll(physicsEngine, uid, options) {
 
@@ -163,7 +163,7 @@ function (Parent, Box2D, Settings, NotificationCenter) {
         );
 
 
-        NotificationCenter.trigger("game/object/add", 'animated', this);
+        Nc.trigger("game/object/add", 'animated', this);
     }
 
     RagDoll.prototype = Object.create(Parent.prototype);
@@ -362,7 +362,7 @@ function (Parent, Box2D, Settings, NotificationCenter) {
     };
 
     RagDoll.prototype.destroy = function() {
-        NotificationCenter.trigger("game/object/remove", 'animated', this);
+        Nc.trigger("game/object/remove", 'animated', this);
         var world = this.body.GetWorld();
         Parent.prototype.destroy.call(this);
         

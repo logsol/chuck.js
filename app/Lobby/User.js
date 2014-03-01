@@ -4,7 +4,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
 
-function (Parent, ProtocolHelper, NotificationCenter) {
+function (Parent, ProtocolHelper, Nc) {
 
     function User (socketLink, coordinator) {
         Parent.call(this, socketLink.id);
@@ -16,7 +16,7 @@ function (Parent, ProtocolHelper, NotificationCenter) {
         socketLink.on('message', this.onMessage.bind(this));
         socketLink.on('disconnect', this.onDisconnect.bind(this));
 
-        NotificationCenter.on("user/" + this.socketLink.id + "/message", this.socketLink.send, this.socketLink);
+        Nc.on("user/" + this.socketLink.id + "/message", this.socketLink.send, this.socketLink);
     }
 
     User.prototype = Object.create(Parent.prototype);
@@ -47,12 +47,12 @@ function (Parent, ProtocolHelper, NotificationCenter) {
     User.prototype.onGameCommand = function(options) {
         // repacking for transport via pipe
         var message = ProtocolHelper.encodeCommand("gameCommand", options);
-        NotificationCenter.trigger("user/controlCommand", this.id, message);
+        Nc.trigger("user/controlCommand", this.id, message);
     };
 
     User.prototype.onPing = function(timestamp) {
         var message = ProtocolHelper.encodeCommand("pong", timestamp);
-        NotificationCenter.trigger("user/" + this.socketLink.id + "/message", message);
+        Nc.trigger("user/" + this.socketLink.id + "/message", message);
     };
 
     return User;

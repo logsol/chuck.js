@@ -7,7 +7,7 @@ define([
     "Game/Client/View/DomController"
 ], 
 
-function (ProtocolHelper, GameController, User, NotificationCenter, Settings, DomController) {
+function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
 
     function Networker (socketLink) {
         this.socketLink = socketLink;
@@ -26,8 +26,8 @@ function (ProtocolHelper, GameController, User, NotificationCenter, Settings, Do
             ProtocolHelper.applyCommand(message, self);
         });
 
-        NotificationCenter.on("sendGameCommand", this.sendGameCommand, this);
-        NotificationCenter.on("game/level/loaded", this.onLevelLoaded, this);
+        Nc.on("sendGameCommand", this.sendGameCommand, this);
+        Nc.on("game/level/loaded", this.onLevelLoaded, this);
     }
 
     // Socket callbacks

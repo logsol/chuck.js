@@ -5,7 +5,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
 
-function (Settings, Box2D, CollisionDetector, NotificationCenter) {
+function (Settings, Box2D, CollisionDetector, Nc) {
 
     function Engine () {
         this.world = new Box2D.Dynamics.b2World(
@@ -17,7 +17,7 @@ function (Settings, Box2D, CollisionDetector, NotificationCenter) {
         this.lastStep = Date.now();
         this.worldQueue = [];
 
-        NotificationCenter.on("engine/addToWorldQueue", this.addToWorldQueue, this);
+        Nc.on("engine/addToWorldQueue", this.addToWorldQueue, this);
     }
 
     Engine.prototype.getWorld = function () {

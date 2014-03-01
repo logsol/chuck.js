@@ -7,7 +7,7 @@
         "Game/Config/Settings"
     ], 
 
-    function (GameController, NotificationCenter, User, ProtocolHelper, Options, Settings) {
+    function (GameController, Nc, User, ProtocolHelper, Options, Settings) {
 
         function Channel (pipeToLobby, name, options) {
 
@@ -24,15 +24,15 @@
 
             this.gameController = new GameController(this);
             
-            NotificationCenter.on('channel/controlCommand', function (message) {
+            Nc.on('channel/controlCommand', function (message) {
                 ProtocolHelper.applyCommand(message.data, self);
             });
 
-            NotificationCenter.on('broadcastControlCommand', this.broadcastControlCommand, this);
-            NotificationCenter.on('broadcastControlCommandExcept', this.broadcastControlCommandExcept, this);
+            Nc.on('broadcastControlCommand', this.broadcastControlCommand, this);
+            Nc.on('broadcastControlCommandExcept', this.broadcastControlCommandExcept, this);
 
-            NotificationCenter.on('broadcastGameCommand', this.broadcastGameCommand, this);
-            NotificationCenter.on('broadcastGameCommandExcept', this.broadcastGameCommandExcept, this);
+            Nc.on('broadcastGameCommand', this.broadcastGameCommand, this);
+            Nc.on('broadcastGameCommandExcept', this.broadcastGameCommandExcept, this);
 
             console.checkpoint('channel ' + name + ' created');
         }
@@ -48,9 +48,9 @@
             var self = this;
 
             if(!this.gameController.level || !this.gameController.level.isLoaded) {
-                var token = NotificationCenter.on("game/level/loaded", function() {
+                var token = Nc.on("game/level/loaded", function() {
                     self.sendJoinSuccess(userId);
-                    NotificationCenter.off(token);
+                    Nc.off(token);
                 });
             } else {
                 self.sendJoinSuccess(userId);
@@ -75,14 +75,14 @@
                 levelUid: levelUid
             };                 
 
-            NotificationCenter.trigger('user/' + user.id + "/joinSuccess", options);
-            NotificationCenter.trigger('user/joined', user);  
+            Nc.trigger('user/' + user.id + "/joinSuccess", options);
+            Nc.trigger('user/joined', user);  
         };
 
         Channel.prototype.onReleaseUser = function (userId) {
             var user = this.users[userId];
             this.broadcastControlCommandExcept("userLeft", user.id, user);
-            NotificationCenter.trigger('user/left', user);
+            Nc.trigger('user/left', user);
             delete this.users[user.id];
         }
 

@@ -4,7 +4,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, Settings, NotificationCenter) {
+function (Parent, Settings, Nc) {
  
     function Tile(physicsEngine, uid, options) {
     	Parent.call(this, physicsEngine, uid, options);
@@ -27,10 +27,10 @@ function (Parent, Settings, NotificationCenter) {
 
     	var callback = function(mesh) {
     		self.mesh = mesh;
-            NotificationCenter.trigger("view/addMesh", mesh);
+            Nc.trigger("view/addMesh", mesh);
     	}
    
-        NotificationCenter.trigger("view/createMesh",
+        Nc.trigger("view/createMesh",
             texturePath, 
             callback,
             {
@@ -45,13 +45,13 @@ function (Parent, Settings, NotificationCenter) {
     };
 
     Tile.prototype.destroy = function() {
-        NotificationCenter.trigger("view/removeMesh", this.mesh);
+        Nc.trigger("view/removeMesh", this.mesh);
         Parent.prototype.destroy.call(this);
     };
 
     Tile.prototype.render = function() {
 
-        NotificationCenter.trigger("view/updateMesh",
+        Nc.trigger("view/updateMesh",
             this.mesh,
             {
                 x: this.body.GetPosition().x * Settings.RATIO,

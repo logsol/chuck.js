@@ -5,29 +5,29 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
 
-function (DomController, Settings, Exception, NotificationCenter) {
+function (DomController, Settings, Exception, Nc) {
     
     function AbstractView () {
     	this.me = null;
         this.canvas = null;
         this.debugMode = false;
 
-        NotificationCenter.on("view/createMesh", this.createMesh, this);
-        NotificationCenter.on("view/createAnimatedMesh", this.createAnimatedMesh, this);
-        NotificationCenter.on("view/addMesh", this.addMesh, this);
-        NotificationCenter.on("view/removeMesh", this.removeMesh, this);
-        NotificationCenter.on("view/updateMesh", this.updateMesh, this);
+        Nc.on("view/createMesh", this.createMesh, this);
+        Nc.on("view/createAnimatedMesh", this.createAnimatedMesh, this);
+        Nc.on("view/addMesh", this.addMesh, this);
+        Nc.on("view/removeMesh", this.removeMesh, this);
+        Nc.on("view/updateMesh", this.updateMesh, this);
 
-        NotificationCenter.on("view/fullscreenChange", this.onFullscreenChange, this);
-        NotificationCenter.on("view/toggleDebugMode", this.onToggleDebugMode, this);
+        Nc.on("view/fullscreenChange", this.onFullscreenChange, this);
+        Nc.on("view/toggleDebugMode", this.onToggleDebugMode, this);
 
-        NotificationCenter.on("view/toggleInfo", this.onToggleInfo, this);
+        Nc.on("view/toggleInfo", this.onToggleInfo, this);
 
-        NotificationCenter.on("view/createAndAddPlayerInfo", this.onCreateAndAddPlayerInfo, this);
-        NotificationCenter.on("view/updatePlayerInfo", this.onUpdatePlayerInfo, this);
-        NotificationCenter.on("view/removePlayerInfo", this.onRemovePlayerInfo, this);
+        Nc.on("view/createAndAddPlayerInfo", this.onCreateAndAddPlayerInfo, this);
+        Nc.on("view/updatePlayerInfo", this.onUpdatePlayerInfo, this);
+        Nc.on("view/removePlayerInfo", this.onRemovePlayerInfo, this);
 
-        NotificationCenter.on("view/updateLoader", this.onUpdateLoader, this);
+        Nc.on("view/updateLoader", this.onUpdateLoader, this);
     }
 
     AbstractView.prototype.isWebGlEnabled = function () { 

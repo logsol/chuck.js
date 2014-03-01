@@ -5,7 +5,7 @@ define([
 	"Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, CoreItem, Settings, NotificationCenter) {
+function (Parent, CoreItem, Settings, Nc) {
  
     function RagDoll(physicsEngine, uid, options) {
     	this.limbMeshes = {};
@@ -37,10 +37,10 @@ function (Parent, CoreItem, Settings, NotificationCenter) {
 				self.limbMeshes[name] = mesh;
     		}
     		
-            NotificationCenter.trigger("view/addMesh", mesh);
+            Nc.trigger("view/addMesh", mesh);
     	}
    
-        NotificationCenter.trigger("view/createMesh",
+        Nc.trigger("view/createMesh",
             texturePath + name + ".png", 
             callback,
             {
@@ -60,7 +60,7 @@ function (Parent, CoreItem, Settings, NotificationCenter) {
     	if(this.limbs) {
 	    	for(var name in this.limbMeshes) {
 	    		if(this.limbs[name]) {
-			        NotificationCenter.trigger("view/updateMesh",
+			        Nc.trigger("view/updateMesh",
 			            this.limbMeshes[name],
 			            {
 			                x: this.limbs[name].GetPosition().x * Settings.RATIO,
@@ -80,7 +80,7 @@ function (Parent, CoreItem, Settings, NotificationCenter) {
         CoreItem.prototype.flip.call(this, direction);
 
         if(oldFlipDirection != direction) {
-            NotificationCenter.trigger("view/updateMesh",
+            Nc.trigger("view/updateMesh",
                 this.mesh,
                 {
                     xScale: direction
@@ -88,7 +88,7 @@ function (Parent, CoreItem, Settings, NotificationCenter) {
             );
 
             for (var name in this.limbMeshes) {
-            	NotificationCenter.trigger("view/updateMesh",
+            	Nc.trigger("view/updateMesh",
 	                this.limbMeshes[name],
 	                {
 	                    xScale: direction
@@ -100,7 +100,7 @@ function (Parent, CoreItem, Settings, NotificationCenter) {
 
     RagDoll.prototype.destroy = function() {
         for (var name in this.limbMeshes) {
-            NotificationCenter.trigger("view/removeMesh", this.limbMeshes[name]);
+            Nc.trigger("view/removeMesh", this.limbMeshes[name]);
         };
 
         Parent.prototype.destroy.call(this);

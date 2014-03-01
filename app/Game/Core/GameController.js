@@ -5,7 +5,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
 
-function (PhysicsEngine, TiledLevel, Player, NotificationCenter) {
+function (PhysicsEngine, TiledLevel, Player, Nc) {
 
     function GameController () {
         this.players = {};
@@ -16,10 +16,10 @@ function (PhysicsEngine, TiledLevel, Player, NotificationCenter) {
         this.physicsEngine = new PhysicsEngine();
         this.physicsEngine.setCollisionDetector();
 
-        NotificationCenter.on("game/level/loaded", this.onLevelLoaded, this);
+        Nc.on("game/level/loaded", this.onLevelLoaded, this);
 
-        NotificationCenter.on("game/object/add", this.onGameObjectAdd, this);
-        NotificationCenter.on("game/object/remove", this.onGameObjectRemove, this);
+        Nc.on("game/object/add", this.onGameObjectAdd, this);
+        Nc.on("game/object/remove", this.onGameObjectRemove, this);
 
         this.update();
     }

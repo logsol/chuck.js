@@ -12,7 +12,7 @@ define([
     "Game/Server/GameObjects/Items/RagDoll"
 ],
 
-function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, NotificationCenter, Box2D, Player, GameObject, Doll, RagDoll) {
+function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, Nc, Box2D, Player, GameObject, Doll, RagDoll) {
 
     function GameController (channel) {
         
@@ -20,11 +20,11 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
         Parent.call(this);
 
-        NotificationCenter.on('user/joined', this.onUserJoined, this);
-        NotificationCenter.on('user/left', this.onUserLeft, this); // FIXME: refactor this.userLeft -> this.onUserLeft, even in core and client
-        NotificationCenter.on('user/resetLevel', this.onResetLevel, this);
-        NotificationCenter.on('user/clientReady', this.onClientReady, this);
-        NotificationCenter.on('player/killed', this.onPlayerKilled, this);
+        Nc.on('user/joined', this.onUserJoined, this);
+        Nc.on('user/left', this.onUserLeft, this); // FIXME: refactor this.userLeft -> this.onUserLeft, even in core and client
+        Nc.on('user/resetLevel', this.onResetLevel, this);
+        Nc.on('user/clientReady', this.onClientReady, this);
+        Nc.on('player/killed', this.onPlayerKilled, this);
 
         console.checkpoint('starting game controller for channel ' + channel.name);
         
@@ -84,7 +84,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
                 y: spawnPoint.y
             };
 
-            NotificationCenter.trigger("broadcastGameCommand", "spawnPlayer", options);
+            Nc.trigger("broadcastGameCommand", "spawnPlayer", options);
         }, respawnTime * 1000);
     };
 
@@ -102,7 +102,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         var update = this.getWorldUpdateObject(false);
 
         if(Object.getOwnPropertyNames(update).length > 0) {
-            NotificationCenter.trigger("broadcastGameCommand", 'worldUpdate', update);
+            Nc.trigger("broadcastGameCommand", 'worldUpdate', update);
         }
 
         setTimeout(this.updateWorld.bind(this), Settings.WORLD_UPDATE_BROADCAST_INTERVAL);
@@ -193,12 +193,12 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
             userId: userId
         }
 
-        NotificationCenter.trigger('user/' + userId + "/gameCommand", "clientReadyResponse", options);
+        Nc.trigger('user/' + userId + "/gameCommand", "clientReadyResponse", options);
     };
 
     GameController.prototype.onResetLevel = function(userId) {
         Parent.prototype.onResetLevel.call(this);
-        NotificationCenter.trigger("broadcastGameCommand", "resetLevel", true);
+        Nc.trigger("broadcastGameCommand", "resetLevel", true);
         for (var key in this.players) {
             this.spawnPlayer(this.players[key]);
         }

@@ -12,13 +12,13 @@ define([
     "Game/Client/View/DomController"
 ],
 
-function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, NotificationCenter, requestAnimFrame, Settings, GameObject, Doll, DomController) {
+function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, DomController) {
 
     function GameController () {
         this.view = ViewManager.createView();
         this.me = null;
 
-        NotificationCenter.on("game/toggleInfo", this.toggleInfo, this);
+        Nc.on("game/toggleInfo", this.toggleInfo, this);
 
         Parent.call(this);
     }

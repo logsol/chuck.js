@@ -6,14 +6,14 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
 
-function (Parent, Settings, DomController, Box2D, NotificationCenter) {
+function (Parent, Settings, DomController, Box2D, Nc) {
 
     function Engine () {
         Parent.call(this);
 
         this.debugMode = false;
 
-        NotificationCenter.on("view/toggleDebugMode", this.onToggleDebugMode, this);
+        Nc.on("view/toggleDebugMode", this.onToggleDebugMode, this);
     }
 
     Engine.prototype = Object.create(Parent.prototype);

@@ -4,7 +4,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, Exception, NotificationCenter) {
+function (Parent, Exception, Nc) {
  
     function GameObject(physicsEngine, uid) {
     	Parent.call(this, physicsEngine, uid);

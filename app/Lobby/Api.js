@@ -3,7 +3,7 @@ define([
 	"Lib/Utilities/Protocol/Helper"
 ],
  
-function (NotificationCenter, ProtocolHelper) {
+function (Nc, ProtocolHelper) {
  
     function Api(coordinator) {
     	this.coordinator = coordinator;

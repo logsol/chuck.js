@@ -4,7 +4,7 @@ define([
     "Lib/Utilities/Protocol/Parser"
 ],
  
-function(Parent, NotificationCenter, Parser) {
+function(Parent, Nc, Parser) {
  
     function PlayerController(player) {
 

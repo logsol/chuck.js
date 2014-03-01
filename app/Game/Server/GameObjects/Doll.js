@@ -5,7 +5,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, Item, Box2D, NotificationCenter) {
+function (Parent, Item, Box2D, Nc) {
  
     function Doll(physicsEngine, uid, player) {
     	Parent.call(this, physicsEngine, uid, player);
@@ -63,7 +63,7 @@ function (Parent, Item, Box2D, NotificationCenter) {
                                 self.player.addDamage(damage.Length() * 2, player);
                             }
 
-                            NotificationCenter.trigger("engine/addToWorldQueue", callback)
+                            Nc.trigger("engine/addToWorldQueue", callback)
                         }
                     }
 

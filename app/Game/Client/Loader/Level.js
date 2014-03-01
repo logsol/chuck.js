@@ -5,7 +5,7 @@ define([
     "Lib/Vendor/Pixi"
 ],
 
-function (Parent, Settings, NotificationCenter, PIXI) {
+function (Parent, Settings, Nc, PIXI) {
 
     function Level (uid, engine, gameObjects) {
         Parent.call(this, uid, engine, gameObjects);
@@ -39,7 +39,7 @@ function (Parent, Settings, NotificationCenter, PIXI) {
         loader.onComplete = function() { callback(levelData); };
         loader.onProgress = function() { 
             var progress = parseInt(100 / numPaths * ++count, 10) + 1;
-            NotificationCenter.trigger("view/updateLoader", progress);
+            Nc.trigger("view/updateLoader", progress);
         }
         loader.load();
     };

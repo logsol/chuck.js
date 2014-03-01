@@ -3,7 +3,7 @@ define([
 	"child_process"
 ],
 
-function (NotificationCenter, childProcess) {
+function (Nc, childProcess) {
 
 	var fork = childProcess.fork;
 
@@ -13,7 +13,6 @@ function (NotificationCenter, childProcess) {
 
 		try {
             this.channelPipe = fork('channel.js');
-            console.log(this.channelPipe)
         } catch (err) {
             throw 'Failed to fork channel! (' + err + ')';
         }
@@ -48,7 +47,7 @@ function (NotificationCenter, childProcess) {
 	}
 
 	PipeToChannel.prototype.onMessage = function (message) {
-		NotificationCenter.trigger(message.recipient + '/message', message.data);
+		Nc.trigger(message.recipient + '/message', message.data);
 	}
 
 	return PipeToChannel;

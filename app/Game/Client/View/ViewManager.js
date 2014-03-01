@@ -7,7 +7,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
  
-function (Settings, Exception, AbstractView, PixiView, NotificationCenter) {
+function (Settings, Exception, AbstractView, PixiView, Nc) {
  
     var ViewManager = {};
 
@@ -36,7 +36,7 @@ function (Settings, Exception, AbstractView, PixiView, NotificationCenter) {
             throw new Exception("In the view", Settings.VIEW_CONTROLLER + 'View', "this.setCanvas(canvas) has not been called with a valid HTMLCanvasElement!");
         }
 
-        NotificationCenter.trigger("view/ready", view);
+        Nc.trigger("view/ready", view);
 
         return view;
     }

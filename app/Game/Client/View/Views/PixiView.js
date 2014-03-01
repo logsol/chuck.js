@@ -6,7 +6,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ], 
 
-function (Parent, DomController, PIXI, Settings, NotificationCenter) {
+function (Parent, DomController, PIXI, Settings, Nc) {
     
     function PixiView () {
 

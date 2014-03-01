@@ -3,7 +3,7 @@ define([
 	"Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, NotificationCenter) {
+function (Parent, Nc) {
  
     function Player(id, physicsEngine) {
     	Parent.call(this, id, physicsEngine);
@@ -43,7 +43,7 @@ function (Parent, NotificationCenter) {
                 options.action = "throw";
                 options.x = x;
                 options.y = y;                
-                NotificationCenter.trigger("broadcastGameCommand", "handActionResponse", options);
+                Nc.trigger("broadcastGameCommand", "handActionResponse", options);
             }
         } else {
             // grab
@@ -51,7 +51,7 @@ function (Parent, NotificationCenter) {
                 this.grab(item); 
 
                 options.action = "grab";
-                NotificationCenter.trigger("broadcastGameCommand", "handActionResponse", options);
+                Nc.trigger("broadcastGameCommand", "handActionResponse", options);
             }
         }
     };
@@ -85,7 +85,7 @@ function (Parent, NotificationCenter) {
         Parent.prototype.kill.call(this, killedByPlayer, ragDollId);
 
         this.broadcastStats();
-        NotificationCenter.trigger("broadcastGameCommand", "playerKill", {
+        Nc.trigger("broadcastGameCommand", "playerKill", {
             playerId: this.id,
             killedByPlayerId: killedByPlayer.id,
             ragDollId: ragDollId
@@ -102,7 +102,7 @@ function (Parent, NotificationCenter) {
     };
 
     Player.prototype.broadcastStats = function() {
-        NotificationCenter.trigger("broadcastGameCommand", "updateStats", {
+        Nc.trigger("broadcastGameCommand", "updateStats", {
             playerId: this.id,
             stats: this.stats
         });

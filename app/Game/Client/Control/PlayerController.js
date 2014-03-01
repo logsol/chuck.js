@@ -5,7 +5,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ], 
 
-function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
+function (Parent, KeyboardInput, MouseInput, Nc) {
 
     function PlayerController (me) {
 
@@ -14,8 +14,8 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
         this.keyboardInput = new KeyboardInput(this);
         this.xyInput = new MouseInput(this);
 
-        NotificationCenter.on("input/onXyChange", this.setXY, this);
-        NotificationCenter.on("input/onHandActionRequest", this.handActionRequest, this);
+        Nc.on("input/onXyChange", this.setXY, this);
+        Nc.on("input/onHandActionRequest", this.handActionRequest, this);
 
         var keys = {
             w:87,
@@ -64,33 +64,33 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
 
     PlayerController.prototype.moveLeft = function () {
         Parent.prototype.moveLeft.call(this);
-        NotificationCenter.trigger('sendGameCommand', 'moveLeft');
+        Nc.trigger('sendGameCommand', 'moveLeft');
     }
 
     PlayerController.prototype.moveRight = function () {
         Parent.prototype.moveRight.call(this);
-        NotificationCenter.trigger('sendGameCommand', 'moveRight');
+        Nc.trigger('sendGameCommand', 'moveRight');
     }
 
     PlayerController.prototype.stop = function () {
         Parent.prototype.stop.call(this);
-        NotificationCenter.trigger('sendGameCommand', 'stop');
+        Nc.trigger('sendGameCommand', 'stop');
     }
 
     PlayerController.prototype.jump = function () {
         Parent.prototype.jump.call(this);
-        NotificationCenter.trigger('sendGameCommand', 'jump');
+        Nc.trigger('sendGameCommand', 'jump');
     }
 
     PlayerController.prototype.jumpStop = function () {
         Parent.prototype.jumpStop.call(this);
-        NotificationCenter.trigger('sendGameCommand', 'jumpStop');
+        Nc.trigger('sendGameCommand', 'jumpStop');
     }
 
     PlayerController.prototype.setXY = function(x, y) {
         var options = {x:x, y:y};
         Parent.prototype.lookAt.call(this, options);
-        NotificationCenter.trigger('sendGameCommand', 'lookAt', options);
+        Nc.trigger('sendGameCommand', 'lookAt', options);
     };
 
     PlayerController.prototype.handActionLeft = function() {
@@ -102,20 +102,20 @@ function (Parent, KeyboardInput, MouseInput, NotificationCenter) {
     };
 
     PlayerController.prototype.suicide = function() {
-        NotificationCenter.trigger("sendGameCommand", "suicide");
+        Nc.trigger("sendGameCommand", "suicide");
     };
 
     PlayerController.prototype.handActionRequest = function(x, y) {
         var options = {x:x, y:y};
-        NotificationCenter.trigger("sendGameCommand", "handActionRequest", options);
+        Nc.trigger("sendGameCommand", "handActionRequest", options);
     };
 
     PlayerController.prototype.showInfo = function() {
-        NotificationCenter.trigger("game/toggleInfo", true);
+        Nc.trigger("game/toggleInfo", true);
     };
 
     PlayerController.prototype.hideInfo = function() {
-        NotificationCenter.trigger("game/toggleInfo", false);
+        Nc.trigger("game/toggleInfo", false);
     };
 
 

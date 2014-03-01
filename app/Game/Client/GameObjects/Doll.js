@@ -5,7 +5,7 @@ define([
     "Lib/Utilities/Exception"
 ],
  
-function (Parent, Settings, NotificationCenter, Exception) {
+function (Parent, Settings, Nc, Exception) {
  
     function Doll(physicsEngine, uid, player) {      
         this.animationDef = {
@@ -35,12 +35,12 @@ function (Parent, Settings, NotificationCenter, Exception) {
         if(!state) throw new Exception("action state is undefined");
 
         if(this.animatedMeshes[this.actionState]) {
-            NotificationCenter.trigger("view/updateMesh", this.animatedMeshes[this.actionState], { visible: false });
+            Nc.trigger("view/updateMesh", this.animatedMeshes[this.actionState], { visible: false });
         }
 
         Parent.prototype.setActionState.call(this, state);
 
-        NotificationCenter.trigger("view/updateMesh", this.animatedMeshes[this.actionState], { visible: true });
+        Nc.trigger("view/updateMesh", this.animatedMeshes[this.actionState], { visible: true });
     }
 
     Doll.prototype.createMesh = function() {
@@ -73,10 +73,10 @@ function (Parent, Settings, NotificationCenter, Exception) {
 
             var callback = function(mesh) {
                 self.animatedMeshes[key] = mesh;
-                NotificationCenter.trigger("view/addMesh", mesh);
+                Nc.trigger("view/addMesh", mesh);
             };
 
-            NotificationCenter.trigger("view/createAnimatedMesh", texturePaths, callback, { 
+            Nc.trigger("view/createAnimatedMesh", texturePaths, callback, { 
                 visible: false, 
                 pivot: {
                     x: 35/2,
@@ -92,9 +92,9 @@ function (Parent, Settings, NotificationCenter, Exception) {
         var texturePath = Settings.GRAPHICS_PATH + "Characters/Chuck/head.png";
         var callback = function (mesh) {
             self.headMesh = mesh;
-            NotificationCenter.trigger("view/addMesh", mesh);
+            Nc.trigger("view/addMesh", mesh);
         }
-        NotificationCenter.trigger("view/createMesh", texturePath, callback, {
+        Nc.trigger("view/createMesh", texturePath, callback, {
             pivot: {
                 x: 5,
                 y: 12
@@ -112,7 +112,7 @@ function (Parent, Settings, NotificationCenter, Exception) {
 
         if(oldLookDirection != this.lookDirection) {
             for(var key in this.animatedMeshes) {
-                NotificationCenter.trigger("view/updateMesh",
+                Nc.trigger("view/updateMesh",
                     this.animatedMeshes[key],
                     {
                         xScale: this.lookDirection
@@ -123,7 +123,7 @@ function (Parent, Settings, NotificationCenter, Exception) {
 
         var angle = Math.atan2(this.lookAtXY.x, this.lookAtXY.y) / 2 - 0.7855 * this.lookDirection; // 0.7855 = 45°
 
-        NotificationCenter.trigger("view/updateMesh",
+        Nc.trigger("view/updateMesh",
             this.headMesh,
             {
                 xScale: this.lookDirection,
@@ -135,17 +135,17 @@ function (Parent, Settings, NotificationCenter, Exception) {
 
     Doll.prototype.destroy = function () {
         for (var key in this.animatedMeshes) {
-            NotificationCenter.trigger("view/removeMesh", this.animatedMeshes[key]);
+            Nc.trigger("view/removeMesh", this.animatedMeshes[key]);
         }
 
-        NotificationCenter.trigger("view/removeMesh", this.headMesh);
+        Nc.trigger("view/removeMesh", this.headMesh);
 
         Parent.prototype.destroy.call(this);
     }
 
     Doll.prototype.render = function() {
         if(this.actionState) {
-            NotificationCenter.trigger("view/updateMesh",
+            Nc.trigger("view/updateMesh",
                 this.animatedMeshes[this.actionState],
                 {
                     x: this.body.GetPosition().x * Settings.RATIO,
@@ -154,7 +154,7 @@ function (Parent, Settings, NotificationCenter, Exception) {
                 }
             );
 
-            NotificationCenter.trigger("view/updateMesh",
+            Nc.trigger("view/updateMesh",
                 this.headMesh,
                 {
                     x: this.body.GetPosition().x * Settings.RATIO,
