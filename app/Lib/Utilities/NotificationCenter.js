@@ -65,11 +65,8 @@ function () {
                     }
                 }
             },
-            server: {
-                pipeToServer: function(v) { return v + "-ns.server.pipeToServer")}
-            },
-            lobby: {
-
+            channel: {
+                pipeToServer: function(v) { return v + "-ns.channel.pipeToServer")}
             }
 
         };

@@ -20,7 +20,8 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
 
         var self = this;
         this.socketLink.on('message', function (message) {
-            if(Settings.NETWORK_LOG_INCOMING) {
+            var m = JSON.parse(message)
+            if(Settings.NETWORK_LOG_INCOMING && !m.gameCommand) {
                 console.log('INCOMING', message);
             }
             ProtocolHelper.applyCommand(message, self);
@@ -35,8 +36,13 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
     Networker.prototype.onConnect = function () {
         console.log('connected.')
         var channel = JSON.parse(localStorage["channel"]);
+        var player = JSON.parse(localStorage["player"]);
         if(channel.name) {
-            this.sendCommand('join', channel.name);
+            var options = {
+                channelName: channel.name,
+                nickname: player.nickname
+            }
+            this.sendCommand('join', options);
         } else {
             window.location.href = "/";
         }
@@ -66,6 +72,11 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
 
         this.initPing();
     }
+
+    Networker.prototype.onJoinError = function(options) {
+        alert(options.message);
+        window.location.href = "/";
+    };
 
     Networker.prototype.onLevelLoaded = function() {  
         for (var userId in this.users) {
@@ -116,8 +127,7 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
     }
 
     Networker.prototype.onUserLeft = function (userId) {
-        var user = this.users[userId];
-        this.gameController.onUserLeft(user);
+        this.gameController.onUserLeft(userId);
         delete this.users[userId];
     }
 

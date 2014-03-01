@@ -62,6 +62,7 @@ define(function() {
 
         // NETWORKING
         WORLD_UPDATE_BROADCAST_INTERVAL: 70,
+        CHANNEL_DESTRUCTION_TIME: 30,
         NETWORK_LOG_INCOMING: false,
         NETWORK_LOG_OUTGOING: false
     }

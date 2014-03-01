@@ -2,40 +2,90 @@
 <html>
 <head>
 	<title>Chuck Lobby</title>
+	<style type="text/css">
+		body { background: #222; color: #ccc; font-family: "Lucida Grande", sans-serif; }
+		input, button { background: black; color: #ccc; border: 0; padding: 0.3em 0.6em; font-size: 1em; }
+		#createform, #customjoinform { display: none; }
+		article { margin: 4em auto; background: #1a1a1a; padding: 2em; max-width: 30em; }
+		table, th, td { border: 1px solid #777; border-collapse: collapse; }
+		th, td { padding: 0.5em 1em; }
+		ul { list-style-type: none; padding-left: 0; }
+		#link { width: 100%; }
+		.offline { background: #ccc; }
+	</style>
 </head>
 <body>
-<form action="game.html" method="POST">
+<article>
+	<h1>Chuck</h1>
 	<p>
 		<label>
 			Nickname:<br>
 			<input id="nick" name="nick" type="text">
 		</label>
 	</p>
-	
-	<table>
-		<thead>
-			<tr><th>Name</th></tr>
-		</thead>
-		<tfoot>
-			<tr>
-				<td>
-					<label>
-						<input type="radio" name="channel" id="radiochannel" checked>
-						custom channel: <input id="customname">
-					</label>
-				</td>
-			</tr>
-		</tfoot>
-		<tbody id="list"></tbody>
-	</table>
-	<p>
-		<button>Join</button>
-		<button id="refresh">Refresh list</button>
-	</p>
-</form>
+
+	<form action="#" id="createform">
+		<div>
+			<h2>Create your own!</h2>
+			<p><label>Name:<br> <input id="customname"></label></p>
+			<fieldset>
+				<legend>Maps</legend>
+				<ul>
+					<li>
+						<label><input name="maps" value="debug" type="checkbox" checked> Debug</label>
+					</li>
+					<li>
+						<label><input name="maps" value="stones2" type="checkbox" checked> Stones2</label>
+					</li>				
+				</ul>
+			</fieldset>
+
+			<p>
+				<button>Run</button>
+				<button onclick="show('#listform'); return false;">Cancel</button>
+			</p>
+		</div>
+	</form>
+
+	<form action="game.html" method="GET" id="customjoinform">
+		<p>
+			<label>
+				Link to share with your friends<br>
+				<input id="link">
+			</label>
+		</p>
+		<p>
+			<button>Join</button>
+			<span id="timeout"></span>
+		</p>
+	</form>
+
+	<form action="game.html" method="GET" id="listform">
+		<h2>Channel list</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Type</th>
+				</tr>
+			</thead>
+			<tbody id="list"></tbody>
+		</table>
+		<p>
+			<button>Join</button>
+			<button id="refresh">Refresh list</button>
+			<button onclick="show('#createform'); return false;">Create</button>
+		</p>
+	</form>
+</article>
+
 <script>
 	function $(selector) {
 		return document.querySelector(selector);
+	}
+
+	function $$(selector) {
+		return document.querySelectorAll(selector);
 	}
 
 	if(localStorage["player"]) {
@@ -45,34 +95,29 @@
 		}
 	}
 
-	$("#customname").onfocus = function() {
-		$("#radiochannel").checked = true;
+	if(localStorage["customname"]) {
+		$("#customname").value = localStorage["customname"];
 	}
 
-	if(localStorage["channel"]) {
-		var channel = JSON.parse(localStorage["channel"])
-		if(channel.customname) {
-			$("#customname").value = channel.customname;
-		}
-	}
-
-	var hash = window.location.hash.split("#").join("");
-	if(hash) {
-		$("#customname").value = hash;
-		$("#radiochannel").checked = true;		
-	}
-
+	var lastRefreshResponse;
 	function refresh() {
-		$("#list").innerHTML = "";
 		var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
-                if(xhr.readyState == 4) {
-                        if(xhr.status == 200) {
-                                populate(JSON.parse(xhr.responseText).success);
-                        } else {
-                                console.error("Ajax error: " + xhr.status + " " + xhr.statusText)
-                        }
+            if(xhr.readyState == 4) {
+                if(xhr.status == 200) {
+
+                	var response = xhr.responseText;
+                	if(response != lastRefreshResponse) {
+                		lastRefreshResponse = response;
+                		populate(JSON.parse(response).success);
+                	}
+                	document.body.className = "";	
+                } else {
+                    console.error("Ajax error: " + xhr.status + " " + xhr.statusText)
+                    $("#list").innerHTML = "";
+                    document.body.className = "offline";
                 }
+            }
         }
         xhr.open("POST", "/api", true);
         xhr.send(JSON.stringify({command:"getChannels"}));
@@ -81,57 +126,156 @@
 
 	function populate(list) {
 		var html = "";
-		for (var i = 0; i < list.length; i++) {
-			var channel = list[i];
-			html += "<tr><td><label>";
-			html += "<input name='channel' type='radio' value='" + channel.name + "'"
-			if(!hash && i == 0) html += " checked"
-			html += "> ";
-			html += channel.name
-			html += "</label></td></tr>";
-		};
+		if(list.length > 0) {
+			for (var i = 0; i < list.length; i++) {
+				var channel = list[i];
+				html += "<tr><td><label>";
+				html += "<input name='channel' type='radio' value='" + channel.name + "'"
+				if(i == 0) html += " checked"
+					html += "> ";
+				html += channel.name
+				html += "</label></td><td></td></tr>";
+			};			
+		} else {
+			html += "<tr><td colspan='2'>No channels found.</td></tr>";
+		}
+
 		$("#list").innerHTML = html;
 	}
 
-	$("form").onsubmit = function(e) {
+	$("form#listform").onsubmit = function(e) {
 		var nickname = $("#nick").value;
 		if(!nickname || nickname.length < 3) {
 			alert("nickname too short")
 			return false;
 		}
 		localStorage["player"] = JSON.stringify({nickname: nickname});
-		if ($("#radiochannel").checked) {
-			var name = $("#customname").value;
-			if(name) {
-				$("#radiochannel").value = name;
-			} else {
-				alert("custom channel empty")
-				return false;
-			}			
-		} else {
-			var radios = document.querySelectorAll("form input[name=channel]");
-			for (var i = 0; i < radios.length; i++) {
-				var radio = radios[i];
-				if(radio.checked) {
-					name = radio.value;
-					break;
-				}
-			};		
-		}
+		var radios = document.querySelectorAll("form#listform input[name=channel]");
+		for (var i = 0; i < radios.length; i++) {
+			var radio = radios[i];
+			if(radio.checked) {
+				name = radio.value;
+				break;
+			}
+		};		
 
 		if(name) {
 			localStorage["channel"] = JSON.stringify({
-				name: name,
-				customname: $("#customname").value
+				name: name
 			});
+			window.location.href = "/game.html";
+			return false;
 		} else {
-			alert("no channel selected")
+			alert("No channel selected")
 			return false;
 		}
 	}
 
+	$("form#createform").onsubmit = function(e) {
+		var maps = [];
+		var checkboxes = document.querySelectorAll("form#createform input[name=maps]");
+		for (var i = 0; i < checkboxes.length; i++) {
+			var checkbox = checkboxes[i];
+			if(checkbox.checked) {
+				maps.push(checkbox.value);
+			}
+		};
+
+		if(maps.length == 0) {
+			alert("Please choose at least one map.")
+			return false;
+		}
+
+		var name = $("#customname").value;
+		if(!name) {
+			alert("Please provide a channel name.")
+			return false;
+		}
+
+		localStorage["customname"] = name;
+
+		var options = {
+			channelName: name,
+			maps: maps,
+			maxUsers: 10,
+			minUsers: 2
+		}
+
+		var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if(xhr.readyState == 4) {
+                if(xhr.status == 200) {
+                    onCreateSuccess(JSON.parse(xhr.responseText).success);
+                } else {
+                	console.log(xhr.responseText)
+                    alert(JSON.parse(xhr.responseText).error)
+                }
+            }
+        }
+        xhr.open("POST", "/api", true);
+        xhr.send(JSON.stringify({command:"createChannel", options: options}));
+		return false;
+	}
+
+	$("form#customjoinform").onsubmit = function(e) {
+		var nickname = $("#nick").value;
+		if(!nickname || nickname.length < 3) {
+			alert("nickname too short")
+			return false;
+		}
+		localStorage["player"] = JSON.stringify({nickname: nickname});
+
+		var name = $("form#createform input[name=channel]").value;
+		localStorage["channel"] = JSON.stringify({
+			name: name
+		});
+
+		window.location.href = "/game.html";
+		return false;
+	}
+
+	function onCreateSuccess(options) {
+		$("#customname").value = options.channelName;
+		$("#link").value = window.location.href + options.link;
+		show("#customjoinform");
+		startTimer(options.timeout);
+	}
+
+	function show(id) {
+		$("#createform").style.display = "none";
+		$("#listform").style.display = "none";
+		$("#customjoinform").style.display = "none";
+
+		$(id).style.display = "block";
+	}
+
+	function startTimer(seconds) {
+		var now = new Date();
+		var end = new Date(now.getTime() + seconds * 1000);
+		setInterval(function() {
+			now = new Date();
+			var diff = new Date(end.getTime() - now.getTime());
+			if(diff.getTime() < 0) {
+				alert("Your channel has timed out.");
+				window.location.href = "/";
+			} else {
+				$("#timeout").innerHTML = " within " + formatDate(diff) + " minutes";
+			}
+		}, 1000);
+	}
+
+	function formatDate(date) {
+	    var minutes = date.getMinutes();
+    	var seconds = date.getSeconds();
+    	if(minutes < 10) minutes = "0" + minutes;
+    	if(seconds < 10) seconds = "0" + seconds;
+
+    	return minutes + ":" + seconds;
+	}
+
 	$("#refresh").onclick = refresh;
 	refresh();
+	setInterval(refresh, 5000);
 </script>
 </body>
 </html>

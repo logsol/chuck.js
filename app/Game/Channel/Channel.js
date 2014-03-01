@@ -9,7 +9,7 @@
 
     function (GameController, Nc, User, ProtocolHelper, Options, Settings) {
 
-        function Channel (pipeToServer, name, options) {
+        function Channel (pipeToServer, options) {
 
             var self = this;
 
@@ -17,7 +17,7 @@
                 levelUids: Settings.DEFAULT_LEVELS
             });
             
-            this.name = name;
+            this.name = options.channelName;
             this.users = {};
 
             this.pipeToServer = pipeToServer;
@@ -34,11 +34,13 @@
             Nc.on('broadcastGameCommand', this.broadcastGameCommand, this);
             Nc.on('broadcastGameCommandExcept', this.broadcastGameCommandExcept, this);
 
-            console.checkpoint('channel ' + name + ' created');
-        }
+            console.checkpoint('channel ' + this.name + ' created');
 
-        Channel.validateName = function (name) {
-            return true;
+            setTimeout(function() {
+                if(Object.keys(self.users).length < 1) {
+                    self.destroy();
+                }
+            }, Settings.CHANNEL_DESTRUCTION_TIME * 1000);
         }
 
 
@@ -81,10 +83,21 @@
 
         Channel.prototype.onReleaseUser = function (userId) {
             var user = this.users[userId];
-            this.broadcastControlCommandExcept("userLeft", user.id, user);
-            Nc.trigger('user/left', user);
-            delete this.users[user.id];
+            Nc.trigger('user/left', userId);
+            delete this.users[userId];
+
+            this.broadcastControlCommand("userLeft", userId);
+            
+            // FIXME: if this was the last user terminate forked process
+            if(Object.keys(this.users).length < 1) {
+                this.destroy();
+            }
         }
+
+        Channel.prototype.destroy = function() {
+            console.checkpoint("channel (" + this.name + ") destroyed");
+            this.pipeToServer.destroy();
+        };
 
 
         // Sending commands

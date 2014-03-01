@@ -2,106 +2,64 @@ define([
     "Server/User", 
     "Game/Channel/Channel",
     "Server/PipeToChannel",
-    "Lib/Utilities/NotificationCenter"
+    "Lib/Utilities/NotificationCenter",
+    "Game/Config/Settings"
 ], 
 
-function (User, Channel, PipeToChannel, Nc) {
+function (User, Channel, PipeToChannel, Nc, Settings) {
 
-    function Coordinator () {
-        this.channelPipes = {};
-        this.lobbyUsers = {};
+    function Coordinator() {
+    	this.channelPipes = {};
+
+    	Nc.on('coordinator/message', this.onMessage, this);
 
         console.checkpoint('create Coordinator');
     }
 
     Coordinator.prototype.createUser = function (socketLink) {
-        var user = new User(socketLink, this);
-        console.checkpoint('creating user');
-        this.assignUserToLobby(user);
-    }
-
-    Coordinator.prototype.assignUserToLobby = function (user) {
-        if(user.channelPipe) {
-            //user.channel.releaseUser(user); -> generate message
-        }
-        this.lobbyUsers[user.id] = user;
-        console.checkpoint('assign user to lobby');
+    	new User(socketLink, this);
     }
 
     Coordinator.prototype.assignUserToChannel = function (user, channelName) {
-
-        if(user.channelPipe) {
-            //user.channel.releaseUser(user); -> generate message
-        }
-
-        if(!Channel.validateName(channelName)) {
-            //TODO send validation error
-            return false;
-        }
-
-        var channelPipe = this.channelPipes[channelName];
-        if(!channelPipe) {
-            this.createPipe(channelName);
-        }
-
-        //channel.addUser(user);
-        //user.setChannel(channel);
-        Nc.trigger('user/joined', user);
-
-        delete this.lobbyUsers[user.id];
+    	var channelPipe = this.channelPipes[channelName];
+    	user.setChannelPipe(channelPipe);
     }
 
-    Coordinator.prototype.removeUser = function (user) {
-
-        Nc.trigger('user/left', user);
-        //NotificationCenter.off('channel/' + user.channel.channelName + '/user/' + user.id);
-
-        delete this.lobbyUsers[user.id];
+    Coordinator.prototype.onDestroyPipe = function(channelName) {
+        delete this.channelPipes[channelName];
     }
-
-    Coordinator.prototype.createPipe = function(channelName) {
-
-        var channelPipe = new PipeToChannel(channelName);
-        this.channelPipes[channelName] = channelPipe;
-
-        
-        Nc.on('channel/' + channelName + '/message', function (data) {
-            channelPipe.send('channel', data);
-        }, this);
-
-        // sending info to user
-        Nc.on('user/joined', function (user) {
-            /*
-            Nc.on('channel/' + channelName + '/user/' + user.id, function (recipient, data) {
-                channelPipe.send(recipient, data);
-            }, this);
-            */
-
-            channelPipe.send('channel', { addUser: user.id });
-
-        }, this);
-
-        Nc.on('user/left', function (user) {
-            channelPipe.send('channel', { releaseUser: user.id });
-        }, this);
-
-        Nc.on('user/controlCommand', function (userId, data) {
-            channelPipe.sendToUser(userId, data);
-        }, this);
-        
-        return channelPipe;
-    };
 
     Coordinator.prototype.getChannels = function(options) {
-        var list = [];
+    	var list = [];
         for (var channelName in this.channelPipes) {
             list.push({
                 name: channelName
             });
         }
         return list;
+    }
+
+    Coordinator.prototype.createChannel = function(options) {
+    	if(this.channelPipes[options.channelName]) {
+    		return false;
+    	}
+
+    	var channelPipe = new PipeToChannel(options);
+    	this.channelPipes[options.channelName] = channelPipe;
+    	return {
+    		channelName: options.channelName,
+    		link: "#" + options.channelName,
+            timeout: Settings.CHANNEL_DESTRUCTION_TIME
+    	}
     };
 
-    return Coordinator;
+    Coordinator.prototype.onMessage = function(message) {
+    	if(message.destroy) {
+    		delete this.channelPipes[message.destroy];
+    	}
+    };
 
+ 
+    return Coordinator;
+ 
 });

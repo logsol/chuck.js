@@ -17,10 +17,9 @@ function (Nc, Channel) {
         process.on('message', function (message, handle) {
 
             if(message.data.hasOwnProperty('CREATE')) {
-                self.channel = new Channel(this, message.data['CREATE']);
+                self.channel = new Channel(self, message.data.options);
             } else if (message.data.hasOwnProperty('KILL')) {
                 self.channel.destroy();
-                process.exit(0);
             } else {
                 self.onMessage(message);
             }
@@ -40,6 +39,11 @@ function (Nc, Channel) {
     PipeToServer.prototype.onMessage = function (message) {
         Nc.trigger(message.recipient + '/controlCommand', message);    
     }
+
+    PipeToServer.prototype.destroy = function() {
+        this.send('coordinator', {destroy:this.channel.name});
+        this.process.exit(0);
+    };
 
     return PipeToServer;
 
