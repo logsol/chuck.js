@@ -1,4 +1,4 @@
-GLOBALS = { context: "Server" };
+GLOBALS = { context: "Channel" };
 var requirejs = require('requirejs');
 
 var inspector;
@@ -23,7 +23,7 @@ var options = {
 requirejs([
     "Bootstrap/HttpServer", 
     "Bootstrap/Socket",
-    "Lobby/Coordinator"
+    "Server/Coordinator"
 ], 
 
 function (HttpServer, Socket, Coordinator) {

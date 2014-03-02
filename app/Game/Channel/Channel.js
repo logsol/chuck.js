@@ -1,7 +1,7 @@
     define([
-        "Game/Server/GameController",
+        "Game/Channel/GameController",
         "Lib/Utilities/NotificationCenter",
-        "Game/Server/User",
+        "Game/Channel/User",
         "Lib/Utilities/Protocol/Helper",
         "Lib/Utilities/Options",
         "Game/Config/Settings"
@@ -9,7 +9,7 @@
 
     function (GameController, Nc, User, ProtocolHelper, Options, Settings) {
 
-        function Channel (pipeToLobby, name, options) {
+        function Channel (pipeToServer, options) {
 
             var self = this;
 
@@ -17,10 +17,10 @@
                 levelUids: Settings.DEFAULT_LEVELS
             });
             
-            this.name = name;
+            this.name = options.channelName;
             this.users = {};
 
-            this.pipeToLobby = pipeToLobby;
+            this.pipeToServer = pipeToServer;
 
             this.gameController = new GameController(this);
             
@@ -34,32 +34,38 @@
             Nc.on('broadcastGameCommand', this.broadcastGameCommand, this);
             Nc.on('broadcastGameCommandExcept', this.broadcastGameCommandExcept, this);
 
-            console.checkpoint('channel ' + name + ' created');
-        }
+            console.checkpoint('channel ' + this.name + ' created');
 
-        Channel.validateName = function (name) {
-            return true;
+            setTimeout(function() {
+                if(Object.keys(self.users).length < 1) {
+                    self.destroy();
+                }
+            }, Settings.CHANNEL_DESTRUCTION_TIME * 1000);
         }
 
 
         // Channel command callbacks
 
-        Channel.prototype.onAddUser = function (userId) {
+        Channel.prototype.onAddUser = function (options) {
             var self = this;
 
             if(!this.gameController.level || !this.gameController.level.isLoaded) {
                 var token = Nc.on("game/level/loaded", function() {
-                    self.sendJoinSuccess(userId);
+                    self.sendJoinSuccess(options);
                     Nc.off(token);
                 });
             } else {
-                self.sendJoinSuccess(userId);
+                self.sendJoinSuccess(options);
             }
         }
 
-        Channel.prototype.sendJoinSuccess = function(userId) {
-            var user = new User(userId, this);
-            var joinedUsers = Object.keys(this.users);
+        Channel.prototype.sendJoinSuccess = function(options) {
+            var user = new User(options.id, options);
+
+            var joinedUsers = [];
+            for(var userId in this.users) {
+                joinedUsers.push(this.users[userId].options)
+            }
             
             var levelUid = null;
             if(this.gameController.level) {
@@ -69,22 +75,35 @@
             this.users[user.id] = user;
 
             var options = {
-                userId: user.id, 
-                channelName: this.name, 
+                user: user.options,
                 joinedUsers: joinedUsers,
                 levelUid: levelUid
             };                 
 
-            Nc.trigger('user/' + user.id + "/joinSuccess", options);
-            Nc.trigger('user/joined', user);  
+            //Nc.trigger('user/' + user.id + "/joinSuccess", options);
+            user.sendControlCommand("joinSuccess", options);
+            Nc.trigger('user/joined', user);
+
+            this.broadcastControlCommandExcept("userJoined", user.options, user);
         };
 
         Channel.prototype.onReleaseUser = function (userId) {
             var user = this.users[userId];
-            this.broadcastControlCommandExcept("userLeft", user.id, user);
-            Nc.trigger('user/left', user);
-            delete this.users[user.id];
+            Nc.trigger('user/left', userId);
+            delete this.users[userId];
+
+            this.broadcastControlCommand("userLeft", userId);
+            
+            // FIXME: if this was the last user terminate forked process
+            if(Object.keys(this.users).length < 1) {
+                this.destroy();
+            }
         }
+
+        Channel.prototype.destroy = function() {
+            console.checkpoint("channel (" + this.name + ") destroyed");
+            this.pipeToServer.destroy();
+        };
 
 
         // Sending commands

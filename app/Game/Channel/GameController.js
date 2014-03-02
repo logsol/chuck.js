@@ -1,15 +1,15 @@
 define([
     "Game/Core/GameController",
-    "Game/Server/Physics/Engine",
+    "Game/Channel/Physics/Engine",
     "Game/Config/Settings", 
-    "Game/Server/Control/PlayerController",
+    "Game/Channel/Control/PlayerController",
     "Lib/Utilities/RequestAnimFrame",
     "Lib/Utilities/NotificationCenter",
     "Lib/Vendor/Box2D",
-    "Game/Server/Player",
-    "Game/Server/GameObjects/GameObject",
-    "Game/Server/GameObjects/Doll",
-    "Game/Server/GameObjects/Items/RagDoll"
+    "Game/Channel/Player",
+    "Game/Channel/GameObjects/GameObject",
+    "Game/Channel/GameObjects/Doll",
+    "Game/Channel/GameObjects/Items/RagDoll"
 ],
 
 function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, Nc, Box2D, Player, GameObject, Doll, RagDoll) {
@@ -21,7 +21,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         Parent.call(this);
 
         Nc.on('user/joined', this.onUserJoined, this);
-        Nc.on('user/left', this.onUserLeft, this); // FIXME: refactor this.userLeft -> this.onUserLeft, even in core and client
+        Nc.on('user/left', this.onUserLeft, this);
         Nc.on('user/resetLevel', this.onResetLevel, this);
         Nc.on('user/clientReady', this.onClientReady, this);
         Nc.on('player/killed', this.onPlayerKilled, this);
@@ -87,15 +87,6 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
             Nc.trigger("broadcastGameCommand", "spawnPlayer", options);
         }, respawnTime * 1000);
     };
-
-    /*
-    GameController.prototype.createPlayer = function(user) {
-        var player = new Player(user.id, this.physicsEngine);
-        player.setPlayerController(new PlayerController(player))
-        
-        return player;
-    };
-    */
 
     GameController.prototype.updateWorld = function () {
         

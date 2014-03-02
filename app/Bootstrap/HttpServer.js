@@ -1,7 +1,7 @@
 define([
     'http', 
     'node-static',
-    'Lobby/Api'
+    'Server/Api'
 ], 
 
 function (http, nodeStatic, Api) {

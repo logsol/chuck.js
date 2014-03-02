@@ -10,13 +10,14 @@ define([
 
 function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
 
-    function Player (id, physicsEngine) {
+    function Player (id, physicsEngine, user) {
         this.stats = {
             health: 100,
             deaths: 0,
             score: 0
         }
 
+        this.user = user;
         this.physicsEngine = physicsEngine;
         this.playerController = null;
         this.doll;

@@ -79,18 +79,22 @@ function (PhysicsEngine, TiledLevel, Player, Nc) {
     }
     */
 
-    GameController.prototype.onUserLeft = function (user) {
-        var player = this.players[user.id];
+    GameController.prototype.onUserLeft = function (userId) {
+        var player = this.players[userId];
+        if(!player) {
+            console.warn("User (", userId ,") left who has not joined");
+            return;
+        }
 
         var i = this.gameObjects.animated.indexOf(player);
         if(i>=0) this.gameObjects.animated.splice(i, 1);
 
         player.destroy();
-        delete this.players[user.id];
+        delete this.players[userId];
     }
 
     GameController.prototype.createPlayer = function(user) {
-        var player = new Player(user.id, this.physicsEngine);
+        var player = new Player(user.id, this.physicsEngine, user);
         this.players[user.id] = player;
         return player;
     };

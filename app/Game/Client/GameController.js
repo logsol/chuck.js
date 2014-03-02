@@ -208,10 +208,12 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         };
 
         var sortedPlayers = playersArray.sort(function(a,b) {
-            if(a.score > b.score) return 1;
-            if(a.score < b.score) return -1;
-            if(a.deaths < b.deaths) return 1;
-            if(a.deaths > b.deaths) return -1;
+            if(a.stats.score  > b.stats.score)  return -1;
+            if(a.stats.score  < b.stats.score)  return 1;
+            if(a.stats.deaths < b.stats.deaths) return -1;
+            if(a.stats.deaths > b.stats.deaths) return 1;
+            if(a.stats.health > b.stats.health) return -1;
+            if(a.stats.health < b.stats.health) return 1;
             return 0;
         });
 
@@ -236,7 +238,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
         var lines = [];
         sortedPlayers.forEach(function(player, i) {
-            var name = player == this.me ? "You" : "Player " + (Object.keys(this.players).indexOf(player.id) + 1);
+            var name = player.getNickname();
             lines.push(
                 pad("" + (i + 1) + ".", 2, false) + " " + 
                 pad(name, 12, true) + 

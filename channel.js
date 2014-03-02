@@ -1,4 +1,4 @@
-GLOBALS = { context: "Server" };
+GLOBALS = { context: "Channel" };
 var requirejs = require('requirejs');
 
 requirejs.config({
@@ -10,11 +10,11 @@ requirejs.config({
 var inspector = {};
 
 requirejs([
-    "Game/Server/PipeToLobby"
+    "Game/Channel/PipeToServer"
 ], 
 
-function (PipeToLobby) {
-	var PipeToLobby = new PipeToLobby(process);
+function (PipeToServer) {
+	var PipeToServer = new PipeToServer(process);
     
-    inspector.PipeToLobby = PipeToLobby;
+    inspector.PipeToServer = PipeToServer;
 });

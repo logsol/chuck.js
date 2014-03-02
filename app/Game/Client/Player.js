@@ -6,8 +6,8 @@ define([
  
 function (Parent, Nc, Settings) {
  
-    function Player(id, physicsEngine) {
-    	Parent.call(this, id, physicsEngine);
+    function Player(id, physicsEngine, user) {
+    	Parent.call(this, id, physicsEngine, user);
 
     	this.playerInfoView = null;
     	this.playerInfoViewVisibleTimeout = null;
@@ -79,6 +79,10 @@ function (Parent, Nc, Settings) {
     	} else {
     		Nc.trigger("view/updatePlayerInfo", this.playerInfoView, {visible: this.playerInfoViewVisible});
     	}
+    };
+
+    Player.prototype.getNickname = function() {
+        return this.user.options.nickname;
     };
 
     Player.prototype.render = function() {

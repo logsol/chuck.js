@@ -1,6 +1,6 @@
 define([
 	"Game/Core/GameObjects/Doll",
-    "Game/Server/GameObjects/Item",
+    "Game/Channel/GameObjects/Item",
     "Lib/Vendor/Box2D",
     "Lib/Utilities/NotificationCenter"
 ],

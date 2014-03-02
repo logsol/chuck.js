@@ -7,21 +7,21 @@ function (Nc, childProcess) {
 
 	var fork = childProcess.fork;
 
-	function PipeToChannel (channelName) {
+	function PipeToChannel (options) {
 
-		this.channelPipe = null;
+		this.fork = null;
 
 		try {
-            this.channelPipe = fork('channel.js');
+            this.fork = fork('channel.js');
         } catch (err) {
             throw 'Failed to fork channel! (' + err + ')';
         }
 
-        console.checkpoint('creating channel process for ' + channelName);
+        console.checkpoint('creating channel process for ' + options.channelName);
 
-        this.send('channel/' + channelName, { CREATE: channelName });
+        this.send('channel/' + options.channelName, { CREATE: true, options: options });
 
-        this.channelPipe.on('message', this.onMessage.bind(this));
+        this.fork.on('message', this.onMessage.bind(this));
 
         var self = this;
 	}
@@ -33,7 +33,7 @@ function (Nc, childProcess) {
             data: data
         }
 
-		this.channelPipe.send(message);
+		this.fork.send(message);
 	}
 
 	// If user already created
@@ -43,7 +43,7 @@ function (Nc, childProcess) {
             data: data
         }
 		
-		this.channelPipe.send(message);
+		this.fork.send(message);
 	}
 
 	PipeToChannel.prototype.onMessage = function (message) {

@@ -1,6 +1,5 @@
 node_modules/
 *.log
 .DS_Store
-pixi.js/
 lab/audio/
 lab/filter/

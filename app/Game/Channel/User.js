@@ -7,19 +7,12 @@ define([
  
 function(Parent, Nc, ProtocolHelper, ProtocolParser) {
  
-    function User(id, channel) {
-    	Parent.call(this, id);
+    function User(id, options) {
+    	Parent.call(this, id, options);
 
-    	this.channel = channel;
         this.player = null;
         this.isReady = false;
     	var self = this;
-
-    	Nc.on('user/joined', function(user) { // FIXME: use sendToAllUsersExcept instead
-    		if(user.id != self.id) {
-    			self.sendControlCommand("userJoined", user.id);    			
-    		}
-    	});
 
     	Nc.on('user/' + this.id + "/joinSuccess", function(options) {
     		self.sendControlCommand("joinSuccess", options);
