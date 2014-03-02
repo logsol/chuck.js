@@ -7,7 +7,7 @@ define([
 function (Parent, ProtocolHelper, Nc) {
 
     function User (socketLink, coordinator) {
-        Parent.call(this, socketLink.id);
+        Parent.call(this, socketLink.id, {});
 
         this.coordinator = coordinator;
         this.socketLink = socketLink;
@@ -58,7 +58,11 @@ function (Parent, ProtocolHelper, Nc) {
             return;
         }
 
-        this.channelPipe.send('channel', { addUser: this.id });
+        var userOptions = {
+            id: this.id,
+            nickname: options.nickname
+        }
+        this.channelPipe.send('channel', { addUser: userOptions });
     };
 
     User.prototype.onGameCommand = function(options) {

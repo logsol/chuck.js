@@ -47,7 +47,7 @@
 		</div>
 	</form>
 
-	<form action="game.html" method="GET" id="customjoinform">
+	<form action="#" method="GET" id="customjoinform">
 		<p>
 			<label>
 				Link to share with your friends<br>
@@ -60,7 +60,7 @@
 		</p>
 	</form>
 
-	<form action="game.html" method="GET" id="listform">
+	<form action="#" method="GET" id="listform">
 		<h2>Channel list</h2>
 		<table>
 			<thead>
@@ -113,7 +113,7 @@
                 	}
                 	document.body.className = "";	
                 } else {
-                    console.error("Ajax error: " + xhr.status + " " + xhr.statusText)
+                    console.error("Ajax error: " + xhr.status + " " + xhr.responseText)
                     $("#list").innerHTML = "";
                     document.body.className = "offline";
                 }
@@ -172,65 +172,77 @@
 	}
 
 	$("form#createform").onsubmit = function(e) {
-		var maps = [];
-		var checkboxes = document.querySelectorAll("form#createform input[name=maps]");
-		for (var i = 0; i < checkboxes.length; i++) {
-			var checkbox = checkboxes[i];
-			if(checkbox.checked) {
-				maps.push(checkbox.value);
+		try {
+
+			var maps = [];
+			var checkboxes = document.querySelectorAll("form#createform input[name=maps]");
+			for (var i = 0; i < checkboxes.length; i++) {
+				var checkbox = checkboxes[i];
+				if(checkbox.checked) {
+					maps.push(checkbox.value);
+				}
+			};
+
+			if(maps.length == 0) {
+				alert("Please choose at least one map.")
+				return false;
 			}
-		};
 
-		if(maps.length == 0) {
-			alert("Please choose at least one map.")
-			return false;
+			var name = $("#customname").value;
+			if(!name) {
+				alert("Please provide a channel name.")
+				return false;
+			}
+
+			localStorage["customname"] = name;
+
+			var options = {
+				channelName: name,
+				maps: maps,
+				maxUsers: 10,
+				minUsers: 2
+			}
+
+			var xhr = new XMLHttpRequest();
+	        xhr.onreadystatechange = function() {
+	            if(xhr.readyState == 4) {
+	                if(xhr.status == 200) {
+	                    onCreateSuccess(JSON.parse(xhr.responseText).success);
+	                } else {
+	                	console.log(xhr.responseText)
+	                    alert(JSON.parse(xhr.responseText).error)
+	                }
+	            }
+	        }
+	        xhr.open("POST", "/api", true);
+	        xhr.send(JSON.stringify({command:"createChannel", options: options}));
+		} catch(e) {
+			console.error(e)
 		}
 
-		var name = $("#customname").value;
-		if(!name) {
-			alert("Please provide a channel name.")
-			return false;
-		}
-
-		localStorage["customname"] = name;
-
-		var options = {
-			channelName: name,
-			maps: maps,
-			maxUsers: 10,
-			minUsers: 2
-		}
-
-		var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if(xhr.readyState == 4) {
-                if(xhr.status == 200) {
-                    onCreateSuccess(JSON.parse(xhr.responseText).success);
-                } else {
-                	console.log(xhr.responseText)
-                    alert(JSON.parse(xhr.responseText).error)
-                }
-            }
-        }
-        xhr.open("POST", "/api", true);
-        xhr.send(JSON.stringify({command:"createChannel", options: options}));
 		return false;
 	}
 
 	$("form#customjoinform").onsubmit = function(e) {
-		var nickname = $("#nick").value;
-		if(!nickname || nickname.length < 3) {
-			alert("nickname too short")
-			return false;
+		try {
+			var nickname = $("#nick").value;
+			if(!nickname || nickname.length < 3) {
+				alert("nickname too short")
+				return false;
+			}
+			localStorage["player"] = JSON.stringify({nickname: nickname});
+
+			var name = $("#customname").value;
+			localStorage["channel"] = JSON.stringify({
+				name: name
+			});
+
+			window.location.href = "/game.html";
+
+		} catch(e) {
+			console.error(e)
 		}
-		localStorage["player"] = JSON.stringify({nickname: nickname});
 
-		var name = $("form#createform input[name=channel]").value;
-		localStorage["channel"] = JSON.stringify({
-			name: name
-		});
-
-		window.location.href = "/game.html";
 		return false;
 	}
 

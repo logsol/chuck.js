@@ -46,22 +46,26 @@
 
         // Channel command callbacks
 
-        Channel.prototype.onAddUser = function (userId) {
+        Channel.prototype.onAddUser = function (options) {
             var self = this;
 
             if(!this.gameController.level || !this.gameController.level.isLoaded) {
                 var token = Nc.on("game/level/loaded", function() {
-                    self.sendJoinSuccess(userId);
+                    self.sendJoinSuccess(options);
                     Nc.off(token);
                 });
             } else {
-                self.sendJoinSuccess(userId);
+                self.sendJoinSuccess(options);
             }
         }
 
-        Channel.prototype.sendJoinSuccess = function(userId) {
-            var user = new User(userId, this);
-            var joinedUsers = Object.keys(this.users);
+        Channel.prototype.sendJoinSuccess = function(options) {
+            var user = new User(options.id, options);
+
+            var joinedUsers = [];
+            for(var userId in this.users) {
+                joinedUsers.push(this.users[userId].options)
+            }
             
             var levelUid = null;
             if(this.gameController.level) {
@@ -71,14 +75,16 @@
             this.users[user.id] = user;
 
             var options = {
-                userId: user.id, 
-                channelName: this.name, 
+                user: user.options,
                 joinedUsers: joinedUsers,
                 levelUid: levelUid
             };                 
 
-            Nc.trigger('user/' + user.id + "/joinSuccess", options);
-            Nc.trigger('user/joined', user);  
+            //Nc.trigger('user/' + user.id + "/joinSuccess", options);
+            user.sendControlCommand("joinSuccess", options);
+            Nc.trigger('user/joined', user);
+
+            this.broadcastControlCommandExcept("userJoined", user.options, user);
         };
 
         Channel.prototype.onReleaseUser = function (userId) {

@@ -94,7 +94,7 @@ function (PhysicsEngine, TiledLevel, Player, Nc) {
     }
 
     GameController.prototype.createPlayer = function(user) {
-        var player = new Player(user.id, this.physicsEngine);
+        var player = new Player(user.id, this.physicsEngine, user);
         this.players[user.id] = player;
         return player;
     };

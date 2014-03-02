@@ -13,7 +13,6 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
         this.socketLink = socketLink;
         this.gameController = null;
         this.users = {};
-        this.userId = null;
 
         this.socketLink.on('connect', this.onConnect.bind(this));
         this.socketLink.on('disconnect', this.onDisconnect.bind(this));
@@ -57,12 +56,11 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
 
     Networker.prototype.onJoinSuccess = function (options) {
         console.log("join success")
-        this.userId = options.userId;
 
         this.gameController = new GameController();
         this.gameController.loadLevel(options.levelUid);
 
-        this.onUserJoined(options.userId);
+        this.onUserJoined(options.user);
 
         if (options.joinedUsers) {
             for(var i = 0; i < options.joinedUsers.length; i++) {
@@ -114,9 +112,10 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
 
     // Commands from server
 
-    Networker.prototype.onUserJoined = function (userId) {
-        var user = new User(userId);
-        this.users[userId] = user;
+    Networker.prototype.onUserJoined = function (options) {
+        var user = new User(options.id, options);
+        console.log(options.nickname)
+        this.users[user.id] = user;
 
         if (this.gameController 
             && this.gameController.level 

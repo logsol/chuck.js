@@ -5,8 +5,8 @@ define([
  
 function (Parent, Nc) {
  
-    function Player(id, physicsEngine) {
-    	Parent.call(this, id, physicsEngine);
+    function Player(id, physicsEngine, user) {
+    	Parent.call(this, id, physicsEngine, user);
     }
 
     Player.prototype = Object.create(Parent.prototype);

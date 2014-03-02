@@ -88,15 +88,6 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         }, respawnTime * 1000);
     };
 
-    /*
-    GameController.prototype.createPlayer = function(user) {
-        var player = new Player(user.id, this.physicsEngine);
-        player.setPlayerController(new PlayerController(player))
-        
-        return player;
-    };
-    */
-
     GameController.prototype.updateWorld = function () {
         
         var update = this.getWorldUpdateObject(false);
