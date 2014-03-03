@@ -1,0 +1,297 @@
+
+{
+  "collisionbitplanes" : 
+  {
+    "names" : 
+    [
+      "bitplane1",
+      "bitplane2",
+      "bitplane3",
+      "bitplane4",
+      "bitplane5",
+      "bitplane6",
+      "bitplane7",
+      "bitplane8",
+      "bitplane9",
+      "bitplane10",
+      "bitplane11",
+      "bitplane12",
+      "bitplane13",
+      "bitplane14",
+      "bitplane15",
+      "bitplane16",
+      "bitplane17",
+      "bitplane18",
+      "bitplane19",
+      "bitplane20",
+      "bitplane21",
+      "bitplane22",
+      "bitplane23",
+      "bitplane24",
+      "bitplane25",
+      "bitplane26",
+      "bitplane27",
+      "bitplane28",
+      "bitplane29",
+      "bitplane30",
+      "bitplane31",
+      "bitplane32"
+    ]
+  },
+  "metaworld" : 
+  {
+    "allowSleep" : true,
+    "autoClearForces" : true,
+    "continuousPhysics" : true,
+    "exportOptions" : 
+    {
+      "compactCommonFloats" : true,
+      "compactZeroVecs" : true,
+      "saveFullPathForImages" : false,
+      "saveImagePathsRelativeToRUBEFile" : false,
+      "useHumanReadableFloats" : true,
+      "usePrettyPrint" : true
+    },
+    "gravity" : 
+    {
+      "x" : 0,
+      "y" : -10
+    },
+    "metabody" : 
+    [
+      
+      {
+        "angle" : 0,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 1,
+            "friction" : 0.2,
+            "id" : 6,
+            "name" : "fixture2",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "line"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : [ 21.67079925537109, -21.67079925537109 ],
+              "y" : [ 0.08283519744873047, 0.08283519744873047 ]
+            }
+          }
+        ],
+        "id" : 5,
+        "linearVelocity" : 0,
+        "name" : "ignore",
+        "position" : 
+        {
+          "x" : -0.1640515327453613,
+          "y" : -1.222461223602295
+        },
+        "type" : "static"
+      },
+      
+      {
+        "angle" : 0,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 3,
+            "friction" : 0.2,
+            "id" : 8,
+            "name" : "fixture0",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "polygon"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : 
+              [
+                -0.1304440498352051,
+                0.1304439306259155,
+                0.1107617914676666,
+                0.02803209424018860,
+                -0.1304440498352051
+              ],
+              "y" : 
+              [
+                -0.05917119979858398,
+                -0.05917119979858398,
+                0.2331519126892090,
+                0.4285533428192139,
+                0.5828356742858887
+              ]
+            }
+          },
+          
+          {
+            "density" : 1,
+            "friction" : 0.2,
+            "id" : 9,
+            "name" : "fixture1",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "polygon"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : 
+              [
+                -0.04707279801368713,
+                0.05067454278469086,
+                0.05067454278469086,
+                -0.04707279801368713
+              ],
+              "y" : 
+              [
+                -0.4052271842956543,
+                -0.4052271842956543,
+                -0.01811981201171875,
+                -0.01811981201171875
+              ]
+            }
+          }
+        ],
+        "id" : 6,
+        "linearVelocity" : 0,
+        "massData-I" : 0.02848954126238823,
+        "massData-center" : 
+        {
+          "x" : -0.01761996559798717,
+          "y" : 0.1609777510166168
+        },
+        "massData-mass" : 0.4118219017982483,
+        "name" : "body0",
+        "position" : 
+        {
+          "x" : 0.001211032271385193,
+          "y" : 0.4150367975234985
+        },
+        "type" : "dynamic"
+      },
+      
+      {
+        "angle" : 0,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 1,
+            "friction" : 1,
+            "id" : 11,
+            "name" : "fixture3",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "polygon"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : 
+              [
+                -0.1263020038604736,
+                0.1263022422790527,
+                0.1263022422790527,
+                -0.1263020038604736
+              ],
+              "y" : 
+              [
+                -0.02517747879028320,
+                -0.02517747879028320,
+                0.02517747879028320,
+                0.02517747879028320
+              ]
+            }
+          }
+        ],
+        "id" : 7,
+        "linearDamping" : 3,
+        "linearVelocity" : 0,
+        "massData-I" : 7.032450957922265e-05,
+        "massData-center" : 
+        {
+          "x" : 1.192092895507812e-07,
+          "y" : 0
+        },
+        "massData-mass" : 0.01271987613290548,
+        "name" : "body1",
+        "position" : 
+        {
+          "x" : -0.0002227276563644409,
+          "y" : 0.03157053887844086
+        },
+        "type" : "dynamic"
+      }
+    ],
+    "metaimage" : 
+    [
+      
+      {
+        "aspectScale" : 1,
+        "body" : 6,
+        "center" : 
+        {
+          "x" : 0.001725792884826660,
+          "y" : 0.08973789215087891
+        },
+        "file" : "../../img/Items/kitchen/knife.gif",
+        "filter" : 1,
+        "flip" : false,
+        "id" : 1,
+        "name" : "image0",
+        "opacity" : 1,
+        "scale" : 1
+      }
+    ],
+    "metajoint" : 
+    [
+      
+      {
+        "anchorA" : 
+        {
+          "x" : -0.001311389962211251,
+          "y" : 0.004075049888342619
+        },
+        "anchorB" : 
+        {
+          "x" : -0.002745149889960885,
+          "y" : -0.3793910145759583
+        },
+        "bodyA" : 7,
+        "bodyB" : 6,
+        "collideConnected" : false,
+        "dampingRatio" : 0,
+        "frequency" : 0,
+        "id" : 2,
+        "name" : "joint0",
+        "referenceAngle" : 0,
+        "type" : "weld"
+      }
+    ],
+    "positionIterations" : 3,
+    "stepsPerSecond" : 60.0,
+    "subStepping" : false,
+    "velocityIterations" : 8,
+    "warmStarting" : true
+  }
+}

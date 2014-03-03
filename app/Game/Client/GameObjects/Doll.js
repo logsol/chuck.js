@@ -65,7 +65,8 @@ function (Parent, Settings, Nc, Exception) {
                       Settings.GRAPHICS_PATH 
                     + Settings.GRAPHICS_SUBPATH_CHARACTERS 
                     + this.characterName 
-                    + "/Animation/WithArms/ChuckAnimations0" 
+                    + "/Animation/WithoutArms/ChuckAnimationsWithoutArms0" 
+                    //+ "/Animation/WithoutArms/ChuckAnimations0" 
                     + padF(i) 
                     + ".png"
                 );

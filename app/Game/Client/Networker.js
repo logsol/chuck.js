@@ -72,7 +72,7 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
     }
 
     Networker.prototype.onJoinError = function(options) {
-        alert(options.message);
+        // alert(options.message);
         window.location.href = "/";
     };
 
