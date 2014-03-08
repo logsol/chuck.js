@@ -23,8 +23,9 @@ function (Parent, DomController, PIXI, Settings, Nc) {
         this.init();
         this.pixi = PIXI;
 
-        PIXI.BaseTexture.SCALE_MODE.DEFAULT = PIXI.BaseTexture.SCALE_MODE.NEAREST;
+        PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
     }
+
 
     PixiView.prototype = Object.create(Parent.prototype);
 
