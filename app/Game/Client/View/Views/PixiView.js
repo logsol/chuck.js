@@ -13,7 +13,6 @@ function (Parent, DomController, PIXI, Settings, Nc) {
         Parent.call(this);
 
         this.movableObjects = [];
-        this.camera = null;
         this.stage = null;
         this.container = null;
         this.infoContainer = null;
@@ -124,12 +123,17 @@ function (Parent, DomController, PIXI, Settings, Nc) {
     PixiView.prototype.calculateCameraPosition = function() {
         var zoom = this.container.scale.x;
 
-        var pos = this.me.getHeadPosition();
-        pos.x *= -Settings.RATIO * zoom;
-        pos.y *= -Settings.RATIO * zoom;
+        var target = this.me.getHeadPosition();
+        target.x *= -Settings.RATIO * zoom;
+        target.y *= -Settings.RATIO * zoom;
 
-        pos.x -= this.me.playerController.xyInput.x * Settings.STAGE_WIDTH / 4;
-        pos.y += this.me.playerController.xyInput.y * Settings.STAGE_HEIGHT / 4;
+        target.x -= this.me.playerController.xyInput.x * Settings.STAGE_WIDTH / 4;
+        target.y += this.me.playerController.xyInput.y * Settings.STAGE_HEIGHT / 4;
+
+        var pos = this.getCameraPosition();
+
+        pos.x += (target.x -pos.x) * Settings.CAMERA_GLIDE / 100;
+        pos.y += (target.y -pos.y) * Settings.CAMERA_GLIDE / 100;
 
         return pos;
     };
@@ -139,6 +143,15 @@ function (Parent, DomController, PIXI, Settings, Nc) {
             this.container.position.x = x + Settings.STAGE_WIDTH / 2;
             this.container.position.y = y + Settings.STAGE_HEIGHT / 2;
         }
+    };
+
+    PixiView.prototype.getCameraPosition = function () { 
+        var pos = this.container.position;
+
+        pos.x = pos.x - Settings.STAGE_WIDTH / 2;
+        pos.y = pos.y - Settings.STAGE_HEIGHT / 2;
+
+        return pos;
     };
 
     PixiView.prototype.setCameraZoom = function (z) {
