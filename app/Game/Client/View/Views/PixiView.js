@@ -31,11 +31,15 @@ function (Parent, DomController, PIXI, Settings, Nc) {
 
     PixiView.prototype.init = function () {
 
+        var transparent = false;
+        var antialias = true;
+        var canvas = null; // lets pixi create one
+
         if(Settings.USE_WEBGL) {
-            this.renderer = new PIXI.WebGLRenderer(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT);
+            this.renderer = new PIXI.WebGLRenderer(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT, canvas, transparent, antialias);
             console.log('WebGLRenderer')
         } else {
-            this.renderer = new PIXI.CanvasRenderer(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT);
+            this.renderer = new PIXI.CanvasRenderer(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT, canvas, transparent, antialias);
             console.log('CanvasRenderer - not using WebGL!')
         }
 

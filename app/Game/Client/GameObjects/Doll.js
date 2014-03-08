@@ -80,8 +80,8 @@ function (Parent, Settings, Nc, Exception) {
             Nc.trigger("view/createAnimatedMesh", texturePaths, callback, { 
                 visible: false, 
                 pivot: {
-                    x: 35/2,
-                    y: 40
+                    x: 35/2 * 4,
+                    y: 40 * 4
                 },
                 width: 35,
                 height: 40
