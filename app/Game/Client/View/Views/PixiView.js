@@ -22,6 +22,8 @@ function (Parent, DomController, PIXI, Settings, Nc) {
         this.loader = null;
         this.init();
         this.pixi = PIXI;
+
+        PIXI.BaseTexture.SCALE_MODE.DEFAULT = PIXI.BaseTexture.SCALE_MODE.NEAREST;
     }
 
     PixiView.prototype = Object.create(Parent.prototype);
@@ -66,7 +68,7 @@ function (Parent, DomController, PIXI, Settings, Nc) {
 
     PixiView.prototype.createMesh = function (texturePath, callback, options) {
 
-        var texture = PIXI.Texture.fromImage(texturePath, false, PIXI.BaseTexture.SCALE_MODE.NEAREST);
+        var texture = PIXI.Texture.fromImage(texturePath);
 
         var mesh = new PIXI.Sprite(texture);
 

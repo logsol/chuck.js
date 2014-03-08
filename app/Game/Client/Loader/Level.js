@@ -56,7 +56,7 @@ function (Parent, Settings, Nc, PIXI) {
         }
 
         var characterNames = ["Chuck"];
-        var animationSets = ["WithoutArms"];//, "WithArms"];
+        var animationSets = ["WithArms"];//, "WithArms"];
         var addition = "";
         for (var i = 0; i < characterNames.length; i++) {
             var characterName = characterNames[i];

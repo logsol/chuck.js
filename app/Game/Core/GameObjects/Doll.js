@@ -12,7 +12,7 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
 
         this.characterName = "Chuck";
         this.player = player;
-        this.height = 43;
+        this.height = 37;
         this.width = 9;
         this.headHeight = 12;
         this.reachDistance = 20;
