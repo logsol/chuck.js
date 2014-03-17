@@ -31,7 +31,7 @@
             Nc.on('broadcastControlCommand', this.broadcastControlCommand, this);
             Nc.on('broadcastControlCommandExcept', this.broadcastControlCommandExcept, this);
 
-            Nc.on('broadcastGameCommand', this.broadcastGameCommand, this);
+            Nc.on(Nc.ns.channel.to.client.gameCommand.broadcast, this.broadcastGameCommand, this);
             Nc.on('broadcastGameCommandExcept', this.broadcastGameCommandExcept, this);
 
             console.checkpoint('channel ' + this.name + ' created');

@@ -43,7 +43,7 @@ function (Parent, Nc) {
                 options.action = "throw";
                 options.x = x;
                 options.y = y;                
-                Nc.trigger("broadcastGameCommand", "handActionResponse", options);
+                Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "handActionResponse", options);
             }
         } else {
             // grab
@@ -51,7 +51,7 @@ function (Parent, Nc) {
                 this.grab(item); 
 
                 options.action = "grab";
-                Nc.trigger("broadcastGameCommand", "handActionResponse", options);
+                Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "handActionResponse", options);
             }
         }
     };
@@ -85,7 +85,7 @@ function (Parent, Nc) {
         Parent.prototype.kill.call(this, killedByPlayer, ragDollId);
 
         this.broadcastStats();
-        Nc.trigger("broadcastGameCommand", "playerKill", {
+        Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "playerKill", {
             playerId: this.id,
             killedByPlayerId: killedByPlayer.id,
             ragDollId: ragDollId
@@ -102,7 +102,7 @@ function (Parent, Nc) {
     };
 
     Player.prototype.broadcastStats = function() {
-        Nc.trigger("broadcastGameCommand", "updateStats", {
+        Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "updateStats", {
             playerId: this.id,
             stats: this.stats
         });

@@ -23,8 +23,8 @@ function (DomController, Settings, Exception, Nc) {
 
         Nc.on("view/toggleInfo", this.onToggleInfo, this);
 
-        Nc.on("view/createAndAddPlayerInfo", this.onCreateAndAddPlayerInfo, this);
-        Nc.on("view/updatePlayerInfo", this.onUpdatePlayerInfo, this);
+        Nc.on(Nc.ns.client.view.playerInfo.createAndAdd, this.onCreateAndAddPlayerInfo, this);
+        Nc.on(Nc.ns.client.view.playerInfo.update, this.onUpdatePlayerInfo, this);
         Nc.on("view/removePlayerInfo", this.onRemovePlayerInfo, this);
 
         Nc.on("view/updateLoader", this.onUpdateLoader, this);

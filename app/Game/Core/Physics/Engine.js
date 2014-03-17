@@ -17,7 +17,7 @@ function (Settings, Box2D, CollisionDetector, Nc) {
         this.lastStep = Date.now();
         this.worldQueue = [];
 
-        Nc.on("engine/addToWorldQueue", this.addToWorldQueue, this);
+        Nc.on(Nc.ns.channel.engine.worldQueue.add, this.addToWorldQueue, this);
     }
 
     Engine.prototype.getWorld = function () {

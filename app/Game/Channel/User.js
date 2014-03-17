@@ -14,7 +14,7 @@ function(Parent, Nc, ProtocolHelper, ProtocolParser) {
         this.isReady = false;
     	var self = this;
 
-    	Nc.on('user/' + this.id + "/joinSuccess", function(options) {
+    	Nc.on(Nc.ns.channel.to.client.user.controlCommand.joinSuccess + this.id, function(options) {
     		self.sendControlCommand("joinSuccess", options);
     	});
 
@@ -22,9 +22,12 @@ function(Parent, Nc, ProtocolHelper, ProtocolParser) {
             ProtocolHelper.applyCommand(message.data, self);
         });
 
+        /*
+        couldnt find trigger for this while refactoring
         Nc.on('user/' + this.id + "/gameCommand", function(command, options) {
             self.sendGameCommand(command, options);
         });
+        */
     }
 
     User.prototype = Object.create(Parent.prototype);
@@ -43,10 +46,10 @@ function(Parent, Nc, ProtocolHelper, ProtocolParser) {
         } // FIXME: move this to Protocol helper as a function
 
         if(command.hasOwnProperty("resetLevel")) {
-            Nc.trigger("user/resetLevel", this.id);
+            Nc.trigger(Nc.ns.channel.events.user.level.reset, this.id);
         } else if(command.hasOwnProperty("clientReady")) {
             this.isReady = true;
-            Nc.trigger("user/clientReady", this.id);
+            Nc.trigger(Nc.ns.channel.events.user.client.ready, this.id);
         } else {
             this.player.playerController.applyCommand(command);
         }
@@ -60,7 +63,7 @@ function(Parent, Nc, ProtocolHelper, ProtocolParser) {
     	var recipient = "user/" + this.id;
 		var data = ProtocolHelper.encodeCommand(command, options);
 
-    	Nc.trigger("process/message", recipient, data);
+    	Nc.trigger(Nc.ns.channel.to.server.controlCommand.send, recipient, data);
     };
 
     User.prototype.sendGameCommand = function(command, options) {

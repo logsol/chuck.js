@@ -13,7 +13,7 @@ function (Settings, Nc, Stats, Screenfull) {
         this.stats = null;
         this.ping = null;
 
-        Nc.on("view/ready", this.initDevTools, this);
+        Nc.on(Nc.ns.client.view.events.ready, this.initDevTools, this);
     }
 
     DomController.prototype.initDevTools = function() {

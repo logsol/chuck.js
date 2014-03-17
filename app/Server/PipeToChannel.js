@@ -47,7 +47,7 @@ function (Nc, childProcess) {
 	}
 
 	PipeToChannel.prototype.onMessage = function (message) {
-		Nc.trigger(message.recipient + '/message', message.data);
+		Nc.trigger(Nc.ns.server.events.controlCommand + message.recipient, message.data);
 	}
 
 	return PipeToChannel;

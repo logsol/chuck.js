@@ -1,79 +1,158 @@
 define([
+    "Lib/Utilities/Exception"
 ],
 
-function () {
+function (Exception) {
+
+    function populate(obj, path) {
+        path = path || "Nc.ns";
+        for(var key in obj) {
+            if(!obj.hasOwnProperty(key)) continue;
+            if(obj[key] === null) {
+                obj[key] = path + "." + key;
+            } else {
+                obj[key] = populate(obj[key], path + "." + key);
+            }
+        }
+        return obj;
+    }
 
     function NotificationCenter () {
         this.topics = {};
         this.subUid = -1;
-/*
+
         var i = 0;
-        this.nc = {
+        this.ns = {
             client: {
                 view: {
                     mesh: {
-                        create: i++,
-                        add: i++,
-                        remove: i++,
-                        update: i++
+                        create: null,
+                        add: null,
+                        remove: null,
+                        update: null
                     },
                     playerInfo: {
-                        createAndAdd: i++,
-                        remove: i++,
-                        update: i++
+                        createAndAdd: null,
+                        remove: null,
+                        update: null
                     },
                     preloadBar: {
-                        update: i++
+                        update: null
                     },
                     fullScreen: {
-                        change: i++
+                        change: null
                     },
                     debugMode: {
-                        toggle: i++
+                        toggle: null
                     },
                     gameInfo: {
-                        toggle: i++
-                    }
+                        toggle: null
+                    },
                     events: {
-                        ready: i++
+                        ready: null
                     }
                 },
                 input: {
                     handAction: {
-                        request: i++
+                        request: null
                     },
                     xy: {
-                        change: i++
+                        change: null
                     }
                 },
                 server: {
                     gameCommand: {
-                        send: i++
+                        send: null
                     }
                 }
             },
             core: {
                 game: {
                     gameObject: {
-                        add: i++,
-                        remove: i++
-                    }
+                        add: null,
+                        remove: null
+                    },
                     events: {
                         level: {
-                            loaded: i++
+                            loaded: null
                         }
                     }
                 }
             },
             channel: {
-                pipeToServer: function(v) { return v + "-ns.channel.pipeToServer")}
+                events: {
+                    controlCommand: null,
+                    user: {
+                        joined: null,
+                        left: null,
+                        client: {
+                            ready: null
+                        },
+                        level: {
+                            reset: null
+                        }
+                    }
+                },
+                engine: {
+                    worldQueue: {
+                        add: null
+                    }
+                },
+                to: {
+                    server: {
+                        send: null
+                    },
+                    client: {
+                        user: {
+                            gameCommand: {
+                                send: null
+                            },
+                            controlCommand: {
+                                joinSuccess: null
+                            }
+                        },
+                        gameCommand: {
+                            broadcast: null
+                        }
+                    }
+                }
+            },
+            server: {
+                events: {
+                    controlCommand: null,
+                    user: {
+                        joined: null,
+                        left: null
+                    }
+                },
+                to: {
+                    client: {
+                        message: {
+                            send: null
+                        }
+                    }
+                }
             }
-
         };
-        */
+
+        populate(this.ns);
+        
     }
 
+
+    NotificationCenter.prototype.validate = function(topic) {
+        if (typeof topic === 'object') {
+            throw new Exception("Topic bad format " + JSON.stringify(topic));
+        }
+
+        if (topic.indexOf("Nc.ns") !== 0) {
+             throw new Exception("Topic bad format, does not begin with Nc.ns. : " + topic);
+        }
+    };
+
     NotificationCenter.prototype.trigger = function (topic /*, arguments*/) {
+
+        this.validate(topic);
 
         if (!this.topics[topic]) {
             console.warn("No such topic " + topic + ". Could not trigger. arguments: " + arguments.join);
@@ -91,6 +170,8 @@ function () {
 
     NotificationCenter.prototype.on = function (topic, func, context) {
         
+        this.validate(topic);
+
         if (!this.topics[topic]) {
             this.topics[topic] = [];
         }

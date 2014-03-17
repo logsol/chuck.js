@@ -16,7 +16,7 @@ function (Parent, ProtocolHelper, Nc) {
         socketLink.on('message', this.onMessage.bind(this));
         socketLink.on('disconnect', this.onDisconnect.bind(this));
 
-        Nc.on("user/" + this.socketLink.id + "/message", this.socketLink.send, this.socketLink);
+        Nc.on(Nc.ns.server.to.client.message.send + id, this.socketLink.send, this.socketLink);
     }
 
     User.prototype = Object.create(Parent.prototype);
@@ -73,7 +73,7 @@ function (Parent, ProtocolHelper, Nc) {
 
     User.prototype.onPing = function(timestamp) {
         var message = ProtocolHelper.encodeCommand("pong", timestamp);
-        Nc.trigger("user/" + this.socketLink.id + "/message", message);
+        Nc.trigger(Nc.ns.server.to.client.message.send + id, message);
     };
 
     return User;

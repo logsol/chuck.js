@@ -63,7 +63,7 @@ function (Parent, Item, Box2D, Nc) {
                                 self.player.addDamage(damage.Length() * 2, player);
                             }
 
-                            Nc.trigger("engine/addToWorldQueue", callback)
+                            Nc.trigger(Nc.ns.channel.engine.worldQueue.add, callback)
                         }
                     }
 

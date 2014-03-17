@@ -12,7 +12,7 @@ function (Nc, Channel) {
         this.channel = null;
         this.process = process;
 
-        Nc.on('process/message', this.send, this);
+        Nc.on(Nc.ns.channel.to.server.controlCommand.send, this.send, this);
 
         process.on('message', function (message, handle) {
 

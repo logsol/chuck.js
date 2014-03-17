@@ -22,8 +22,8 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
         Nc.on('user/joined', this.onUserJoined, this);
         Nc.on('user/left', this.onUserLeft, this);
-        Nc.on('user/resetLevel', this.onResetLevel, this);
-        Nc.on('user/clientReady', this.onClientReady, this);
+        Nc.on(Nc.ns.channel.events.user.level.reset, this.onResetLevel, this);
+        Nc.on(Nc.ns.channel.events.user.client.ready, this.onClientReady, this);
         Nc.on('player/killed', this.onPlayerKilled, this);
 
         console.checkpoint('starting game controller for channel ' + channel.name);
@@ -84,7 +84,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
                 y: spawnPoint.y
             };
 
-            Nc.trigger("broadcastGameCommand", "spawnPlayer", options);
+            Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "spawnPlayer", options);
         }, respawnTime * 1000);
     };
 
@@ -93,7 +93,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         var update = this.getWorldUpdateObject(false);
 
         if(Object.getOwnPropertyNames(update).length > 0) {
-            Nc.trigger("broadcastGameCommand", 'worldUpdate', update);
+            Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, 'worldUpdate', update);
         }
 
         setTimeout(this.updateWorld.bind(this), Settings.WORLD_UPDATE_BROADCAST_INTERVAL);
@@ -184,12 +184,12 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
             userId: userId
         }
 
-        Nc.trigger('user/' + userId + "/gameCommand", "clientReadyResponse", options);
+        Nc.trigger(Nc.ns.channel.to.client.user.gameCommand.send + userId, "clientReadyResponse", options);
     };
 
     GameController.prototype.onResetLevel = function(userId) {
         Parent.prototype.onResetLevel.call(this);
-        Nc.trigger("broadcastGameCommand", "resetLevel", true);
+        Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "resetLevel", true);
         for (var key in this.players) {
             this.spawnPlayer(this.players[key]);
         }

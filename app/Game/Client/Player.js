@@ -41,7 +41,7 @@ function (Parent, Nc, Settings) {
     	var callback = function(playerInfoView) {
     		self.playerInfoView = playerInfoView;
     	}
-    	Nc.trigger("view/createAndAddPlayerInfo", callback, options);
+    	Nc.trigger(Nc.ns.client.view.playerInfo.createAndAdd, callback, options);
     };
 
     Player.prototype.onHealthChange = function() {
@@ -69,15 +69,15 @@ function (Parent, Nc, Settings) {
 	    		healthFactor: this.stats.health / 100,
 	    		visible: this.playerInfoViewVisible
 	    	};
-	    	Nc.trigger("view/updatePlayerInfo", this.playerInfoView, options);
+	    	Nc.trigger(Nc.ns.client.view.playerInfo.update, this.playerInfoView, options);
 
 	    	this.playerInfoViewVisibleTimeout = setTimeout(function() {
 	    		self.playerInfoViewVisible = false;
-	    		Nc.trigger("view/updatePlayerInfo", self.playerInfoView, {visible: self.playerInfoViewVisible});
+	    		Nc.trigger(Nc.ns.client.view.playerInfo.update, self.playerInfoView, {visible: self.playerInfoViewVisible});
 	    	}, Settings.HEALTH_DISPLAY_TIME * 1000);
 
     	} else {
-    		Nc.trigger("view/updatePlayerInfo", this.playerInfoView, {visible: this.playerInfoViewVisible});
+    		Nc.trigger(Nc.ns.client.view.playerInfo.update, this.playerInfoView, {visible: this.playerInfoViewVisible});
     	}
     };
 
@@ -96,7 +96,7 @@ function (Parent, Nc, Settings) {
 				x: position.x * Settings.RATIO,
 	    		y: position.y * Settings.RATIO,
 	    	}
-	    	Nc.trigger("view/updatePlayerInfo", this.playerInfoView, options);
+	    	Nc.trigger(Nc.ns.client.view.playerInfo.update, this.playerInfoView, options);
     	}
     };
 

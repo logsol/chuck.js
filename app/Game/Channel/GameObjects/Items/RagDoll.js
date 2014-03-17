@@ -35,7 +35,7 @@ function (Parent, Settings, Nc) {
     };
 
     RagDoll.prototype.destroy = function() {
-    	Nc.trigger("broadcastGameCommand", 'removeGameObject', {
+    	Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, 'removeGameObject', {
     		type: 'animated',
     		uid: this.uid
     	});
