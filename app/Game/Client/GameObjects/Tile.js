@@ -30,7 +30,7 @@ function (Parent, Settings, Nc) {
             Nc.trigger(Nc.ns.client.view.mesh.add, mesh);
     	}
    
-        Nc.trigger("view/createMesh",
+        Nc.trigger(Nc.ns.client.view.mesh.create,
             texturePath, 
             callback,
             {

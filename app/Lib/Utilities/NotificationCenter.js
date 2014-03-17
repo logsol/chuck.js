@@ -31,6 +31,9 @@ function (Exception) {
                         remove: null,
                         update: null
                     },
+                    animatedMesh: {
+                        create: null
+                    },
                     playerInfo: {
                         createAndAdd: null,
                         remove: null,

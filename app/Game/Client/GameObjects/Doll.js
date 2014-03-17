@@ -77,7 +77,7 @@ function (Parent, Settings, Nc, Exception) {
                 Nc.trigger(Nc.ns.client.view.mesh.add, mesh);
             };
 
-            Nc.trigger("view/createAnimatedMesh", texturePaths, callback, { 
+            Nc.trigger(Nc.ns.client.view.animatedMesh.create, texturePaths, callback, { 
                 visible: false, 
                 pivot: {
                     x: 35/2 * 4,
@@ -95,7 +95,7 @@ function (Parent, Settings, Nc, Exception) {
             self.headMesh = mesh;
             Nc.trigger(Nc.ns.client.view.mesh.add, mesh);
         }
-        Nc.trigger("view/createMesh", texturePath, callback, {
+        Nc.trigger(Nc.ns.client.view.mesh.create, texturePath, callback, {
             pivot: {
                 x: 5,
                 y: 12

@@ -12,16 +12,14 @@ function (DomController, Settings, Exception, Nc) {
         this.canvas = null;
         this.debugMode = false;
 
-        Nc.on("view/createMesh", this.createMesh, this);
-        Nc.on("view/createAnimatedMesh", this.createAnimatedMesh, this);
+        Nc.on(Nc.ns.client.view.mesh.create, this.createMesh, this);
+        Nc.on(Nc.ns.client.view.animatedMesh.create, this.createAnimatedMesh, this);
         Nc.on(Nc.ns.client.view.mesh.add, this.addMesh, this);
         Nc.on(Nc.ns.client.view.mesh.remove, this.removeMesh, this);
         Nc.on(Nc.ns.client.view.mesh.update, this.updateMesh, this);
 
         Nc.on(Nc.ns.client.view.fullscreen.change, this.onFullscreenChange, this);
         Nc.on(Nc.ns.client.view.debugMode.toggle, this.onToggleDebugMode, this);
-
-        Nc.on("view/toggleInfo", this.onToggleInfo, this);
 
         Nc.on(Nc.ns.client.view.playerInfo.createAndAdd, this.onCreateAndAddPlayerInfo, this);
         Nc.on(Nc.ns.client.view.playerInfo.update, this.onUpdatePlayerInfo, this);

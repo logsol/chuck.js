@@ -111,11 +111,11 @@ function (Parent, KeyboardInput, MouseInput, Nc) {
     };
 
     PlayerController.prototype.showInfo = function() {
-        Nc.trigger(Nc.ns.client.view.gameInfo.toggle, true);
+        Nc.trigger(Nc.ns.client.game.gameInfo.toggle, true);
     };
 
     PlayerController.prototype.hideInfo = function() {
-        Nc.trigger(Nc.ns.client.view.gameInfo.toggle, false);
+        Nc.trigger(Nc.ns.client.game.gameInfo.toggle, false);
     };
 
 
