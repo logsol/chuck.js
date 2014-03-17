@@ -20,8 +20,8 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
         Parent.call(this);
 
-        Nc.on('user/joined', this.onUserJoined, this);
-        Nc.on('user/left', this.onUserLeft, this);
+        Nc.on(Nc.ns.channel.events.user.joined, this.onUserJoined, this);
+        Nc.on(Nc.ns.channel.events.user.left, this.onUserLeft, this);
         Nc.on('user/resetLevel', this.onResetLevel, this);
         Nc.on('user/clientReady', this.onClientReady, this);
         Nc.on('player/killed', this.onPlayerKilled, this);

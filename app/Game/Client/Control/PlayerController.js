@@ -14,8 +14,8 @@ function (Parent, KeyboardInput, MouseInput, Nc) {
         this.keyboardInput = new KeyboardInput(this);
         this.xyInput = new MouseInput(this);
 
-        Nc.on("input/onXyChange", this.setXY, this);
-        Nc.on("input/onHandActionRequest", this.handActionRequest, this);
+        Nc.on(Nc.ns.client.input.xy.change, this.setXY, this);
+        Nc.on(Nc.ns.client.input.handAction.request, this.handActionRequest, this);
 
         var keys = {
             w:87,
@@ -64,33 +64,33 @@ function (Parent, KeyboardInput, MouseInput, Nc) {
 
     PlayerController.prototype.moveLeft = function () {
         Parent.prototype.moveLeft.call(this);
-        Nc.trigger('sendGameCommand', 'moveLeft');
+        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, 'moveLeft');
     }
 
     PlayerController.prototype.moveRight = function () {
         Parent.prototype.moveRight.call(this);
-        Nc.trigger('sendGameCommand', 'moveRight');
+        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, 'moveRight');
     }
 
     PlayerController.prototype.stop = function () {
         Parent.prototype.stop.call(this);
-        Nc.trigger('sendGameCommand', 'stop');
+        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, 'stop');
     }
 
     PlayerController.prototype.jump = function () {
         Parent.prototype.jump.call(this);
-        Nc.trigger('sendGameCommand', 'jump');
+        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, 'jump');
     }
 
     PlayerController.prototype.jumpStop = function () {
         Parent.prototype.jumpStop.call(this);
-        Nc.trigger('sendGameCommand', 'jumpStop');
+        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, 'jumpStop');
     }
 
     PlayerController.prototype.setXY = function(x, y) {
         var options = {x:x, y:y};
         Parent.prototype.lookAt.call(this, options);
-        Nc.trigger('sendGameCommand', 'lookAt', options);
+        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, 'lookAt', options);
     };
 
     PlayerController.prototype.handActionLeft = function() {
@@ -102,20 +102,20 @@ function (Parent, KeyboardInput, MouseInput, Nc) {
     };
 
     PlayerController.prototype.suicide = function() {
-        Nc.trigger("sendGameCommand", "suicide");
+        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, "suicide");
     };
 
     PlayerController.prototype.handActionRequest = function(x, y) {
         var options = {x:x, y:y};
-        Nc.trigger("sendGameCommand", "handActionRequest", options);
+        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, "handActionRequest", options);
     };
 
     PlayerController.prototype.showInfo = function() {
-        Nc.trigger("game/toggleInfo", true);
+        Nc.trigger(Nc.ns.client.view.gameInfo.toggle, true);
     };
 
     PlayerController.prototype.hideInfo = function() {
-        Nc.trigger("game/toggleInfo", false);
+        Nc.trigger(Nc.ns.client.view.gameInfo.toggle, false);
     };
 
 

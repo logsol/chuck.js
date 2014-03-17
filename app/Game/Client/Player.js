@@ -102,7 +102,7 @@ function (Parent, Nc, Settings) {
 
     Player.prototype.destroy = function() {
     	Parent.prototype.destroy.call(this);
-    	Nc.trigger("view/removePlayerInfo", this.playerInfoView);
+    	Nc.trigger(Nc.ns.client.view.playerInfo.remove, this.playerInfoView);
     };
  
     return Player;

@@ -28,7 +28,7 @@ define([
             self.createTiles();
             self.createItems();
             self.isLoaded = true;
-            Nc.trigger("game/level/loaded");
+            Nc.trigger(Nc.ns.core.game.events.level.loaded);
         });
     }
 

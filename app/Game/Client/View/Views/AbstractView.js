@@ -14,20 +14,20 @@ function (DomController, Settings, Exception, Nc) {
 
         Nc.on("view/createMesh", this.createMesh, this);
         Nc.on("view/createAnimatedMesh", this.createAnimatedMesh, this);
-        Nc.on("view/addMesh", this.addMesh, this);
-        Nc.on("view/removeMesh", this.removeMesh, this);
-        Nc.on("view/updateMesh", this.updateMesh, this);
+        Nc.on(Nc.ns.client.view.mesh.add, this.addMesh, this);
+        Nc.on(Nc.ns.client.view.mesh.remove, this.removeMesh, this);
+        Nc.on(Nc.ns.client.view.mesh.update, this.updateMesh, this);
 
-        Nc.on("view/fullscreenChange", this.onFullscreenChange, this);
-        Nc.on("view/toggleDebugMode", this.onToggleDebugMode, this);
+        Nc.on("Nc.ns.client.view.fullscreen.change", this.onFullscreenChange, this);
+        Nc.on(Nc.ns.client.view.debugMode.toggle, this.onToggleDebugMode, this);
 
         Nc.on("view/toggleInfo", this.onToggleInfo, this);
 
         Nc.on("view/createAndAddPlayerInfo", this.onCreateAndAddPlayerInfo, this);
         Nc.on("view/updatePlayerInfo", this.onUpdatePlayerInfo, this);
-        Nc.on("view/removePlayerInfo", this.onRemovePlayerInfo, this);
+        Nc.on(Nc.ns.client.view.playerInfo.remove, this.onRemovePlayerInfo, this);
 
-        Nc.on("view/updateLoader", this.onUpdateLoader, this);
+        Nc.on(Nc.ns.client.view.preloadBar.update, this.onUpdateLoader, this);
     }
 
     AbstractView.prototype.isWebGlEnabled = function () { 

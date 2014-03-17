@@ -26,8 +26,8 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
             ProtocolHelper.applyCommand(message, self);
         });
 
-        Nc.on("sendGameCommand", this.sendGameCommand, this);
-        Nc.on("game/level/loaded", this.onLevelLoaded, this);
+        Nc.on(Nc.ns.client.to.server.gameCommand.send, this.sendGameCommand, this);
+        Nc.on(Nc.ns.core.game.events.level.loaded, this.onLevelLoaded, this);
     }
 
     // Socket callbacks

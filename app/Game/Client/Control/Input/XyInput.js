@@ -12,7 +12,7 @@ function (Nc) {
     XyInput.prototype.onXyChange = function(x, y) {
     	this.x = x;
     	this.y = y;
-    	Nc.trigger('input/onXyChange', x, y);
+    	Nc.trigger(Nc.ns.client.input.xy.change, x, y);
     }
  
     return XyInput;

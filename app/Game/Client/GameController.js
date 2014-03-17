@@ -18,7 +18,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         this.view = ViewManager.createView();
         this.me = null;
 
-        Nc.on("game/toggleInfo", this.toggleInfo, this);
+        Nc.on(Nc.ns.client.view.gameInfo.toggle, this.toggleInfo, this);
 
         Parent.call(this);
     }

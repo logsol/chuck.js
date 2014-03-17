@@ -37,7 +37,7 @@ function (Parent, CoreItem, Settings, Nc) {
 				self.limbMeshes[name] = mesh;
     		}
     		
-            Nc.trigger("view/addMesh", mesh);
+            Nc.trigger(Nc.ns.client.view.mesh.add, mesh);
     	}
    
         Nc.trigger("view/createMesh",
@@ -60,7 +60,7 @@ function (Parent, CoreItem, Settings, Nc) {
     	if(this.limbs) {
 	    	for(var name in this.limbMeshes) {
 	    		if(this.limbs[name]) {
-			        Nc.trigger("view/updateMesh",
+			        Nc.trigger(Nc.ns.client.view.mesh.update,
 			            this.limbMeshes[name],
 			            {
 			                x: this.limbs[name].GetPosition().x * Settings.RATIO,
@@ -80,7 +80,7 @@ function (Parent, CoreItem, Settings, Nc) {
         CoreItem.prototype.flip.call(this, direction);
 
         if(oldFlipDirection != direction) {
-            Nc.trigger("view/updateMesh",
+            Nc.trigger(Nc.ns.client.view.mesh.update,
                 this.mesh,
                 {
                     xScale: direction
@@ -88,7 +88,7 @@ function (Parent, CoreItem, Settings, Nc) {
             );
 
             for (var name in this.limbMeshes) {
-            	Nc.trigger("view/updateMesh",
+            	Nc.trigger(Nc.ns.client.view.mesh.update,
 	                this.limbMeshes[name],
 	                {
 	                    xScale: direction
@@ -100,7 +100,7 @@ function (Parent, CoreItem, Settings, Nc) {
 
     RagDoll.prototype.destroy = function() {
         for (var name in this.limbMeshes) {
-            Nc.trigger("view/removeMesh", this.limbMeshes[name]);
+            Nc.trigger(Nc.ns.client.view.mesh.remove, this.limbMeshes[name]);
         };
 
         Parent.prototype.destroy.call(this);

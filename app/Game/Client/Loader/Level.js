@@ -39,7 +39,7 @@ function (Parent, Settings, Nc, PIXI) {
         loader.onComplete = function() { callback(levelData); };
         loader.onProgress = function() { 
             var progress = parseInt(100 / numPaths * ++count, 10) + 1;
-            Nc.trigger("view/updateLoader", progress);
+            Nc.trigger(Nc.ns.client.view.preloadBar.update, progress);
         }
         loader.load();
     };

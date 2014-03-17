@@ -13,7 +13,7 @@ function (Settings, Nc, Stats, Screenfull) {
         this.stats = null;
         this.ping = null;
 
-        Nc.on("view/ready", this.initDevTools, this);
+        Nc.on(Nc.ns.client.view.events.ready, this.initDevTools, this);
     }
 
     DomController.prototype.initDevTools = function() {
@@ -39,7 +39,7 @@ function (Settings, Nc, Stats, Screenfull) {
 
         window.onresize = function() {
             if(Screenfull.enabled) {
-                Nc.trigger("view/fullscreenChange", Screenfull.isFullscreen);
+                Nc.trigger("Nc.ns.client.view.fullscreen.change", Screenfull.isFullscreen);
             }
         }
 
@@ -71,7 +71,7 @@ function (Settings, Nc, Stats, Screenfull) {
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.onclick = function(e) {
-            Nc.trigger("view/toggleDebugMode", e.target.checked);
+            Nc.trigger(Nc.ns.client.view.debugMode.toggle, e.target.checked);
             self.getDebugCanvas().style.display = e.target.checked ? "" : "none";
         }
         label.appendChild(checkbox);

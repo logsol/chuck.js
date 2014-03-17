@@ -13,7 +13,7 @@ function (Parent, Settings, DomController, Box2D, Nc) {
 
         this.debugMode = false;
 
-        Nc.on("view/toggleDebugMode", this.onToggleDebugMode, this);
+        Nc.on(Nc.ns.client.view.debugMode.toggle, this.onToggleDebugMode, this);
     }
 
     Engine.prototype = Object.create(Parent.prototype);
