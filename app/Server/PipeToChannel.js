@@ -39,7 +39,7 @@ function (Nc, childProcess) {
 	// If user already created
 	PipeToChannel.prototype.sendToUser = function (id, data) {
         var message = {
-            recipient: "user/" + id,
+            recipient: id,
             data: data
         }
 		
@@ -47,7 +47,15 @@ function (Nc, childProcess) {
 	}
 
 	PipeToChannel.prototype.onMessage = function (message) {
-		Nc.trigger(Nc.ns.server.events.controlCommand + message.recipient, message.data);
+		switch(message.recipient) {
+			case 'coordinator':
+				Nc.trigger(Nc.ns.server.events.controlCommand.coordinator, message.data);
+				break;
+			default:
+				Nc.trigger(Nc.ns.server.events.controlCommand.user + message.recipient, message.data);
+				break;
+		}
+		
 	}
 
 	return PipeToChannel;

@@ -37,7 +37,15 @@ function (Nc, Channel) {
     };
 
     PipeToServer.prototype.onMessage = function (message) {
-        Nc.trigger(Nc.ns.channel.events.controlCommand + recipient, message);    
+        switch(message.recipient) {
+            case 'channel':
+                Nc.trigger(Nc.ns.channel.events.controlCommand.channel, message);    
+                break;
+            default: 
+                Nc.trigger(Nc.ns.channel.events.controlCommand.user + message.recipient, message);    
+                break;
+        }
+        
     }
 
     PipeToServer.prototype.destroy = function() {

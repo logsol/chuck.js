@@ -24,15 +24,18 @@
 
             this.gameController = new GameController(this);
             
-            Nc.on('channel/controlCommand', function (message) {
+            
+            Nc.on(Nc.ns.channel.events.controlCommand.channel, function (message) {
                 ProtocolHelper.applyCommand(message.data, self);
             });
-
-            Nc.on('broadcastControlCommand', this.broadcastControlCommand, this);
-            Nc.on('broadcastControlCommandExcept', this.broadcastControlCommandExcept, this);
-
+            
+            
             Nc.on(Nc.ns.channel.to.client.gameCommand.broadcast, this.broadcastGameCommand, this);
-            Nc.on('broadcastGameCommandExcept', this.broadcastGameCommandExcept, this);
+            
+            // prepared - not triggered yet
+            //Nc.on(Nc.ns.channel.to.client.gameCommand.broadcastExcept, this.broadcastGameCommandExcept, this);
+            //Nc.on(Nc.ns.channel.to.client.controlCommand.broadcast, this.broadcastControlCommand, this);
+            //Nc.on(Nc.ns.channel.to.client.controlCommand.broadcastExcept, this.broadcastControlCommandExcept, this);
 
             console.checkpoint('channel ' + this.name + ' created');
 

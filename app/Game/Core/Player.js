@@ -127,7 +127,7 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
         this.ragDoll = ragDoll;
         
 
-        Nc.trigger("player/killed", this);
+        Nc.trigger(Nc.ns.core.game.player.killed, this);
     };
 
     Player.prototype.update = function () {

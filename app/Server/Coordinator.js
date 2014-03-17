@@ -11,7 +11,7 @@ function (User, Channel, PipeToChannel, Nc, Settings) {
     function Coordinator() {
     	this.channelPipes = {};
 
-        Nc.on(Nc.ns.server.events.controlCommand + "coordinator", this.onMessage, this);
+        Nc.on(Nc.ns.server.events.controlCommand.coordinator, this.onMessage, this);
 
         console.checkpoint('create Coordinator');
     }

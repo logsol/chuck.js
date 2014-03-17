@@ -25,7 +25,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         Nc.on(Nc.ns.channel.events.user.level.reset, this.onResetLevel, this);
         Nc.on(Nc.ns.channel.events.user.client.ready, this.onClientReady, this);
 
-        Nc.on('player/killed', this.onPlayerKilled, this);
+        Nc.on(Nc.ns.core.game.player.killed, this.onPlayerKilled, this);
 
         console.checkpoint('starting game controller for channel ' + channel.name);
         

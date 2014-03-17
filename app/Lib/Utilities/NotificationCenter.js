@@ -42,13 +42,10 @@ function (Exception) {
                     preloadBar: {
                         update: null
                     },
-                    fullScreen: {
+                    fullscreen: {
                         change: null
                     },
                     debugMode: {
-                        toggle: null
-                    },
-                    gameInfo: {
                         toggle: null
                     },
                     events: {
@@ -63,9 +60,16 @@ function (Exception) {
                         change: null
                     }
                 },
-                server: {
-                    gameCommand: {
-                        send: null
+                game: {
+                    gameInfo: {
+                        toggle: null
+                    }
+                },
+                to: {
+                    server: {
+                        gameCommand: {
+                            send: null
+                        }
                     }
                 }
             },
@@ -74,6 +78,9 @@ function (Exception) {
                     gameObject: {
                         add: null,
                         remove: null
+                    },
+                    player: {
+                        killed: null
                     },
                     events: {
                         level: {
@@ -84,7 +91,10 @@ function (Exception) {
             },
             channel: {
                 events: {
-                    controlCommand: null,
+                    controlCommand: {
+                        channel: null,
+                        user: null
+                    },
                     user: {
                         joined: null,
                         left: null,
@@ -103,7 +113,9 @@ function (Exception) {
                 },
                 to: {
                     server: {
-                        send: null
+                        controlCommand: {
+                            send: null
+                        }
                     },
                     client: {
                         user: {
@@ -122,7 +134,10 @@ function (Exception) {
             },
             server: {
                 events: {
-                    controlCommand: null,
+                    controlCommand: {
+                        coordinator: null,
+                        user: null
+                    },
                     user: {
                         joined: null,
                         left: null

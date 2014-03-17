@@ -16,7 +16,7 @@ function (Parent, ProtocolHelper, Nc) {
         socketLink.on('message', this.onMessage.bind(this));
         socketLink.on('disconnect', this.onDisconnect.bind(this));
 
-        Nc.on(Nc.ns.server.to.client.message.send + id, this.socketLink.send, this.socketLink);
+        Nc.on(Nc.ns.server.events.controlCommand.user + this.id, this.socketLink.send, this.socketLink);
     }
 
     User.prototype = Object.create(Parent.prototype);
@@ -65,6 +65,7 @@ function (Parent, ProtocolHelper, Nc) {
         this.channelPipe.send('channel', { addUser: userOptions });
     };
 
+    /* FIXME: watch out and check in wich direction game and control commands flow */
     User.prototype.onGameCommand = function(options) {
         // repacking for transport via pipe
         var message = ProtocolHelper.encodeCommand("gameCommand", options);
@@ -73,7 +74,7 @@ function (Parent, ProtocolHelper, Nc) {
 
     User.prototype.onPing = function(timestamp) {
         var message = ProtocolHelper.encodeCommand("pong", timestamp);
-        Nc.trigger(Nc.ns.server.to.client.message.send + id, message);
+        Nc.trigger(Nc.ns.server.events.controlCommand.user + this.id, message);
     };
 
     return User;

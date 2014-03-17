@@ -18,16 +18,18 @@ function(Parent, Nc, ProtocolHelper, ProtocolParser) {
     		self.sendControlCommand("joinSuccess", options);
     	});
 
-        Nc.on('user/' + this.id + "/controlCommand", function(message) {
+
+        Nc.on(Nc.ns.channel.events.controlCommand.user + this.id, function(message) {
             ProtocolHelper.applyCommand(message.data, self);
         });
 
-        /*
-        couldnt find trigger for this while refactoring
-        Nc.on('user/' + this.id + "/gameCommand", function(command, options) {
+        
+        
+
+        Nc.on(Nc.ns.channel.to.client.user.gameCommand.send + this.id, function(command, options) {
             self.sendGameCommand(command, options);
         });
-        */
+        
     }
 
     User.prototype = Object.create(Parent.prototype);
@@ -60,7 +62,7 @@ function(Parent, Nc, ProtocolHelper, ProtocolParser) {
     // Sending commands
 
     User.prototype.sendControlCommand = function(command, options) {
-    	var recipient = "user/" + this.id;
+    	var recipient = this.id;
 		var data = ProtocolHelper.encodeCommand(command, options);
 
     	Nc.trigger(Nc.ns.channel.to.server.controlCommand.send, recipient, data);
