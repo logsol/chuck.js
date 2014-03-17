@@ -35,12 +35,12 @@ function (Parent, Settings, Nc, Exception) {
         if(!state) throw new Exception("action state is undefined");
 
         if(this.animatedMeshes[this.actionState]) {
-            Nc.trigger("view/updateMesh", this.animatedMeshes[this.actionState], { visible: false });
+            Nc.trigger(Nc.ns.client.view.mesh.update, this.animatedMeshes[this.actionState], { visible: false });
         }
 
         Parent.prototype.setActionState.call(this, state);
 
-        Nc.trigger("view/updateMesh", this.animatedMeshes[this.actionState], { visible: true });
+        Nc.trigger(Nc.ns.client.view.mesh.update, this.animatedMeshes[this.actionState], { visible: true });
     }
 
     Doll.prototype.createMesh = function() {
@@ -74,7 +74,7 @@ function (Parent, Settings, Nc, Exception) {
 
             var callback = function(mesh) {
                 self.animatedMeshes[key] = mesh;
-                Nc.trigger("view/addMesh", mesh);
+                Nc.trigger(Nc.ns.client.view.mesh.add, mesh);
             };
 
             Nc.trigger("view/createAnimatedMesh", texturePaths, callback, { 
@@ -93,7 +93,7 @@ function (Parent, Settings, Nc, Exception) {
         var texturePath = Settings.GRAPHICS_PATH + "Characters/Chuck/head.png";
         var callback = function (mesh) {
             self.headMesh = mesh;
-            Nc.trigger("view/addMesh", mesh);
+            Nc.trigger(Nc.ns.client.view.mesh.add, mesh);
         }
         Nc.trigger("view/createMesh", texturePath, callback, {
             pivot: {
@@ -113,7 +113,7 @@ function (Parent, Settings, Nc, Exception) {
 
         if(oldLookDirection != this.lookDirection) {
             for(var key in this.animatedMeshes) {
-                Nc.trigger("view/updateMesh",
+                Nc.trigger(Nc.ns.client.view.mesh.update,
                     this.animatedMeshes[key],
                     {
                         xScale: this.lookDirection
@@ -124,7 +124,7 @@ function (Parent, Settings, Nc, Exception) {
 
         var angle = Math.atan2(this.lookAtXY.x, this.lookAtXY.y) / 2 - 0.7855 * this.lookDirection; // 0.7855 = 45°
 
-        Nc.trigger("view/updateMesh",
+        Nc.trigger(Nc.ns.client.view.mesh.update,
             this.headMesh,
             {
                 xScale: this.lookDirection,
@@ -136,17 +136,17 @@ function (Parent, Settings, Nc, Exception) {
 
     Doll.prototype.destroy = function () {
         for (var key in this.animatedMeshes) {
-            Nc.trigger("view/removeMesh", this.animatedMeshes[key]);
+            Nc.trigger(Nc.ns.client.view.mesh.remove, this.animatedMeshes[key]);
         }
 
-        Nc.trigger("view/removeMesh", this.headMesh);
+        Nc.trigger(Nc.ns.client.view.mesh.remove, this.headMesh);
 
         Parent.prototype.destroy.call(this);
     }
 
     Doll.prototype.render = function() {
         if(this.actionState) {
-            Nc.trigger("view/updateMesh",
+            Nc.trigger(Nc.ns.client.view.mesh.update,
                 this.animatedMeshes[this.actionState],
                 {
                     x: this.body.GetPosition().x * Settings.RATIO,
@@ -155,7 +155,7 @@ function (Parent, Settings, Nc, Exception) {
                 }
             );
 
-            Nc.trigger("view/updateMesh",
+            Nc.trigger(Nc.ns.client.view.mesh.update,
                 this.headMesh,
                 {
                     x: this.body.GetPosition().x * Settings.RATIO,

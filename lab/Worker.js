@@ -40,7 +40,7 @@ function (Parent, ProtocolHelper, GameController, User, Nc) {
 			}
 		}, this);
 
-       Nc.on("sendGameCommand", this.sendGameCommand, this);
+       Nc.on(Nc.ns.client.to.server.gameCommand.send, this.sendGameCommand, this);
     }
 
     Worker.prototype.sendCommand = function (command, options) {

@@ -22,7 +22,7 @@ function (Parent, Settings, Nc) {
 
     	var callback = function(mesh) {
     		self.mesh = mesh;
-            Nc.trigger("view/addMesh", mesh);
+            Nc.trigger(Nc.ns.client.view.mesh.add, mesh);
     	}
    
         Nc.trigger("view/createMesh",
@@ -40,13 +40,13 @@ function (Parent, Settings, Nc) {
     };
 
     Item.prototype.destroy = function() {
-        Nc.trigger("view/removeMesh", this.mesh);
+        Nc.trigger(Nc.ns.client.view.mesh.remove, this.mesh);
         Parent.prototype.destroy.call(this);
     };
 
     Item.prototype.render = function() {
 
-        Nc.trigger("view/updateMesh",
+        Nc.trigger(Nc.ns.client.view.mesh.update,
             this.mesh,
             {
                 x: this.body.GetPosition().x * Settings.RATIO,
@@ -62,7 +62,7 @@ function (Parent, Settings, Nc) {
         Parent.prototype.flip.call(this, direction);
 
         if(oldFlipDirection != direction) {
-            Nc.trigger("view/updateMesh",
+            Nc.trigger(Nc.ns.client.view.mesh.update,
                 this.mesh,
                 {
                     xScale: direction

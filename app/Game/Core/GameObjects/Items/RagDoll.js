@@ -163,7 +163,7 @@ function (Parent, Box2D, Settings, Nc) {
         );
 
 
-        Nc.trigger("game/object/add", 'animated', this);
+        Nc.trigger(Nc.ns.core.game.gameObject.add, 'animated', this);
     }
 
     RagDoll.prototype = Object.create(Parent.prototype);
@@ -362,7 +362,7 @@ function (Parent, Box2D, Settings, Nc) {
     };
 
     RagDoll.prototype.destroy = function() {
-        Nc.trigger("game/object/remove", 'animated', this);
+        Nc.trigger(Nc.ns.core.game.gameObject.remove, 'animated', this);
         var world = this.body.GetWorld();
         Parent.prototype.destroy.call(this);
         

@@ -16,10 +16,10 @@ function (PhysicsEngine, TiledLevel, Player, Nc) {
         this.physicsEngine = new PhysicsEngine();
         this.physicsEngine.setCollisionDetector();
 
-        Nc.on("game/level/loaded", this.onLevelLoaded, this);
+        Nc.on(Nc.ns.core.game.events.level.loaded, this.onLevelLoaded, this);
 
-        Nc.on("game/object/add", this.onGameObjectAdd, this);
-        Nc.on("game/object/remove", this.onGameObjectRemove, this);
+        Nc.on(Nc.ns.core.game.gameObject.add, this.onGameObjectAdd, this);
+        Nc.on(Nc.ns.core.game.gameObject.remove, this.onGameObjectRemove, this);
 
         this.update();
     }

@@ -37,7 +37,7 @@ function (Parent, DomController, Settings, Nc) {
 			var x = (((e.clientX - this.offsetLeft) / Settings.STAGE_WIDTH) * 2) - 1;
 			var y = (((Settings.STAGE_HEIGHT - (e.clientY - this.offsetTop)) / Settings.STAGE_HEIGHT) * 2) -1;
 
-			Nc.trigger("input/onHandActionRequest", x, y);
+			Nc.trigger(Nc.ns.client.input.handAction.request, x, y);
 		}
     };
 

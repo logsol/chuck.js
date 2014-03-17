@@ -50,7 +50,7 @@
             var self = this;
 
             if(!this.gameController.level || !this.gameController.level.isLoaded) {
-                var token = Nc.on("game/level/loaded", function() {
+                var token = Nc.on(Nc.ns.core.game.events.level.loaded, function() {
                     self.sendJoinSuccess(options);
                     Nc.off(token);
                 });
@@ -82,14 +82,14 @@
 
             //Nc.trigger('user/' + user.id + "/joinSuccess", options);
             user.sendControlCommand("joinSuccess", options);
-            Nc.trigger('user/joined', user);
+            Nc.trigger(Nc.ns.channel.events.user.joined, user);
 
             this.broadcastControlCommandExcept("userJoined", user.options, user);
         };
 
         Channel.prototype.onReleaseUser = function (userId) {
             var user = this.users[userId];
-            Nc.trigger('user/left', userId);
+            Nc.trigger(Nc.ns.channel.events.user.left, userId);
             delete this.users[userId];
 
             this.broadcastControlCommand("userLeft", userId);
