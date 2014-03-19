@@ -29,7 +29,8 @@ function (Parent, Settings) {
     	var objects = this.getLayer(levelData, "items").objects;
         for (var i = 0; i < objects.length; i++) {
             var object = objects[i];
-            var options = object.properties;
+
+            var options = this.gatherOptions(object);
 
     		var texturePath = Settings.GRAPHICS_PATH
 	    		+ Settings.GRAPHICS_SUBPATH_ITEMS

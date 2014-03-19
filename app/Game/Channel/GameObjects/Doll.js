@@ -53,14 +53,16 @@ function (Parent, Item, Box2D, Nc) {
                     
                     if(absItemVelocity.x > max || absItemVelocity.y > max) {
                         if(item.lastMoved && item.lastMoved.player != this.player) {
-                            var damage = b2Math.SubtractVV(itemVelocity, ownVelocity);
-                            damage.Abs();
-                            damage.Multiply(itemMass);
+                            var damageVector = b2Math.SubtractVV(itemVelocity, ownVelocity);
+                            damageVector.Abs();
+                            damageVector.Multiply(itemMass);
+                            var damage = damageVector.Length() * 2;
+                            damage *= item.options.danger ? item.options.danger : 1;
 
                             var player = item.lastMoved.player;
 
                             var callback = function() {
-                                self.player.addDamage(damage.Length() * 2, player);
+                                self.player.addDamage(damage, player);
                             }
 
                             Nc.trigger(Nc.ns.channel.engine.worldQueue.add, callback)

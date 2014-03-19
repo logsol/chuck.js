@@ -2,14 +2,13 @@ define([
     "Game/Config/Settings", 
     "Lib/Vendor/Box2D",
     "Lib/Utilities/NotificationCenter",
-    "Lib/Utilities/Exception",
     "Game/" + GLOBALS.context + "/Collision/Detector",
     "Game/" + GLOBALS.context + "/GameObjects/Tile",
     "Game/" + GLOBALS.context + "/GameObjects/Item",
     "Game/" + GLOBALS.context + "/GameObjects/Items/Skateboard",
     "Game/" + GLOBALS.context + "/GameObjects/Items/RagDoll"
 
-], function (Settings, Box2D, Nc, Exception, CollisionDetector, Tile, Item, Skateboard, RagDoll) {
+], function (Settings, Box2D, Nc, CollisionDetector, Tile, Item, Skateboard, RagDoll) {
     
     function Level (uid, engine, gameObjects) {
         this.uid = uid;

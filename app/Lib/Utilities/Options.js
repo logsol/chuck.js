@@ -26,10 +26,18 @@ function (Exception) {
 			return preset;
 		}
 
+		// FIXME there is a bad bug here, the preset is being manipulated by reference, so no config can be used!
+		
+		// hotfix for the bug
+		preset = JSON.parse(JSON.stringify(preset));
+
 		for (var key in options) {
 			if(!preset.hasOwnProperty(key)) {
 				preset[key] = options[key];
 			} else {
+				if(options[key] === undefined) {
+					continue;
+				}
 				if(options[key].constructor !== Object) {
 					preset[key] = options[key];
 				} else {

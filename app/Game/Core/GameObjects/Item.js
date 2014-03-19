@@ -2,14 +2,17 @@ define([
 	"Game/" + GLOBALS.context + "/GameObjects/GameObject",
 	"Lib/Vendor/Box2D",
     "Lib/Utilities/Options",
-	"Game/Config/Settings"
+	"Game/Config/Settings",
+    "Lib/Utilities/Exception"
 ],
  
-function (Parent, Box2D, Options, Settings) {
+function (Parent, Box2D, Options, Settings, Exception) {
  
     function Item(physicsEngine, uid, options) {
+
         var floatOptions = {
             grabAngle: parseFloat(options.grabAngle),
+            danger: parseFloat(options.danger),
             weight: parseFloat(options.weight),
             width: parseFloat(options.width),
             height: parseFloat(options.height),
@@ -20,6 +23,11 @@ function (Parent, Box2D, Options, Settings) {
         };
 
         this.options = Options.merge(floatOptions, options);
+
+        if(!this.options.category) {
+            // FIXME add more validation
+            console.warn('item category empty (' + this.options.name + ')' );
+        }
 
     	Parent.call(this, physicsEngine, uid);
         this.createFixture();

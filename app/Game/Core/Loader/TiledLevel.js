@@ -1,16 +1,20 @@
 define([
     "Game/" + GLOBALS.context + "/Loader/Level",
     "Game/Config/Settings", 
+    "Game/Config/ItemSettings",
     "Lib/Vendor/Box2D", 
+    "Lib/Utilities/Options",
+    "Lib/Utilities/Exception",
     "Game/" + GLOBALS.context + "/Collision/Detector",
     "Game/" + GLOBALS.context + "/GameObjects/Tile",
     "Game/" + GLOBALS.context + "/GameObjects/Item",
     "Game/" + GLOBALS.context + "/GameObjects/Items/Skateboard",
 
-], function (Parent, Settings, Box2D, CollisionDetector, Tile, Item, Skateboard) {
+], function (Parent, Settings, ItemSettings, Box2D, Options, Exception, CollisionDetector, Tile, Item, Skateboard) {
     
     // Public
     function TiledLevel (path, engine, gameObjects) {
+
         this.levelData = null;
         Parent.call(this, path, engine, gameObjects);
     }
@@ -57,19 +61,58 @@ define([
 
     TiledLevel.prototype.createItems = function() {
         var objects = this.getLayer(this.levelData, "items").objects;
+
         for (var i = 0; i < objects.length; i++) {
             var object = objects[i];
-            var options = object.properties;
-            options.x = object.x / Settings.TILE_RATIO;
-            options.y = object.y / Settings.TILE_RATIO;
+
+            var options = this.gatherOptions(object);
+
             var uid = "item-" + i;
             var item = this.createItem(uid, options);
             this.gameObjects.animated.push(item);  
         };
     };
 
+    TiledLevel.prototype.gatherOptions = function(tiledObject) {
+        var options = {};
+
+        options.name = tiledObject.name;
+        options.rotation = tiledObject.rotation;
+        options.width = tiledObject.width / Settings.TILE_RATIO;
+        options.height = tiledObject.height / Settings.TILE_RATIO;
+        options.x = (tiledObject.x + tiledObject.width / 2) / Settings.TILE_RATIO;
+        options.y = (tiledObject.y + options.height / 2) / Settings.TILE_RATIO;
+
+        if (!options.width) options.width = undefined;
+        if (!options.height) options.height = undefined;
+
+        var defaultOptions = this.getDefaultItemSettingsByName(options.name);
+
+        options = Options.merge(options, defaultOptions);
+        //options = Options.merge(tiledObject.properties, options);
+
+        return options;
+    };
+
+
+    TiledLevel.prototype.getDefaultItemSettingsByName = function(name) {
+
+        if(!name) {
+            throw new Exception('Item name cannot be be empty');
+        }
+
+        if(ItemSettings[name] === undefined) {
+            throw new Exception('Item name (' + name + ') cannot be found in item list');
+        }
+
+        var options = ItemSettings.Default;
+
+        options = Options.merge(ItemSettings[name], options);
+
+        return options;
+    };
+
     TiledLevel.prototype.getTileImagePath = function(gid) {
-        //console.log(this.levelData.tilesets)
         for (var i = 0; i < this.levelData.tilesets.length; i++) {
             var tileset = this.levelData.tilesets[i];
             var offset = tileset.firstgid;
