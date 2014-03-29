@@ -13,10 +13,10 @@ define([
 ], function (Parent, Settings, ItemSettings, Box2D, Options, Exception, CollisionDetector, Tile, Item, Skateboard) {
     
     // Public
-    function TiledLevel (path, engine, gameObjects) {
+    function TiledLevel (path, engine) {
 
         this.levelData = null;
-        Parent.call(this, path, engine, gameObjects);
+        Parent.call(this, path, engine);
     }
 
     TiledLevel.prototype = Object.create(Parent.prototype);
@@ -51,7 +51,9 @@ define([
                     y: parseInt(i / collisionLayer.height , 10)
                 }
 
-                this.gameObjects.fixed.push(new Tile(this.engine, "tile-" + i, options));
+                //this.gameObjects.fixed.push(
+                new Tile(this.engine, "tile-" + i, options);
+                //);
             }
 
         } else {
@@ -69,7 +71,7 @@ define([
 
             var uid = "item-" + i;
             var item = this.createItem(uid, options);
-            this.gameObjects.animated.push(item);  
+            //this.gameObjects.animated.push(item);  
         };
     };
 

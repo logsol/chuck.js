@@ -60,6 +60,10 @@ function (Settings, Box2D, CollisionDetector, Nc) {
         this.processWorldQueue();
     }
 
+    Engine.prototype.destroy = function() {
+        delete this.world;
+    };
+
 
     return Engine;
 });

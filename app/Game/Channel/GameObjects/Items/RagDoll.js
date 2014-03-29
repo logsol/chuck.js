@@ -30,15 +30,21 @@ function (Parent, Settings, Nc) {
     };
 
     RagDoll.prototype.delayedDestroy = function() {
+        var self = this;
         this.scheduledForDestruction = true;
-        this.destructionTimeout = setTimeout(this.destroy.bind(this), Settings.RAGDOLL_DESTRUCTION_TIME * 1000);
+        this.destructionTimeout = setTimeout(function() {
+            Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, 'removeGameObject', {
+                type: 'animated',
+                uid: self.uid
+            });
+            self.destroy.bind(self);
+        }, Settings.RAGDOLL_DESTRUCTION_TIME * 1000);
     };
 
     RagDoll.prototype.destroy = function() {
-    	Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, 'removeGameObject', {
-    		type: 'animated',
-    		uid: this.uid
-    	});
+        if(this.scheduledForDestruction) {
+            clearTimeout(this.destructionTimeout);
+        }
     	Parent.prototype.destroy.call(this);
     };
  

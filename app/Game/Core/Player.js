@@ -40,7 +40,6 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
         this.doll = new Doll(this.physicsEngine, "doll-" + this.id, this);
         this.doll.spawn(x, y);
         this.isSpawned = true;
-        Nc.trigger(Nc.ns.core.game.gameObject.add, 'animated', this.doll);
     }
 
     Player.prototype.getPosition = function () {
@@ -120,14 +119,13 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
 
         this.isSpawned = false;
 
-        Nc.trigger(Nc.ns.core.game.gameObject.remove, 'animated', this.doll);
         this.doll.destroy();
         this.doll = null;
 
         this.ragDoll = ragDoll;
         
 
-        Nc.trigger(Nc.ns.core.game.player.killed, this);
+        Nc.trigger(Nc.ns.core.game.player.killed, this, killedByPlayer);
     };
 
     Player.prototype.update = function () {
@@ -148,7 +146,6 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
         
         this.spectatorDoll.destroy();
         if(this.doll) this.doll.destroy();
-        if(this.ragDoll) this.ragDoll.destroy();
     }
 
     Player.prototype.setPlayerController = function(playerController) {

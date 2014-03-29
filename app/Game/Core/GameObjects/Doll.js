@@ -3,10 +3,11 @@ define([
     "Lib/Vendor/Box2D", 
     "Game/Config/Settings", 
     "Game/" + GLOBALS.context + "/Collision/Detector",
-    "Game/" + GLOBALS.context + "/GameObjects/Item"
+    "Game/" + GLOBALS.context + "/GameObjects/Item",
+    "Lib/Utilities/NotificationCenter"
 ], 
 
-function (Parent, Box2D, Settings, CollisionDetector, Item) {
+function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
 
     function Doll (physicsEngine, uid, player) {
 
@@ -36,6 +37,8 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
         
         this.createFixtures();
         this.body.SetActive(false);
+
+        Nc.trigger(Nc.ns.core.game.gameObject.add, 'animated', this);
     }
 
     Doll.prototype = Object.create(Parent.prototype);
@@ -366,6 +369,10 @@ function (Parent, Box2D, Settings, CollisionDetector, Item) {
         if (!this.body.IsAwake() && !this.isStanding()) {
             this.setStanding(true);
         }
+    };
+
+    Doll.prototype.destroy = function() {
+        Nc.trigger(Nc.ns.core.game.gameObject.remove, 'animated', this);
     };
 
     return Doll;

@@ -7,7 +7,7 @@ function (Settings) {
     var requestAnimFrame = (function () {
 
         var _setTimeout = function ( callback ) {
-            setTimeout(callback, Settings.BOX2D_TIME_STEP * 1000);
+            return setTimeout(callback, Settings.BOX2D_TIME_STEP * 1000);
         }
 
         if (typeof window != 'undefined') {

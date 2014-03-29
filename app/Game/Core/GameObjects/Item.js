@@ -3,10 +3,11 @@ define([
 	"Lib/Vendor/Box2D",
     "Lib/Utilities/Options",
 	"Game/Config/Settings",
-    "Lib/Utilities/Exception"
+    "Lib/Utilities/Exception",
+    "Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, Box2D, Options, Settings, Exception) {
+function (Parent, Box2D, Options, Settings, Exception, Nc) {
  
     function Item(physicsEngine, uid, options) {
 
@@ -33,6 +34,8 @@ function (Parent, Box2D, Options, Settings, Exception) {
         this.createFixture();
         this.body.ResetMassData();
         this.flipDirection = 1;
+
+        Nc.trigger(Nc.ns.core.game.gameObject.add, 'animated', this);
     }
 
     Item.prototype = Object.create(Parent.prototype);
@@ -135,6 +138,11 @@ function (Parent, Box2D, Options, Settings, Exception) {
         this.body.SetLinearVelocity(vector);
 
         body.SetAngularVelocity(Settings.MAX_THROW_ANGULAR_VELOCITY * x);
+    };
+
+    Item.prototype.destroy = function() {
+        Nc.trigger(Nc.ns.core.game.gameObject.remove, 'animated', this);
+        Parent.prototype.destroy.call(this);
     };
  
     return Item;

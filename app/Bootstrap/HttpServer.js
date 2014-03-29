@@ -65,6 +65,7 @@ function (http, nodeStatic, Api) {
                             var status = self.api.isError ? 400 : 200;
                             res.writeHead(status, {"Content-Type": self.api.getContentType()});
                             res.end(self.api.getOutput());
+                            self.api.isError = false;
                             break;
 
                         case new RegExp(/^\/app/).test(req.url):

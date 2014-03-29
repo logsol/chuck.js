@@ -14,20 +14,26 @@ define([
 
 function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, DomController) {
 
-    function GameController () {
+    if (!window.cancelAnimationFrame) {
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+    }
+
+
+    function GameController (options) {
         this.view = ViewManager.createView();
         this.me = null;
+        this.animationRequestId = null;
 
-        Nc.on(Nc.ns.client.game.gameInfo.toggle, this.toggleInfo, this);
+        Parent.call(this, options);
 
-        Parent.call(this);
+        this.ncTokens = this.ncTokens.concat([
+            Nc.on(Nc.ns.client.game.gameInfo.toggle, this.toggleInfo, this)
+        ]);
     }
 
     GameController.prototype = Object.create(Parent.prototype);
-
-    GameController.prototype.destruct = function() {
-        //destroy box2d world etc.
-    };
 
     GameController.prototype.getMe = function () {
         return this.me;
@@ -39,7 +45,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
         DomController.statsBegin();
 
-        requestAnimFrame(this.update.bind(this));
+        this.animationRequestId = requestAnimFrame(this.update.bind(this));
 
         this.physicsEngine.update();
         
@@ -82,7 +88,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
                 if(!alreadyExists) {
                     var item = this.level.createItem(itemDef.uid, itemDef.options);
-                    this.onGameObjectAdd("animated", item);                    
+                    //this.onGameObjectAdd("animated", item);
                 }
             };
         }
@@ -189,7 +195,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
             }
         }
         if(object) {
-            this.onGameObjectRemove(options.type, object);
+            //this.onGameObjectRemove(options.type, object);
             object.destroy();
         } else {
             console.warn("GameObject for removal can not be found locally. " + options.uid);
@@ -251,6 +257,16 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         string += lines.join("\n");
 
         this.view.toggleInfo(show, string);
+    };
+
+    GameController.prototype.destroy = function() {
+
+        cancelAnimationFrame(this.animationRequestId);
+
+        Parent.prototype.destroy.call(this);
+
+        this.view.render(); 
+        this.view.test();
     };
 
     return GameController;

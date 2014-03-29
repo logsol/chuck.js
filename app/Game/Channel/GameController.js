@@ -14,24 +14,26 @@ define([
 
 function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, Nc, Box2D, Player, GameObject, Doll, RagDoll) {
 
-    function GameController (channel) {
-        
-        this.channel = channel;
+    function GameController (options) {
 
-        Parent.call(this);
+        this.animationTimeout = null;
+        this.worldUpdateTimeout = null;
+        this.spawnTimeouts = [];
 
-        Nc.on(Nc.ns.channel.events.user.joined, this.onUserJoined, this);
-        Nc.on(Nc.ns.channel.events.user.left, this.onUserLeft, this);
-        Nc.on(Nc.ns.channel.events.user.level.reset, this.onResetLevel, this);
-        Nc.on(Nc.ns.channel.events.user.client.ready, this.onClientReady, this);
+        Parent.call(this, options);
 
-        Nc.on(Nc.ns.core.game.player.killed, this.onPlayerKilled, this);
+        this.ncTokens = this.ncTokens.concat([
+            Nc.on(Nc.ns.channel.events.user.joined, this.onUserJoined, this),
+            Nc.on(Nc.ns.channel.events.user.left, this.onUserLeft, this),
+            Nc.on(Nc.ns.channel.events.user.level.reset, this.onResetLevel, this),
+            Nc.on(Nc.ns.channel.events.user.client.ready, this.onClientReady, this),
+            Nc.on(Nc.ns.core.game.events.level.loaded, this.onLevelLoaded, this), 
+            Nc.on(Nc.ns.core.game.player.killed, this.onPlayerKilled, this), // FIXME: move to events
+        ]);
 
-        console.checkpoint('starting game controller for channel ' + channel.name);
-        
-        var nextUid = this.getNextLevelUid();
-        this.loadLevel(nextUid);
+        console.checkpoint('starting game controller for channel (' + options.channelName + ')');
     }
+
 
     GameController.prototype = Object.create(Parent.prototype);
 
@@ -39,7 +41,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
         Parent.prototype.update.call(this);
 
-        requestAnimFrame(this.update.bind(this));
+        this.animationTimeout = requestAnimFrame(this.update.bind(this));
 
         this.physicsEngine.update();
         for(var id in this.players) {
@@ -48,7 +50,6 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
     }
 
     GameController.prototype.onLevelLoaded = function() {
-        Parent.prototype.onLevelLoaded.call(this);
         this.updateWorld();
     };
 
@@ -62,8 +63,11 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         user.setPlayer(player);
     };
 
-    GameController.prototype.onPlayerKilled = function(player, respawnTime) {
-        this.spawnPlayer(player, respawnTime);
+    GameController.prototype.onPlayerKilled = function(player, killedByPlayer) {
+        if(killedByPlayer.stats.score >= this.options.scoreLimit) {
+            Nc.trigger(Nc.ns.channel.events.round.end);
+        }
+        this.spawnPlayer(player, Settings.RESPAWN_TIME);
     };
 
     GameController.prototype.spawnPlayer = function(player, respawnTime) {
@@ -74,7 +78,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
             ? Settings.RESPAWN_TIME
             : respawnTime;
 
-        setTimeout(function() {
+        var spawnTimeout = setTimeout(function() {
             player.spawn(spawnPoint.x, spawnPoint.y);
             // put it into 
             self.gameObjects.animated.push(player);
@@ -86,7 +90,13 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
             };
 
             Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "spawnPlayer", options);
+            
+            var i = self.spawnTimeouts.indexOf(spawnTimeout);
+            self.spawnTimeouts.splice(i, 1);
+
         }, respawnTime * 1000);
+
+        this.spawnTimeouts.push(spawnTimeout);
     };
 
     GameController.prototype.updateWorld = function () {
@@ -97,7 +107,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
             Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, 'worldUpdate', update);
         }
 
-        setTimeout(this.updateWorld.bind(this), Settings.WORLD_UPDATE_BROADCAST_INTERVAL);
+        this.worldUpdateTimeout = setTimeout(this.updateWorld.bind(this), Settings.WORLD_UPDATE_BROADCAST_INTERVAL);
     }
 
     GameController.prototype.getWorldUpdateObject = function(getSleeping) {
@@ -196,23 +206,16 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         }
     };
 
-    GameController.prototype.getNextLevelUid = function() {
-        if(!this.level) return this.channel.options.levelUids[0];
+    GameController.prototype.destroy = function() {
+        clearTimeout(this.animationTimeout);
+        clearTimeout(this.worldUpdateTimeout);
 
-        var levelCount = this.channel.options.levelUids.length;
-
-        for (var i = 0; i < levelCount; i++) {
-            var uid = this.channel.options.levelUids[i];
-            if(uid == this.level.uid) {
-                break;
-            }
+        for (var i = 0; i < this.spawnTimeouts.length; i++) {
+            clearTimeout(this.spawnTimeouts[i]);
         };
 
-        var next = i + 1;
-
-        return this.channel.options.levelUids[next % levelCount];
+        Parent.prototype.destroy.call(this);
     };
-
 
     return GameController;
 });

@@ -101,8 +101,9 @@ function (Parent, Nc, Settings) {
     };
 
     Player.prototype.destroy = function() {
-    	Parent.prototype.destroy.call(this);
+        clearTimeout(this.playerInfoViewVisibleTimeout);
     	Nc.trigger(Nc.ns.client.view.playerInfo.remove, this.playerInfoView);
+        Parent.prototype.destroy.call(this);
     };
  
     return Player;

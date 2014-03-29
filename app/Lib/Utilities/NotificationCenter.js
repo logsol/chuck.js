@@ -104,6 +104,9 @@ function (Exception) {
                         level: {
                             reset: null
                         }
+                    },
+                    round: {
+                        end: null
                     }
                 },
                 engine: {
@@ -127,6 +130,9 @@ function (Exception) {
                             }
                         },
                         gameCommand: {
+                            broadcast: null
+                        },
+                        controlCommand: {
                             broadcast: null
                         }
                     }

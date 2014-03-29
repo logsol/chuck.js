@@ -185,6 +185,7 @@ function validateForJoin(nickname, channelName) {
 }
 
 function validateForCreate(channelName, maps) {
+	return true;
 	if(maps.length < 1) {
 		alert("Please choose at least one map.")
 		return false;
@@ -243,9 +244,10 @@ function create(channelName, callback) {
 
 		var options = {
 			channelName: channelName,
-			maps: maps,
+			levelUids: maps,
 			maxUsers: 10,
-			minUsers: 2
+			minUsers: 2,
+			scoreLimit: 1
 		}
 
 		localStorage["customname"] = channelName;

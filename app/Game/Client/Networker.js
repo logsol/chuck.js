@@ -48,17 +48,14 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
     }
 
     Networker.prototype.onDisconnect = function () {
-        if(this.gameController) this.gameController.destruct();
-        this.gameController = null;
+        //if(this.gameController) this.gameController.destruct();
+        //this.gameController = null;
         console.log('disconnected. game destroyed. no auto-reconnect');
         document.body.style.backgroundColor = '#aaaaaa';
     }
 
     Networker.prototype.onJoinSuccess = function (options) {
         console.log("join success")
-
-        this.gameController = new GameController();
-        this.gameController.loadLevel(options.levelUid);
 
         this.onUserJoined(options.user);
 
@@ -138,6 +135,21 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
         var ping = (Date.now() - parseInt(timestamp, 10));
         DomController.setPing(ping);
         setTimeout(this.ping.bind(this), 1000);
+    };
+
+    Networker.prototype.onBeginRound = function(options) {
+
+        if(this.gameController) {
+            this.gameController.destroy();
+            delete this.gameController;
+        }
+
+        console.log('GameController')
+        this.gameController = new GameController(options);
+    };
+
+    Networker.prototype.onEndRound = function() {
+        this.gameController.toggleInfo(true);
     };
 
     return Networker;

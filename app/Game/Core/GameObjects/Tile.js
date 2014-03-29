@@ -2,15 +2,18 @@ define([
 	"Game/" + GLOBALS.context + "/GameObjects/GameObject",
 	"Lib/Vendor/Box2D",
 	"Game/Config/Settings",
-    "Lib/Utilities/Exception"
+    "Lib/Utilities/Exception",
+    "Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, Box2D, Settings, Exception) {
+function (Parent, Box2D, Settings, Exception, Nc) {
  
     function Tile(physicsEngine, uid, options) {
     	this.options = options;
     	Parent.call(this, physicsEngine, uid);
     	this.createPhysicTile(this.options);
+
+        Nc.trigger(Nc.ns.core.game.gameObject.add, 'fixed', this);
     }
 
     Tile.prototype = Object.create(Parent.prototype);
@@ -112,6 +115,10 @@ function (Parent, Box2D, Settings, Exception) {
     Tile.prototype.addVec = function (vs, m1, m2) {
         return vs.push(new Box2D.Common.Math.b2Vec2(this.mkArg(m1), this.mkArg(m2)));
     }
+
+    Tile.prototype.destroy = function() {
+        Nc.trigger(Nc.ns.core.game.gameObject.remove, 'fixed', this);
+    };
  
     return Tile;
  

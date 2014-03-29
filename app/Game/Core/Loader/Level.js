@@ -10,11 +10,10 @@ define([
 
 ], function (Settings, Box2D, Nc, CollisionDetector, Tile, Item, Skateboard, RagDoll) {
     
-    function Level (uid, engine, gameObjects) {
+    function Level (uid, engine) {
         this.uid = uid;
         this.engine = engine;
         this.levelObject = null;
-        this.gameObjects = gameObjects;
         this.isLoaded = false;
         this.load(this.uid);
     }
@@ -32,11 +31,13 @@ define([
     }
 
     Level.prototype.destroy = function () {
+        /*
         for (var key in this.gameObjects) {
             for (var i = 0; i < this.gameObjects[key].length; i++) {
                 this.gameObjects[key][i].destroy();
             }
         }
+        */
         this.isLoaded = false;
     }
 
@@ -52,7 +53,9 @@ define([
             var options = tiles[i];
             //options.m = this.tileAtPositionExists(options.x, options.y - 1) ? "Soil" : "GrassSoil";
             options.m = "Soil";
-            this.gameObjects.fixed.push(new Tile(this.engine, "tile-" + i, options));
+            //this.gameObjects.fixed.push(
+            new Tile(this.engine, "tile-" + i, options);
+            //);
         }
     }
 
@@ -66,7 +69,7 @@ define([
             var options = items[i];
             var uid = "item-" + i;
             var item = this.createItem(uid, options);
-            this.gameObjects.animated.push(item); // FIXME: use Nc
+            //this.gameObjects.animated.push(item); 
         };
     };
 

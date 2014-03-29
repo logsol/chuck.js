@@ -13,29 +13,26 @@
 
             var self = this;
 
-            this.options = options = Options.merge(options, {
-                levelUids: Settings.DEFAULT_LEVELS
-            });
-            
             this.name = options.channelName;
             this.users = {};
-
             this.pipeToServer = pipeToServer;
+            this.levelListIndex = -1;
 
-            this.gameController = new GameController(this);
-            
-            
+            this.options = options = Options.merge(options, {
+                levelUids: Settings.CHANNEL_DEFAULT_LEVELS
+            });
+
+            // Notification Center
+            Nc.on(Nc.ns.channel.events.round.end, this.onEndRound, this);
             Nc.on(Nc.ns.channel.events.controlCommand.channel, function (message) {
                 ProtocolHelper.applyCommand(message.data, self);
             });
-            
-            
             Nc.on(Nc.ns.channel.to.client.gameCommand.broadcast, this.broadcastGameCommand, this);
-            
-            // prepared - not triggered yet
+            Nc.on(Nc.ns.channel.to.client.controlCommand.broadcast, this.broadcastControlCommand, this);
             //Nc.on(Nc.ns.channel.to.client.gameCommand.broadcastExcept, this.broadcastGameCommandExcept, this);
-            //Nc.on(Nc.ns.channel.to.client.controlCommand.broadcast, this.broadcastControlCommand, this);
             //Nc.on(Nc.ns.channel.to.client.controlCommand.broadcastExcept, this.broadcastControlCommandExcept, this);
+
+            this.beginRound();
 
             console.checkpoint('channel ' + this.name + ' created');
 
@@ -46,19 +43,68 @@
             }, Settings.CHANNEL_DESTRUCTION_TIME * 1000);
         }
 
+        Channel.prototype.getNextLevelUid = function() {
+            this.levelListIndex = (this.levelListIndex + 1) % this.options.levelUids.length;
+            return this.options.levelUids[this.levelListIndex];
+        };
+
+
+        Channel.prototype.beginRound = function() {
+
+            if(this.gameController) {
+                this.gameController.destroy();
+                delete this.gameController;
+            }
+
+            var gameControllerOptions = {
+                channelName: this.name,
+                scoreLimit: this.options.scoreLimit,
+                levelUid: this.getNextLevelUid()
+            };
+
+            console.log(gameControllerOptions)
+
+            this.gameController = new GameController(gameControllerOptions);
+
+            for(var userId in this.users) {
+                this.gameController.createPlayer(this.users[userId]);
+            }
+
+            var clientGameControllerOptions = {
+                levelUid: gameControllerOptions.levelUid
+            };
+
+            this.broadcastControlCommand("beginRound", clientGameControllerOptions);
+        };
+
+        Channel.prototype.onEndRound = function() {
+            var self = this;
+            this.broadcastControlCommand("endRound", true);
+            
+            setTimeout(function() {
+                self.beginRound();
+            }, Settings.CHANNEL_END_ROUND_TIME * 1000);
+        };
+
 
         // Channel command callbacks
 
         Channel.prototype.onAddUser = function (options) {
             var self = this;
 
+            var clientGameControllerOptions = {
+                levelUid: this.gameController.options.levelUid
+            };
+
             if(!this.gameController.level || !this.gameController.level.isLoaded) {
                 var token = Nc.on(Nc.ns.core.game.events.level.loaded, function() {
                     self.sendJoinSuccess(options);
+                    this.users[options.id].sendControlCommand("beginRound", clientGameControllerOptions);
                     Nc.off(token);
                 });
             } else {
                 self.sendJoinSuccess(options);
+                this.users[options.id].sendControlCommand("beginRound", clientGameControllerOptions);
             }
         }
 
@@ -91,15 +137,24 @@
         };
 
         Channel.prototype.onReleaseUser = function (userId) {
+            var self = this;
             var user = this.users[userId];
             Nc.trigger(Nc.ns.channel.events.user.left, userId);
             delete this.users[userId];
 
             this.broadcastControlCommand("userLeft", userId);
             
-            // FIXME: if this was the last user terminate forked process
             if(Object.keys(this.users).length < 1) {
-                this.destroy();
+
+                console.checkpoint("channel (" + this.name + ") destruction scheduled. t - " + Settings.CHANNEL_DESTRUCTION_TIME + " seconds");
+
+                setTimeout(function() {
+                    if(Object.keys(self.users).length < 1) {
+                        self.destroy();
+                    } else {
+                        console.checkpoint("channel (" + self.name + ") destruction aborted (a user joined).");
+                    }
+                }, Settings.CHANNEL_DESTRUCTION_TIME * 1000);
             }
         }
 

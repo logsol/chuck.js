@@ -32,7 +32,7 @@ function (Parent, DomController, PIXI, Settings, Nc) {
 
         var transparent = false;
         var antialias = true;
-        var canvas = null; // lets pixi create one
+        var canvas = DomController.getCanvas();
 
         if(Settings.USE_WEBGL) {
             this.renderer = new PIXI.WebGLRenderer(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT, canvas, transparent, antialias);
@@ -42,7 +42,7 @@ function (Parent, DomController, PIXI, Settings, Nc) {
             console.log('CanvasRenderer - not using WebGL!')
         }
 
-        this.stage = new PIXI.Stage(0x333333);
+        this.stage = new PIXI.Stage(/*0x333333*/);
 
         this.initCamera();
         this.initInfo();
@@ -303,6 +303,10 @@ function (Parent, DomController, PIXI, Settings, Nc) {
         }
 
         this.loader.visible = progress < 100;
+    };
+
+    PixiView.prototype.test = function() {
+        console.log(this.stage.children)
     };
 
     return PixiView;

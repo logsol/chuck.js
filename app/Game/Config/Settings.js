@@ -18,7 +18,6 @@ define(function() {
         GRAPHICS_SUBPATH_CHARACTERS: 'Characters/',
         GRAPHICS_SUBPATH_TILES: 'Tiles/',
         MAPS_PATH: 'static/maps/tiled/',
-        DEFAULT_LEVELS: ['stones2', 'debug', 'stones2', 'debug'],
 
         RATIO: 21, //35
         // original tile size is 25 but we want it to resize to 20
@@ -37,9 +36,9 @@ define(function() {
         MAX_THROW_FORCE: 18 * 3.5,
         MAX_THROW_ANGULAR_VELOCITY: 0,
         MAX_RUNNING_WEIGHT: 9,
-        RESPAWN_TIME: 6,
+        RESPAWN_TIME: 512,
         HEALTH_DISPLAY_TIME: 2,
-        RAGDOLL_DESTRUCTION_TIME: 25,
+        RAGDOLL_DESTRUCTION_TIME: 250,
 
         // restitution: bouncyness, friction: rubbing, density: mass
         TILE_FRICTION: 0.99,
@@ -65,7 +64,13 @@ define(function() {
         WORLD_UPDATE_BROADCAST_INTERVAL: 70,
         CHANNEL_DESTRUCTION_TIME: 30,
         NETWORK_LOG_INCOMING: false,
-        NETWORK_LOG_OUTGOING: false
+        NETWORK_LOG_OUTGOING: false,
+
+        // CHANNEL
+        CHANNEL_END_ROUND_TIME: 10,
+        CHANNEL_DEFAULT_MAX_USERS: 40,
+        CHANNEL_DEFAULT_SCORE_LIMIT: 10,
+        CHANNEL_DEFAULT_LEVELS: ['stones2', 'debug', 'stones2', 'debug']
     }
 
     Settings.TILE_RATIO = Settings.ORIGINAL_TILE_SIZE / Settings.TILE_SIZE;
