@@ -99,9 +99,7 @@ function (Parent, CoreItem, Settings, Nc) {
     };
 
     RagDoll.prototype.destroy = function() {
-
-        console.log('ragdoll destroy');
-
+        
         for (var name in this.limbMeshes) {
             Nc.trigger(Nc.ns.client.view.mesh.remove, this.limbMeshes[name]);
         };

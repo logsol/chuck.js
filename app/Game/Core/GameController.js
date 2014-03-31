@@ -66,30 +66,6 @@ function (PhysicsEngine, TiledLevel, Player, Nc) {
         this.loadLevel(this.level.uid);
     };
 
-    GameController.prototype.destroy = function () {
-        for(var player in this.players) {
-            // this.players[player].destroy();
-
-            // FIXME: 
-            // commented out for now, because players are in gameObjects array.
-            // try using a real gameobject for the health bar
-        }
-
-        for (var i = 0; i < this.ncTokens.length; i++) {
-            Nc.off(this.ncTokens[i]);
-        };
-
-        for (var key in this.gameObjects) {
-            for (var i = 0; i < this.gameObjects[key].length; i++) {
-                var gameObject = this.gameObjects[key][i];
-                this.onGameObjectRemove(key, gameObject);
-                gameObject.destroy();
-            };
-        };
-
-        this.physicsEngine.destroy();
-    }
-
     /*
     GameController.prototype.userJoined = function (user) {
         this.players[user.id] = this.createPlayer(user);
@@ -115,6 +91,30 @@ function (PhysicsEngine, TiledLevel, Player, Nc) {
         this.players[user.id] = player;
         return player;
     };
+
+    GameController.prototype.destroy = function () {
+        for(var player in this.players) {
+            // this.players[player].destroy();
+
+            // FIXME: 
+            // commented out for now, because players are in gameObjects array.
+            // try using a real gameobject for the health bar
+        }
+
+        for (var i = 0; i < this.ncTokens.length; i++) {
+            Nc.off(this.ncTokens[i]);
+        };
+
+        for (var key in this.gameObjects) {
+            for (var i = 0; i < this.gameObjects[key].length; i++) {
+                var gameObject = this.gameObjects[key][i];
+                this.onGameObjectRemove(key, gameObject);
+                gameObject.destroy();
+            };
+        };
+
+        this.physicsEngine.destroy();
+    }
 
     return GameController;
 });

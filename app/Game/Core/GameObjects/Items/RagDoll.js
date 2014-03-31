@@ -362,13 +362,15 @@ function (Parent, Box2D, Settings, Nc) {
     };
 
     RagDoll.prototype.destroy = function() {
+
         Nc.trigger(Nc.ns.core.game.gameObject.remove, 'animated', this);
         var world = this.body.GetWorld();
-        Parent.prototype.destroy.call(this);
         
         for (var name in this.limbs) {
             world.DestroyBody(this.limbs[name]);
         }
+
+        Parent.prototype.destroy.call(this);
     };
 
     return RagDoll;

@@ -62,7 +62,7 @@
                 levelUid: this.getNextLevelUid()
             };
 
-            console.log(gameControllerOptions)
+            console.checkpoint("Begin Round (" + this.name + ")");
 
             this.gameController = new GameController(gameControllerOptions);
 
@@ -80,6 +80,8 @@
         Channel.prototype.onEndRound = function() {
             var self = this;
             this.broadcastControlCommand("endRound", true);
+
+            console.checkpoint("End Round (" + this.name + ") - Begin Round in " + Settings.CHANNEL_END_ROUND_TIME + " seconds");
             
             setTimeout(function() {
                 self.beginRound();
