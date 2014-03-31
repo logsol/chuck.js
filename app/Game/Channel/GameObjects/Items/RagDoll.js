@@ -37,7 +37,7 @@ function (Parent, Settings, Nc) {
                 type: 'animated',
                 uid: self.uid
             });
-            self.destroy.bind(self);
+            self.destroy();
         }, Settings.RAGDOLL_DESTRUCTION_TIME * 1000);
     };
 
