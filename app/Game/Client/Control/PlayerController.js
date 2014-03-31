@@ -14,8 +14,10 @@ function (Parent, KeyboardInput, MouseInput, Nc) {
         this.keyboardInput = new KeyboardInput(this);
         this.xyInput = new MouseInput(this);
 
-        Nc.on(Nc.ns.client.input.xy.change, this.setXY, this);
-        Nc.on(Nc.ns.client.input.handAction.request, this.handActionRequest, this);
+        this.ncTokens = [
+            Nc.on(Nc.ns.client.input.xy.change, this.setXY, this),
+            Nc.on(Nc.ns.client.input.handAction.request, this.handActionRequest, this)
+        ];
 
         var keys = {
             w:87,
@@ -116,6 +118,11 @@ function (Parent, KeyboardInput, MouseInput, Nc) {
 
     PlayerController.prototype.hideInfo = function() {
         Nc.trigger(Nc.ns.client.game.gameInfo.toggle, false);
+    };
+
+    PlayerController.prototype.destroy = function() {
+        Nc.offAll(this.ncTokens);
+        Parent.prototype.destroy.call(this);
     };
 
 

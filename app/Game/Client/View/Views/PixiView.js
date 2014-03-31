@@ -42,7 +42,7 @@ function (Parent, DomController, PIXI, Settings, Nc) {
             console.log('CanvasRenderer - not using WebGL!')
         }
 
-        this.stage = new PIXI.Stage(/*0x333333*/);
+        this.stage = new PIXI.Stage(0x333333);
 
         this.initCamera();
         this.initInfo();
@@ -305,8 +305,15 @@ function (Parent, DomController, PIXI, Settings, Nc) {
         this.loader.visible = progress < 100;
     };
 
-    PixiView.prototype.test = function() {
-        console.log(this.stage.children)
+    PixiView.prototype.destroy = function() {
+        
+        for (var i = 0; i < this.stage.children.length; i++) {
+            this.stage.removeChild(this.stage.children[i]);
+        }
+
+        this.renderer.render(this.stage);
+
+        Parent.prototype.destroy.call(this);
     };
 
     return PixiView;

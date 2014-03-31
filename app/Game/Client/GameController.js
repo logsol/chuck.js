@@ -265,8 +265,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
         Parent.prototype.destroy.call(this);
 
-        this.view.render(); 
-        this.view.test();
+        this.view.destroy();
     };
 
     return GameController;

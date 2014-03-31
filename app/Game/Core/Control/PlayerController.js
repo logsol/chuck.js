@@ -43,5 +43,9 @@ define(function () {
         }
     }
 
+    PlayerController.prototype.destroy = function() {
+        // extend if necessary
+    };
+
     return PlayerController;
 });

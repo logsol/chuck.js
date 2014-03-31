@@ -146,6 +146,8 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
         
         this.spectatorDoll.destroy();
         if(this.doll) this.doll.destroy();
+
+        this.playerController.destroy();
     }
 
     Player.prototype.setPlayerController = function(playerController) {

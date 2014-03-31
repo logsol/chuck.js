@@ -17,7 +17,9 @@ function (Settings, Box2D, CollisionDetector, Nc) {
         this.lastStep = Date.now();
         this.worldQueue = [];
 
-        Nc.on(Nc.ns.channel.engine.worldQueue.add, this.addToWorldQueue, this);
+        this.ncTokens = [
+            Nc.on(Nc.ns.channel.engine.worldQueue.add, this.addToWorldQueue, this)
+        ];
     }
 
     Engine.prototype.getWorld = function () {
@@ -62,6 +64,7 @@ function (Settings, Box2D, CollisionDetector, Nc) {
 
     Engine.prototype.destroy = function() {
         delete this.world;
+        Nc.offAll(this.ncTokens);
     };
 
 

@@ -12,21 +12,24 @@ function (DomController, Settings, Exception, Nc) {
         this.canvas = null;
         this.debugMode = false;
 
-        Nc.on(Nc.ns.client.view.mesh.create, this.createMesh, this);
-        Nc.on(Nc.ns.client.view.animatedMesh.create, this.createAnimatedMesh, this);
-        Nc.on(Nc.ns.client.view.mesh.add, this.addMesh, this);
-        Nc.on(Nc.ns.client.view.mesh.remove, this.removeMesh, this);
-        Nc.on(Nc.ns.client.view.mesh.update, this.updateMesh, this);
+        this.ncTokens = [
+            Nc.on(Nc.ns.client.view.mesh.create, this.createMesh, this),
+            Nc.on(Nc.ns.client.view.animatedMesh.create, this.createAnimatedMesh, this),
+            Nc.on(Nc.ns.client.view.mesh.add, this.addMesh, this),
+            Nc.on(Nc.ns.client.view.mesh.remove, this.removeMesh, this),
+            Nc.on(Nc.ns.client.view.mesh.update, this.updateMesh, this),
 
-        Nc.on(Nc.ns.client.view.fullscreen.change, this.onFullscreenChange, this);
-        Nc.on(Nc.ns.client.view.debugMode.toggle, this.onToggleDebugMode, this);
+            Nc.on(Nc.ns.client.view.fullscreen.change, this.onFullscreenChange, this),
+            Nc.on(Nc.ns.client.view.debugMode.toggle, this.onToggleDebugMode, this),
 
-        Nc.on(Nc.ns.client.view.playerInfo.createAndAdd, this.onCreateAndAddPlayerInfo, this);
-        Nc.on(Nc.ns.client.view.playerInfo.update, this.onUpdatePlayerInfo, this);
-        Nc.on(Nc.ns.client.view.playerInfo.remove, this.onRemovePlayerInfo, this);
+            Nc.on(Nc.ns.client.view.playerInfo.createAndAdd, this.onCreateAndAddPlayerInfo, this),
+            Nc.on(Nc.ns.client.view.playerInfo.update, this.onUpdatePlayerInfo, this),
+            Nc.on(Nc.ns.client.view.playerInfo.remove, this.onRemovePlayerInfo, this),
 
+            Nc.on(Nc.ns.client.view.preloadBar.update, this.onUpdateLoader, this),
+        ];
 
-        Nc.on(Nc.ns.client.view.preloadBar.update, this.onUpdateLoader, this);
+        
     }
 
     AbstractView.prototype.isWebGlEnabled = function () { 
@@ -150,6 +153,12 @@ function (DomController, Settings, Exception, Nc) {
 
     AbstractView.prototype.onUpdateLoader = function(progress) {
         throw new Exception('Abstract Function onUpdateLoader not overwritten');
+    };
+
+    AbstractView.prototype.destroy = function() {
+        for (var i = 0; i < this.ncTokens.length; i++) {
+            Nc.off(this.ncTokens[i]);
+        };
     };
 
     return AbstractView;

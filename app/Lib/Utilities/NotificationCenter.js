@@ -224,5 +224,12 @@ function (Exception) {
         }
     }
 
+    NotificationCenter.prototype.offAll = function (tokens) {
+        for (var i = 0; i < tokens.length; i++) {
+            this.off(tokens[i]);
+        };
+    }
+
+
     return new NotificationCenter(); // making it singletone
 });
