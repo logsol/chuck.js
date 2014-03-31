@@ -96,8 +96,27 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
     Networker.prototype.sendCommand = function (command, options) {
         var message = ProtocolHelper.encodeCommand(command, options);
         this.socketLink.send(message);
+
         if(Settings.NETWORK_LOG_OUTGOING) {
-            console.log('OUTGOING', message);
+            if(Settings.NETWORK_LOG_FILTER.length > 0) {
+
+                var shouldBeFiltered = false;
+                var keyword;
+
+                for (var i = 0; i < Settings.NETWORK_LOG_FILTER.length; i++) {
+                    keyword = Settings.NETWORK_LOG_FILTER[i];
+                    if(message.search(keyword) != -1) {
+                        shouldBeFiltered = true;
+                        break;
+                    }
+                };
+
+                if(!shouldBeFiltered) {
+                    console.log('OUTGOING', message);
+                }
+            } else {
+                console.log('OUTGOING', message);
+            }
         }
     }
 
@@ -144,7 +163,6 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
             delete this.gameController;
         }
 
-        console.log('GameController')
         this.gameController = new GameController(options);
     };
 
