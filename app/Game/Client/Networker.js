@@ -20,8 +20,12 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
         var self = this;
         this.socketLink.on('message', function (message) {
             var m = JSON.parse(message)
-            if(Settings.NETWORK_LOG_INCOMING && !m.gameCommand) {
-                console.log('INCOMING', message);
+            if(Settings.NETWORK_LOG_INCOMING) {
+
+                if (message.indexOf('worldUpdate') == -1 && message.indexOf('pong') == -1) {
+                    console.log('INCOMING', message);
+                }
+                
             }
             ProtocolHelper.applyCommand(message, self);
         });
@@ -147,7 +151,7 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
     }
 
     Networker.prototype.onGameCommand = function(message) {
-        ProtocolHelper.applyCommand(message, this.gameController);
+        this.gameController.onGameCommand(message);
     }
 
     Networker.prototype.onPong = function(timestamp) {

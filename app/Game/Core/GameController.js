@@ -2,10 +2,11 @@ define([
     "Game/" + GLOBALS.context + "/Physics/Engine",
     "Game/" + GLOBALS.context + "/Loader/TiledLevel",
     "Game/" + GLOBALS.context + "/Player",
-    "Lib/Utilities/NotificationCenter"
+    "Lib/Utilities/NotificationCenter",
+    "Game/" + GLOBALS.context + "/GameObjects/Doll",
 ],
 
-function (PhysicsEngine, TiledLevel, Player, Nc) {
+function (PhysicsEngine, TiledLevel, Player, Nc, Doll) {
 
     function GameController (options) {
 
@@ -79,8 +80,7 @@ function (PhysicsEngine, TiledLevel, Player, Nc) {
             return;
         }
 
-        var i = this.gameObjects.animated.indexOf(player);
-        if(i>=0) this.gameObjects.animated.splice(i, 1);
+        this.onGameObjectRemove('animated', player);
 
         player.destroy();
         delete this.players[userId];
@@ -105,12 +105,22 @@ function (PhysicsEngine, TiledLevel, Player, Nc) {
             Nc.off(this.ncTokens[i]);
         };
 
+        /*
+         *   Contents of gameObject: Players, Items, Tiles, RagDolls
+         *   No Dolls.
+         */
+
         for (var key in this.gameObjects) {
             for (var i = 0; i < this.gameObjects[key].length; i++) {
                 var gameObject = this.gameObjects[key][i];
-                this.onGameObjectRemove(key, gameObject);
+
                 gameObject.destroy();
             };
+        };
+
+        this.gameObjects = {
+            fixed: [],
+            animated: []
         };
 
         this.physicsEngine.destroy();

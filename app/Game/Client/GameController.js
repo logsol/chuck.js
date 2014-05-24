@@ -9,10 +9,11 @@ define([
     "Game/Config/Settings",
     "Game/Client/GameObjects/GameObject",
     "Game/Client/GameObjects/Doll",
-    "Game/Client/View/DomController"
+    "Game/Client/View/DomController",
+    "Lib/Utilities/Protocol/Helper"
 ],
 
-function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, DomController) {
+function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, DomController, ProtocolHelper) {
 
     if (!window.cancelAnimationFrame) {
         window.cancelAnimationFrame = function(id) {
@@ -20,8 +21,9 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         };
     }
 
-
     function GameController (options) {
+
+        this.clientIsReady = false;
         this.view = ViewManager.createView();
         this.me = null;
         this.animationRequestId = null;
@@ -64,12 +66,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
     GameController.prototype.onClientReadyResponse = function(options) {
         
-        if (options.spawnedPlayers) {
-            for(var i = 0; i < options.spawnedPlayers.length; i++) {
-                this.onSpawnPlayer(options.spawnedPlayers[i]);
-            }
-        }
-
         if (options.worldUpdate) {
             this.onWorldUpdate(options.worldUpdate);
         }
@@ -88,12 +84,19 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
                 if(!alreadyExists) {
                     var item = this.level.createItem(itemDef.uid, itemDef.options);
-                    //this.onGameObjectAdd("animated", item);
                 }
             };
         }
 
         this.createMe(options.userId);
+
+        this.clientIsReady = true; // needs to stay before onSpawnPlayer
+
+        if (options.spawnedPlayers) {
+            for(var i = 0; i < options.spawnedPlayers.length; i++) {
+                this.onSpawnPlayer(options.spawnedPlayers[i]);
+            }
+        }
     };
 
     GameController.prototype.onWorldUpdate = function (updateData) {
@@ -128,14 +131,23 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         this.view.setMe(this.me);
     }
 
+    GameController.prototype.onGameCommand = function(message) {
+        ProtocolHelper.applyCommand(message, this);
+    };
+
     GameController.prototype.onSpawnPlayer = function(options) {
+
+        if(!this.clientIsReady) {
+            return;
+        }
+
         var playerId = options.id,
             x = options.x,
             y = options.y;
 
         var player = this.players[playerId];
         player.spawn(x, y);
-        this.gameObjects.animated.push(player);
+        this.onGameObjectAdd('animated', player);
         
         if(options.holdingItemUid) {
             this.onHandActionResponse({

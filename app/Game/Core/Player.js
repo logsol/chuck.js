@@ -99,7 +99,7 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
             this.throw(0, 0, this.holdingItem)
         }
 
-        // get forces
+        // prepare for creating the ragdoll
         var options = {
             x: this.getPosition().x * Settings.RATIO, 
             y: this.getPosition().y * Settings.RATIO,
@@ -123,9 +123,6 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
         this.doll = null;
 
         this.ragDoll = ragDoll;
-        
-
-        Nc.trigger(Nc.ns.core.game.player.killed, this, killedByPlayer);
     };
 
     Player.prototype.update = function () {
@@ -145,9 +142,14 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
         }
         
         this.spectatorDoll.destroy();
-        if(this.doll) this.doll.destroy();
 
-        this.playerController.destroy();
+        if(this.doll) {
+            this.doll.destroy();
+        }
+
+        if(this.playerController) {
+            this.playerController.destroy();
+        }
     }
 
     Player.prototype.setPlayerController = function(playerController) {

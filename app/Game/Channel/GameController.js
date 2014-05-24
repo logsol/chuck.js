@@ -28,7 +28,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
             Nc.on(Nc.ns.channel.events.user.level.reset, this.onResetLevel, this),
             Nc.on(Nc.ns.channel.events.user.client.ready, this.onClientReady, this),
             Nc.on(Nc.ns.core.game.events.level.loaded, this.onLevelLoaded, this), 
-            Nc.on(Nc.ns.core.game.player.killed, this.onPlayerKilled, this), // FIXME: move to events
+            Nc.on(Nc.ns.channel.events.game.player.killed, this.onPlayerKilled, this),
         ]);
 
         console.checkpoint('starting game controller for channel (' + options.channelName + ')');
@@ -66,8 +66,9 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
     GameController.prototype.onPlayerKilled = function(player, killedByPlayer) {
         if(killedByPlayer.stats.score >= this.options.scoreLimit) {
             Nc.trigger(Nc.ns.channel.events.round.end);
+        } else {
+            this.spawnPlayer(player, Settings.RESPAWN_TIME);
         }
-        this.spawnPlayer(player, Settings.RESPAWN_TIME);
     };
 
     GameController.prototype.spawnPlayer = function(player, respawnTime) {
@@ -186,7 +187,6 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
     GameController.prototype.onClientReady = function(userId) {
         var player = this.players[userId];
-        this.spawnPlayer(player, 0);
 
         var options = {
             spawnedPlayers: this.getSpawnedPlayersAndTheirPositions(),
@@ -196,9 +196,14 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         }
 
         Nc.trigger(Nc.ns.channel.to.client.user.gameCommand.send + userId, "clientReadyResponse", options);
+
+        this.spawnPlayer(player, 0);
     };
 
     GameController.prototype.onResetLevel = function(userId) {
+
+        console.log('OH NO!!! ON RESET LEVEL IS CALLED AND RESPAWNES PLAYERS');
+
         Parent.prototype.onResetLevel.call(this);
         Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "resetLevel", true);
         for (var key in this.players) {

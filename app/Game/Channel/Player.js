@@ -66,7 +66,7 @@ function (Parent, Nc) {
         if(this.stats.health < 0) this.stats.health = 0;
 
         if(this.stats.health <= 0) {
-            /*if(enemy != this) for testing! */ enemy.score();
+            /*if(enemy != this) self killing scores for testing! */ enemy.score();
             this.kill(enemy);
         } else {
             this.broadcastStats();
@@ -90,6 +90,8 @@ function (Parent, Nc) {
             killedByPlayerId: killedByPlayer.id,
             ragDollId: ragDollId
         });
+
+        Nc.trigger(Nc.ns.channel.events.game.player.killed, this, killedByPlayer); // sends endround
 
         if(this.ragDoll) {
             this.ragDoll.delayedDestroy();

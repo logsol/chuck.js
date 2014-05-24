@@ -87,7 +87,9 @@ function (Parent, Nc, Settings) {
 
     Player.prototype.render = function() {
 
-        // dolls are self responsible
+        if(this.doll) {
+            this.doll.render();
+        } 
 
     	if(this.playerInfoViewVisible) {
 	    	var position = this.getPosition();

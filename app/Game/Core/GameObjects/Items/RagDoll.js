@@ -161,9 +161,6 @@ function (Parent, Box2D, Settings, Nc) {
             0, 
             options.limbs.upperRightArm.height / 2
         );
-
-
-        Nc.trigger(Nc.ns.core.game.gameObject.add, 'animated', this);
     }
 
     RagDoll.prototype = Object.create(Parent.prototype);

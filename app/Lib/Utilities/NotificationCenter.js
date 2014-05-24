@@ -79,9 +79,6 @@ function (Exception) {
                         add: null,
                         remove: null
                     },
-                    player: {
-                        killed: null
-                    },
                     events: {
                         level: {
                             loaded: null
@@ -107,6 +104,11 @@ function (Exception) {
                     },
                     round: {
                         end: null
+                    },
+                    game: {
+                        player: {
+                            killed: null
+                        }
                     }
                 },
                 engine: {
@@ -231,5 +233,5 @@ function (Exception) {
     }
 
 
-    return new NotificationCenter(); // making it singletone
+    return new NotificationCenter(); // making it singleton
 });

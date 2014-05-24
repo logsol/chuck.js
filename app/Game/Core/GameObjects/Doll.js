@@ -38,7 +38,6 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
         this.createFixtures();
         this.body.SetActive(false);
 
-        Nc.trigger(Nc.ns.core.game.gameObject.add, 'animated', this);
     }
 
     Doll.prototype = Object.create(Parent.prototype);
@@ -372,7 +371,6 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
     };
 
     Doll.prototype.destroy = function() {
-        Nc.trigger(Nc.ns.core.game.gameObject.remove, 'animated', this);
     };
 
     return Doll;
