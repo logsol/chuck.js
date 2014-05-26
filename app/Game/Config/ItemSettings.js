@@ -350,6 +350,22 @@ define(function() {
 
             "grabAngle":    "-0.4", 
         },
+
+
+
+
+        "Rube": 
+        {
+            "category":     "kitchen",
+            "image":        "banana.gif",
+            
+//            "type":         "rube",
+            "weight":       "1",
+            "width":        "5",
+            "height":       "9",
+
+            "grabAngle":    "0.5",
+        }
     }
 
     return ItemSettings;

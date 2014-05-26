@@ -40,8 +40,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":248.535368857004,
-                 "y":176.525492560429
+                 "x":222.535368857004,
+                 "y":170.525492560429
                 }, 
                 {
                  "ellipse":true,
@@ -186,7 +186,7 @@
                 }, 
                 {
                  "height":0,
-                 "name":"Knife",
+                 "name":"Rube",
                  "properties":
                     {
 
@@ -195,8 +195,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":462.607333333333,
-                 "y":357.255333333333
+                 "x":236.607333333333,
+                 "y":471.255333333333
                 }, 
                 {
                  "height":0,
@@ -239,6 +239,20 @@
                  "width":0,
                  "x":543.000000000001,
                  "y":356.333333333333
+                }, 
+                {
+                 "height":0,
+                 "name":"Knife",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":464,
+                 "y":357
                 }],
          "opacity":1,
          "type":"objectgroup",
