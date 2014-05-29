@@ -74,7 +74,14 @@ function (Parent, Item, Box2D, Nc) {
             }
         }
     }
+
+    Doll.prototype.updatePositionState = function(positionState) {
+        if(!this.isAnotherPlayerNearby()) {
+            this.body.SetAwake(true);
+            this.body.SetPosition(positionState);
+        }
+    };
  
     return Doll;
- 
+
 });

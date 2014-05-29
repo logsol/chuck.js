@@ -40,7 +40,7 @@ function(Parent, Nc, Parser, Settings) {
         this.player.suicide();
     };
 
-    PlayerController.prototype.meStateUpdate = function(update) {
+    PlayerController.prototype.mePositionStateUpdate = function(update) {
 
         if(!this.player.doll) {
             console.warn('me state update, even though doll does not exist');
@@ -54,10 +54,10 @@ function(Parent, Nc, Parser, Settings) {
 
         if(difference.x < Settings.PUNKBUSTER_DIFFERENCE_METERS
            || difference.y < Settings.PUNKBUSTER_DIFFERENCE_METERS) {
-            this.player.doll.body.SetAwake(true);
-            this.player.doll.body.SetPosition(update.p);
+            this.player.doll.updatePositionState(update.p);
         } else {
             // HARD UPDATE FOR SELF
+            console.log(this.player.user.options.nickname + ' is cheating.')
         }
     };
 

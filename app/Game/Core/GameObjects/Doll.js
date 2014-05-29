@@ -17,6 +17,7 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
         this.width = 9;
         this.headHeight = 12;
         this.reachDistance = 20;
+        this.areaSize = 25;
 
         Parent.call(this, physicsEngine, uid);
 
@@ -30,6 +31,7 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
             left: [],
             right: []
         };
+        this.nearbyDolls = [];
         this.holdingJoint = null;
         this.holdingItem = null;
 
@@ -137,6 +139,40 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
         fixtureDef.userData = {
             onCollisionChange: function(isColliding, fixture) {
                 self.onFixtureWithinReach(isColliding, "right", fixture);
+            }
+        }
+
+        this.body.CreateFixture(fixtureDef);
+
+        // Area Sensor
+        var areaSensorShape = new Box2D.Collision.Shapes.b2PolygonShape();
+        areaSensorShape.SetAsOrientedBox(
+            (this.width + this.areaSize) / 2 / Settings.RATIO,
+            (this.height + this.areaSize) / 2 / Settings.RATIO, 
+            new Box2D.Common.Math.b2Vec2(
+                0, 
+                -this.height / 2 / Settings.RATIO
+            )
+        );
+        fixtureDef.shape = areaSensorShape;
+        fixtureDef.isSensor = true;
+        
+        fixtureDef.userData = {
+            onCollisionChange: function(isColliding, fixture) {
+                var userData = fixture.GetBody().GetUserData()
+                if(userData instanceof Doll) {
+                    var doll = userData;
+                    var i = this.nearbyDolls.indexOf(doll);
+                    if(isColliding) {
+                        if(i === -1) {
+                            this.nearbyDolls.push(doll);
+                        }
+                    } else {
+                        if(i !== -1) {
+                            this.nearbyDolls.slice(i, 1);
+                        }
+                    }
+                } 
             }
         }
 
@@ -321,6 +357,10 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
         this.holdingItem = null;
 
         item.throw(x, y);
+    };
+
+    Doll.prototype.isAnotherPlayerNearby = function() {
+        return this.nearbyDolls.length > 0;
     };
 
     Doll.prototype.onFootSensorDetection = function(isColliding, fixture) {

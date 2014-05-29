@@ -54,7 +54,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         
         if(this.me) {
             this.me.update();
-            this.localMePositionUpdate();
+            this.mePositionStateUpdate();
         }
 
         for (var i = 0; i < this.gameObjects.animated.length; i++) {
@@ -66,9 +66,9 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         DomController.statsEnd();
     }
 
-    GameController.prototype.localMePositionUpdate = function() {   
-        if(this.me.isStateUpdateNeeded()) {
-            Nc.trigger(Nc.ns.client.to.server.gameCommand.send, "meStateUpdate", this.me.getStateUpdate());
+    GameController.prototype.mePositionStateUpdate = function() {   
+        if(this.me.isPositionStateUpdateNeeded()) {
+            Nc.trigger(Nc.ns.client.to.server.gameCommand.send, "mePositionStateUpdate", this.me.getPositionStateUpdate());
         }
     };
 
@@ -119,8 +119,10 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
                     if (gameObject instanceof Doll) {
                         if(gameObject === this.me.doll) {
-                            this.me.setLastServerState(update);
-                            continue; // this is to ignore own doll updates from world update 
+                            this.me.setLastServerPositionState(update);
+                            if(!this.me.acceptPositionStateUpdateFromServer()) {
+                                continue; // this is to ignore own doll updates from world update 
+                            }
                         }
                         gameObject.setActionState(update.as);
                         gameObject.lookAt(update.laxy.x, update.laxy.y);

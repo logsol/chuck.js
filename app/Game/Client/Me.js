@@ -8,7 +8,7 @@ function (Parent, Settings) {
     function Me(id, physicsEngine, user) {
     	Parent.call(this, id, physicsEngine, user);
 
-    	this.lastServerState = {
+    	this.lastServerPositionState = {
     		p: {
     			x: 0,
     			y: 0
@@ -18,17 +18,23 @@ function (Parent, Settings) {
 
     Me.prototype = Object.create(Parent.prototype);
  
-    Me.prototype.setLastServerState = function(update) {
-    	this.lastServerState = update;
+    Me.prototype.setLastServerPositionState = function(update) {
+    	this.lastServerPositionState = update;
     };
 
-	Me.prototype.isStateUpdateNeeded = function() {
+	Me.prototype.isPositionStateUpdateNeeded = function() {
 
-		if(!this.doll) return false;
+		if(!this.doll) {
+            return false;
+        }
+
+        if(this.doll.isAnotherPlayerNearby()) {
+            return false;
+        }
 
 		var difference = {
-			x: Math.abs(this.lastServerState.p.x - this.doll.body.GetPosition().x),
-			y: Math.abs(this.lastServerState.p.y - this.doll.body.GetPosition().y)
+			x: Math.abs(this.lastServerPositionState.p.x - this.doll.body.GetPosition().x),
+			y: Math.abs(this.lastServerPositionState.p.y - this.doll.body.GetPosition().y)
 		}
 
 		if(difference.x > Settings.ME_STATE_MAX_DIFFERENCE_METERS
@@ -39,11 +45,16 @@ function (Parent, Settings) {
     	return false;
     };
 
-    Me.prototype.getStateUpdate = function() {
+    Me.prototype.getPositionStateUpdate = function() {
     	return {
     		p: this.doll.body.GetPosition().Copy(),
     		lv: this.doll.body.GetLinearVelocity().Copy()
     	}
+    };
+
+    Me.prototype.acceptPositionStateUpdateFromServer = function() {
+        // gamecontroller should accept  me's doll update only when another players doll is nearby.
+        return this.doll.isAnotherPlayerNearby();
     };
 
     return Me;
