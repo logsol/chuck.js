@@ -54,7 +54,7 @@ function(Parent, Nc, Parser, Settings) {
 
         if(difference.x < Settings.PUNKBUSTER_DIFFERENCE_METERS
            || difference.y < Settings.PUNKBUSTER_DIFFERENCE_METERS) {
-            this.player.doll.updatePositionState(update.p);
+            this.player.doll.updatePositionState(update);
         } else {
             // HARD UPDATE FOR SELF
             console.log(this.player.user.options.nickname + ' is cheating.')

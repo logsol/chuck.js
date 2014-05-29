@@ -75,10 +75,11 @@ function (Parent, Item, Box2D, Nc) {
         }
     }
 
-    Doll.prototype.updatePositionState = function(positionState) {
+    Doll.prototype.updatePositionState = function(update) {
         if(!this.isAnotherPlayerNearby()) {
             this.body.SetAwake(true);
-            this.body.SetPosition(positionState);
+            this.body.SetPosition(update.p);
+            this.body.SetLinearVelocity(update.lv);
         }
     };
  
