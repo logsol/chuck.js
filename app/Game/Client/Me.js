@@ -39,7 +39,6 @@ function (Parent, Settings) {
 
 		if(difference.x > Settings.ME_STATE_MAX_DIFFERENCE_METERS
 		   || difference.y > Settings.ME_STATE_MAX_DIFFERENCE_METERS) {
-		   	console.log('AAAAHHHH');
 			return true;
 		}
     	return false;

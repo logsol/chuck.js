@@ -17,7 +17,7 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
         this.width = 9;
         this.headHeight = 12;
         this.reachDistance = 20;
-        this.areaSize = 25;
+        this.areaSize = 35;
 
         Parent.call(this, physicsEngine, uid);
 
@@ -162,14 +162,14 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
                 var userData = fixture.GetBody().GetUserData()
                 if(userData instanceof Doll) {
                     var doll = userData;
-                    var i = this.nearbyDolls.indexOf(doll);
+                    var i = self.nearbyDolls.indexOf(doll);
                     if(isColliding) {
                         if(i === -1) {
-                            this.nearbyDolls.push(doll);
+                            self.nearbyDolls.push(doll);
                         }
                     } else {
                         if(i !== -1) {
-                            this.nearbyDolls.slice(i, 1);
+                            self.nearbyDolls.splice(i, 1);
                         }
                     }
                 } 
