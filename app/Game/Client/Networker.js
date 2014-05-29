@@ -61,8 +61,9 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
     Networker.prototype.onJoinSuccess = function (options) {
         console.log("join success")
 
-        this.onUserJoined(options.user);
-
+        this.onUserJoined(options.user, true);
+        this.meUserId = options.user.id;
+        
         if (options.joinedUsers) {
             for(var i = 0; i < options.joinedUsers.length; i++) {
                 this.onUserJoined(options.joinedUsers[i]);
@@ -77,9 +78,13 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
         window.location.href = "/";
     };
 
-    Networker.prototype.onLevelLoaded = function() {  
+    Networker.prototype.onLevelLoaded = function() { 
+        this.gameController.createMe(this.users[this.meUserId]);
+
         for (var userId in this.users) {
-            this.gameController.createPlayer(this.users[userId]);
+            if(this.meUserId != userId) {
+                this.gameController.createPlayer(this.users[userId]);
+            }            
         }
 
         this.sendGameCommand("clientReady");
@@ -132,17 +137,18 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
 
     // Commands from server
 
-    Networker.prototype.onUserJoined = function (options) {
+    Networker.prototype.onUserJoined = function (options, isMe) {
         var user = new User(options.id, options);
         console.log(options.nickname)
         this.users[user.id] = user;
 
-        if (this.gameController 
+        if (!isMe
+            && this.gameController 
             && this.gameController.level 
             && this.gameController.level.isLoaded) {
 
             this.gameController.createPlayer(user);
-        };
+        }
     }
 
     Networker.prototype.onUserLeft = function (userId) {

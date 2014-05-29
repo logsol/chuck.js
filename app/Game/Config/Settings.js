@@ -61,9 +61,9 @@ define(function() {
         USE_WEBGL: true,
 
         // NETWORKING
-        WORLD_UPDATE_BROADCAST_INTERVAL: 70,
+        NETWORK_UPDATE_INTERVAL: 70,
         CHANNEL_DESTRUCTION_TIME: 30,
-        NETWORK_LOG_INCOMING: true,
+        NETWORK_LOG_INCOMING: false,
         NETWORK_LOG_OUTGOING: false,
         NETWORK_LOG_FILTER: ['ping', 'pong', 'worldUpdate', 'lookAt'],
 
@@ -71,7 +71,11 @@ define(function() {
         CHANNEL_END_ROUND_TIME: 4, //10,
         CHANNEL_DEFAULT_MAX_USERS: 40,
         CHANNEL_DEFAULT_SCORE_LIMIT: 10,
-        CHANNEL_DEFAULT_LEVELS: ['stones2', 'debug', 'stones2', 'debug']
+        CHANNEL_DEFAULT_LEVELS: ['stones2', 'debug', 'stones2', 'debug'],
+
+        // ME STATE
+        ME_STATE_MAX_DIFFERENCE_METERS: 1,
+        PUNKBUSTER_DIFFERENCE_METERS: 1
     }
 
     Settings.TILE_RATIO = Settings.ORIGINAL_TILE_SIZE / Settings.TILE_SIZE;

@@ -108,7 +108,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
             Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, 'worldUpdate', update);
         }
 
-        this.worldUpdateTimeout = setTimeout(this.updateWorld.bind(this), Settings.WORLD_UPDATE_BROADCAST_INTERVAL);
+        this.worldUpdateTimeout = setTimeout(this.updateWorld.bind(this), Settings.NETWORK_UPDATE_INTERVAL);
     }
 
     GameController.prototype.getWorldUpdateObject = function(getSleeping) {

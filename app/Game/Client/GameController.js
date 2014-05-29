@@ -10,10 +10,11 @@ define([
     "Game/Client/GameObjects/GameObject",
     "Game/Client/GameObjects/Doll",
     "Game/Client/View/DomController",
-    "Lib/Utilities/Protocol/Helper"
+    "Lib/Utilities/Protocol/Helper",
+    "Game/Client/Me"
 ],
 
-function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, DomController, ProtocolHelper) {
+function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, DomController, ProtocolHelper, Me) {
 
     if (!window.cancelAnimationFrame) {
         window.cancelAnimationFrame = function(id) {
@@ -53,6 +54,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         
         if(this.me) {
             this.me.update();
+            this.localMePositionUpdate();
         }
 
         for (var i = 0; i < this.gameObjects.animated.length; i++) {
@@ -63,6 +65,12 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
         DomController.statsEnd();
     }
+
+    GameController.prototype.localMePositionUpdate = function() {   
+        if(this.me.isStateUpdateNeeded()) {
+            Nc.trigger(Nc.ns.client.to.server.gameCommand.send, "meStateUpdate", this.me.getStateUpdate());
+        }
+    };
 
     GameController.prototype.onClientReadyResponse = function(options) {
         
@@ -88,7 +96,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
             };
         }
 
-        this.createMe(options.userId);
+        this.setMe();
 
         this.clientIsReady = true; // needs to stay before onSpawnPlayer
 
@@ -108,16 +116,21 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
                 var gameObject = userData;
                 if(updateData[gameObject.uid]) {
                     var update = updateData[gameObject.uid];
+
+                    if (gameObject instanceof Doll) {
+                        if(gameObject === this.me.doll) {
+                            this.me.setLastServerState(update);
+                            continue; // this is to ignore own doll updates from world update 
+                        }
+                        gameObject.setActionState(update.as);
+                        gameObject.lookAt(update.laxy.x, update.laxy.y);
+                    }
+
                     body.SetAwake(true);
                     body.SetPosition(update.p);
                     body.SetAngle(update.a);
                     body.SetLinearVelocity(update.lv);
                     body.SetAngularVelocity(update.av);
-
-                    if (gameObject instanceof Doll) {
-                        gameObject.setActionState(update.as);
-                        gameObject.lookAt(update.laxy.x, update.laxy.y);
-                    }
                 }
             }
             
@@ -125,8 +138,12 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
     }
 
-    GameController.prototype.createMe = function (playerId) {
-        this.me = this.players[playerId];
+    GameController.prototype.createMe = function(user) {
+        this.me = new Me(user.id, this.physicsEngine, user);
+        this.players[user.id] = this.me;
+    };
+
+    GameController.prototype.setMe = function() {
         this.me.setPlayerController(new PlayerController(this.me));
         this.view.setMe(this.me);
     }

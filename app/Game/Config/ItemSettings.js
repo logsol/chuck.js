@@ -359,7 +359,7 @@ define(function() {
             "category":     "kitchen",
             "image":        "banana.gif",
             
-//            "type":         "rube",
+   //         "type":         "rube",
             "weight":       "1",
             "width":        "5",
             "height":       "9",

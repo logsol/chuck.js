@@ -1,10 +1,11 @@
 define([
 	"Game/Core/Control/PlayerController",
 	"Lib/Utilities/NotificationCenter",
-    "Lib/Utilities/Protocol/Parser"
+    "Lib/Utilities/Protocol/Parser",
+    "Game/Config/Settings"
 ],
  
-function(Parent, Nc, Parser) {
+function(Parent, Nc, Parser, Settings) {
  
     function PlayerController(player) {
 
@@ -37,6 +38,27 @@ function(Parent, Nc, Parser) {
 
     PlayerController.prototype.suicide = function() {
         this.player.suicide();
+    };
+
+    PlayerController.prototype.meStateUpdate = function(update) {
+
+        if(!this.player.doll) {
+            console.warn('me state update, even though doll does not exist');
+            return;
+        }
+
+        var difference = {
+            x: Math.abs(update.p.x - this.player.doll.body.GetPosition().x),
+            y: Math.abs(update.p.y - this.player.doll.body.GetPosition().y)
+        }
+
+        if(difference.x < Settings.PUNKBUSTER_DIFFERENCE_METERS
+           || difference.y < Settings.PUNKBUSTER_DIFFERENCE_METERS) {
+            this.player.doll.body.SetAwake(true);
+            this.player.doll.body.SetPosition(update.p);
+        } else {
+            // HARD UPDATE FOR SELF
+        }
     };
 
     return PlayerController;
