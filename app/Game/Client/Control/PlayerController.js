@@ -2,10 +2,11 @@ define([
     "Game/Core/Control/PlayerController", 
     "Game/Client/Control/KeyboardInput",
     "Game/Client/Control/Input/MouseInput",
-    "Lib/Utilities/NotificationCenter"
+    "Lib/Utilities/NotificationCenter",
+    "Game/Client/Control/Input/GamepadInput",
 ], 
 
-function (Parent, KeyboardInput, MouseInput, Nc) {
+function (Parent, KeyboardInput, MouseInput, Nc, GamepadInput) {
 
     function PlayerController (me) {
 
@@ -13,6 +14,7 @@ function (Parent, KeyboardInput, MouseInput, Nc) {
 
         this.keyboardInput = new KeyboardInput(this);
         this.xyInput = new MouseInput(this);
+        this.gamepadInput = new GamepadInput(this);
 
         this.ncTokens = [
             Nc.on(Nc.ns.client.input.xy.change, this.setXY, this),
@@ -43,6 +45,10 @@ function (Parent, KeyboardInput, MouseInput, Nc) {
     }
 
     PlayerController.prototype = Object.create(Parent.prototype);
+
+    PlayerController.prototype.update = function() {
+        this.gamepadInput.update();
+    };
 
     PlayerController.prototype.init = function (keys)  {
         

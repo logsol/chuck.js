@@ -50,6 +50,8 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
         this.animationRequestId = requestAnimFrame(this.update.bind(this));
 
+        if(this.me && this.me.playerController) this.me.playerController.update();
+
         this.physicsEngine.update();
         
         if(this.me) {
