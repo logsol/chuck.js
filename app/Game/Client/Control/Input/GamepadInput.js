@@ -1,11 +1,10 @@
 define([
 	"Game/Client/Control/Input/XyInput",
 	"Game/Config/Settings",
-	"Lib/Utilities/NotificationCenter",
-	"Lib/Utilities/RequestAnimFrame"
+	"Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, Settings, Nc, requestAnimFrame) {
+function (Parent, Settings, Nc) {
  
     function GamepadInput(playerController) {
     	this.playerController = playerController;

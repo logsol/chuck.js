@@ -47,6 +47,7 @@ function (Parent, KeyboardInput, MouseInput, Nc, GamepadInput) {
     PlayerController.prototype = Object.create(Parent.prototype);
 
     PlayerController.prototype.update = function() {
+        Parent.prototype.update.call(this);
         this.gamepadInput.update();
     };
 
