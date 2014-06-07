@@ -18,7 +18,6 @@ function (Parent, CoreItem, Settings, Nc) {
     RagDoll.prototype = Object.create(Parent.prototype);
 
     RagDoll.prototype.createMesh = function() {
-        this.createLimbMesh("chest");
         for(var name in this.options.limbs) {
             this.createLimbMesh(name);
         }
