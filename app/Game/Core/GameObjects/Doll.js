@@ -25,6 +25,7 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
         this.moveDirection = 0;
         this.lookDirection = 0;
         this.legs;
+        this.footSensor;
         this.actionState = null;
         this.lookAtXY = { x:0, y:0 };
         this.reachableItems = {
@@ -104,7 +105,7 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
             onCollisionChange: this.onFootSensorDetection.bind(this)
         }
 
-        this.body.CreateFixture(fixtureDef);
+        this.footSensor = this.body.CreateFixture(fixtureDef);
 
         var grabSensorLeftShape = new Box2D.Collision.Shapes.b2PolygonShape();
         grabSensorLeftShape.SetAsOrientedBox(
@@ -365,10 +366,40 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
 
     Doll.prototype.onFootSensorDetection = function(isColliding, fixture) {
 
+        var self = this;
+
         var hasJumpStartVelocity = this.body.GetLinearVelocity().y < -Settings.JUMP_SPEED;
 
-        if(isColliding && !hasJumpStartVelocity) {
-            this.setStanding(true);
+        if(isColliding) {
+            if(!hasJumpStartVelocity) {
+                this.setStanding(true);
+            }
+        } else {
+
+            var contactCount = 0;
+
+            var edge = self.body.GetContactList();
+            while (edge) {
+                var contact = edge.contact;
+                if(!contact.IsTouching()) {
+                    edge = edge.next;
+                    continue;
+                }
+               
+                if(contact.GetFixtureA() === self.footSensor) {
+                    contactCount++;
+                }
+                
+                if(contact.GetFixtureB() === self.footSensor) {
+                    contactCount++;
+                }
+
+                edge = edge.next;
+            }
+
+            if (contactCount === 0) {
+                self.setStanding(false);
+            }
         }
     }
 
