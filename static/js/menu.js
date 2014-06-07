@@ -250,9 +250,6 @@ function create(channelName, callback) {
 			scoreLimit: parseInt($("#scoreLimit").value, 10)
 		}
 
-		console.log(options)
-		return
-
 		localStorage["customname"] = channelName;
 		
 		var xhr = new XMLHttpRequest();
