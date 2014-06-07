@@ -18,13 +18,9 @@ function(Parent, Nc, ProtocolHelper, ProtocolParser) {
     		self.sendControlCommand("joinSuccess", options);
     	});
 
-
         Nc.on(Nc.ns.channel.events.controlCommand.user + this.id, function(message) {
             ProtocolHelper.applyCommand(message.data, self);
         });
-
-        
-        
 
         Nc.on(Nc.ns.channel.to.client.user.gameCommand.send + this.id, function(command, options) {
             self.sendGameCommand(command, options);

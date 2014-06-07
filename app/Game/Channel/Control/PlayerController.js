@@ -53,11 +53,20 @@ function(Parent, Nc, Parser, Settings) {
         }
 
         if(difference.x < Settings.PUNKBUSTER_DIFFERENCE_METERS
-           || difference.y < Settings.PUNKBUSTER_DIFFERENCE_METERS) {
+           && difference.y < Settings.PUNKBUSTER_DIFFERENCE_METERS) {
             this.player.doll.updatePositionState(update);
         } else {
             // HARD UPDATE FOR SELF
             console.log(this.player.user.options.nickname + ' is cheating.')
+
+            var body = this.player.doll.body;
+
+            var options = {
+                p: body.GetPosition(),
+                lv: body.GetLinearVelocity()
+            };
+
+            Nc.trigger(Nc.ns.channel.to.client.user.gameCommand.send + this.player.id, 'positionStateReset', options);
         }
     };
 

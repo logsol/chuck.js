@@ -56,6 +56,11 @@ function (Parent, Settings) {
         return this.doll.isAnotherPlayerNearby();
     };
 
+    Me.prototype.resetPositionState = function(options) {
+        this.doll.body.SetPosition(options.p);
+        this.doll.body.SetLinearVelocity(options.lv);
+    };
+
     return Me;
  
 });

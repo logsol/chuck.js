@@ -217,6 +217,10 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         player.kill(killedByPlayer, options.ragDollId);
     };
 
+    GameController.prototype.onPositionStateReset = function(options) {
+        this.me.resetPositionState(options);
+    };
+
     GameController.prototype.onRemoveGameObject = function(options) {
         var object = null;
         for (var i = 0; i < this.gameObjects[options.type].length; i++) {
