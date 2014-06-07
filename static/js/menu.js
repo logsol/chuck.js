@@ -247,7 +247,7 @@ function create(channelName, callback) {
 			levelUids: maps,
 			maxUsers: 10,
 			minUsers: 2,
-			scoreLimit: 1
+			scoreLimit: 10
 		}
 
 		localStorage["customname"] = channelName;
