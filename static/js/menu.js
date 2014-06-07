@@ -247,8 +247,11 @@ function create(channelName, callback) {
 			levelUids: maps,
 			maxUsers: 10,
 			minUsers: 2,
-			scoreLimit: 10
+			scoreLimit: parseInt($("#scoreLimit").value, 10)
 		}
+
+		console.log(options)
+		return
 
 		localStorage["customname"] = channelName;
 		
