@@ -51,20 +51,6 @@ function (Settings, Nc, Stats, Screenfull) {
         this.stats = new Stats();
         this.stats.setMode(0);
         this.devToolsContainer.appendChild(this.stats.domElement);
-        
-        // create Reset level
-        p = document.createElement("p");
-        button = document.createElement("button");
-        button.innerHTML = "Reset level";
-        button.onclick = function() {
-            inspector.resetLevel();
-            button.disabled = true;;
-            setTimeout(function() {
-                button.disabled = false;
-            }, 1000 * 30);
-        }
-        p.appendChild(button);
-        this.devToolsContainer.appendChild(p);
 
         // create debug mode
         var label = document.createElement("label");
