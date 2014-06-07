@@ -166,7 +166,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
         var player = this.players[playerId];
         player.spawn(x, y);
-        this.onGameObjectAdd('animated', player);
         
         if(options.holdingItemUid) {
             this.onHandActionResponse({

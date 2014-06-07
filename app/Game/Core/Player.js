@@ -25,6 +25,8 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
         this.isSpawned = false;
         this.holdingItem = null;
         this.spectatorDoll = new SpectatorDoll(this.physicsEngine, "spectatorDoll-" + this.id, this);
+
+        Nc.trigger(Nc.ns.core.game.gameObject.add, 'animated', this);
     }
 
     Player.prototype.getActiveDoll = function() {
@@ -137,6 +139,9 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
     }
 
     Player.prototype.destroy = function () {
+
+        Nc.trigger(Nc.ns.core.game.gameObject.remove, 'animated', this);
+
         if(this.holdingItem) {
             this.throw(0, 0, this.holdingItem);
         }

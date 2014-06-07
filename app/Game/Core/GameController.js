@@ -79,9 +79,7 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll) {
             console.warn("User (", userId ,") left who has not joined");
             return;
         }
-
-        this.onGameObjectRemove('animated', player);
-
+        
         player.destroy();
         delete this.players[userId];
     }
