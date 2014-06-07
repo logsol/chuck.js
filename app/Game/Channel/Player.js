@@ -66,7 +66,7 @@ function (Parent, Nc) {
         if(this.stats.health < 0) this.stats.health = 0;
 
         if(this.stats.health <= 0) {
-            /*if(enemy != this) self killing scores for testing! */ enemy.score();
+            if(enemy != this) enemy.score();
             this.kill(enemy);
         } else {
             this.broadcastStats();
