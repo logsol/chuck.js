@@ -442,6 +442,7 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
     };
 
     Doll.prototype.destroy = function() {
+        Parent.prototype.destroy.call(this);
     };
 
     return Doll;

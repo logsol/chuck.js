@@ -36,9 +36,9 @@ define(function() {
         MAX_THROW_FORCE: 18 * 3.5,
         MAX_THROW_ANGULAR_VELOCITY: 0,
         MAX_RUNNING_WEIGHT: 9,
-        RESPAWN_TIME: 512,
+        RESPAWN_TIME: 5,
         HEALTH_DISPLAY_TIME: 2,
-        RAGDOLL_DESTRUCTION_TIME: 250,
+        RAGDOLL_DESTRUCTION_TIME: 20,
 
         // restitution: bouncyness, friction: rubbing, density: mass
         TILE_FRICTION: 0.99,
