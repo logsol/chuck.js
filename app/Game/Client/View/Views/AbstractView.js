@@ -40,10 +40,10 @@ function (DomController, Settings, Exception, Nc) {
         } 
     }
 
-    AbstractView.prototype.setCanvas = function (canvas) {
+    AbstractView.prototype.initCanvas = function (canvas) {
 
     	this.canvas = canvas;
-        DomController.setCanvas(canvas);
+        DomController.initCanvas(canvas);
     }
 
     AbstractView.prototype.loadPlayerMesh = function(player) {

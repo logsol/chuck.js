@@ -48,7 +48,7 @@ function (Parent, DomController, PIXI, Settings, Nc) {
         this.initInfo();
         this.initLoader();
 
-        this.setCanvas(this.renderer.view);
+        this.initCanvas(this.renderer.view);
     }
 
     PixiView.prototype.render = function () {

@@ -8,7 +8,7 @@ define([
 function (Settings, Nc, Stats, Screenfull) {
 
     function DomController() {
-        this.canvas = null;
+        this.canvas = document.getElementById("canvas");
         this.debugCanvas = null;
         this.stats = null;
         this.ping = null;
@@ -116,15 +116,8 @@ function (Settings, Nc, Stats, Screenfull) {
         return this.canvas;
     }
 
-    DomController.prototype.setCanvas = function (canvas) {
-        
-        var container = this.getCanvasContainer();
-        if(this.canvas) {
-            container.removeChild(this.canvas);
-        }
-
-        this.canvas = canvas;
-        container.appendChild(canvas);
+    DomController.prototype.initCanvas = function (canvas) {
+        Nc.trigger(Nc.ns.client.view.fullscreen.change, Screenfull.isFullscreen);
     }
 
     DomController.prototype.getDebugCanvas = function () {
