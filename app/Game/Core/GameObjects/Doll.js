@@ -340,7 +340,7 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
             var bodyPosition = this.body.GetPosition();
             var handPosition = new Box2D.Common.Math.b2Vec2(
                 bodyPosition.x + ((this.width / 2 / Settings.RATIO) * this.lookDirection),
-                bodyPosition.y - this.height / 3 * 2 / Settings.RATIO // 2/3 of the body height
+                bodyPosition.y - this.height / 4 * 2 / Settings.RATIO // 2/3 of the body height
             );
 
             this.holdingItem.reposition(handPosition, this.lookDirection);

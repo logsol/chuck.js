@@ -20,27 +20,49 @@ function (Parent, Settings, Nc, Exception) {
             "run": [104,126]
         }
 
-        this.animatedMeshes = {};
+        this.animatedMeshesContainer = {
+            withArms: {},
+            withoutArms: {}
+        };
+        this.animatedMeshes = this.animatedMeshesContainer.withArms;
         this.headMesh = null;
+        this.holdingArmMesh = null;
 
         Parent.call(this, physicsEngine, uid, player);
     }
 
     Doll.prototype = Object.create(Parent.prototype);
 
-    Doll.prototype.setActionState = function(state) {
+    Doll.prototype.setActionState = function(state, force) {
 
-        if(this.actionState == state) return;
+        if(!force && this.actionState == state) return;
+        console.log(state)
 
         if(!state) throw new Exception("action state is undefined");
 
         if(this.animatedMeshes[this.actionState]) {
-            Nc.trigger(Nc.ns.client.view.mesh.update, this.animatedMeshes[this.actionState], { visible: false });
+            Nc.trigger(
+                Nc.ns.client.view.mesh.update,
+                this.animatedMeshesContainer.withArms[this.actionState],
+                { visible: false }
+            );
+            Nc.trigger(
+                Nc.ns.client.view.mesh.update,
+                this.animatedMeshesContainer.withoutArms[this.actionState],
+                { visible: false }
+            );
         }
 
         Parent.prototype.setActionState.call(this, state);
 
-        Nc.trigger(Nc.ns.client.view.mesh.update, this.animatedMeshes[this.actionState], { visible: true });
+        Nc.trigger(
+            Nc.ns.client.view.mesh.update,
+            this.animatedMeshes[this.actionState],
+            {
+                visible: true,
+                xScale: this.lookDirection
+            }
+        );
     }
 
     Doll.prototype.createMesh = function() {
@@ -55,38 +77,42 @@ function (Parent, Settings, Nc, Exception) {
 
         var self = this;
 
-        for (var key in this.animationDef) {
-            var start = this.animationDef[key][0];
-            var end = this.animationDef[key][1];
+        var arms = ["withArms", "withoutArms"];
+        for (var j = 0; j < arms.length; j++) {
+            var arm = arms[j];
+            for (var key in this.animationDef) {
+                var start = this.animationDef[key][0];
+                var end = this.animationDef[key][1];
 
-            var texturePaths = [];
-            for (var i = start; i <= end; i++) {
-                texturePaths.push(
-                      Settings.GRAPHICS_PATH 
-                    + Settings.GRAPHICS_SUBPATH_CHARACTERS 
-                    + this.characterName 
-                    //+ "/Animation/WithoutArms/ChuckAnimationsWithoutArms0" 
-                    + "/Animation/WithArms/ChuckAnimations0" 
-                    + padF(i) 
-                    + ".png"
-                );
+                var texturePaths = [];
+                for (var i = start; i <= end; i++) {
+                    texturePaths.push(
+                          Settings.GRAPHICS_PATH 
+                        + Settings.GRAPHICS_SUBPATH_CHARACTERS 
+                        + this.characterName 
+                        + "/Animation/" + arm.toUpperCaseFirstChar() + "/ChuckAnimations0" 
+                        + padF(i) 
+                        + ".png"
+                    );
+                }
+
+                var callback = function(mesh) {
+                    self.animatedMeshesContainer[arm][key] = mesh;
+                    Nc.trigger(Nc.ns.client.view.mesh.add, mesh);
+                };
+
+                Nc.trigger(Nc.ns.client.view.animatedMesh.create, texturePaths, callback, { 
+                    visible: false, 
+                    pivot: {
+                        x: 35/2 * 4,
+                        y: 40 * 4
+                    },
+                    width: 35,
+                    height: 40
+                });
             }
 
-            var callback = function(mesh) {
-                self.animatedMeshes[key] = mesh;
-                Nc.trigger(Nc.ns.client.view.mesh.add, mesh);
-            };
-
-            Nc.trigger(Nc.ns.client.view.animatedMesh.create, texturePaths, callback, { 
-                visible: false, 
-                pivot: {
-                    x: 35/2 * 4,
-                    y: 40 * 4
-                },
-                width: 35,
-                height: 40
-            });
-        }
+        };
 
         // Head
 
@@ -102,6 +128,21 @@ function (Parent, Settings, Nc, Exception) {
             },
             width: 10,
             height: 12
+        });
+
+        texturePath = Settings.GRAPHICS_PATH + "Characters/Chuck/holdingArm.png";
+        var callback = function (mesh) {
+            self.holdingArmMesh = mesh;
+            Nc.trigger(Nc.ns.client.view.mesh.add, mesh);
+        }
+        Nc.trigger(Nc.ns.client.view.mesh.create, texturePath, callback, {
+            visible: false,
+            pivot: {
+                x: 35/2 * 4,
+                y: 40 * 4
+            },
+            width: 35,
+            height: 40
         });
 
     }
@@ -120,6 +161,13 @@ function (Parent, Settings, Nc, Exception) {
                     }
                 );                   
             }
+
+            Nc.trigger(Nc.ns.client.view.mesh.update,
+                this.holdingArmMesh,
+                {
+                    xScale: this.lookDirection
+                }
+            );
         }
 
         var angle = Math.atan2(this.lookAtXY.x, this.lookAtXY.y) / 2 - 0.7855 * this.lookDirection; // 0.7855 = 45°
@@ -133,6 +181,19 @@ function (Parent, Settings, Nc, Exception) {
         );
     }
 
+    Doll.prototype.grab = function(item) {
+        Parent.prototype.grab.call(this, item);
+        this.animatedMeshes = this.animatedMeshesContainer.withoutArms;
+        this.setActionState(this.actionState, true);
+        Nc.trigger(Nc.ns.client.view.mesh.update, this.holdingArmMesh, { visible: true });
+    };
+
+    Doll.prototype.throw = function(item, x, y) {
+        Parent.prototype.throw.call(this, item, x, y);
+        this.animatedMeshes = this.animatedMeshesContainer.withArms;
+        this.setActionState(this.actionState, true);
+        Nc.trigger(Nc.ns.client.view.mesh.update, this.holdingArmMesh, { visible: false });
+    };
 
     Doll.prototype.destroy = function () {
         for (var key in this.animatedMeshes) {
@@ -151,7 +212,7 @@ function (Parent, Settings, Nc, Exception) {
                 {
                     x: this.body.GetPosition().x * Settings.RATIO,
                     y: this.body.GetPosition().y * Settings.RATIO,
-                    rotation: this.body.GetAngle()
+                    //rotation: this.body.GetAngle()
                 }
             );
 
@@ -160,6 +221,14 @@ function (Parent, Settings, Nc, Exception) {
                 {
                     x: this.body.GetPosition().x * Settings.RATIO,
                     y: this.body.GetPosition().y * Settings.RATIO - this.height + this.headHeight
+                }
+            )
+
+            Nc.trigger(Nc.ns.client.view.mesh.update,
+                this.holdingArmMesh,
+                {
+                    x: this.body.GetPosition().x * Settings.RATIO,
+                    y: this.body.GetPosition().y * Settings.RATIO
                 }
             )
         }

@@ -56,21 +56,20 @@ function (Parent, Settings, Nc, PIXI) {
         }
 
         var characterNames = ["Chuck"];
-        var animationSets = ["WithArms"];//, "WithArms"];
+        var animationSets = ["WithArms", "WithoutArms"];
         var addition = "";
         for (var i = 0; i < characterNames.length; i++) {
             var characterName = characterNames[i];
             for (var j = 1; j <= 126; j++) {
                 for (var k = 0; k < animationSets.length; k++) {
                     var animationSet = animationSets[k];
-                    addition = animationSet == "WithoutArms" ? "WithoutArms" : "";
                     paths.push(
                         Settings.GRAPHICS_PATH 
                         + Settings.GRAPHICS_SUBPATH_CHARACTERS 
                         + characterName 
                         + "/Animation/"
                         + animationSet
-                        + "/ChuckAnimations" + addition + "0" 
+                        + "/ChuckAnimations0" 
                         + padF(j) 
                         + ".png"
                     );
