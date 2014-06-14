@@ -59,11 +59,12 @@ define(function() {
         CANVAS_DOM_ID: 'canvasContainer',
         IS_BROWSER_ENVIRONMENT: typeof window !== 'undefined',
         USE_WEBGL: true,
+        USE_ASM: true,
 
         // NETWORKING
         NETWORK_UPDATE_INTERVAL: 70,
         CHANNEL_DESTRUCTION_TIME: 30,
-        NETWORK_LOG_INCOMING: false,
+        NETWORK_LOG_INCOMING: true,
         NETWORK_LOG_OUTGOING: false,
         NETWORK_LOG_FILTER: ['ping', 'pong', 'worldUpdate', 'lookAt'],
 

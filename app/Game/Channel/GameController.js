@@ -50,7 +50,9 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
     }
 
     GameController.prototype.onLevelLoaded = function() {
+        console.log("onLevelLoaded updateWorld pre")
         this.updateWorld();
+        console.log("onLevelLoaded updateWorld post")
     };
 
     GameController.prototype.onUserJoined = function (user) {
@@ -115,26 +117,34 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         getSleeping = getSleeping || false;
 
         var update = {};
-
         var body = this.physicsEngine.world.GetBodyList();
+
         do {
+
             if((getSleeping || body.IsAwake()) && body.GetType() === Box2D.Dynamics.b2Body.b2_dynamicBody) {
                 var userData = body.GetUserData();
+
 
                 if (userData instanceof GameObject) {
                     var gameObject = userData;
 
                     update[gameObject.uid] = {
-                        p: body.GetPosition(),
+                        p: body.GetPosition().Copy(),
                         a: body.GetAngle(),
-                        lv: body.GetLinearVelocity(),
-                        av: body.GetAngularVelocity()
+                        lv: body.GetLinearVelocity().Copy(),
+                        av: body.GetAngularVelocity().Copy()
                     };
 
                     if(gameObject instanceof Doll) {
                         update[gameObject.uid].as = gameObject.getActionState();
                         update[gameObject.uid].laxy = gameObject.lookAtXY;
                     }
+                }
+            }
+
+            if(Settings.USE_ASM) {
+                if(body.GetNext() == body) {
+                    break;
                 }
             }
 

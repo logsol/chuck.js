@@ -57,13 +57,13 @@ function(Parent, Nc, Parser, Settings) {
             this.player.doll.updatePositionState(update);
         } else {
             // HARD UPDATE FOR SELF
-            console.log(this.player.user.options.nickname + ' is cheating.')
+            console.log(this.player.user.options.nickname + ' is cheating. difference:', difference);
 
             var body = this.player.doll.body;
 
             var options = {
-                p: body.GetPosition(),
-                lv: body.GetLinearVelocity()
+                p: body.GetPosition().Copy(),
+                lv: body.GetLinearVelocity().Copy()
             };
 
             Nc.trigger(Nc.ns.channel.to.client.user.gameCommand.send + this.player.id, 'positionStateReset', options);

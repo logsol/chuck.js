@@ -22,8 +22,11 @@ function (Parent, Box2D, Settings, Exception, Nc) {
 
     	var bodyDef = new Box2D.Dynamics.b2BodyDef();
         bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
-        bodyDef.position.x = (this.options.x * Settings.TILE_SIZE + Settings.TILE_SIZE / 2) / Settings.RATIO;
-        bodyDef.position.y = (this.options.y * Settings.TILE_SIZE + Settings.TILE_SIZE / 2) / Settings.RATIO;
+
+        var x = (this.options.x * Settings.TILE_SIZE + Settings.TILE_SIZE / 2) / Settings.RATIO;
+        var y = (this.options.y * Settings.TILE_SIZE + Settings.TILE_SIZE / 2) / Settings.RATIO;
+        
+        bodyDef.position = new Box2D.Common.Math.b2Vec2(x, y);
         bodyDef.angle = (this.options.r || 0) * 90 * Math.PI / 180;
 
         return bodyDef;
@@ -31,8 +34,14 @@ function (Parent, Box2D, Settings, Exception, Nc) {
 
     Tile.prototype.createPhysicTile = function (tile) {
         var vertices = this.createVertices(tile);
-        var tileShape = new Box2D.Collision.Shapes.b2PolygonShape();
-        tileShape.SetAsArray(vertices, vertices.length);
+
+        var tileShape;
+        if(Settings.USE_ASM) {
+            tileShape = Box2D.createPolygonShape(vertices);
+        } else {
+            tileShape = new Box2D.Collision.Shapes.b2PolygonShape();
+            tileShape.SetAsArray(vertices, vertices.length);
+        }
 
         var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
         fixtureDef.shape = tileShape;

@@ -135,6 +135,12 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
                     body.SetAngularVelocity(update.av);
                 }
             }
+
+            if(Settings.USE_ASM) {
+                if(body.GetNext() == body) {
+                    break;
+                }
+            }
             
         } while (body = body.GetNext());
 
