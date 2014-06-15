@@ -50,9 +50,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
     }
 
     GameController.prototype.onLevelLoaded = function() {
-        console.log("onLevelLoaded updateWorld pre")
         this.updateWorld();
-        console.log("onLevelLoaded updateWorld post")
     };
 
     GameController.prototype.onUserJoined = function (user) {

@@ -14,6 +14,7 @@ function (Settings, /*Box2dWeb, */AsmBox2d) {
                 b2ControllerEdge: Module.b2ControllerEdge
             },
             Contacts: {
+                b2Contact: Module.b2Contact,
                 b2CircleContact: Module.b2CircleContact
             },
             Joints: {
