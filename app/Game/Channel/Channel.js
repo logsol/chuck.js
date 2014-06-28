@@ -101,11 +101,11 @@
             if(!this.gameController.level || !this.gameController.level.isLoaded) {
                 var token = Nc.on(Nc.ns.core.game.events.level.loaded, function() {
                     self.sendJoinSuccess(options);
-                    this.users[options.id].sendControlCommand("beginRound", clientGameControllerOptions);
+                    self.users[options.id].sendControlCommand("beginRound", clientGameControllerOptions);
                     Nc.off(token);
                 });
             } else {
-                self.sendJoinSuccess(options);
+                this.sendJoinSuccess(options);
                 this.users[options.id].sendControlCommand("beginRound", clientGameControllerOptions);
             }
         }
