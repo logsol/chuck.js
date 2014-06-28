@@ -9,7 +9,9 @@ define([
 
 function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
 
-    function Networker (socketLink) {
+    function Networker (socketLink, channelName, nickname) {
+        this.channelName = channelName;
+        this.nickname = nickname;
         this.socketLink = socketLink;
         this.gameController = null;
         this.users = {};
@@ -38,14 +40,13 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
 
     Networker.prototype.onConnect = function () {
         console.log('connected.')
-        var channel = JSON.parse(localStorage["channel"]);
-        var player = JSON.parse(localStorage["player"]);
-        if(channel.name) {
+        if(this.channelName) {
             var options = {
-                channelName: channel.name,
-                nickname: player.nickname
+                channelName: this.channelName,
+                nickname: this.nickname
             }
             this.sendCommand('join', options);
+            DomController.setConnected(true);
         } else {
             window.location.href = "/";
         }
@@ -55,7 +56,7 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
         //if(this.gameController) this.gameController.destruct();
         //this.gameController = null;
         console.log('disconnected. game destroyed. no auto-reconnect');
-        document.body.style.backgroundColor = '#aaaaaa';
+        DomController.setConnected(false);
     }
 
     Networker.prototype.onJoinSuccess = function (options) {

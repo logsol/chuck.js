@@ -123,6 +123,14 @@ function (Settings, Nc, Stats, Screenfull) {
         this.health.innerHTML = "Health: " + parseInt(health, 10);     
     };
 
+    DomController.prototype.setConnected = function(connected) {
+        if(connected) {
+            document.body.style.backgroundColor = '';
+        } else {
+            document.body.style.backgroundColor = '#aaaaaa';
+        }
+    };
+
 
     return new DomController();
     

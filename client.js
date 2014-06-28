@@ -6,7 +6,8 @@ requirejs.config({
     waitSeconds: 0
 });
 
-var inspector = {};
+if(!Chuck) var Chuck = {};
+Chuck.inspector = {};
 
 requirejs([
     "Game/Client/Networker", 
@@ -18,18 +19,20 @@ requirejs([
 
 function (Networker, SocketIO, Settings, Exception, PIXI) {
 
-    var options = {
-        "reconnect": false,
-        "reconnection delay": 500,
-        "max reconnection attempts": 10,
-        "transports": [
-            "websocket", 
-            "flashsocket"
-        ]
-    };
-    var socket = SocketIO.connect("/", options);
-    var networker = new Networker(socket);
-    inspector.networker = networker;
-    inspector.settings = Settings;
-    inspector.resetLevel = function() { networker.sendGameCommand("resetLevel"); }
+    Chuck.run = function(channelName, nickname) {
+        var options = {
+            "reconnect": false,
+            "reconnection delay": 500,
+            "max reconnection attempts": 10,
+            "transports": [
+                "websocket", 
+                "flashsocket"
+            ]
+        };
+        var socket = SocketIO.connect("/", options);
+        var networker = new Networker(socket, channelName, nickname);
+        Chuck.inspector.networker = networker;
+        Chuck.inspector.settings = Settings;
+        Chuck.inspector.resetLevel = function() { networker.sendGameCommand("resetLevel"); }        
+    }
 });

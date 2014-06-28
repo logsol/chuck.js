@@ -62,12 +62,12 @@ define(function() {
 
         // NETWORKING
         NETWORK_UPDATE_INTERVAL: 70,
-        CHANNEL_DESTRUCTION_TIME: 30,
         NETWORK_LOG_INCOMING: false,
         NETWORK_LOG_OUTGOING: false,
         NETWORK_LOG_FILTER: ['ping', 'pong', 'worldUpdate', 'lookAt'],
 
         // CHANNEL
+        CHANNEL_DESTRUCTION_TIME: 5 * 60,
         CHANNEL_END_ROUND_TIME: 4, //10,
         CHANNEL_DEFAULT_MAX_USERS: 40,
         CHANNEL_DEFAULT_SCORE_LIMIT: 10,

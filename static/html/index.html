@@ -2,20 +2,10 @@
 <html>
 <head>
 	<title>Chuck Lobby</title>
-	<style type="text/css">
-		body { background: #222; color: #ccc; font-family: "Lucida Grande", sans-serif; }
-		input, button { background: black; color: #ccc; border: 0; padding: 0.3em 0.6em; font-size: 1em; }
-		#createform, #customjoinform { display: none; }
-		article { margin: 4em auto; background: #1a1a1a; padding: 2em; max-width: 30em; }
-		table, th, td { border: 1px solid #777; border-collapse: collapse; }
-		th, td { padding: 0.5em 1em; }
-		ul { list-style-type: none; padding-left: 0; }
-		#link { width: 100%; }
-		.offline { background: #ccc; }
-	</style>
+	<link rel="stylesheet" href="/static/css/screen.css" type="text/css" media="screen">
 </head>
 <body>
-<article>
+<article id="menu">
 	<h1>Chuck</h1>
 	<p>
 		<label>
@@ -42,8 +32,8 @@
 			</fieldset>
 
 			<p>
-				<button>Run</button>
-				<button onclick="show('#listform'); return false;">Cancel</button>
+				<button>Create</button>
+				<button onclick="Chuck.menu.show('#listform'); return false;">Cancel</button>
 			</p>
 		</div>
 	</form>
@@ -51,13 +41,14 @@
 	<form action="#" method="GET" id="customjoinform">
 		<p>
 			<label>
-				Link to share with your friends<br>
-				<input id="link">
+				Link to share with your friends:<br>
+				<input id="link" readonly onclick="this.select()">
 			</label>
 		</p>
 		<p>
 			<button>Join</button>
 			<span id="timeout"></span>
+			<button onclick="Chuck.menu.show('#listform'); return false;">Cancel</button>
 		</p>
 	</form>
 
@@ -73,13 +64,19 @@
 			<tbody id="list"></tbody>
 		</table>
 		<p>
-			<button>Join</button>
 			<button id="refresh">Refresh list</button>
-			<button onclick="show('#createform'); return false;">Create</button>
-			<button onclick="quickstart(); return false;">Quickstart</button>
+			<button onclick="Chuck.menu.show('#createform'); return false;">Create</button>
+			<button onclick="Chuck.menu.quickstart(); return false;">Quickstart</button>
 		</p>
 	</form>
 </article>
+<article id="game">
+	<button onclick="window.location.href='/'">Menu</button>
+    <div id="canvasContainer">
+        <canvas id="canvas"></canvas>
+    </div>
+</article>
 <script type="text/javascript" src="/static/js/menu.js"></script>
+<script data-main="client" src="require.js"></script>
 </body>
 </html>
