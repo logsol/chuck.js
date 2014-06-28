@@ -78,7 +78,7 @@ if(!Chuck) var Chuck = {};
 					html += "<a href='#" + channel.name + "'>";
 				html += channel.name
 				html += "</a></td><td>death match</td></tr>";
-			};			
+			};
 		} else {
 			html += "<tr><td colspan='2'>No channels found.</td></tr>";
 		}
@@ -167,7 +167,7 @@ if(!Chuck) var Chuck = {};
 	function startTimer(seconds) {
 		var now = new Date();
 		var end = new Date(now.getTime() + seconds * 1000);
-		setInterval(function() {
+		channelDestructionTimeout = setInterval(function() {
 			now = new Date();
 			var diff = new Date(end.getTime() - now.getTime());
 			if(diff.getTime() < 0) {
@@ -263,6 +263,15 @@ if(!Chuck) var Chuck = {};
 			$("#menu").style.display = "none";
 			$("#game").style.display = "block";
 			Chuck.run(channelName, nickname);
+			
+			if(refreshInterval) {
+				clearInterval(refreshInterval);
+			}
+
+			if(channelDestructionTimeout) {
+				clearInterval(channelDestructionTimeout);
+			}
+
 		}
 	}
 
@@ -301,7 +310,8 @@ if(!Chuck) var Chuck = {};
 
 	$("#refresh").onclick = refresh;
 	refresh();
-	setInterval(refresh, 5000);
+	var channelDestructionTimeout = null;
+	var refreshInterval = setInterval(refresh, 5000);
 
 	Chuck.menu = {
 		show: show

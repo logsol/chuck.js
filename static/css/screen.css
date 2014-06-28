@@ -12,6 +12,11 @@ body {
     display: table; 
 }
 
+#back-to-menu {
+    display: inline-block;
+    margin: 10px;
+}
+
 ::selection {
     background: #607950; /* Safari */
     }
@@ -99,7 +104,7 @@ canvas {
     right: 0;
     top: 0;
     padding: 10px;
-    background: #222;
+    background: #333;
 }
 
 #devtools p {
