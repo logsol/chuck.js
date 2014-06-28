@@ -3,6 +3,9 @@ if(!Chuck) var Chuck = {};
 
 	window.onhashchange = function() {
 		if(window.location.hash) {
+			if($("#game").style.display == "block") {
+				window.location.reload();
+			}
 			refresh(function(list) {
 				var channelName = unescape(window.location.hash.substr(1));
 				if(channelExists(list, channelName)) {
@@ -148,6 +151,7 @@ if(!Chuck) var Chuck = {};
 	function quickstart() {
 		refresh(function(list){
 			var defaultChannelName = "Dungeon";
+			history.pushState("", document.title, window.location.pathname + "#" + defaultChannelName);
 			var nickname = $("#nick").value;
 
 			if(!nickname) {
@@ -250,7 +254,6 @@ if(!Chuck) var Chuck = {};
 	}
 
 	function join(nickname, channelName) {
-
 		if(validateForJoin(nickname, channelName)) {
 			localStorage["player"] = JSON.stringify({
 				nickname: nickname
@@ -314,6 +317,7 @@ if(!Chuck) var Chuck = {};
 	var refreshInterval = setInterval(refresh, 5000);
 
 	Chuck.menu = {
-		show: show
+		show: show,
+		quickstart: quickstart
 	}
 })(Chuck);

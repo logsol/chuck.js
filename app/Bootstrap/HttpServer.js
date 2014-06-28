@@ -43,11 +43,6 @@ function (http, nodeStatic, Api) {
                             console.checkpoint('HTTP Server serves index');
                             break;
 
-                        case req.url == '/game.html':
-                            fileServer.serveFile('./static/html/game.html', 200, {}, req, res);
-                            console.checkpoint('HTTP Server serves game');
-                            break;
-
                         case req.url == '/client.js':
                             fileServer.serveFile('./client.js', 200, {}, req, res);
                             break;

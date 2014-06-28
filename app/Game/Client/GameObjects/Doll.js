@@ -36,7 +36,6 @@ function (Parent, Settings, Nc, Exception) {
     Doll.prototype.setActionState = function(state, force) {
 
         if(!force && this.actionState == state) return;
-        console.log(state)
 
         if(!state) throw new Exception("action state is undefined");
 
