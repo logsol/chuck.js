@@ -36,6 +36,10 @@ input, button {
     display: none;
 }
 
+#createform #maps {
+    text-transform: capitalize;
+}
+
 article#menu {
     margin: 4em auto;
     background: #1a1a1a;

@@ -4,7 +4,7 @@ define([
 	"fs"
 ],
 
-function (Parent, Settings, fs) {
+function (Parent, Settings, FileSystem) {
 
     function Level (uid, engine, gameObjects) {
         Parent.call(this, uid, engine, gameObjects);
@@ -15,7 +15,7 @@ function (Parent, Settings, fs) {
     Level.prototype.loadLevelDataFromPath = function (path, callback) {
     	// overwriting parent
 
-    	fs.readFile(path, "utf8", function (err, data) {
+    	FileSystem.readFile(path, "utf8", function (err, data) {
 		  if (err) throw err;
 		  callback(JSON.parse(data));
 		});

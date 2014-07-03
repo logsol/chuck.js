@@ -71,7 +71,7 @@ define(function() {
         CHANNEL_END_ROUND_TIME: 4, //10,
         CHANNEL_DEFAULT_MAX_USERS: 40,
         CHANNEL_DEFAULT_SCORE_LIMIT: 10,
-        CHANNEL_DEFAULT_LEVELS: ['stones2', 'debug', 'stones2', 'debug'],
+        CHANNEL_DEFAULT_LEVELS: ['debug'],
 
         // ME STATE
         ME_STATE_MAX_DIFFERENCE_METERS: 1,

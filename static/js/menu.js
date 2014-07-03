@@ -41,7 +41,24 @@ if(!Chuck) var Chuck = {};
 
 	var lastRefreshResponse;
 	function refresh(callback) {
-			try {
+
+		ajax("getChannels", {}, function(response) {
+			if(response != lastRefreshResponse) {
+				lastRefreshResponse = response;
+				populate(JSON.parse(response).success);
+			}
+			document.body.className = "";	
+
+			if(typeof callback == 'function') {
+				callback(JSON.parse(response).success)
+			}
+
+		}, function(status, responseText) {
+			console.error("getChannels error: ", responseText)
+		});
+
+/*
+		try {
 			var xhr = new XMLHttpRequest();
 		    xhr.onreadystatechange = function() {
 		        if(xhr.readyState == 4) {
@@ -69,7 +86,35 @@ if(!Chuck) var Chuck = {};
 	    } catch(e) {
 			console.error(e)
 		}
+*/
 	    return false;
+	}
+
+	function ajax(command, options, callback, errorCallback) {
+		try {
+			var xhr = new XMLHttpRequest();
+		    xhr.onreadystatechange = function() {
+		        if(xhr.readyState == 4) {
+		            if(xhr.status == 200) {
+		            	if(typeof callback == 'function') {
+		            		callback(xhr.responseText)
+		            	} 
+		            } else {
+		                if(typeof errorCallback == 'function' && xhr.status == "400") {
+							errorCallback(xhr.status, xhr.responseText);
+		                } else {
+							console.error("Ajax error: " + xhr.status + " " + xhr.responseText)
+							$("#list").innerHTML = "";
+							document.body.className = "offline";				
+						}
+		            }
+		        }
+		    }
+		    xhr.open("POST", "/api", true);
+		    xhr.send(JSON.stringify({command:command, options:options}));
+	    } catch(e) {
+			console.error(e)
+		}
 	}
 
 	function populate(list) {
@@ -87,6 +132,24 @@ if(!Chuck) var Chuck = {};
 		}
 
 		$("#list").innerHTML = html;
+	}
+
+	function populateMaps() {
+		ajax("getMaps", {}, function(responseText) {
+			var maps = JSON.parse(responseText).success;
+			var html = "";
+			for (var i = 0; i < maps.length; i++) {
+				var map = maps[i];
+				html += "<li><label>";
+				html += '<input name="maps" value="' + map + '" type="checkbox" checked> ';
+				html += map;
+				html += "</label></li>";
+			};
+
+			$("#maps").innerHTML = html;
+		}, function(status, responseText) {
+			console.error("getMaps error:", status, responseText);
+		});
 	}
 
 	$("form#listform").onsubmit = function(e) {
@@ -292,7 +355,17 @@ if(!Chuck) var Chuck = {};
 			}
 
 			localStorage["customname"] = channelName;
-			
+
+			ajax("createChannel", options, function(responseText) {
+				if(typeof callback == 'function') {
+					callback(JSON.parse(responseText).success);
+	            }
+			}, function(status, responseText) {
+				console.log(responseText)
+	            alert(JSON.parse(responseText).error)
+			});
+
+			/*
 			var xhr = new XMLHttpRequest();
 	        xhr.onreadystatechange = function() {
 	            if(xhr.readyState == 4) {
@@ -308,11 +381,13 @@ if(!Chuck) var Chuck = {};
 	        }
 	        xhr.open("POST", "/api", true);
 	        xhr.send(JSON.stringify({command:"createChannel", options: options}));
+	        */
 		}
 	}
 
 	$("#refresh").onclick = refresh;
 	refresh();
+	populateMaps();
 	var channelDestructionTimeout = null;
 	var refreshInterval = setInterval(refresh, 5000);
 

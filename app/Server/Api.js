@@ -3,10 +3,11 @@ define([
 	"Lib/Utilities/Protocol/Helper",
 	"Lib/Utilities/Validate",
 	"Lib/Utilities/Options",
-	"Game/Config/Settings"
+	"Game/Config/Settings",
+	"fs"
 ],
  
-function (Nc, ProtocolHelper, validate, Options, Settings) {
+function (Nc, ProtocolHelper, validate, Options, Settings, FileSystem) {
  
 		function Api(coordinator) {
 			this.coordinator = coordinator;
@@ -31,11 +32,14 @@ function (Nc, ProtocolHelper, validate, Options, Settings) {
 
 			switch(command) {
 				case "getChannels":
-					output = this.coordinator.getChannels();
+					output = this.getChannels();
 					break;
 				case "createChannel":
 					// FIXME: sanitize input
 					output = this.createChannel(message.options);
+					break;
+				case "getMaps":
+					output = this.getMaps();
 					break;
 				default:
 					this.isError = true;
@@ -45,6 +49,10 @@ function (Nc, ProtocolHelper, validate, Options, Settings) {
 
 			this.output = output;
 		}
+
+		Api.prototype.getChannels = function() {
+			return this.coordinator.getChannels();
+		};
 
 		Api.prototype.createChannel = function(options) {
 
@@ -73,7 +81,7 @@ function (Nc, ProtocolHelper, validate, Options, Settings) {
 			} 
 
 			for(var i = 0; i < options.levelUids.length; i++) {
-				if(!validate(options.levelUids[i], {type: 'string', in: ['stones2', 'debug']})) {
+				if(!validate(options.levelUids[i], {type: 'string', in: this.getMaps()})) {
 					this.isError = true;
 					return "Could not create channel, invalid map (" + options.levelUids[i] + ").";
 				}
@@ -104,8 +112,6 @@ function (Nc, ProtocolHelper, validate, Options, Settings) {
 				return "Could not create channel, score limit (" + options.scoreLimit + ").";
 			}
 
-
-
 			var defaultOptions = {
 				maxUsers: Settings.CHANNEL_DEFAULT_MAX_USERS,
 				minUsers: 0,
@@ -113,7 +119,6 @@ function (Nc, ProtocolHelper, validate, Options, Settings) {
 			};
 
 			options = Options.merge(options, defaultOptions);
-
 
 			var result = this.coordinator.createChannel(options);
 			if(result !== false) {
@@ -134,14 +139,24 @@ function (Nc, ProtocolHelper, validate, Options, Settings) {
 			}
 
 			return JSON.stringify(output);
-			
 		};
 
 		Api.prototype.getContentType = function() {
 			return "application/json";
 		};
 
-		
+		Api.prototype.getMaps = function(callback) {
+
+			var list = FileSystem.readdirSync(Settings.MAPS_PATH);
+			var maps = [];
+			for (var i = 0; i < list.length; i++) {
+				var fileinfo = list[i].split(".");
+				if(fileinfo[1] == "json") {
+					maps.push(fileinfo[0]);
+				}
+			};
+			return maps;
+		};
  
 		return Api;
  
