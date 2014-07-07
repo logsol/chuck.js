@@ -26,6 +26,10 @@ function (DomController, Settings, Exception, Nc) {
             Nc.on(Nc.ns.client.view.playerInfo.update, this.onUpdatePlayerInfo, this),
             Nc.on(Nc.ns.client.view.playerInfo.remove, this.onRemovePlayerInfo, this),
 
+            Nc.on(Nc.ns.client.game.zoomIn, this.onZoomIn, this),
+            Nc.on(Nc.ns.client.game.zoomOut, this.onZoomOut, this),
+            Nc.on(Nc.ns.client.game.zoomReset, this.onZoomReset, this),
+
             Nc.on(Nc.ns.client.view.preloadBar.update, this.onUpdateLoader, this),
         ];
 
@@ -111,7 +115,19 @@ function (DomController, Settings, Exception, Nc) {
     };
 
     AbstractView.prototype.setCameraZoom = function (z) {
-    	throw new Exception('Abstract Function setCameraZoom not overwritten');
+        throw new Exception('Abstract Function setCameraZoom not overwritten');
+    };
+
+    AbstractView.prototype.onZoomIn = function () {
+        throw new Exception('Abstract Function onZoomIn not overwritten');
+    };
+
+    AbstractView.prototype.onZoomOut = function () {
+        throw new Exception('Abstract Function onZoomOut not overwritten');
+    };
+
+    AbstractView.prototype.onZoomReset = function () {
+        throw new Exception('Abstract Function onZoomReset not overwritten');
     };
 
     AbstractView.prototype.onFullscreenChange = function(isFullScreen) {

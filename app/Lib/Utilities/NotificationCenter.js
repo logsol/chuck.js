@@ -63,7 +63,10 @@ function (Exception) {
                 game: {
                     gameInfo: {
                         toggle: null
-                    }
+                    },
+                    zoomIn: null,
+                    zoomOut: null,
+                    zoomReset: null
                 },
                 to: {
                     server: {

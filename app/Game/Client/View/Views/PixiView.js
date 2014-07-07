@@ -21,6 +21,7 @@ function (Parent, DomController, PIXI, Settings, Nc) {
         this.loader = null;
         this.init();
         this.pixi = PIXI;
+        this.currentZoom = Settings.ZOOM_DEFAULT;
 
         PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
     }
@@ -121,11 +122,17 @@ function (Parent, DomController, PIXI, Settings, Nc) {
     }
 
     PixiView.prototype.calculateCameraPosition = function() {
-        var zoom = this.container.scale.x;
+        var targetZoom = this.currentZoom;
+
+        var oldZoom = (this.container.scale.x + this.container.scale.y) / 2;
+        var newZoom = (targetZoom -oldZoom) * Settings.CAMERA_GLIDE / 100;
+
+        this.container.scale.x += newZoom;
+        this.container.scale.y += newZoom;
 
         var target = this.me.getHeadPosition();
-        target.x *= -Settings.RATIO * zoom;
-        target.y *= -Settings.RATIO * zoom;
+        target.x *= -Settings.RATIO * targetZoom;
+        target.y *= -Settings.RATIO * targetZoom;
 
         target.x -= this.me.playerController.xyInput.x * Settings.STAGE_WIDTH / 4;
         target.y += this.me.playerController.xyInput.y * Settings.STAGE_HEIGHT / 4;
@@ -154,10 +161,13 @@ function (Parent, DomController, PIXI, Settings, Nc) {
         return pos;
     };
 
-    PixiView.prototype.setCameraZoom = function (z) {
-        this.container.scale.x = z;
-        this.container.scale.y = z;
+    PixiView.prototype.setCameraZoom = function (zoom) {
+/*
+        var oldZoom = this.container.scale.x;
 
+        this.container.scale.x += (zoom -oldZoom) * Settings.CAMERA_GLIDE / 100;
+        this.container.scale.y += (zoom -oldZoom) * Settings.CAMERA_GLIDE / 100;
+*/
     };
 
     PixiView.prototype.onFullscreenChange = function(isFullScreen) {
@@ -165,10 +175,11 @@ function (Parent, DomController, PIXI, Settings, Nc) {
 
         if(isFullScreen) {
             this.renderer.resize(window.innerWidth, window.innerHeight);
-            this.setCameraZoom(window.innerWidth / 600);
+            this.currentZoom = window.innerWidth / Settings.STAGE_WIDTH;
+            console.log();
         } else {
             this.renderer.resize(600, 400);
-            this.setCameraZoom(1);
+            this.currentZoom = 1;
         }
     };
 
@@ -303,6 +314,22 @@ function (Parent, DomController, PIXI, Settings, Nc) {
         }
 
         this.loader.visible = progress < 100;
+    };
+
+    PixiView.prototype.onZoomIn = function() {
+        if(this.currentZoom + Settings.ZOOM_FACTOR <= Settings.ZOOM_MAX) {
+            this.currentZoom += Settings.ZOOM_FACTOR;
+        }
+    };
+    
+    PixiView.prototype.onZoomOut = function() {
+        if(this.currentZoom - Settings.ZOOM_FACTOR > 0) {
+            this.currentZoom -= Settings.ZOOM_FACTOR;
+        }
+    };    
+
+    PixiView.prototype.onZoomReset = function() {
+        this.currentZoom = Settings.ZOOM_DEFAULT;
     };
 
     PixiView.prototype.destroy = function() {

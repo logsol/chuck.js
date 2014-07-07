@@ -38,7 +38,11 @@ function (Parent, KeyboardInput, MouseInput, Nc, GamepadInput) {
 
             space: 32,
 
-            tab: 9
+            tab: 9,
+
+            plus: 187,
+            minus: 189,
+            zero: 48
         }
 
         this.init(keys);
@@ -62,6 +66,10 @@ function (Parent, KeyboardInput, MouseInput, Nc, GamepadInput) {
         this.keyboardInput.registerKey(keys.w, 'jump', 'jumpStop');
         this.keyboardInput.registerKey(keys.up, 'jump', 'jumpStop');
         this.keyboardInput.registerKey(keys.space, 'jump', 'jumpStop');
+
+        this.keyboardInput.registerKey(keys.plus, 'zoomIn');
+        this.keyboardInput.registerKey(keys.minus, 'zoomOut');
+        this.keyboardInput.registerKey(keys.zero, 'zoomReset');
 
         this.keyboardInput.registerKey(keys.tab, 'showInfo', 'hideInfo');
 
@@ -125,6 +133,18 @@ function (Parent, KeyboardInput, MouseInput, Nc, GamepadInput) {
 
     PlayerController.prototype.hideInfo = function() {
         Nc.trigger(Nc.ns.client.game.gameInfo.toggle, false);
+    };
+
+    PlayerController.prototype.zoomIn = function() {
+        Nc.trigger(Nc.ns.client.game.zoomIn, true);
+    };
+
+    PlayerController.prototype.zoomOut = function() {
+        Nc.trigger(Nc.ns.client.game.zoomOut, false);
+    };
+
+    PlayerController.prototype.zoomReset = function() {
+        Nc.trigger(Nc.ns.client.game.zoomReset, false);
     };
 
     PlayerController.prototype.destroy = function() {

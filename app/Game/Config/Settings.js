@@ -3,6 +3,9 @@ define(function() {
     var Settings = {
         STAGE_WIDTH: 600,
         STAGE_HEIGHT: 400,
+        ZOOM_FACTOR: 0.8,
+        ZOOM_DEFAULT: 1,
+        ZOOM_MAX: 10,
 
         // BOX2D INITIALATORS
         BOX2D_WORLD_AABB_SIZE: 3000,
