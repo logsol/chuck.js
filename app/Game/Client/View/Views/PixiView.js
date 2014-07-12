@@ -248,8 +248,8 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
 
         if(isFullScreen) {
             this.renderer.resize(window.innerWidth, window.innerHeight);
-            this.currentZoom = window.innerWidth / Settings.STAGE_WIDTH;
-            console.log();
+            this.currentZoom = window.innerWidth / 600;
+            console.log(this.currentZoom);
         } else {
             this.renderer.resize(600, 400);
             this.currentZoom = 1;
@@ -268,17 +268,6 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
         var grayFilter = new PIXI.GrayFilter();
         grayFilter.gray = 0.85;
         this.infoFilters = [blurFilter, grayFilter];
-
-/*
-        var colorFilter = new ColorMatrixFilter()
-        colorFilter.matrix = [
-            1,1,0,0,
-            0,1,0,0,
-            0,0,1,0,
-            0,0,0,1
-        ];
-        this.infoFilters = [colorFilter];
-        */
 
         this.infoText = new PIXI.Text("", {font: "normal 20px monospace", fill: "red", align: "center"});
         this.infoBox = new PIXI.Graphics();
@@ -310,7 +299,7 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
             this.infoBox.position.x = this.infoText.position.x + borderWidth/2 - padding * 2;
             this.infoBox.position.y = this.infoText.position.y + borderWidth/2 - padding;
 
-            this.infoContainer.visible = false;
+            this.infoContainer.visible = true;
             this.container.filters = this.infoFilters;
             this.infoFilters.forEach(function(filter) { filter.dirty = true; });
         } else {

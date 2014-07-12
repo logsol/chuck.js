@@ -1,8 +1,9 @@
 define([
-	"Lib/Utilities/ColorConverter"
+	"Lib/Utilities/ColorConverter",
+	"Lib/Utilities/Exception"
 ],
  
-function (ColorConverter) {
+function (ColorConverter, Exception) {
 
 	var instance = null
  
@@ -28,8 +29,8 @@ function (ColorConverter) {
 		$("#refresh").onclick = refresh;
 		refresh();
 		populateMaps();
-		var channelDestructionTimeout = null;
-		var refreshInterval = setInterval(refresh, 5000);
+		this.channelDestructionTimeout = null;
+		this.refreshInterval = setInterval(refresh, 5000);
 
 		$("#createbutton").onclick = function() {
 			show('#createform');
@@ -55,7 +56,9 @@ function (ColorConverter) {
     	$("#primarycolor").style.backgroundColor = "#" + this.colorConverter.getColorByName(e.target.value).toString(16);
     };
 
-	Menu.prototype.onRun = function(channelName, nickname) {}
+	Menu.prototype.onRun = function(channelName, nickname) {
+		throw new Exception("Menu onRun has to be overwritten");
+	}
 
 	window.onhashchange = function() {
 		if(window.location.hash) {
@@ -250,7 +253,7 @@ function (ColorConverter) {
 	function startTimer(seconds) {
 		var now = new Date();
 		var end = new Date(now.getTime() + seconds * 1000);
-		channelDestructionTimeout = setInterval(function() {
+		instance.channelDestructionTimeout = setInterval(function() {
 			now = new Date();
 			var diff = new Date(end.getTime() - now.getTime());
 			if(diff.getTime() < 0) {
@@ -346,12 +349,12 @@ function (ColorConverter) {
 			$("#game").style.display = "block";
 			instance.onRun(channelName, nickname); // Dumm und dümmer
 			
-			if(refreshInterval) {
-				clearInterval(refreshInterval);
+			if(instance.refreshInterval) {
+				clearInterval(instance.refreshInterval);
 			}
 
-			if(channelDestructionTimeout) {
-				clearInterval(channelDestructionTimeout);
+			if(instance.channelDestructionTimeout) {
+				clearInterval(instance.channelDestructionTimeout);
 			}
 
 		}
