@@ -5,10 +5,11 @@ define([
     "Game/Client/View/Views/Pixi/ColorRangeReplaceFilter",
     "Game/Config/Settings",
     "Lib/Utilities/NotificationCenter",
-    "Lib/Utilities/Exception"
+    "Lib/Utilities/Exception",
+    "Game/Client/View/Views/Pixi/GameStats"
 ], 
 
-function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Exception) {
+function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Exception, GameStats) {
     
     var AVAILABLE_MESH_FILTERS = {
         "blur": PIXI.BlurFilter,
@@ -54,10 +55,12 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
         this.stage = new PIXI.Stage(0x333333);
 
         this.initCamera();
-        this.initInfo();
         this.initLoader();
 
         this.initCanvas(this.renderer.view);
+
+        this.gameStats = new GameStats(this.container);
+        this.stage.addChild(this.gameStats.getInfoContainer());
     }
 
     PixiView.prototype.render = function () {
@@ -256,58 +259,6 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
         }
     };
 
-    // Info Overlay
-
-    PixiView.prototype.initInfo = function() {
-        this.infoContainer = new PIXI.DisplayObjectContainer();
-        this.stage.addChild(this.infoContainer);
-
-        var blurFilter = new PIXI.BlurFilter();
-        blurFilter.blurX = 12;
-        blurFilter.blurY = 12;
-        var grayFilter = new PIXI.GrayFilter();
-        grayFilter.gray = 0.85;
-        this.infoFilters = [blurFilter, grayFilter];
-
-        this.infoText = new PIXI.Text("", {font: "normal 20px monospace", fill: "red", align: "center"});
-        this.infoBox = new PIXI.Graphics();
-        this.infoBox.alpha = 0.7;
-
-        this.infoContainer.addChild(this.infoBox);
-        this.infoContainer.addChild(this.infoText);
-
-        this.infoContainer.visible = false;
-    };
-
-    PixiView.prototype.toggleInfo = function(show, string) {
-        if(show) {
-            this.infoText.setText(string);
-            this.infoText.updateText();
-            this.infoText.dirty = false;
-
-            var x = Settings.STAGE_WIDTH / 2 - this.infoText.width / 2,
-                y = Settings.STAGE_HEIGHT / 2 - this.infoText.height / 2;
-            this.infoText.position = new PIXI.Point(x, y);
-
-            var borderWidth = 3;
-            var padding = 20;
-            this.infoBox.clear();
-            this.infoBox.beginFill(0x000000);
-            this.infoBox.lineStyle(borderWidth, 0xAA0000);
-            this.infoBox.drawRect(0, 0, this.infoText.width - borderWidth + 2 * padding * 2, this.infoText.height - borderWidth + 2 * padding);
-            this.infoBox.endFill();
-            this.infoBox.position.x = this.infoText.position.x + borderWidth/2 - padding * 2;
-            this.infoBox.position.y = this.infoText.position.y + borderWidth/2 - padding;
-
-            this.infoContainer.visible = true;
-            this.container.filters = this.infoFilters;
-            this.infoFilters.forEach(function(filter) { filter.dirty = true; });
-        } else {
-            this.infoText.setText("...");
-            this.infoContainer.visible = false;
-            this.container.filters = null;
-        }
-    };
 
     // Player Info
 

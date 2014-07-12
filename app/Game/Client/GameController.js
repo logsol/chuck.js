@@ -32,7 +32,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         Parent.call(this, options);
 
         this.ncTokens = this.ncTokens.concat([
-            Nc.on(Nc.ns.client.game.gameInfo.toggle, this.toggleInfo, this)
+            Nc.on(Nc.ns.client.game.gameStats.toggle, this.toggleGameStats, this)
         ]);
     }
 
@@ -240,7 +240,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         Parent.prototype.loadLevel.call(this, path);
     }
 
-    GameController.prototype.toggleInfo = function(show) {
+    GameController.prototype.toggleGameStats = function(show) {
 
         var playersArray = [];
         for (var key in this.players) {
@@ -257,40 +257,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
             return 0;
         });
 
-        function pad(string, max, alignLeft) {
-            string = string.substring(0, max - 1);
-
-            var spaces = new Array( max - string.length + 1 ).join(" ");
-            if(alignLeft) {
-                return string + spaces;
-            } else {
-                return spaces + string;
-            }
-        }
-
-        var string = "" +
-                     pad("#", 2, false) + " " +
-                     pad("Name", 12, true) +
-                     pad("Score", 6, false) +
-                     pad("Deaths", 7, false) +
-                     pad("Health", 7, false) +
-                     "\n-----------------------------------\n";
-
-        var lines = [];
-        sortedPlayers.forEach(function(player, i) {
-            var name = player.getNickname();
-            lines.push(
-                pad("" + (i + 1) + ".", 2, false) + " " + 
-                pad(name, 12, true) + 
-                pad("" + player.stats.score, 6, false) +
-                pad("" + player.stats.deaths, 7, false) +
-                pad("" + parseInt(player.stats.health, 10), 7, false)
-            );
-        }, this);
-
-        string += lines.join("\n");
-
-        this.view.toggleInfo(show, string);
+        Nc.trigger(Nc.ns.client.view.gameStats.toggle, show, sortedPlayers);
     };
 
     GameController.prototype.destroy = function() {

@@ -30,7 +30,6 @@ function (Key) {
     }
 
     KeyboardInput.prototype._onKeyDown = function (e) {
-        console.log(e.keyCode)
         var key = this._getKeyByKeyCode(e.keyCode);
 
         if (key && !key.getActive()) {

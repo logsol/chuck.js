@@ -52,6 +52,9 @@ function (Exception) {
                     },
                     events: {
                         ready: null
+                    },
+                    gameStats: {
+                        toggle: null
                     }
                 },
                 input: {
@@ -63,7 +66,7 @@ function (Exception) {
                     }
                 },
                 game: {
-                    gameInfo: {
+                    gameStats: {
                         toggle: null
                     },
                     zoomIn: null,
