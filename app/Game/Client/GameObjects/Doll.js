@@ -2,10 +2,11 @@ define([
 	"Game/Core/GameObjects/Doll",
     "Game/Config/Settings",
     "Lib/Utilities/NotificationCenter",
-    "Lib/Utilities/Exception"
+    "Lib/Utilities/Exception",
+    "Lib/Utilities/ColorConverter"
 ],
  
-function (Parent, Settings, Nc, Exception) {
+function (Parent, Settings, Nc, Exception, ColorConverter) {
  
     function Doll(physicsEngine, uid, player) {      
         this.animationDef = {
@@ -27,6 +28,10 @@ function (Parent, Settings, Nc, Exception) {
         this.animatedMeshes = this.animatedMeshesContainer.withArms;
         this.headMesh = null;
         this.holdingArmMesh = null;
+
+        var converter = new ColorConverter();
+        this.primaryColor = converter.getColorByName(player.getNickname());
+        console.log(this.primaryColor.toString(16))
 
         Parent.call(this, physicsEngine, uid, player);
     }
@@ -66,6 +71,17 @@ function (Parent, Settings, Nc, Exception) {
 
     Doll.prototype.createMesh = function() {
 
+        var self = this;
+
+        var setShirtColor = function (mesh) {
+            Nc.trigger(Nc.ns.client.view.mesh.addFilter, mesh, 'colorRangeReplace', {
+                minColor: 0x3b4a31,
+                maxColor: 0x657f54,
+                newColor: self.primaryColor,
+                brightnessOffset: 0.56
+            });
+        }
+
         // Body
 
         var padF = function(n) {
@@ -98,6 +114,8 @@ function (Parent, Settings, Nc, Exception) {
                 var callback = function(mesh) {
                     self.animatedMeshesContainer[arm][key] = mesh;
                     Nc.trigger(Nc.ns.client.view.mesh.add, mesh);
+
+                    setShirtColor(mesh);
                 };
 
                 Nc.trigger(Nc.ns.client.view.animatedMesh.create, texturePaths, callback, { 
@@ -119,11 +137,6 @@ function (Parent, Settings, Nc, Exception) {
         var callback = function (mesh) {
             self.headMesh = mesh;
             Nc.trigger(Nc.ns.client.view.mesh.add, mesh);
-
-            Nc.trigger(Nc.ns.client.view.mesh.addFilter, mesh, 'pixelate', {
-                sizeX: 4,
-                sizeY: 4
-            });
         }
         Nc.trigger(Nc.ns.client.view.mesh.create, texturePath, callback, {
             pivot: {
@@ -134,10 +147,14 @@ function (Parent, Settings, Nc, Exception) {
             height: 12
         });
 
+        // Holding arm
+
         texturePath = Settings.GRAPHICS_PATH + "Characters/Chuck/holdingArm.png";
         var callback = function (mesh) {
             self.holdingArmMesh = mesh;
             Nc.trigger(Nc.ns.client.view.mesh.add, mesh);
+
+            setShirtColor(mesh);
         }
         Nc.trigger(Nc.ns.client.view.mesh.create, texturePath, callback, {
             visible: false,

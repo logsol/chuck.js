@@ -1,76 +1,22 @@
 define([
     "Game/Client/View/Views/AbstractView",
     "Game/Client/View/DomController", 
-    "Lib/Vendor/Pixi", 
+    "Lib/Vendor/Pixi",
+    "Game/Client/View/Views/Pixi/ColorRangeReplaceFilter",
     "Game/Config/Settings",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Exception"
 ], 
 
-function (Parent, DomController, PIXI, Settings, Nc, Exception) {
+function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Exception) {
     
     var AVAILABLE_MESH_FILTERS = {
         "blur": PIXI.BlurFilter,
         "desaturate": PIXI.GrayFilter,
         "pixelate": PIXI.PixelateFilter,
-        "colorRangeReplace": ColorRangeReplace,
+        "colorRangeReplace": ColorRangeReplaceFilter,
     };
 
-    var ColorRangeReplace = function() {
-        PIXI.AbstractFilter.call( this );
-
-        this.passes = [this];
-
-        // set the uniforms
-        this.uniforms = {
-            matrix: {type: 'mat4', value: [1,0,0,0,
-                                           0,1,0,0,
-                                           0,0,1,0,
-                                           0,0,0,1]},
-            gray: {type: '1f', value: 1},
-            shirtColor: {type: '4fv', value: [1,1,1,1]}
-        };
-
-        this.fragmentSrc = [
-            'precision mediump float;',
-            'varying vec2 vTextureCoord;',
-            'varying vec4 vColor;',
-            'uniform float invert;',
-            'uniform mat4 matrix;',
-            'uniform sampler2D uSampler;',
-            'uniform float gray;',
-            'uniform vec4 shirtColor;',
-
-            'void main(void) {',
-            '   vec4 pixel = texture2D(uSampler, vTextureCoord);',
-            '   vec3 min_color = vec3(49.0/256.0, 64.0/256.0, 39.0/256.0);',
-            '   vec3 max_color = vec3(106.0/256.0, 131.0/256.0, 90.0/256.0);',
-            '   if(pixel.x >= min_color.x && pixel.y >= min_color.y && pixel.z >= min_color.z',
-            '      &&',
-            '      pixel.x <= max_color.x && pixel.y <= max_color.y && pixel.z <= max_color.z) {',
-            '         pixel.rgb = mix(pixel.rgb, vec3(0.2126*pixel.r + 0.7152*pixel.g + 0.0722*pixel.b), gray);',
-            '         pixel = pixel * shirtColor;',
-            '   }',
-            '   gl_FragColor = pixel;',
-
-          //  '   gl_FragColor = texture2D(uSampler, vTextureCoord) * matrix;',
-          //  '   gl_FragColor = gl_FragColor;',
-            '}'
-        ];
-    };
-/*
-    ColorMatrixFilter.prototype = Object.create( PIXI.AbstractFilter.prototype );
-    ColorMatrixFilter.prototype.constructor = ColorMatrixFilter;
-
-    Object.defineProperty(ColorMatrixFilter.prototype, 'matrix', {
-        get: function() {
-            return this.uniforms.matrix.value;
-        },
-        set: function(value) {
-            this.uniforms.matrix.value = value;
-        }
-    });
-*/
     function PixiView () {
 
         Parent.call(this);
@@ -196,9 +142,10 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception) {
                 break;
 
             case 'colorRangeReplace':
-                if (options.min) filter.min = options.min;
-                if (options.max) filter.max = options.max;
-                if (options.new) filter.new = options.new;
+                if (options.minColor) filter.minColor = options.minColor;
+                if (options.maxColor) filter.maxColor = options.maxColor;
+                if (options.newColor) filter.newColor = options.newColor;
+                if (options.brightnessOffset) filter.brightnessOffset = options.brightnessOffset;
                 break;
 
             case 'pixelate':
@@ -221,8 +168,6 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception) {
 
         filters.push(filter);
         mesh.filters = filters;
-
-        console.log(mesh.filters)
     };
 
     PixiView.prototype.removeFilter = function(mesh, filterName) {
@@ -456,6 +401,7 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception) {
     };
 
     PixiView.prototype.onZoomIn = function() {
+        console.log("onZoomIn")
         if(this.currentZoom + Settings.ZOOM_FACTOR <= Settings.ZOOM_MAX) {
             this.currentZoom += Settings.ZOOM_FACTOR;
         }
