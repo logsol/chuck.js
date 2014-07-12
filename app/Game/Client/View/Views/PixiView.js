@@ -3,11 +3,74 @@ define([
     "Game/Client/View/DomController", 
     "Lib/Vendor/Pixi", 
     "Game/Config/Settings",
-    "Lib/Utilities/NotificationCenter"
+    "Lib/Utilities/NotificationCenter",
+    "Lib/Utilities/Exception"
 ], 
 
-function (Parent, DomController, PIXI, Settings, Nc) {
+function (Parent, DomController, PIXI, Settings, Nc, Exception) {
     
+    var AVAILABLE_MESH_FILTERS = {
+        "blur": PIXI.BlurFilter,
+        "desaturate": PIXI.GrayFilter,
+        "pixelate": PIXI.PixelateFilter,
+        "colorRangeReplace": ColorRangeReplace,
+    };
+
+    var ColorRangeReplace = function() {
+        PIXI.AbstractFilter.call( this );
+
+        this.passes = [this];
+
+        // set the uniforms
+        this.uniforms = {
+            matrix: {type: 'mat4', value: [1,0,0,0,
+                                           0,1,0,0,
+                                           0,0,1,0,
+                                           0,0,0,1]},
+            gray: {type: '1f', value: 1},
+            shirtColor: {type: '4fv', value: [1,1,1,1]}
+        };
+
+        this.fragmentSrc = [
+            'precision mediump float;',
+            'varying vec2 vTextureCoord;',
+            'varying vec4 vColor;',
+            'uniform float invert;',
+            'uniform mat4 matrix;',
+            'uniform sampler2D uSampler;',
+            'uniform float gray;',
+            'uniform vec4 shirtColor;',
+
+            'void main(void) {',
+            '   vec4 pixel = texture2D(uSampler, vTextureCoord);',
+            '   vec3 min_color = vec3(49.0/256.0, 64.0/256.0, 39.0/256.0);',
+            '   vec3 max_color = vec3(106.0/256.0, 131.0/256.0, 90.0/256.0);',
+            '   if(pixel.x >= min_color.x && pixel.y >= min_color.y && pixel.z >= min_color.z',
+            '      &&',
+            '      pixel.x <= max_color.x && pixel.y <= max_color.y && pixel.z <= max_color.z) {',
+            '         pixel.rgb = mix(pixel.rgb, vec3(0.2126*pixel.r + 0.7152*pixel.g + 0.0722*pixel.b), gray);',
+            '         pixel = pixel * shirtColor;',
+            '   }',
+            '   gl_FragColor = pixel;',
+
+          //  '   gl_FragColor = texture2D(uSampler, vTextureCoord) * matrix;',
+          //  '   gl_FragColor = gl_FragColor;',
+            '}'
+        ];
+    };
+/*
+    ColorMatrixFilter.prototype = Object.create( PIXI.AbstractFilter.prototype );
+    ColorMatrixFilter.prototype.constructor = ColorMatrixFilter;
+
+    Object.defineProperty(ColorMatrixFilter.prototype, 'matrix', {
+        get: function() {
+            return this.uniforms.matrix.value;
+        },
+        set: function(value) {
+            this.uniforms.matrix.value = value;
+        }
+    });
+*/
     function PixiView () {
 
         Parent.call(this);
@@ -25,7 +88,6 @@ function (Parent, DomController, PIXI, Settings, Nc) {
 
         PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
     }
-
 
     PixiView.prototype = Object.create(Parent.prototype);
 
@@ -114,6 +176,72 @@ function (Parent, DomController, PIXI, Settings, Nc) {
         if (options.pivot) mesh.pivot = new PIXI.Point(options.pivot.x, options.pivot.y);
     }
 
+    PixiView.prototype.addFilter = function(mesh, filterName, options) {
+
+        if (!AVAILABLE_MESH_FILTERS.hasOwnProperty(filterName)) {
+            throw new Exception('Filter ' + filterName + ' is not available');
+        }
+        
+        var MeshFilter = AVAILABLE_MESH_FILTERS[filterName];
+        var filter = new MeshFilter();
+
+        switch (filterName) {
+            case 'desaturate':
+                if (options.amount) filter.gray = options.amount;
+                break;
+
+            case 'blur':
+                if (options.blurX) filter.blurX = options.blurX;
+                if (options.blurY) filter.blurY = options.blurY;
+                break;
+
+            case 'colorRangeReplace':
+                if (options.min) filter.min = options.min;
+                if (options.max) filter.max = options.max;
+                if (options.new) filter.new = options.new;
+                break;
+
+            case 'pixelate':
+                if (options.sizeX) filter.size.x = options.sizeX;
+                if (options.sizeY) filter.size.y = options.sizeY;
+                break;
+
+            default:
+                break;
+        }
+
+        var filters = mesh.filters;
+
+        if(!filters) {
+            filters = [];
+        } else {
+            // ensure uniqueness of filter by name
+            this.removeFilter(mesh, filterName);
+        }
+
+        filters.push(filter);
+        mesh.filters = filters;
+
+        console.log(mesh.filters)
+    };
+
+    PixiView.prototype.removeFilter = function(mesh, filterName) {
+
+        var filters = mesh.filters;
+
+        if(!filters) {
+            return;
+        }
+
+        var MeshFilter = AVAILABLE_MESH_FILTERS[options.filter];
+
+        filters = filters.filter(function(filter){
+            return !filter instanceof MeshFilter;
+        });
+
+        mesh.filters = filter;
+    };
+
     // Camera
 
     PixiView.prototype.initCamera = function () {
@@ -196,65 +324,7 @@ function (Parent, DomController, PIXI, Settings, Nc) {
         grayFilter.gray = 0.85;
         this.infoFilters = [blurFilter, grayFilter];
 
-
-        var ColorMatrixFilter = function()
-        {
-            PIXI.AbstractFilter.call( this );
-
-            this.passes = [this];
-
-            // set the uniforms
-            this.uniforms = {
-                matrix: {type: 'mat4', value: [1,0,0,0,
-                                               0,1,0,0,
-                                               0,0,1,0,
-                                               0,0,0,1]},
-                gray: {type: '1f', value: 1},
-                shirtColor: {type: '4fv', value: [1,1,1,1]}
-            };
-
-            this.fragmentSrc = [
-                'precision mediump float;',
-                'varying vec2 vTextureCoord;',
-                'varying vec4 vColor;',
-                'uniform float invert;',
-                'uniform mat4 matrix;',
-                'uniform sampler2D uSampler;',
-                'uniform float gray;',
-                'uniform vec4 shirtColor;',
-
-                'void main(void) {',
-                '   vec4 pixel = texture2D(uSampler, vTextureCoord);',
-                '   vec3 min_color = vec3(49.0/256.0, 64.0/256.0, 39.0/256.0);',
-                '   vec3 max_color = vec3(106.0/256.0, 131.0/256.0, 90.0/256.0);',
-                '   if(pixel.x >= min_color.x && pixel.y >= min_color.y && pixel.z >= min_color.z',
-                '      &&',
-                '      pixel.x <= max_color.x && pixel.y <= max_color.y && pixel.z <= max_color.z) {',
-                '         pixel.rgb = mix(pixel.rgb, vec3(0.2126*pixel.r + 0.7152*pixel.g + 0.0722*pixel.b), gray);',
-                '         pixel = pixel * shirtColor;',
-                '   }',
-                '   gl_FragColor = pixel;',
-
-              //  '   gl_FragColor = texture2D(uSampler, vTextureCoord) * matrix;',
-              //  '   gl_FragColor = gl_FragColor;',
-                '}'
-            ];
-        };
-
-        ColorMatrixFilter.prototype = Object.create( PIXI.AbstractFilter.prototype );
-        ColorMatrixFilter.prototype.constructor = ColorMatrixFilter;
-
-        Object.defineProperty(ColorMatrixFilter.prototype, 'matrix', {
-            get: function() {
-                return this.uniforms.matrix.value;
-            },
-            set: function(value) {
-                this.uniforms.matrix.value = value;
-            }
-        });
-
-
-
+/*
         var colorFilter = new ColorMatrixFilter()
         colorFilter.matrix = [
             1,1,0,0,
@@ -263,8 +333,7 @@ function (Parent, DomController, PIXI, Settings, Nc) {
             0,0,0,1
         ];
         this.infoFilters = [colorFilter];
-
-
+        */
 
         this.infoText = new PIXI.Text("", {font: "normal 20px monospace", fill: "red", align: "center"});
         this.infoBox = new PIXI.Graphics();

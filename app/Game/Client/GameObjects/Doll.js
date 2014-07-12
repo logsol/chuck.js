@@ -119,6 +119,11 @@ function (Parent, Settings, Nc, Exception) {
         var callback = function (mesh) {
             self.headMesh = mesh;
             Nc.trigger(Nc.ns.client.view.mesh.add, mesh);
+
+            Nc.trigger(Nc.ns.client.view.mesh.addFilter, mesh, 'pixelate', {
+                sizeX: 4,
+                sizeY: 4
+            });
         }
         Nc.trigger(Nc.ns.client.view.mesh.create, texturePath, callback, {
             pivot: {

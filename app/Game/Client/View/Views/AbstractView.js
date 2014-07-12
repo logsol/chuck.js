@@ -18,6 +18,8 @@ function (DomController, Settings, Exception, Nc) {
             Nc.on(Nc.ns.client.view.mesh.add, this.addMesh, this),
             Nc.on(Nc.ns.client.view.mesh.remove, this.removeMesh, this),
             Nc.on(Nc.ns.client.view.mesh.update, this.updateMesh, this),
+            Nc.on(Nc.ns.client.view.mesh.addFilter, this.addFilter, this),
+            Nc.on(Nc.ns.client.view.mesh.removeFilter, this.removeFilter, this),
 
             Nc.on(Nc.ns.client.view.fullscreen.change, this.onFullscreenChange, this),
             Nc.on(Nc.ns.client.view.debugMode.toggle, this.onToggleDebugMode, this),
@@ -80,6 +82,14 @@ function (DomController, Settings, Exception, Nc) {
 
     AbstractView.prototype.updateMesh = function(mesh, options) {
         throw new Exception('Abstract Function updateMesh not overwritten');
+    };
+
+    AbstractView.prototype.addFilter = function(mesh, options) {
+        throw new Exception('Abstract Function addFilter not overwritten');
+    };
+
+    AbstractView.prototype.removeFilter = function(mesh, options) {
+        throw new Exception('Abstract Function removeFilter not overwritten');
     };
 
     AbstractView.prototype.setMe = function(player) {

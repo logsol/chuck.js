@@ -29,7 +29,9 @@ function (Exception) {
                         create: null,
                         add: null,
                         remove: null,
-                        update: null
+                        update: null,
+                        addFilter: null,
+                        removeFilter: null
                     },
                     animatedMesh: {
                         create: null
