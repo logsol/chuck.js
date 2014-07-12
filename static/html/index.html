@@ -11,6 +11,7 @@
 		<label>
 			Nickname:<br>
 			<input id="nick" name="nick" type="text">
+			<input id="primarycolor">
 		</label>
 	</p>
 
@@ -33,7 +34,7 @@
 
 			<p>
 				<button>Create</button>
-				<button onclick="Chuck.menu.show('#listform'); return false;">Cancel</button>
+				<button class="cancel">Cancel</button>
 			</p>
 		</div>
 	</form>
@@ -48,7 +49,7 @@
 		<p>
 			<button>Join</button>
 			<span id="timeout"></span>
-			<button onclick="Chuck.menu.show('#listform'); return false;">Cancel</button>
+			<button class="cancel">Cancel</button>
 		</p>
 	</form>
 
@@ -65,8 +66,8 @@
 		</table>
 		<p>
 			<button id="refresh">Refresh list</button>
-			<button onclick="Chuck.menu.show('#createform'); return false;">Create</button>
-			<button onclick="Chuck.menu.quickstart(); return false;">Quickstart</button>
+			<button id="createbutton">Create</button>
+			<button id="quickstartbutton">Quickstart</button>
 		</p>
 	</form>
 </article>
@@ -76,7 +77,6 @@
         <canvas id="canvas"></canvas>
     </div>
 </article>
-<script type="text/javascript" src="/static/js/menu.js"></script>
 <script data-main="client" src="require.js"></script>
 </body>
 </html>

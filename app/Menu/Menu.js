@@ -1,5 +1,61 @@
-if(!Chuck) var Chuck = {};
-(function(Chuck) {
+define([
+	"Lib/Utilities/ColorConverter"
+],
+ 
+function (ColorConverter) {
+
+	var instance = null
+ 
+    function Menu() {
+
+    }
+
+    Menu.prototype.init = function() {
+    	instance = this; // Dum und Dümmer
+
+    	if(localStorage["player"]) {
+			var player = JSON.parse(localStorage["player"]);
+			if(player.nickname) {
+				$("#nick").value = player.nickname;
+			}
+		}
+
+		if(localStorage["customname"]) {
+			$("#customname").value = localStorage["customname"];
+		}
+
+
+		$("#refresh").onclick = refresh;
+		refresh();
+		populateMaps();
+		var channelDestructionTimeout = null;
+		var refreshInterval = setInterval(refresh, 5000);
+
+		$("#createbutton").onclick = function() {
+			show('#createform');
+			return false;
+		};
+		$("#quickstartbutton").onclick = quickstart;
+
+		var cancelButtons = $$(".cancel");
+		for (var i = 0; i < cancelButtons.length; i++) {
+			cancelButtons[i].onclick = function() {
+				show('#listform');
+				return false;
+			};
+		};
+
+		this.colorConverter = new ColorConverter();
+		var c = $("#nick");
+		c.onchange = c.onkeyup = c.onblur = c.onclick = this.updatePrimaryColor.bind(this);
+		this.updatePrimaryColor({target:c});
+    };
+
+    Menu.prototype.updatePrimaryColor = function(e) {
+    	$("#primarycolor").style.backgroundColor = "#" + this.colorConverter.getColorByName(e.target.value).toString(16);
+    };
+
+	Menu.prototype.onRun = function(channelName, nickname) {}
 
 	window.onhashchange = function() {
 		if(window.location.hash) {
@@ -28,17 +84,6 @@ if(!Chuck) var Chuck = {};
 		return document.querySelectorAll(selector);
 	}
 
-	if(localStorage["player"]) {
-		var player = JSON.parse(localStorage["player"]);
-		if(player.nickname) {
-			$("#nick").value = player.nickname;
-		}
-	}
-
-	if(localStorage["customname"]) {
-		$("#customname").value = localStorage["customname"];
-	}
-
 	var lastRefreshResponse;
 	function refresh(callback) {
 
@@ -57,36 +102,6 @@ if(!Chuck) var Chuck = {};
 			console.error("getChannels error: ", responseText)
 		});
 
-/*
-		try {
-			var xhr = new XMLHttpRequest();
-		    xhr.onreadystatechange = function() {
-		        if(xhr.readyState == 4) {
-		            if(xhr.status == 200) {
-
-		            	var response = xhr.responseText;
-		            	if(response != lastRefreshResponse) {
-		            		lastRefreshResponse = response;
-		            		populate(JSON.parse(response).success);
-		            	}
-		            	document.body.className = "";	
-
-		            	if(typeof callback == 'function') {
-		            		callback(JSON.parse(response).success)
-		            	} 
-		            } else {
-		                console.error("Ajax error: " + xhr.status + " " + xhr.responseText)
-		                $("#list").innerHTML = "";
-		                document.body.className = "offline";
-		            }
-		        }
-		    }
-		    xhr.open("POST", "/api", true);
-		    xhr.send(JSON.stringify({command:"getChannels"}));
-	    } catch(e) {
-			console.error(e)
-		}
-*/
 	    return false;
 	}
 
@@ -229,6 +244,7 @@ if(!Chuck) var Chuck = {};
 				join(nickname, defaultChannelName);
 			}
 		});
+		return false;
 	}
 
 	function startTimer(seconds) {
@@ -328,7 +344,7 @@ if(!Chuck) var Chuck = {};
 			//window.location.href = "/game.html";
 			$("#menu").style.display = "none";
 			$("#game").style.display = "block";
-			Chuck.run(channelName, nickname);
+			instance.onRun(channelName, nickname); // Dumm und dümmer
 			
 			if(refreshInterval) {
 				clearInterval(refreshInterval);
@@ -364,35 +380,9 @@ if(!Chuck) var Chuck = {};
 				console.log(responseText)
 	            alert(JSON.parse(responseText).error)
 			});
-
-			/*
-			var xhr = new XMLHttpRequest();
-	        xhr.onreadystatechange = function() {
-	            if(xhr.readyState == 4) {
-	                if(xhr.status == 200) {
-	                    if(typeof callback == 'function') {
-	                    	callback(JSON.parse(xhr.responseText).success);
-	                    }
-	                } else {
-	                	console.log(xhr.responseText)
-	                    alert(JSON.parse(xhr.responseText).error)
-	                }
-	            }
-	        }
-	        xhr.open("POST", "/api", true);
-	        xhr.send(JSON.stringify({command:"createChannel", options: options}));
-	        */
 		}
 	}
-
-	$("#refresh").onclick = refresh;
-	refresh();
-	populateMaps();
-	var channelDestructionTimeout = null;
-	var refreshInterval = setInterval(refresh, 5000);
-
-	Chuck.menu = {
-		show: show,
-		quickstart: quickstart
-	}
-})(Chuck);
+ 
+    return Menu;
+ 
+});

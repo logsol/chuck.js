@@ -14,12 +14,13 @@ requirejs([
     "Lib/Vendor/SocketIO",
     "Game/Config/Settings",
     "Lib/Utilities/Exception",
-    "Lib/Vendor/Pixi"
+    "Menu/Menu"
 ], 
 
-function (Networker, SocketIO, Settings, Exception, PIXI) {
+function (Networker, SocketIO, Settings, Exception, Menu) {
 
-    Chuck.run = function(channelName, nickname) {
+    var menu = new Menu();
+    menu.onRun = function(channelName, nickname) {
         var options = {
             "reconnect": false,
             "reconnection delay": 500,
@@ -33,6 +34,7 @@ function (Networker, SocketIO, Settings, Exception, PIXI) {
         var networker = new Networker(socket, channelName, nickname);
         Chuck.inspector.networker = networker;
         Chuck.inspector.settings = Settings;
-        Chuck.inspector.resetLevel = function() { networker.sendGameCommand("resetLevel"); }        
+        Chuck.inspector.resetLevel = function() { networker.sendGameCommand("resetLevel"); } 
     }
+    menu.init();
 });

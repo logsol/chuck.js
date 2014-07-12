@@ -40,6 +40,12 @@ input, button {
     text-transform: capitalize;
 }
 
+#primarycolor {
+    padding: 0.3em;
+    width: 1em;
+    background-color: black;
+}
+
 article#menu {
     margin: 4em auto;
     background: #1a1a1a;
