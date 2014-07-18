@@ -1,9 +1,10 @@
 define([
 	"Game/Client/Player",
-	"Game/Config/Settings"
+	"Game/Config/Settings",
+    "Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, Settings) {
+function (Parent, Settings, Nc) {
  
     function Me(id, physicsEngine, user) {
     	Parent.call(this, id, physicsEngine, user);
@@ -14,6 +15,9 @@ function (Parent, Settings) {
     			y: 0
     		}
     	};
+
+        this.arrowMesh = null;
+        this.createAndAddArrow();
     }
 
     Me.prototype = Object.create(Parent.prototype);
@@ -61,6 +65,34 @@ function (Parent, Settings) {
         this.doll.body.SetLinearVelocity(options.lv);
     };
 
+    Me.prototype.createAndAddArrow = function(visible) {
+        var self = this;
+
+        var position = this.getPosition();
+
+        var options = {
+            x: position.x * Settings.RATIO,
+            y: position.y * Settings.RATIO,
+        };
+
+        var callback = function(arrowMesh) {
+            self.arrowMesh = arrowMesh;
+        }
+        Nc.trigger(Nc.ns.client.view.playerArrow.createAndAdd, callback, options);
+    };
+
+    Me.prototype.render = function() {
+
+        Parent.prototype.render.call(this);
+
+        var position = this.getPosition();
+        var options = {
+            x: position.x * Settings.RATIO,
+            y: position.y * Settings.RATIO,
+        }
+        Nc.trigger(Nc.ns.client.view.playerArrow.update, this.arrowMesh, options);
+    };
+
     return Me;
  
-});
+})

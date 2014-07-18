@@ -28,6 +28,9 @@ function (DomController, Settings, Exception, Nc) {
             Nc.on(Nc.ns.client.view.playerInfo.update, this.onUpdatePlayerInfo, this),
             Nc.on(Nc.ns.client.view.playerInfo.remove, this.onRemovePlayerInfo, this),
 
+            Nc.on(Nc.ns.client.view.playerArrow.createAndAdd, this.onCreateAndAddPlayerArrow, this),
+            Nc.on(Nc.ns.client.view.playerArrow.update, this.onUpdatePlayerArrow, this),
+
             Nc.on(Nc.ns.client.game.zoomIn, this.onZoomIn, this),
             Nc.on(Nc.ns.client.game.zoomOut, this.onZoomOut, this),
             Nc.on(Nc.ns.client.game.zoomReset, this.onZoomReset, this),
@@ -167,6 +170,14 @@ function (DomController, Settings, Exception, Nc) {
 
     AbstractView.prototype.onCreateAndAddPlayerInfo = function(options) {
         throw new Exception('Abstract Function onCreateAndAddPlayerInfo not overwritten');
+    };
+
+    AbstractView.prototype.onCreateAndAddPlayerArrow = function(options) {
+        throw new Exception('Abstract Function onCreateAndAddPlayerArrow not overwritten');
+    };
+
+    AbstractView.prototype.onUpdatePlayerArrow = function(options) {
+        throw new Exception('Abstract Function onUpdatePlayerArrow not overwritten');
     };
 
     AbstractView.prototype.onUpdatePlayerInfo = function(playerInfo, options) {

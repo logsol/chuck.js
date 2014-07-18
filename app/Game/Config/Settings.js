@@ -29,6 +29,7 @@ define(function() {
         CAMERA_IS_ORTHOGRAPHIC: true,
         CAMERA_GLIDE: 12, // % of the way per frame
         VIEW_CONTROLLER: 0 ? 'Three' : 'Pixi',
+        ARROW_GLIDE: 30, // % of the way per frame     
 
         // GAME PLAY 
         WALK_SPEED: 4,

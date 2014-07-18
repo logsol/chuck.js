@@ -41,6 +41,10 @@ function (Exception) {
                         remove: null,
                         update: null
                     },
+                    playerArrow: {
+                        createAndAdd: null,
+                        update: null
+                    },
                     preloadBar: {
                         update: null
                     },
