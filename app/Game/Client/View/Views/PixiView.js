@@ -117,6 +117,7 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
         if (options.x) mesh.position.x = options.x;
         if (options.y) mesh.position.y = options.y;
         if (options.rotation) mesh.rotation = options.rotation;
+        if (options.alpha) mesh.alpha = options.alpha;
         if (options.width) mesh.width = options.width;
         if (options.height) mesh.height = options.height;
         if (options.xScale) mesh.width = Math.abs(mesh.width) * options.xScale;

@@ -3,7 +3,7 @@
  "layers":[
         {
          "height":0,
-         "image":"..\/..\/img\/Backgrounds\/londonatnight.jpg",
+         "image":"..\/..\/img\/Backgrounds\/starnight.png",
          "name":"background",
          "opacity":1,
          "type":"imagelayer",

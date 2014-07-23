@@ -8,7 +8,7 @@ define([
 ],
  
 function (Nc, ProtocolHelper, validate, Options, Settings, FileSystem) {
- 
+
 		function Api(coordinator) {
 			this.coordinator = coordinator;
 			this.isError = false;

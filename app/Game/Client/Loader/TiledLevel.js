@@ -40,7 +40,8 @@ function (Parent, Settings) {
 	    	paths.push(texturePath);
         };
 
-        // FIXME: Get background image
+        var background = this.getLayer(levelData, "background");
+        paths.push(Settings.MAPS_PATH + background.image);
 
         return paths;
 

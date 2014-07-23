@@ -5,12 +5,13 @@ define([
     "Lib/Vendor/Box2D", 
     "Lib/Utilities/Options",
     "Lib/Utilities/Exception",
+    "Lib/Utilities/NotificationCenter",
     "Game/" + GLOBALS.context + "/Collision/Detector",
     "Game/" + GLOBALS.context + "/GameObjects/Tile",
     "Game/" + GLOBALS.context + "/GameObjects/Item",
     "Game/" + GLOBALS.context + "/GameObjects/Items/Skateboard",
 
-], function (Parent, Settings, ItemSettings, Box2D, Options, Exception, CollisionDetector, Tile, Item, Skateboard) {
+], function (Parent, Settings, ItemSettings, Box2D, Options, Exception, Nc, CollisionDetector, Tile, Item, Skateboard) {
     
     // Public
     function TiledLevel (path, engine) {
@@ -71,9 +72,23 @@ define([
 
             var uid = "item-" + i;
             var item = this.createItem(uid, options);
-            //this.gameObjects.animated.push(item);  
+            //this.gameObjects.animated.push(item);
         };
     };
+
+    TiledLevel.prototype.addBackground = function(path) {
+
+        var texturePath = Settings.GRAPHICS_PATH + "Backgrounds/starnight.png";
+        var callback = function (mesh) {
+            Nc.trigger(Nc.ns.client.view.mesh.add, mesh, 0); // FIXME: add at z layer -1 or so
+        }
+        Nc.trigger(Nc.ns.client.view.mesh.create, texturePath, callback, {
+            width: 4000,
+            height: 2959, 
+            x: -(4000 - Settings.STAGE_WIDTH) / 2,
+            y: -(2959 + Settings.STAGE_HEIGHT + 700) / 2
+        });
+    }
 
     TiledLevel.prototype.gatherOptions = function(tiledObject) {
         var options = {};
@@ -138,7 +153,6 @@ define([
                 x: object.x / Settings.TILE_RATIO,
                 y: object.y / Settings.TILE_RATIO
             }
-
         }
     };
 

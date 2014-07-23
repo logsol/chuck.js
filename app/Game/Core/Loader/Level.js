@@ -24,6 +24,7 @@ define([
         var path = Settings.MAPS_PATH + uid + ".json"
         this.loadLevelDataFromPath(path, function(levelData) {
             self.levelData = levelData;
+            self.addBackground();
             self.createTiles();
             self.createItems();
             self.isLoaded = true;
@@ -97,6 +98,10 @@ define([
             //this.gameObjects.animated.push(item); 
         };
     };
+
+    // Extended by TiledLevel
+    Level.prototype.addBackground = function() {
+    }
 */
 
     return Level;
