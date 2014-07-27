@@ -13,11 +13,6 @@ function (Parent, Settings, Nc, PIXI) {
 
     Level.prototype = Object.create(Parent.prototype);
 
-    Level.prototype.setup = function(levelData) {
-        this.levelData = levelData;
-        this.addBackground();
-        Parent.prototype.setup.call(this, levelData);
-    };
 
     Level.prototype.loadLevelDataFromPath = function (path, callback) {
     	var self = this;
@@ -91,6 +86,16 @@ function (Parent, Settings, Nc, PIXI) {
         );
 
         return paths;
+    };
+
+    Level.prototype.createItems = function(options) {
+        Nc.trigger(); // FIXME
+        Parent.prototype.createItems.call(this, options);
+    };
+
+    Level.prototype.createTiles = function(first_argument) {
+        Nc.trigger(); // FIXME
+        Parent.prototype.createItems.call(this, options);
     };
 
     return Level;

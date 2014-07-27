@@ -13,8 +13,13 @@ define([
 
 ], function (Parent, Settings, ItemSettings, Box2D, Options, Exception, Nc, CollisionDetector, Tile, Item, Skateboard) {
     
-    // Public
     function TiledLevel (path, engine) {
+
+        this.layerMapping = {
+            tiles: this.createTiles.bind(this),
+            items: this.createItems.bind(this),
+            spawnpoints: this.createSpawnPoints.bind(this)
+        };
 
         this.levelData = null;
         Parent.call(this, path, engine);
@@ -22,73 +27,68 @@ define([
 
     TiledLevel.prototype = Object.create(Parent.prototype);
 
-    TiledLevel.prototype.createTiles = function () {
-        if (!this.levelData) {
-            throw "Level: Can't create level, nothing found";
-        }
 
-        var collisionLayer = this.getLayer(this.levelData, "collision");
-
-        if(collisionLayer) {
-
-            for (var i = 0; i < collisionLayer.data.length; i++) {
-
-                var gid = collisionLayer.data[i];
-                if(gid === 0) continue;
-
-                var imagePath = this.getTileImagePath(gid);
-
-                
-                var parts = imagePath.split("/");
-                var tileType = parts[parts.length - 1].split(".")[0].split("");
-
-                // FIXME rename s to shape, r to rotation etc.
-
-                var options = {
-                    s: parseInt(tileType[0], 10),
-                    r: parseInt(tileType[1], 10),
-                    t: imagePath,
-                    x: i % collisionLayer.width,
-                    y: parseInt(i / collisionLayer.height , 10)
-                }
-
-                //this.gameObjects.fixed.push(
-                new Tile(this.engine, "tile-" + i, options);
-                //);
+    TiledLevel.prototype.setup = function(levelData) {
+        this.levelData = levelData;
+        for (var i = 0; i < levelData.layers.length; i++) {
+            var layerOptions = levelData.layers[i];
+            layerOptions.z = i;
+            if(this.layerMapping[layerOptions.name]) {
+                this.layerMapping[layerOptions.name](layerOptions);
             }
-
-        } else {
-            console.warn("Level: No collision Layer given");
-        }
-    }
-
-    TiledLevel.prototype.createItems = function() {
-        var objects = this.getLayer(this.levelData, "items").objects;
-
-        for (var i = 0; i < objects.length; i++) {
-            var object = objects[i];
-
-            var options = this.gatherOptions(object);
-
-            var uid = "item-" + i;
-            var item = this.createItem(uid, options);
-            //this.gameObjects.animated.push(item);
         };
+
+        Parent.prototype.setup.call(this, levelData);
     };
 
-    TiledLevel.prototype.addBackground = function(path) {
+    TiledLevel.prototype.createTiles = function(options) {
 
-        var texturePath = Settings.GRAPHICS_PATH + "Backgrounds/starnight.png";
-        var callback = function (mesh) {
-            Nc.trigger(Nc.ns.client.view.mesh.add, mesh, 0); // FIXME: add at z layer -1 or so
+        var data = options.data;
+        var tilesOptions = [];
+        for (var i = 0; i < data.length; i++) {
+
+            var gid = data[i];
+            if(gid === 0) continue;
+
+            var imagePath = this.getTileImagePath(gid);
+
+            var parts = imagePath.split("/");
+            var tileType = parts[parts.length - 1].split(".")[0].split("");
+
+            // FIXME rename s to shape, r to rotation etc.
+
+            var tileOptions = {
+                s: parseInt(tileType[0], 10),
+                r: parseInt(tileType[1], 10),
+                t: imagePath,
+                x: i % options.width,
+                y: parseInt(i / options.height , 10)
+            }
+
+            tilesOptions.push(tileOptions);
         }
-        Nc.trigger(Nc.ns.client.view.mesh.create, texturePath, callback, {
-            width: 4000,
-            height: 2959, 
-            x: -(4000 - Settings.STAGE_WIDTH) / 2,
-            y: -(2959 + Settings.STAGE_HEIGHT + 700) / 2
-        });
+
+        Parent.prototype.createTiles.call(this, tilesOptions);
     }
+
+    TiledLevel.prototype.createItems = function(options) {
+        var objects = options.objects;
+        var itemsOptions = []
+        for (var i = 0; i < objects.length; i++) {
+            var options = this.gatherOptions(objects[i]);
+            itemsOptions.push(options);
+        };
+
+        Parent.prototype.createItems.call(this, itemsOptions);
+    };
+
+    TiledLevel.prototype.createSpawnPoints = function(options) {
+        var points = options.objects.map(function(o) {
+            return { x: o.x, y: o.y };
+        });
+
+        Parent.prototype.createSpawnPoints(this, points);
+    };
 
     TiledLevel.prototype.gatherOptions = function(tiledObject) {
         var options = {};
@@ -106,7 +106,6 @@ define([
         var defaultOptions = this.getDefaultItemSettingsByName(options.name);
 
         options = Options.merge(options, defaultOptions);
-        //options = Options.merge(tiledObject.properties, options);
 
         return options;
     };
@@ -138,33 +137,6 @@ define([
             }
         }
     }
-
-    TiledLevel.prototype.getRandomSpawnPoint = function() {
-        if(!this.levelData) {
-            return Parent.prototype.getRandomSpawnPoint.call(this);
-        } else {
-
-            var spawnLayer = this.getLayer(this.levelData, "spawnpoints");
-
-            var size = spawnLayer.objects.length;
-            var object = spawnLayer.objects[parseInt(Math.random() * (size -1), 10)];
-
-            return {
-                x: object.x / Settings.TILE_RATIO,
-                y: object.y / Settings.TILE_RATIO
-            }
-        }
-    };
-
-    TiledLevel.prototype.getLayer = function(levelData, name) {
-        for (var i = 0; i < levelData.layers.length; i++) {
-            if(levelData.layers[i].name === name) {
-                return levelData.layers[i];
-            }
-        }
-
-        throw "Layer '" + name + "' not found.";
-    };
 
     return TiledLevel;
 })

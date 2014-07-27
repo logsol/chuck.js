@@ -18,11 +18,8 @@ define([
         this.levelObject = null;
         this.isLoaded = false;
         this.load(this.uid);
+        this.spawnPoints = null;
     }
-
-    Abstract.prototype.addMethod.call(Level, "createTiles");
-    Abstract.prototype.addMethod.call(Level, "createItems");
-    Abstract.prototype.addMethod.call(Level, "addBackground");
 
     Level.prototype.load = function (uid) {
         var self = this;
@@ -33,11 +30,15 @@ define([
     }
 
     Level.prototype.setup = function(levelData) {
-        this.levelData = levelData;
-        this.createTiles();
-        this.createItems();
         this.isLoaded = true;
         Nc.trigger(Nc.ns.core.game.events.level.loaded);
+    };
+
+    Level.prototype.createItems = function(options) {
+        for (var i = 0; i < options.length; i++) {
+            var uid = "item-" + i;
+            this.createItem(uid, options[i]);
+        };
     };
 
     Level.prototype.createItem = function(uid, options) {
@@ -53,12 +54,31 @@ define([
         }
     };
 
-    Level.prototype.getRandomSpawnPoint = function() {
-        throw new Error("Level not loaded.");
-        return {
-            x: 150 + Math.random() * 300,
-            y: -500
+    Level.prototype.createTiles = function(options) {
+        for (var i = 0; i < options.length; i++) {
+            new Tile(this.engine, "tile-" + i, options[i]);
         };
+    };
+
+    Level.prototype.createSpawnPoints = function(points) {
+        this.spawnPoints = points;
+    };
+
+    Level.prototype.getRandomSpawnPoint = function() {
+        if(!this.spawnPoints) {
+            return {
+                x: 150 + Math.random() * 300,
+                y: -500
+            };
+        }
+
+        var size = this.spawnPoints.length;
+        var object = this.spawnPoints[parseInt(Math.random() * (size -1), 10)];
+
+        return {
+            x: object.x / Settings.TILE_RATIO,
+            y: object.y / Settings.TILE_RATIO
+        }
     };
 
     Level.prototype.destroy = function () {
