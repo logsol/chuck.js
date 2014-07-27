@@ -1,11 +1,12 @@
 define([
+    "Lib/Utilities/Abstract",
     "Game/Client/View/DomController", 
     "Game/Config/Settings",
     "Lib/Utilities/Exception",
     "Lib/Utilities/NotificationCenter"
 ],
 
-function (DomController, Settings, Exception, Nc) {
+function (Abstract, DomController, Settings, Exception, Nc) {
     
     function AbstractView () {
     	this.me = null;
@@ -37,9 +38,28 @@ function (DomController, Settings, Exception, Nc) {
 
             Nc.on(Nc.ns.client.view.preloadBar.update, this.onUpdateLoader, this),
         ];
-
-        
     }
+
+    Abstract.prototype.addMethod.call(AbstractView, 'render');
+    Abstract.prototype.addMethod.call(AbstractView, 'createMesh', ['texturePath', 'callback', 'options']);
+    Abstract.prototype.addMethod.call(AbstractView, 'createAnimatedMesh', ['texturePaths', 'callback', 'options']);
+    Abstract.prototype.addMethod.call(AbstractView, 'addMesh', ['mesh']);
+    Abstract.prototype.addMethod.call(AbstractView, 'removeMesh', ['mesh']);
+    Abstract.prototype.addMethod.call(AbstractView, 'updateMesh', ['mesh', 'options']);
+    Abstract.prototype.addMethod.call(AbstractView, 'addFilter', ['mesh', 'options']);
+    Abstract.prototype.addMethod.call(AbstractView, 'removeFilter', ['mesh', 'options']);
+    Abstract.prototype.addMethod.call(AbstractView, 'setCameraPosition', ['x', 'y']);
+    Abstract.prototype.addMethod.call(AbstractView, 'setCameraZoom', ['z']);
+    Abstract.prototype.addMethod.call(AbstractView, 'onZoomIn');
+    Abstract.prototype.addMethod.call(AbstractView, 'onZoomIn');
+    Abstract.prototype.addMethod.call(AbstractView, 'onZoomReset');
+    Abstract.prototype.addMethod.call(AbstractView, 'toggleInfo', ['show', 'string']);
+    Abstract.prototype.addMethod.call(AbstractView, 'onCreateAndAddPlayerInfo', ['options']);
+    Abstract.prototype.addMethod.call(AbstractView, 'onCreateAndAddPlayerArrow', ['options']);
+    Abstract.prototype.addMethod.call(AbstractView, 'onUpdatePlayerArrow', ['options']);
+    Abstract.prototype.addMethod.call(AbstractView, 'onUpdatePlayerInfo', ['mesh', 'options']);
+    Abstract.prototype.addMethod.call(AbstractView, 'onRemovePlayerInfo', ['mesh']);
+    Abstract.prototype.addMethod.call(AbstractView, 'onUpdateLoader', ['progress']);
 
     AbstractView.prototype.isWebGlEnabled = function () { 
         try { 
@@ -50,66 +70,13 @@ function (DomController, Settings, Exception, Nc) {
     }
 
     AbstractView.prototype.initCanvas = function (canvas) {
-
     	this.canvas = canvas;
         DomController.initCanvas(canvas);
     }
 
-    AbstractView.prototype.loadPlayerMesh = function(player) {
-        throw new Exception('Abstract Function loadPlayerMesh not overwritten');
-    };
-
-    AbstractView.prototype.loadMeshes = function(objects) {
-    	throw new Exception('Abstract Function loadMeshes not overwritten');
-    };
-
-    AbstractView.prototype.render = function () {
-    	throw new Exception('Abstract Function render not overwritten');
-    }
-
-    AbstractView.prototype.createMesh = function (texturePath, callback, options) {
-    	throw new Exception('Abstract Function createMesh not overwritten');
-    }
-
-    AbstractView.prototype.createAnimatedMesh = function (texturePaths, callback, options) {
-        throw new Exception('Abstract Function createAnimatedMesh not overwritten');
-    }
-
-    AbstractView.prototype.addMesh = function(mesh) {
-        throw new Exception('Abstract Function addMesh not overwritten');
-    };
-
-    AbstractView.prototype.removeMesh = function(mesh) {
-        throw new Exception('Abstract Function removeMesh not overwritten');
-    };
-
-    AbstractView.prototype.updateMesh = function(mesh, options) {
-        throw new Exception('Abstract Function updateMesh not overwritten');
-    };
-
-    AbstractView.prototype.addFilter = function(mesh, options) {
-        throw new Exception('Abstract Function addFilter not overwritten');
-    };
-
-    AbstractView.prototype.removeFilter = function(mesh, options) {
-        throw new Exception('Abstract Function removeFilter not overwritten');
-    };
-
     AbstractView.prototype.setMe = function(player) {
         this.me = player;
     };
-
-    AbstractView.prototype.addPlayer = function(player) {
- 		throw new Exception('Abstract Function addPlayer not overwritten');
-    };
-
-    AbstractView.prototype.removPlayer = function(player) {
-    	throw new Exception('Abstract Function removPlayer not overwritten');
-    };
-
-    AbstractView.prototype.setCameraPosition = function (x, y) {
-    	throw new Exception('Abstract Function setCameraPosition not overwritten');
-    }
 
     AbstractView.prototype.calculateCameraPosition = function() {
         var reference = this.me.getPosition();
@@ -125,22 +92,6 @@ function (DomController, Settings, Exception, Nc) {
         pos.y += this.me.playerController.xyInput.y * Settings.STAGE_HEIGHT / 4;
 
         return pos;
-    };
-
-    AbstractView.prototype.setCameraZoom = function (z) {
-        throw new Exception('Abstract Function setCameraZoom not overwritten');
-    };
-
-    AbstractView.prototype.onZoomIn = function () {
-        throw new Exception('Abstract Function onZoomIn not overwritten');
-    };
-
-    AbstractView.prototype.onZoomOut = function () {
-        throw new Exception('Abstract Function onZoomOut not overwritten');
-    };
-
-    AbstractView.prototype.onZoomReset = function () {
-        throw new Exception('Abstract Function onZoomReset not overwritten');
     };
 
     AbstractView.prototype.onFullscreenChange = function(isFullScreen) {
@@ -162,34 +113,6 @@ function (DomController, Settings, Exception, Nc) {
         }
 
         this.debugMode = debugMode;
-    };
-
-    AbstractView.prototype.toggleInfo = function(show, string) {
-        throw new Exception('Abstract Function showInfo not overwritten');
-    };
-
-    AbstractView.prototype.onCreateAndAddPlayerInfo = function(options) {
-        throw new Exception('Abstract Function onCreateAndAddPlayerInfo not overwritten');
-    };
-
-    AbstractView.prototype.onCreateAndAddPlayerArrow = function(options) {
-        throw new Exception('Abstract Function onCreateAndAddPlayerArrow not overwritten');
-    };
-
-    AbstractView.prototype.onUpdatePlayerArrow = function(options) {
-        throw new Exception('Abstract Function onUpdatePlayerArrow not overwritten');
-    };
-
-    AbstractView.prototype.onUpdatePlayerInfo = function(playerInfo, options) {
-        throw new Exception('Abstract Function onUpdatePlayerInfo not overwritten');
-    };
-
-    AbstractView.prototype.onRemovePlayerInfo = function(playerInfo) {
-        throw new Exception('Abstract Function onRemovePlayerInfo not overwritten');
-    };
-
-    AbstractView.prototype.onUpdateLoader = function(progress) {
-        throw new Exception('Abstract Function onUpdateLoader not overwritten');
     };
 
     AbstractView.prototype.destroy = function() {

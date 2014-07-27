@@ -65,7 +65,7 @@ define(function() {
         USE_WEBGL: true,
 
         // NETWORKING
-        NETWORK_UPDATE_INTERVAL: 70,
+        NETWORK_UPDATE_INTERVAL: 70, // in milliseconds
         NETWORK_LOG_INCOMING: false,
         NETWORK_LOG_OUTGOING: false,
         NETWORK_LOG_FILTER: ['ping', 'pong', 'worldUpdate', 'lookAt'],

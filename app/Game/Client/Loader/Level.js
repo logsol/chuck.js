@@ -13,17 +13,23 @@ function (Parent, Settings, Nc, PIXI) {
 
     Level.prototype = Object.create(Parent.prototype);
 
+    Level.prototype.setup = function(levelData) {
+        this.levelData = levelData;
+        this.addBackground();
+        Parent.prototype.setup.call(this, levelData);
+    };
+
     Level.prototype.loadLevelDataFromPath = function (path, callback) {
     	var self = this;
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
-                if(xhr.readyState == 4) {
-                        if(xhr.status == 200) {
-                                self.loadAssets(JSON.parse(xhr.responseText), callback);
-                        } else {
-                                console.error("Ajax error: " + xhr.status + " " + xhr.statusText)
-                        }
+            if(xhr.readyState == 4) {
+                if(xhr.status == 200) {
+                    self.loadAssets(JSON.parse(xhr.responseText), callback);
+                } else {
+                    console.error("Ajax error: " + xhr.status + " " + xhr.statusText)
                 }
+            }
         }
         xhr.open("GET", path, true);
         xhr.send(null);
