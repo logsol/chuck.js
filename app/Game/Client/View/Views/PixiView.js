@@ -6,10 +6,11 @@ define([
     "Game/Config/Settings",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Exception",
-    "Game/Client/View/Views/Pixi/GameStats"
+    "Game/Client/View/Views/Pixi/GameStats",
+    "Game/Client/View/Views/Pixi/Layer"
 ], 
 
-function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Exception, GameStats) {
+function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Exception, GameStats, Layer) {
     
     var AVAILABLE_MESH_FILTERS = {
         "blur": PIXI.BlurFilter,
@@ -32,6 +33,7 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
         this.init();
         this.pixi = PIXI;
         this.currentZoom = Settings.ZOOM_DEFAULT;
+        this.layers = [];
 
         PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
     }
@@ -71,6 +73,15 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
 
         this.renderer.render(this.stage);
     }
+
+    // Layers
+
+    PixiView.prototype.createAndAddLayer = function(name) {
+        
+        var layer =  new Layer(name, 1);
+        this.layers.push(layer);
+        this.stage.addChild(layer.getContainer());
+    };
 
     // Meshes
 

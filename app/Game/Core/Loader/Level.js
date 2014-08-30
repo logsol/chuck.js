@@ -42,6 +42,7 @@ define([
     };
 
     Level.prototype.createItem = function(uid, options) {
+
         switch(options.type) {
             //case 'skateboard':
             //    return new Skateboard(this.engine, uid, options);

@@ -17,6 +17,7 @@ define([
 
         this.layerMapping = {
             tiles: this.createTiles.bind(this),
+            collision: this.createTiles.bind(this),
             items: this.createItems.bind(this),
             spawnpoints: this.createSpawnPoints.bind(this)
         };
@@ -34,7 +35,10 @@ define([
             var layerOptions = levelData.layers[i];
             layerOptions.z = i;
             if(this.layerMapping[layerOptions.name]) {
+
                 this.layerMapping[layerOptions.name](layerOptions);
+            } else {
+                console.warn('No layerMapping for level file layer: ' + layerOptions.name);
             }
         };
 
@@ -87,7 +91,7 @@ define([
             return { x: o.x, y: o.y };
         });
 
-        Parent.prototype.createSpawnPoints(this, points);
+        Parent.prototype.createSpawnPoints.call(this, points);
     };
 
     TiledLevel.prototype.gatherOptions = function(tiledObject) {

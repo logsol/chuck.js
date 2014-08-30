@@ -25,6 +25,9 @@ function (Exception) {
         this.ns = {
             client: {
                 view: {
+                    layer: {
+                        createAndAdd: null
+                    },
                     mesh: {
                         create: null,
                         add: null,

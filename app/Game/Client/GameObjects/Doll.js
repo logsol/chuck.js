@@ -31,7 +31,6 @@ function (Parent, Settings, Nc, Exception, ColorConverter) {
 
         var converter = new ColorConverter();
         this.primaryColor = converter.getColorByName(player.getNickname());
-        console.log(this.primaryColor.toString(16))
 
         Parent.call(this, physicsEngine, uid, player);
     }

@@ -14,6 +14,8 @@ function (Abstract, DomController, Settings, Exception, Nc) {
         this.debugMode = false;
 
         this.ncTokens = [
+            Nc.on(Nc.ns.client.view.layer.createAndAdd, this.createLayer, this),
+
             Nc.on(Nc.ns.client.view.mesh.create, this.createMesh, this),
             Nc.on(Nc.ns.client.view.animatedMesh.create, this.createAnimatedMesh, this),
             Nc.on(Nc.ns.client.view.mesh.add, this.addMesh, this),
@@ -41,6 +43,7 @@ function (Abstract, DomController, Settings, Exception, Nc) {
     }
 
     Abstract.prototype.addMethod.call(AbstractView, 'render');
+    Abstract.prototype.addMethod.call(AbstractView, 'createAndAddLayer', ['name']);
     Abstract.prototype.addMethod.call(AbstractView, 'createMesh', ['texturePath', 'callback', 'options']);
     Abstract.prototype.addMethod.call(AbstractView, 'createAnimatedMesh', ['texturePaths', 'callback', 'options']);
     Abstract.prototype.addMethod.call(AbstractView, 'addMesh', ['mesh']);

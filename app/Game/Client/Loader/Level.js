@@ -89,13 +89,21 @@ function (Parent, Settings, Nc, PIXI) {
     };
 
     Level.prototype.createItems = function(options) {
-        Nc.trigger(); // FIXME
+
+        var layerName = "items";
+        Nc.trigger(Nc.ns.client.view.layer.createAndAdd, layerName);
+        options.layer = layerName;
+
         Parent.prototype.createItems.call(this, options);
     };
 
-    Level.prototype.createTiles = function(first_argument) {
-        Nc.trigger(); // FIXME
-        Parent.prototype.createItems.call(this, options);
+    Level.prototype.createTiles = function(options) {
+        
+        var layerName = "tiles";
+        Nc.trigger(Nc.ns.client.view.layer.createAndAdd, layerName);
+        options.layer = layerName;
+
+        Parent.prototype.createTiles.call(this, options);
     };
 
     return Level;
