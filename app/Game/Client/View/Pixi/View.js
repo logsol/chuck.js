@@ -1,13 +1,13 @@
 define([
-    "Game/Client/View/Views/AbstractView",
+    "Game/Client/View/Abstract/View",
     "Game/Client/View/DomController", 
     "Lib/Vendor/Pixi",
-    "Game/Client/View/Views/Pixi/ColorRangeReplaceFilter",
+    "Game/Client/View/Pixi/ColorRangeReplaceFilter",
     "Game/Config/Settings",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Exception",
-    "Game/Client/View/Views/Pixi/GameStats",
-    "Game/Client/View/Views/Pixi/Layer"
+    "Game/Client/View/Pixi/GameStats",
+    "Game/Client/View/Pixi/Layer"
 ], 
 
 function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Exception, GameStats, Layer) {
@@ -73,134 +73,6 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
 
         this.renderer.render(this.stage);
     }
-
-    // Layers
-
-    PixiView.prototype.createAndAddLayer = function(name) {
-        
-        var layer =  new Layer(name, 1);
-        this.layers.push(layer);
-        this.stage.addChild(layer.getContainer());
-    };
-
-    // Meshes
-
-    PixiView.prototype.addMesh = function(mesh) {
-        this.container.addChild(mesh);
-    };
-
-    PixiView.prototype.removeMesh = function(mesh) {
-        this.container.removeChild(mesh);
-    };
-
-    PixiView.prototype.createMesh = function (texturePath, callback, options) {
-
-        var texture = PIXI.Texture.fromImage(texturePath);
-
-        var mesh = new PIXI.Sprite(texture);
-
-        if(options) this.updateMesh(mesh, options);
-
-        callback(mesh);
-    }
-
-    PixiView.prototype.createAnimatedMesh = function (texturePaths, callback, options) {
-        var textures = [];
-        for (var i = 0; i < texturePaths.length; i++) {
-            var texture = PIXI.Texture.fromImage(texturePaths[i]);
-            texture.width = options.width;
-            texture.height = options.height;
-            PIXI.texturesToUpdate.push(texture);
-            textures.push(texture);
-        }
-
-        var mesh = new PIXI.MovieClip(textures);
-        if(options) this.updateMesh(mesh, options);
-
-        mesh.animationSpeed = 0.5;
-
-        mesh.play();
-
-        callback(mesh);
-    }
-
-    PixiView.prototype.updateMesh = function(mesh, options) {
-        if (options.x) mesh.position.x = options.x;
-        if (options.y) mesh.position.y = options.y;
-        if (options.rotation) mesh.rotation = options.rotation;
-        if (options.alpha) mesh.alpha = options.alpha;
-        if (options.width) mesh.width = options.width;
-        if (options.height) mesh.height = options.height;
-        if (options.xScale) mesh.width = Math.abs(mesh.width) * options.xScale;
-        if (options.yScale) mesh.scale.y = options.yScale;
-        if (options.visible === true || options.visible === false) mesh.visible = options.visible;
-        if (options.pivot) mesh.pivot = new PIXI.Point(options.pivot.x, options.pivot.y);
-    }
-
-    PixiView.prototype.addFilter = function(mesh, filterName, options) {
-
-        if (!AVAILABLE_MESH_FILTERS.hasOwnProperty(filterName)) {
-            throw new Exception('Filter ' + filterName + ' is not available');
-        }
-        
-        var MeshFilter = AVAILABLE_MESH_FILTERS[filterName];
-        var filter = new MeshFilter();
-
-        switch (filterName) {
-            case 'desaturate':
-                if (options.amount) filter.gray = options.amount;
-                break;
-
-            case 'blur':
-                if (options.blurX) filter.blurX = options.blurX;
-                if (options.blurY) filter.blurY = options.blurY;
-                break;
-
-            case 'colorRangeReplace':
-                if (options.minColor) filter.minColor = options.minColor;
-                if (options.maxColor) filter.maxColor = options.maxColor;
-                if (options.newColor) filter.newColor = options.newColor;
-                if (options.brightnessOffset) filter.brightnessOffset = options.brightnessOffset;
-                break;
-
-            case 'pixelate':
-                if (options.sizeX) filter.size.x = options.sizeX;
-                if (options.sizeY) filter.size.y = options.sizeY;
-                break;
-
-            default:
-                break;
-        }
-
-        var filters = mesh.filters;
-
-        if(!filters) {
-            filters = [];
-        } else {
-            // ensure uniqueness of filter by name
-            this.removeFilter(mesh, filterName);
-        }
-
-        filters.push(filter);
-        mesh.filters = filters;
-    };
-
-    PixiView.prototype.removeFilter = function(mesh, filterName) {
-
-        var filters = mesh.filters;
-
-        if(!filters) {
-            return;
-        }
-
-        var MeshFilter = AVAILABLE_MESH_FILTERS[options.filter];
-
-        filters = filters.filter(function(filter){
-            return !filter instanceof MeshFilter;
-        });
-
-        mesh.filters = filter;
-    };
 
     // Camera
 

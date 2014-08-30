@@ -2,17 +2,17 @@ define([
 	"Game/Core/Loader/Level",
 	"Game/Config/Settings",
     "Lib/Utilities/NotificationCenter",
-    "Lib/Vendor/Pixi"
+    "Lib/Vendor/Pixi",
+    "Game/Client/View/Abstract/Layer"
 ],
 
-function (Parent, Settings, Nc, PIXI) {
+function (Parent, Settings, Nc, PIXI, AbstractLayer) {
 
     function Level (uid, engine, gameObjects) {
         Parent.call(this, uid, engine, gameObjects);
     }
 
     Level.prototype = Object.create(Parent.prototype);
-
 
     Level.prototype.loadLevelDataFromPath = function (path, callback) {
     	var self = this;
@@ -90,7 +90,7 @@ function (Parent, Settings, Nc, PIXI) {
 
     Level.prototype.createItems = function(options) {
 
-        var layerName = "items";
+        var layerName = AbstractLayer.ID.ITEM;
         Nc.trigger(Nc.ns.client.view.layer.createAndAdd, layerName);
         options.layer = layerName;
 
@@ -99,7 +99,7 @@ function (Parent, Settings, Nc, PIXI) {
 
     Level.prototype.createTiles = function(options) {
         
-        var layerName = "tiles";
+        var layerName = AbstractLayer.ID.TILE;
         Nc.trigger(Nc.ns.client.view.layer.createAndAdd, layerName);
         options.layer = layerName;
 

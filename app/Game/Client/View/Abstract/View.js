@@ -14,15 +14,7 @@ function (Abstract, DomController, Settings, Exception, Nc) {
         this.debugMode = false;
 
         this.ncTokens = [
-            Nc.on(Nc.ns.client.view.layer.createAndAdd, this.createLayer, this),
-
-            Nc.on(Nc.ns.client.view.mesh.create, this.createMesh, this),
-            Nc.on(Nc.ns.client.view.animatedMesh.create, this.createAnimatedMesh, this),
-            Nc.on(Nc.ns.client.view.mesh.add, this.addMesh, this),
-            Nc.on(Nc.ns.client.view.mesh.remove, this.removeMesh, this),
-            Nc.on(Nc.ns.client.view.mesh.update, this.updateMesh, this),
-            Nc.on(Nc.ns.client.view.mesh.addFilter, this.addFilter, this),
-            Nc.on(Nc.ns.client.view.mesh.removeFilter, this.removeFilter, this),
+            Nc.on(Nc.ns.client.view.layer.createAndAdd, this.createAndAddLayer, this),
 
             Nc.on(Nc.ns.client.view.fullscreen.change, this.onFullscreenChange, this),
             Nc.on(Nc.ns.client.view.debugMode.toggle, this.onToggleDebugMode, this),
@@ -43,12 +35,7 @@ function (Abstract, DomController, Settings, Exception, Nc) {
     }
 
     Abstract.prototype.addMethod.call(AbstractView, 'render');
-    Abstract.prototype.addMethod.call(AbstractView, 'createAndAddLayer', ['name']);
-    Abstract.prototype.addMethod.call(AbstractView, 'createMesh', ['texturePath', 'callback', 'options']);
-    Abstract.prototype.addMethod.call(AbstractView, 'createAnimatedMesh', ['texturePaths', 'callback', 'options']);
-    Abstract.prototype.addMethod.call(AbstractView, 'addMesh', ['mesh']);
-    Abstract.prototype.addMethod.call(AbstractView, 'removeMesh', ['mesh']);
-    Abstract.prototype.addMethod.call(AbstractView, 'updateMesh', ['mesh', 'options']);
+    Abstract.prototype.addMethod.call(AbstractView, 'createAndInsert', ['id', 'parallaxSpeed', 'referenceId', 'behind']);
     Abstract.prototype.addMethod.call(AbstractView, 'addFilter', ['mesh', 'options']);
     Abstract.prototype.addMethod.call(AbstractView, 'removeFilter', ['mesh', 'options']);
     Abstract.prototype.addMethod.call(AbstractView, 'setCameraPosition', ['x', 'y']);
