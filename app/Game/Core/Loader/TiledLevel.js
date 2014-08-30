@@ -31,8 +31,14 @@ define([
 
     TiledLevel.prototype.setup = function(levelData) {
         this.levelData = levelData;
-        for (var i = 0; i < levelData.layers.length; i++) {
-            var layerOptions = levelData.layers[i];
+
+        // Make sure spawnpoints layer is created first
+        var layers = levelData.layers.sort(function(a, b) {
+            return a.name == "spawnpoints" ? -1 : b.name == "spawnpoints" ? 1 : 0;
+        });
+
+        for (var i = 0; i < layers.length; i++) {
+            var layerOptions = layers[i];
             layerOptions.z = i;
             if(this.layerMapping[layerOptions.name]) {
 

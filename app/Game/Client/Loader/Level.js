@@ -89,19 +89,22 @@ function (Parent, Settings, Nc, PIXI, AbstractLayer) {
     };
 
     Level.prototype.createItems = function(options) {
-
-        var layerName = AbstractLayer.ID.ITEM;
-        Nc.trigger(Nc.ns.client.view.layer.createAndAdd, layerName);
-        options.layer = layerName;
+        options.layer = AbstractLayer.ID.ITEM;
+        Nc.trigger(Nc.ns.client.view.layer.createAndInsert, options.layer, 1, AbstractLayer.ID.SPAWN, true);
 
         Parent.prototype.createItems.call(this, options);
     };
 
     Level.prototype.createTiles = function(options) {
-        
-        var layerName = AbstractLayer.ID.TILE;
-        Nc.trigger(Nc.ns.client.view.layer.createAndAdd, layerName);
-        options.layer = layerName;
+        options.layerId = AbstractLayer.ID.TILE;        
+        Nc.trigger(Nc.ns.client.view.layer.createAndInsert, options.layerId, 1, AbstractLayer.ID.SPAWN, true);
+
+        Parent.prototype.createTiles.call(this, options);
+    };
+
+    Level.prototype.createSpawnPoints = function(options) {
+        options.layerId = AbstractLayer.ID.SPAWN;        
+        Nc.trigger(Nc.ns.client.view.layer.createAndInsert, options.layerId, 1);
 
         Parent.prototype.createTiles.call(this, options);
     };

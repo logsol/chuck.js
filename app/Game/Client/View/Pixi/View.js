@@ -7,10 +7,10 @@ define([
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Exception",
     "Game/Client/View/Pixi/GameStats",
-    "Game/Client/View/Pixi/Layer"
+    "Game/Client/View/LayerManager",
 ], 
 
-function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Exception, GameStats, Layer) {
+function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Exception, GameStats, LayerManager) {
     
     var AVAILABLE_MESH_FILTERS = {
         "blur": PIXI.BlurFilter,
@@ -23,6 +23,7 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
 
         Parent.call(this);
 
+        this.layerManager = null;
         this.movableObjects = [];
         this.stage = null;
         this.container = null;
@@ -33,7 +34,6 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
         this.init();
         this.pixi = PIXI;
         this.currentZoom = Settings.ZOOM_DEFAULT;
-        this.layers = [];
 
         PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
     }
@@ -55,6 +55,8 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
         }
 
         this.stage = new PIXI.Stage(0x333333);
+
+        this.layerManager = new LayerManager(this.stage);
 
         this.initCamera();
         this.initLoader();
@@ -283,6 +285,8 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
     };
 
     PixiView.prototype.destroy = function() {
+
+        this.layerManager.destroy();
         
         for (var i = 0; i < this.stage.children.length; i++) {
             this.stage.removeChild(this.stage.children[i]);

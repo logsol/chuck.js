@@ -26,7 +26,7 @@ function (Exception) {
             client: {
                 view: {
                     layer: {
-                        createAndAdd: null
+                        createAndInsert: null
                     },
                     mesh: {
                         create: null,

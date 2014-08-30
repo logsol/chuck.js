@@ -13,15 +13,15 @@ function (Parent, PIXI) {
     Layer.prototype = Object.create(Parent.prototype);
 
     Layer.prototype.getContainer = function() {
-        return this.contianer;
+        return this.container;
     };
 
     Layer.prototype.show = function() {
-        this.contianer.visible = true;
+        this.container.visible = true;
     };
 
     Layer.prototype.hide = function() {
-        this.contianer.visible = false;
+        this.container.visible = false;
     };
 
     Layer.prototype.addMesh = function(mesh) {

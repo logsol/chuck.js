@@ -1,11 +1,17 @@
 define([
-	    "Lib/Utilities/NotificationCenter"
+    "Lib/Utilities/NotificationCenter",
+    "Lib/Utilities/Exception",
+    "Game/Client/View/Pixi/Layer"
 ],
  
-function (Nc) {
+function (Nc, Exception, Layer) {
  
-    function LayerManager() {
+    function LayerManager(stage) {
+        this.layers = [];
+        this.stage = stage;
+
         this.ncTokens = [
+            Nc.on(Nc.ns.client.view.layer.createAndInsert, this.createAndInsert, this),
             Nc.on(Nc.ns.client.view.mesh.create, this.createMesh, this),
             Nc.on(Nc.ns.client.view.animatedMesh.create, this.createAnimatedMesh, this),
             Nc.on(Nc.ns.client.view.mesh.add, this.addMesh, this),
@@ -39,7 +45,7 @@ function (Nc) {
 
         var layer =  new Layer(id, parallaxSpeed);
 
-        var layerIndex = behind ? referenceIndex : referenceIndex + 1;
+        var layerIndex = behind ? referenceIndex -1 : referenceIndex;
 
         this.layers.splice(layerIndex, 0, layer);
         this.stage.addChildAt(layer.getContainer(), layerIndex);
@@ -57,37 +63,43 @@ function (Nc) {
 
     LayerManager.prototype.delegate = function(methodName, layerId) {
     	var layer = this.getLayerById(layerId);
-    	var args = arguments.splice(0,2);
+    	var args = Array.prototype.splice.call(arguments, 0, 2);
 
     	layer[methodName].apply(layer, args);
     };
 
     LayerManager.prototype.createMesh = function() {
-    	this.delegate(arguments.splice(0,0,'createMesh'));
+    	this.delegate(Array.prototype.splice.call(arguments, 0, 0, 'createMesh'));
     };
 
     LayerManager.prototype.createAnimatedMesh = function() {
-    	this.delegate(arguments.splice(0,0,'createAnimatedMesh'));
+    	this.delegate(Array.prototype.splice.call(arguments, 0, 0, 'createAnimatedMesh'));
     };
 
     LayerManager.prototype.addMesh = function() {
-    	this.delegate(arguments.splice(0,0,'addMesh'));
+    	this.delegate(Array.prototype.splice.call(arguments, 0, 0, 'addMesh'));
     };
 
     LayerManager.prototype.removeMesh = function() {
-    	this.delegate(arguments.splice(0,0,'removeMesh'));
+    	this.delegate(Array.prototype.splice.call(arguments, 0, 0, 'removeMesh'));
     };
 
     LayerManager.prototype.updateMesh = function() {
-    	this.delegate(arguments.splice(0,0,'updateMesh'));
+    	this.delegate(Array.prototype.splice.call(arguments, 0, 0, 'updateMesh'));
     };
 
     LayerManager.prototype.addFilter = function() {
-    	this.delegate(arguments.splice(0,0,'addFilter'));
+    	this.delegate(Array.prototype.splice.call(arguments, 0, 0, 'addFilter'));
     };
 
     LayerManager.prototype.removeFilter = function() {
-    	this.delegate(arguments.splice(0,0,'removeFilter'));
+    	this.delegate(Array.prototype.splice.call(arguments, 0, 0, 'removeFilter'));
+    };
+
+    LayerManager.prototype.destroy = function() {
+        for (var i = 0; i < this.ncTokens.length; i++) {
+            Nc.off(this.ncTokens[i]);
+        };
     };
 
     return LayerManager;

@@ -14,8 +14,6 @@ function (Abstract, DomController, Settings, Exception, Nc) {
         this.debugMode = false;
 
         this.ncTokens = [
-            Nc.on(Nc.ns.client.view.layer.createAndAdd, this.createAndAddLayer, this),
-
             Nc.on(Nc.ns.client.view.fullscreen.change, this.onFullscreenChange, this),
             Nc.on(Nc.ns.client.view.debugMode.toggle, this.onToggleDebugMode, this),
 
