@@ -7,6 +7,7 @@ function (Parent, Settings) {
  
     function TiledLevel(uid, engine, gameObjects) {
     	Parent.call(this, uid, engine, gameObjects);
+        this.layerId = "background";
     }
 
     TiledLevel.prototype = Object.create(Parent.prototype);
@@ -63,6 +64,7 @@ function (Parent, Settings) {
     TiledLevel.prototype.addBackground = function(options) {
         var texturePath = Settings.GRAPHICS_PATH + options.image;
 
+/*
         var callback = function (mesh) {
             Nc.trigger(Nc.ns.client.view.mesh.add, mesh, 0); // FIXME: add at z layer -1 or so
         }
@@ -72,6 +74,7 @@ function (Parent, Settings) {
             x: -(4000 - Settings.STAGE_WIDTH) / 2,
             y: -(2959 + Settings.STAGE_HEIGHT + 700) / 2
         });
+*/
     }
 
     TiledLevel.prototype.getLayer = function(levelData, name) {

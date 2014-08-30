@@ -1,13 +1,15 @@
 define([
 	"Game/Core/GameObjects/Tile",
 	"Game/Config/Settings",
-    "Lib/Utilities/NotificationCenter"
+    "Lib/Utilities/NotificationCenter",
+    "Game/Client/View/Abstract/Layer"
 ],
  
-function (Parent, Settings, Nc) {
+function (Parent, Settings, Nc, Layer) {
  
     function Tile(physicsEngine, uid, options) {
     	Parent.call(this, physicsEngine, uid, options);
+        this.layerId = Layer.ID.TILE;
     }
 
     Tile.prototype = Object.create(Parent.prototype);
@@ -27,10 +29,11 @@ function (Parent, Settings, Nc) {
 
     	var callback = function(mesh) {
     		self.mesh = mesh;
-            Nc.trigger(Nc.ns.client.view.mesh.add, mesh);
+            Nc.trigger(Nc.ns.client.view.mesh.add, self.layerId, mesh);
     	}
    
         Nc.trigger(Nc.ns.client.view.mesh.create,
+            this.layerId,
             texturePath, 
             callback,
             {
@@ -45,13 +48,14 @@ function (Parent, Settings, Nc) {
     };
 
     Tile.prototype.destroy = function() {
-        Nc.trigger(Nc.ns.client.view.mesh.remove, this.mesh);
+        Nc.trigger(Nc.ns.client.view.mesh.remove, this.layerId, this.mesh);
         Parent.prototype.destroy.call(this);
     };
 
     Tile.prototype.render = function() {
 
         Nc.trigger(Nc.ns.client.view.mesh.update,
+            this.layerId,
             this.mesh,
             {
                 x: this.body.GetPosition().x * Settings.RATIO,

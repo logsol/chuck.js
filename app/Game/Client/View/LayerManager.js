@@ -44,7 +44,6 @@ function (Nc, Exception, Layer) {
         }
 
         var layer =  new Layer(id, parallaxSpeed);
-
         var layerIndex = behind ? referenceIndex -1 : referenceIndex;
 
         this.layers.splice(layerIndex, 0, layer);
@@ -58,7 +57,7 @@ function (Nc, Exception, Layer) {
     			return layer;
     		}
     	};
-    	console.warn('No such layer: ' + id);
+    	throw new Exception('No such layer: ' + id);
     };
 
     LayerManager.prototype.delegate = function(methodName, layerId) {
