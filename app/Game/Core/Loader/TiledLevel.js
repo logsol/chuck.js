@@ -52,6 +52,7 @@ define([
     };
 
     TiledLevel.prototype.createTiles = function(options) {
+        console.log('core tiledlevel createTiles');
 
         var data = options.data;
         var tilesOptions = [];

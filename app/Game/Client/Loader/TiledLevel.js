@@ -6,8 +6,8 @@ define([
 function (Parent, Settings) {
  
     function TiledLevel(uid, engine, gameObjects) {
-    	Parent.call(this, uid, engine, gameObjects);
         this.layerId = "background";
+    	Parent.call(this, uid, engine, gameObjects);
     }
 
     TiledLevel.prototype = Object.create(Parent.prototype);

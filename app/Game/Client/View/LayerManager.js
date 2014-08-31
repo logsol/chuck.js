@@ -6,9 +6,9 @@ define([
  
 function (Nc, Exception, Layer) {
  
-    function LayerManager(stage) {
+    function LayerManager(container) {
         this.layers = [];
-        this.stage = stage;
+        this.container = container;
 
         this.ncTokens = [
             Nc.on(Nc.ns.client.view.layer.createAndInsert, this.createAndInsert, this),
@@ -40,14 +40,37 @@ function (Nc, Exception, Layer) {
                 throw new Exception('Reference Layer (' + referenceId + ') could not be found');
             }
         } else { 
-            referenceIndex = behind ? 0 : this.stage.children.length;
+            referenceIndex = behind ? 0 : this.container.children.length;
         }
 
         var layer =  new Layer(id, parallaxSpeed);
         var layerIndex = behind ? referenceIndex -1 : referenceIndex;
 
         this.layers.splice(layerIndex, 0, layer);
-        this.stage.addChildAt(layer.getContainer(), layerIndex);
+        
+        this.rearrangeLayers();
+    };
+
+    LayerManager.prototype.rearrangeLayers = function() {
+
+        var layer;
+
+        for (var i = this.layers.length - 1; i >= 0; i--) {
+            layer = this.layers[i];
+            if (this.container.children.indexOf(layer.getContainer()) !== -1) {
+                this.container.removeChild(layer.getContainer());
+            }
+        };
+
+        if (this.container.children.length !== 0) {
+            console.warn('Unmanaged stuff in container... ', this.container.children);
+            //throw new Exception('Unmanaged dirt in container... ');
+        }
+
+        for (var i = 0; i < this.layers.length; i++) {
+            layer = this.layers[i];
+            this.container.addChildAt(layer.getContainer(), i);
+        };
     };
 
     LayerManager.prototype.getLayerById = function(id) {
@@ -57,42 +80,59 @@ function (Nc, Exception, Layer) {
     			return layer;
     		}
     	};
-    	throw new Exception('No such layer: ' + id);
+        return null;
     };
 
-    LayerManager.prototype.delegate = function(methodName, layerId) {
+    LayerManager.prototype.delegate = function() {
+        var methodName = arguments[0];
+        var layerId = arguments[1];
     	var layer = this.getLayerById(layerId);
-    	var args = Array.prototype.splice.call(arguments, 0, 2);
+
+        if (!layer) {
+            throw new Exception('Layer (' + layerId + ') does not exist.');
+        }
+
+    	var args = arguments;
+        Array.prototype.splice.call(args, 0, 2);
 
     	layer[methodName].apply(layer, args);
     };
 
     LayerManager.prototype.createMesh = function() {
-    	this.delegate(Array.prototype.splice.call(arguments, 0, 0, 'createMesh'));
+        var args = arguments;
+        Array.prototype.splice.call(args, 0, 0, 'createMesh')
+
+    	this.delegate.apply(this, args);
     };
 
     LayerManager.prototype.createAnimatedMesh = function() {
-    	this.delegate(Array.prototype.splice.call(arguments, 0, 0, 'createAnimatedMesh'));
+        Array.prototype.splice.call(arguments, 0, 0, 'createAnimatedMesh')
+    	this.delegate.apply(this, arguments);
     };
 
     LayerManager.prototype.addMesh = function() {
-    	this.delegate(Array.prototype.splice.call(arguments, 0, 0, 'addMesh'));
+        Array.prototype.splice.call(arguments, 0, 0, 'addMesh')
+    	this.delegate.apply(this, arguments);
     };
 
     LayerManager.prototype.removeMesh = function() {
-    	this.delegate(Array.prototype.splice.call(arguments, 0, 0, 'removeMesh'));
+        Array.prototype.splice.call(arguments, 0, 0, 'removeMesh')
+    	this.delegate.apply(this, arguments);
     };
 
     LayerManager.prototype.updateMesh = function() {
-    	this.delegate(Array.prototype.splice.call(arguments, 0, 0, 'updateMesh'));
+        Array.prototype.splice.call(arguments, 0, 0, 'updateMesh')
+    	this.delegate.apply(this, arguments);
     };
 
     LayerManager.prototype.addFilter = function() {
-    	this.delegate(Array.prototype.splice.call(arguments, 0, 0, 'addFilter'));
+        Array.prototype.splice.call(arguments, 0, 0, 'addFilter')
+    	this.delegate.apply(this, arguments);
     };
 
     LayerManager.prototype.removeFilter = function() {
-    	this.delegate(Array.prototype.splice.call(arguments, 0, 0, 'removeFilter'));
+        Array.prototype.splice.call(arguments, 0, 0, 'removeFilter')
+    	this.delegate.apply(this, arguments);
     };
 
     LayerManager.prototype.destroy = function() {

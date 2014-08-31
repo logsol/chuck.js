@@ -8,8 +8,8 @@ define([
 function (Parent, Settings, Nc, Layer) {
  
     function Tile(physicsEngine, uid, options) {
-    	Parent.call(this, physicsEngine, uid, options);
         this.layerId = Layer.ID.TILE;
+    	Parent.call(this, physicsEngine, uid, options);
     }
 
     Tile.prototype = Object.create(Parent.prototype);

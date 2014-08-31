@@ -1,13 +1,23 @@
 define([
     "Game/Client/View/Abstract/Layer",
 	"Lib/Vendor/Pixi",
+    "Game/Client/View/Pixi/ColorRangeReplaceFilter",
 ],
 
-function (Parent, PIXI) {
+function (Parent, PIXI, ColorRangeReplaceFilter) {
+
+    var AVAILABLE_MESH_FILTERS = {
+        "blur": PIXI.BlurFilter,
+        "desaturate": PIXI.GrayFilter,
+        "pixelate": PIXI.PixelateFilter,
+        "colorRangeReplace": ColorRangeReplaceFilter,
+    };
     
     function Layer (name, parallaxSpeed) {
         Parent.call(this, name, parallaxSpeed);
         this.container = new PIXI.DisplayObjectContainer();
+        this.container.x = 0;
+        this.container.y = 0;
     }
 
     Layer.prototype = Object.create(Parent.prototype);

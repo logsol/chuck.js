@@ -2,7 +2,6 @@ define([
     "Game/Client/View/Abstract/View",
     "Game/Client/View/DomController", 
     "Lib/Vendor/Pixi",
-    "Game/Client/View/Pixi/ColorRangeReplaceFilter",
     "Game/Config/Settings",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Exception",
@@ -10,14 +9,7 @@ define([
     "Game/Client/View/LayerManager",
 ], 
 
-function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Exception, GameStats, LayerManager) {
-    
-    var AVAILABLE_MESH_FILTERS = {
-        "blur": PIXI.BlurFilter,
-        "desaturate": PIXI.GrayFilter,
-        "pixelate": PIXI.PixelateFilter,
-        "colorRangeReplace": ColorRangeReplaceFilter,
-    };
+function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, LayerManager) {
 
     function PixiView () {
 
@@ -56,9 +48,10 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
 
         this.stage = new PIXI.Stage(0x333333);
 
-        this.layerManager = new LayerManager(this.stage);
-
         this.initCamera();
+
+        this.layerManager = new LayerManager(this.container);
+
         this.initLoader();
 
         this.initCanvas(this.renderer.view);

@@ -89,13 +89,14 @@ function (Parent, Settings, Nc, PIXI, AbstractLayer) {
     };
 
     Level.prototype.createItems = function(options) {
-        options.layer = AbstractLayer.ID.ITEM;
-        Nc.trigger(Nc.ns.client.view.layer.createAndInsert, options.layer, 1, AbstractLayer.ID.SPAWN, true);
+        options.layerId = AbstractLayer.ID.ITEM;
+        Nc.trigger(Nc.ns.client.view.layer.createAndInsert, options.layerId, 1, AbstractLayer.ID.SPAWN, true);
 
         Parent.prototype.createItems.call(this, options);
     };
 
     Level.prototype.createTiles = function(options) {
+        console.log('client level createTiles');
         options.layerId = AbstractLayer.ID.TILE;        
         Nc.trigger(Nc.ns.client.view.layer.createAndInsert, options.layerId, 1, AbstractLayer.ID.SPAWN, true);
 
@@ -106,7 +107,7 @@ function (Parent, Settings, Nc, PIXI, AbstractLayer) {
         options.layerId = AbstractLayer.ID.SPAWN;        
         Nc.trigger(Nc.ns.client.view.layer.createAndInsert, options.layerId, 1);
 
-        Parent.prototype.createTiles.call(this, options);
+        Parent.prototype.createSpawnPoints.call(this, options);
     };
 
     return Level;
