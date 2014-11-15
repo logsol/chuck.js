@@ -2,9 +2,10 @@ define([
     "Game/Client/View/Abstract/Layer",
 	"Lib/Vendor/Pixi",
     "Game/Client/View/Pixi/ColorRangeReplaceFilter",
+    "Game/Config/Settings",
 ],
 
-function (Parent, PIXI, ColorRangeReplaceFilter) {
+function (Parent, PIXI, ColorRangeReplaceFilter, Settings) {
 
     var AVAILABLE_MESH_FILTERS = {
         "blur": PIXI.BlurFilter,
@@ -151,7 +152,35 @@ function (Parent, PIXI, ColorRangeReplaceFilter) {
         mesh.filters = filter;
     };
 
+    Layer.prototype.render = function(centerPosition, zoom) {
+        this.setPosition(centerPosition);
+        this.setZoom(zoom);
+
+        // Zoom
+        var zoomStep = (this.zoom.target - this.zoom.current) * Settings.CAMERA_GLIDE / 100;
+        this.zoom.current += zoomStep;
+        this.container.scale.x = this.zoom.current;
+        this.container.scale.y = this.container.scale.x;
+
+        // Position
+        var posXStep = (this.position.target.x - this.position.current.x) * Settings.CAMERA_GLIDE / 100;
+        this.position.current.x += posXStep;
+        this.container.x = this.position.current.x + (this.position.current.x * this.parallaxSpeed);
+
+        var posYStep = (this.position.target.y - this.position.current.y) * Settings.CAMERA_GLIDE / 100;
+        this.position.current.y += posYStep;
+        this.container.y = this.position.current.y + (this.position.current.y * this.parallaxSpeed);
+    };
 
     return Layer;
 });
 
+
+/*
+
+1 = this.zoom.current ? -1
+
+1 = this.zoom.current * (-1) * (-1)
+
+
+*/

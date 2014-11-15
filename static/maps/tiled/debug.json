@@ -3,9 +3,28 @@
  "layers":[
         {
          "height":0,
-         "image":"..\/..\/img\/Backgrounds\/starnight.png",
+         "image":"..\/..\/img\/Backgrounds\/starnight-small.png",
          "name":"background",
          "opacity":1,
+         "properties":
+            {
+             "parallaxSpeed":"-1.0"
+            },
+         "type":"imagelayer",
+         "visible":false,
+         "width":0,
+         "x":0,
+         "y":0
+        },
+        {
+         "height":0,
+         "image":"..\/..\/img\/Backgrounds\/clouds.png",
+         "name":"clouds",
+         "opacity":0.3,
+         "properties":
+            {
+             "parallaxSpeed":"-0.3"
+            },
          "type":"imagelayer",
          "visible":false,
          "width":0,

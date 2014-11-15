@@ -80,14 +80,19 @@ function (Parent, Settings, Nc) {
                     pivot: {
                         x: mesh.texture.width / 2,
                         y: mesh.texture.height / 2
-                    }
+                    },
+                    xScale: 1,
+                    yScale: 1
                 });
             }
        
             Nc.trigger(Nc.ns.client.view.mesh.create,
                 options.layerId,
                 texturePath, 
-                callback
+                callback,
+                {
+                    alpha: options.opacity
+                }
             );
         }
 

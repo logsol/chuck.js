@@ -64,7 +64,7 @@ function (Abstract, DomController, Settings, Exception, Nc) {
     AbstractView.prototype.setMe = function(player) {
         this.me = player;
     };
-
+/*
     AbstractView.prototype.calculateCameraPosition = function() {
         var reference = this.me.getPosition();
         var pos = {};
@@ -80,7 +80,7 @@ function (Abstract, DomController, Settings, Exception, Nc) {
 
         return pos;
     };
-
+*/
     AbstractView.prototype.onFullscreenChange = function(isFullScreen) {
 
         if (!isFullScreen) {

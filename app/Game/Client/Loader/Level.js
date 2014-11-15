@@ -90,7 +90,11 @@ function (Parent, Settings, Nc, PIXI, AbstractLayer) {
 
     Level.prototype.setupLayer = function(options, behind, referenceId) {
         Parent.prototype.setupLayer.call(this, options, behind, referenceId);
-        Nc.trigger(Nc.ns.client.view.layer.createAndInsert, options.layerId, 1, behind, referenceId);
+        var parallaxSpeed = 0.0;
+        if (options.properties && options.properties.parallaxSpeed) {
+            parallaxSpeed = parseFloat(options.properties.parallaxSpeed);
+        } 
+        Nc.trigger(Nc.ns.client.view.layer.createAndInsert, options.layerId, parallaxSpeed, behind, referenceId);
     };
 
     return Level;

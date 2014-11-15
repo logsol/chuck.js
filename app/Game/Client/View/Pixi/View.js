@@ -50,7 +50,7 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
 
         this.initCamera();
 
-        this.layerManager = new LayerManager(this.container);
+        this.layerManager = new LayerManager(this.container, this.me);
 
         this.initLoader();
 
@@ -61,21 +61,35 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
     }
 
     PixiView.prototype.render = function () {
-        if(this.me) {
-            var pos = this.calculateCameraPosition();
-            this.setCameraPosition(pos.x, pos.y);
+        if (this.me) {
+            this.layerManager.render(this.calculateCenterPosition(), this.currentZoom);
         }
 
         this.renderer.render(this.stage);
     }
 
     // Camera
-
     PixiView.prototype.initCamera = function () {
         this.container = new PIXI.DisplayObjectContainer();
         this.stage.addChild(this.container);
     }
 
+    PixiView.prototype.calculateCenterPosition = function() {
+        var target = this.me.getHeadPosition();
+        var centerPosition = {x: target.x, y: target.y};
+        centerPosition.x *= -Settings.RATIO * this.currentZoom;
+        centerPosition.y *= -Settings.RATIO * this.currentZoom;
+
+        centerPosition.x += Settings.STAGE_WIDTH / 2;
+        centerPosition.y += Settings.STAGE_HEIGHT / 2;
+
+        centerPosition.x -= this.me.playerController.xyInput.x * Settings.STAGE_WIDTH / 4;
+        centerPosition.y += this.me.playerController.xyInput.y * Settings.STAGE_HEIGHT / 4;
+
+        return centerPosition;
+    };
+
+/*
     PixiView.prototype.calculateCameraPosition = function() {
         var targetZoom = this.currentZoom;
 
@@ -115,7 +129,7 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
 
         return pos;
     };
-
+*/
     PixiView.prototype.setCameraZoom = function (zoom) {
 /*
         var oldZoom = this.container.scale.x;

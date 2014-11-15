@@ -4,9 +4,17 @@ define([
 
 function (Abstract) {
 
-    function Layer(name, z, parallaxSpeed) {
+    function Layer(name, parallaxSpeed) {
     	this.name = name;
     	this.parallaxSpeed = parallaxSpeed;
+        this.zoom = { 
+            current: 1, 
+            target: 1
+        };
+        this.position = {
+            current: { x: 0, y: 0},
+            target: { x: 0, y: 0}
+        };
     }
 
     Object.defineProperty(Layer, 'ID', { 
@@ -24,9 +32,19 @@ function (Abstract) {
     Abstract.prototype.addMethod.call(Layer, 'addMesh', ['mesh']);
     Abstract.prototype.addMethod.call(Layer, 'removeMesh', ['mesh']);
     Abstract.prototype.addMethod.call(Layer, 'updateMesh', ['mesh', 'options']);
+    Abstract.prototype.addMethod.call(Layer, 'render', ['centerPosition']);
 
     Layer.prototype.getName = function() {
         return this.name;
+    };
+
+    Layer.prototype.setPosition = function(centerPosition) {
+        this.position.target.x = centerPosition.x;
+        this.position.target.y = centerPosition.y;
+    };
+
+    Layer.prototype.setZoom = function(z) {
+        this.zoom.target = z;
     };
 
     return Layer;

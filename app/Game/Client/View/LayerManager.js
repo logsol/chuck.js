@@ -6,7 +6,7 @@ define([
  
 function (Nc, Exception, Layer) {
  
-    function LayerManager(container) {
+    function LayerManager(container, me) {
         this.layers = [];
         this.container = container;
 
@@ -21,6 +21,14 @@ function (Nc, Exception, Layer) {
             Nc.on(Nc.ns.client.view.mesh.removeFilter, this.removeFilter, this)
         ];
     }
+
+
+    LayerManager.prototype.render = function(centerPosition, zoom) {
+        for (var i = 0; i < this.layers.length; i++) {
+            var layer = this.layers[i];
+            layer.render(centerPosition, zoom);
+        }
+    };
  
     /*
      * If no referenceId is given, the layer is inserted in the far background (behind=true)
@@ -86,6 +94,11 @@ function (Nc, Exception, Layer) {
     	};
         return null;
     };
+
+
+
+
+    /* Delegate methods */
 
     LayerManager.prototype.delegate = function() {
         var methodName = arguments[0];
