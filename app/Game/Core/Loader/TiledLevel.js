@@ -56,7 +56,7 @@ define([
         }
 
         var spawnpointsFound = false,
-            lastLayerId;
+            lastLayerId = null;
 
         // from spawnpoints to background
         for (var i = levelData.layers.length - 1; i >= 0; i--) {

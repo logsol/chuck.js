@@ -74,35 +74,24 @@ function (Parent, Settings, Nc) {
 
             var callback = function(mesh) {
                 Nc.trigger(Nc.ns.client.view.mesh.add, options.layerId, mesh);
+                Nc.trigger(Nc.ns.client.view.mesh.update, options.layerId, mesh, {
+                    x: Settings.STAGE_WIDTH / 2,
+                    y: Settings.STAGE_HEIGHT / 2,
+                    pivot: {
+                        x: mesh.texture.width / 2,
+                        y: mesh.texture.height / 2
+                    }
+                });
             }
        
             Nc.trigger(Nc.ns.client.view.mesh.create,
                 options.layerId,
                 texturePath, 
-                callback,
-                {
-                    x: 200
-                }
+                callback
             );
         }
 
     };
-
-    TiledLevel.prototype.addBackground = function(options) {
-        var texturePath = Settings.GRAPHICS_PATH + options.image;
-
-/*
-        var callback = function (mesh) {
-            Nc.trigger(Nc.ns.client.view.mesh.add, mesh, 0); // FIXME: add at z layer -1 or so
-        }
-        Nc.trigger(Nc.ns.client.view.mesh.create, texturePath, callback, {
-            width: 4000,
-            height: 2959, 
-            x: -(4000 - Settings.STAGE_WIDTH) / 2,
-            y: -(2959 + Settings.STAGE_HEIGHT + 700) / 2
-        });
-*/
-    }
 
     TiledLevel.prototype.getLayer = function(levelData, name) {
         for (var i = 0; i < levelData.layers.length; i++) {

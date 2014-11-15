@@ -53,8 +53,6 @@ function (Nc, Exception, Layer) {
         this.layers.splice(layerIndex, 0, layer);
         
         this.rearrangeLayers();
-
-        console.log(this.layers.map(function(o) {return o.name}))
     };
 
     LayerManager.prototype.rearrangeLayers = function() {
