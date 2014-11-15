@@ -22,7 +22,11 @@ function (Nc, Exception, Layer) {
         ];
     }
  
-    LayerManager.prototype.createAndInsert = function(id, parallaxSpeed, referenceId, behind) {
+    /*
+     * If no referenceId is given, the layer is inserted in the far background (behind=true)
+     * or in the foreground (behind=false/null)
+     */
+    LayerManager.prototype.createAndInsert = function(id, parallaxSpeed, behind, referenceId) {
 
         var referenceIndex = -1;
         behind = !!behind;
@@ -44,11 +48,13 @@ function (Nc, Exception, Layer) {
         }
 
         var layer =  new Layer(id, parallaxSpeed);
-        var layerIndex = behind ? referenceIndex -1 : referenceIndex;
+        var layerIndex = behind ? referenceIndex : referenceIndex + 1;
 
         this.layers.splice(layerIndex, 0, layer);
         
         this.rearrangeLayers();
+
+        console.log(this.layers.map(function(o) {return o.name}))
     };
 
     LayerManager.prototype.rearrangeLayers = function() {

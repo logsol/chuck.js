@@ -33,7 +33,6 @@ function (Abstract, DomController, Settings, Exception, Nc) {
     }
 
     Abstract.prototype.addMethod.call(AbstractView, 'render');
-    Abstract.prototype.addMethod.call(AbstractView, 'createAndInsert', ['id', 'parallaxSpeed', 'referenceId', 'behind']);
     Abstract.prototype.addMethod.call(AbstractView, 'addFilter', ['mesh', 'options']);
     Abstract.prototype.addMethod.call(AbstractView, 'removeFilter', ['mesh', 'options']);
     Abstract.prototype.addMethod.call(AbstractView, 'setCameraPosition', ['x', 'y']);

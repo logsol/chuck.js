@@ -6,20 +6,21 @@ define([
     "Lib/Utilities/Options",
     "Lib/Utilities/Exception",
     "Lib/Utilities/NotificationCenter",
+    "Game/Client/View/Abstract/Layer", 
     "Game/" + GLOBALS.context + "/Collision/Detector",
     "Game/" + GLOBALS.context + "/GameObjects/Tile",
     "Game/" + GLOBALS.context + "/GameObjects/Item",
     "Game/" + GLOBALS.context + "/GameObjects/Items/Skateboard",
 
-], function (Parent, Settings, ItemSettings, Box2D, Options, Exception, Nc, CollisionDetector, Tile, Item, Skateboard) {
+], function (Parent, Settings, ItemSettings, Box2D, Options, Exception, Nc, AbstractLayer, CollisionDetector, Tile, Item, Skateboard) {
     
     function TiledLevel (path, engine) {
 
         this.layerMapping = {
             tiles: this.createTiles.bind(this),
-            //collision: this.createTiles.bind(this), collision renamed to tiles
             items: this.createItems.bind(this),
             spawnpoints: this.createSpawnPoints.bind(this)
+            //collision: this.createTiles.bind(this), collision renamed to tiles
         };
 
         this.levelData = null;
@@ -32,42 +33,87 @@ define([
     TiledLevel.prototype.setup = function(levelData) {
         this.levelData = levelData;
 
-        // Make sure spawnpoints layer is created first because of add before and behind
-        var layers = levelData.layers.sort(function(a, b) {
-            return a.name == "spawnpoints" ? -1 : b.name == "spawnpoints" ? 1 : 0;
+        var spawnpointsExists = levelData.layers.some(function(o) {
+            return o.name == "spawnpoints";
         });
 
-        for (var i = 0; i < layers.length; i++) {
-            var layerOptions = layers[i];
-            layerOptions.z = i;
-            if(this.layerMapping[layerOptions.name]) {
+        if (!spawnpointsExists) {
+            console.warn('No layerMapping for level file layer: ' + layerOptions.name);
+            return;
+        }
 
-                this.layerMapping[layerOptions.name](layerOptions);
-            } else {
-                console.warn('No layerMapping for level file layer: ' + layerOptions.name);
+        function getLayerId(name, i) {
+            var mapping = {
+                tiles: AbstractLayer.ID.TILE,
+                items: AbstractLayer.ID.ITEM,
+                spawnpoints: AbstractLayer.ID.SPAWN
             }
+            if(mapping[name]) {
+                return mapping[name];
+            }
+
+            return "layer-" + i + "-" + name;
+        }
+
+        var spawnpointsFound = false,
+            lastLayerId;
+
+        // from spawnpoints to background
+        for (var i = levelData.layers.length - 1; i >= 0; i--) {
+            var layerOptions = levelData.layers[i];
+            layerOptions.z = i;
+            layerOptions.layerId = getLayerId(layerOptions.name, i);
+
+            if (layerOptions.name == "spawnpoints") {
+                spawnpointsFound = true;
+            }
+
+            if (!spawnpointsFound) {
+                continue;
+            }
+
+            this.setupLayer(layerOptions, true, lastLayerId);
+
+            if(this.layerMapping[layerOptions.name]) {
+                this.layerMapping[layerOptions.name](layerOptions);
+            }
+
+            lastLayerId = layerOptions.layerId;
+        }
+
+        spawnpointsFound = false; // reset (used in mkLayer)
+        lastLayerId = AbstractLayer.ID.SPAWN;
+
+
+        // from spawnpoints to foreground
+        for (var i = 0; i < levelData.layers.length; i++) {
+            var layerOptions = levelData.layers[i];
+            layerOptions.z = i;
+            layerOptions.layerId = getLayerId(layerOptions.name, i);
+
+            if (layerOptions.name == "spawnpoints") {
+                spawnpointsFound = true;
+                continue;
+            }
+
+            if (!spawnpointsFound) {
+                continue;
+            }
+
+            this.setupLayer(layerOptions, false, lastLayerId);
+
+            if(this.layerMapping[layerOptions.name]) {
+                this.layerMapping[layerOptions.name](layerOptions);
+            }
+
+            lastLayerId = layerOptions.layerId;
         };
+
 
         Parent.prototype.setup.call(this, levelData);
     };
-/*
-    TiledLevel.prototype.addBackground = function(path) {
-
-        var texturePath = Settings.GRAPHICS_PATH + "Backgrounds/starnight.png";
-        var callback = function (mesh) {
-            Nc.trigger(Nc.ns.client.view.mesh.add, mesh, 0); // FIXME: add at z layer -1 or so
-        }
-        Nc.trigger(Nc.ns.client.view.mesh.create, texturePath, callback, {
-            width: 4000,
-            height: 2959, 
-            x: -(4000 - Settings.STAGE_WIDTH) / 2,
-            y: -(2959 + Settings.STAGE_HEIGHT + 700) / 2
-        });
-    }
-*/
 
     TiledLevel.prototype.createTiles = function(options) {
-        console.log('core tiledlevel createTiles');
 
         var data = options.data;
         var tilesOptions = [];

@@ -65,6 +65,15 @@ define([
         this.spawnPoints = points;
     };
 
+    Level.prototype.setupLayer = function(options, behind, referenceId) {
+        // will be extended (so far only in client)
+    }
+
+
+    Level.prototype.createContainer = function(options) {
+        // nothing to do here yet, in the future perhaps synchronize day/night graphics
+    };
+
     Level.prototype.getRandomSpawnPoint = function() {
         if(!this.spawnPoints) {
             return {

@@ -88,6 +88,13 @@ function (Parent, Settings, Nc, PIXI, AbstractLayer) {
         return paths;
     };
 
+    Level.prototype.setupLayer = function(options, behind, referenceId) {
+        Parent.prototype.setupLayer.call(this, options, behind, referenceId);
+        console.log(options.layerId, behind, referenceId);
+        Nc.trigger(Nc.ns.client.view.layer.createAndInsert, options.layerId, 1, behind, referenceId);
+    };
+
+/*
     Level.prototype.createItems = function(options) {
         options.layerId = AbstractLayer.ID.ITEM;
         Nc.trigger(Nc.ns.client.view.layer.createAndInsert, options.layerId, 1, AbstractLayer.ID.SPAWN, true);
@@ -110,5 +117,10 @@ function (Parent, Settings, Nc, PIXI, AbstractLayer) {
         Parent.prototype.createSpawnPoints.call(this, options);
     };
 
+    Level.prototype.createContainer = function(options) {
+
+        Parent.prototype.createContainer.call(this, options);
+    };
+*/
     return Level;
 });

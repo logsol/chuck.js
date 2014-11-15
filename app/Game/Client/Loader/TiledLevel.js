@@ -1,9 +1,10 @@
 define([
 	"Game/Core/Loader/TiledLevel",
-	"Game/Config/Settings"
+	"Game/Config/Settings",
+    "Lib/Utilities/NotificationCenter",
 ],
  
-function (Parent, Settings) {
+function (Parent, Settings, Nc) {
  
     function TiledLevel(uid, engine, gameObjects) {
         this.layerId = "background";
@@ -55,11 +56,37 @@ function (Parent, Settings) {
 	    	paths.push(texturePath);
         };
 
+        // FIXME: iterate through image layers and add images
         var background = this.getLayer(levelData, "background");
         paths.push(Settings.MAPS_PATH + background.image);
 
         return paths;
     }
+
+    TiledLevel.prototype.setupLayer = function(options, behind, referenceId) {
+        
+        Parent.prototype.setupLayer.call(this, options, behind, referenceId);
+
+        // So far only one image per layer is possible because of Tiled editor
+        if (options.type == "imagelayer") {
+
+            var texturePath = Settings.MAPS_PATH + options.image;
+
+            var callback = function(mesh) {
+                Nc.trigger(Nc.ns.client.view.mesh.add, options.layerId, mesh);
+            }
+       
+            Nc.trigger(Nc.ns.client.view.mesh.create,
+                options.layerId,
+                texturePath, 
+                callback,
+                {
+                    x: 200
+                }
+            );
+        }
+
+    };
 
     TiledLevel.prototype.addBackground = function(options) {
         var texturePath = Settings.GRAPHICS_PATH + options.image;
