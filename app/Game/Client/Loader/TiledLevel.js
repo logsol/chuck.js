@@ -56,9 +56,12 @@ function (Parent, Settings, Nc) {
 	    	paths.push(texturePath);
         };
 
-        // FIXME: iterate through image layers and add images
-        var background = this.getLayer(levelData, "background");
-        paths.push(Settings.MAPS_PATH + background.image);
+        for (var i = 0; i < levelData.layers.length; i++) {
+            var layer = levelData.layers[i];
+            if (layer.type == "imagelayer") {
+                paths.push(Settings.MAPS_PATH + layer.image);
+            }
+        };
 
         return paths;
     }
