@@ -17,7 +17,7 @@ define([
 
         this.layerMapping = {
             tiles: this.createTiles.bind(this),
-            collision: this.createTiles.bind(this),
+            //collision: this.createTiles.bind(this), collision renamed to tiles
             items: this.createItems.bind(this),
             spawnpoints: this.createSpawnPoints.bind(this)
         };
@@ -32,7 +32,7 @@ define([
     TiledLevel.prototype.setup = function(levelData) {
         this.levelData = levelData;
 
-        // Make sure spawnpoints layer is created first
+        // Make sure spawnpoints layer is created first because of add before and behind
         var layers = levelData.layers.sort(function(a, b) {
             return a.name == "spawnpoints" ? -1 : b.name == "spawnpoints" ? 1 : 0;
         });
@@ -50,6 +50,21 @@ define([
 
         Parent.prototype.setup.call(this, levelData);
     };
+/*
+    TiledLevel.prototype.addBackground = function(path) {
+
+        var texturePath = Settings.GRAPHICS_PATH + "Backgrounds/starnight.png";
+        var callback = function (mesh) {
+            Nc.trigger(Nc.ns.client.view.mesh.add, mesh, 0); // FIXME: add at z layer -1 or so
+        }
+        Nc.trigger(Nc.ns.client.view.mesh.create, texturePath, callback, {
+            width: 4000,
+            height: 2959, 
+            x: -(4000 - Settings.STAGE_WIDTH) / 2,
+            y: -(2959 + Settings.STAGE_HEIGHT + 700) / 2
+        });
+    }
+*/
 
     TiledLevel.prototype.createTiles = function(options) {
         console.log('core tiledlevel createTiles');
