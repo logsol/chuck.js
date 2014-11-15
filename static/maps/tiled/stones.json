@@ -1,11 +1,60 @@
 { "backgroundcolor":"#171b1d",
  "height":100,
  "layers":[
-        {
+         {
          "height":0,
          "image":"..\/..\/img\/Backgrounds\/londonatnight.jpg",
          "name":"background",
          "opacity":1,
+         "properties":
+            {
+             "parallaxSpeed":"-1"
+            },
+         "type":"imagelayer",
+         "visible":false,
+         "width":0,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "height":0,
+         "image":"..\/..\/img\/Backgrounds\/londonatnight.jpg",
+         "name":"background",
+         "opacity":0.5,
+         "properties":
+            {
+             "parallaxSpeed":"-0.9"
+            },
+         "type":"imagelayer",
+         "visible":false,
+         "width":0,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "height":0,
+         "image":"..\/..\/img\/Backgrounds\/londonatnight.jpg",
+         "name":"background",
+         "opacity":0.8,
+         "properties":
+            {
+             "parallaxSpeed":"-0.6"
+            },
+         "type":"imagelayer",
+         "visible":false,
+         "width":0,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "height":0,
+         "image":"..\/..\/img\/Backgrounds\/clouds.png",
+         "name":"clouds",
+         "opacity":0.1,
+         "properties":
+            {
+             "parallaxSpeed":"-0.3"
+            },
          "type":"imagelayer",
          "visible":false,
          "width":0,
