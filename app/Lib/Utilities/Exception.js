@@ -17,7 +17,8 @@ function() {
 
         this.message = message.join(" ");
 
-    	Error.call(this, this.message);
+    	var e = Error.call(this, this.message);
+        console.log(e.stack)
     }
 
     Exception.prototype = Object.create(Error.prototype);

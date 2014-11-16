@@ -1,5 +1,5 @@
 define([
-    "Game/Client/View/Views/AbstractView",
+    "Game/Client/View/Abstract/View",
     "Game/Client/View/DomController", 
     "Lib/Vendor/Three", 
     "Game/Config/Settings"

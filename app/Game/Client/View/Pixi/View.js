@@ -1,27 +1,21 @@
 define([
-    "Game/Client/View/Views/AbstractView",
+    "Game/Client/View/Abstract/View",
     "Game/Client/View/DomController", 
     "Lib/Vendor/Pixi",
-    "Game/Client/View/Views/Pixi/ColorRangeReplaceFilter",
     "Game/Config/Settings",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Exception",
-    "Game/Client/View/Views/Pixi/GameStats"
+    "Game/Client/View/Pixi/GameStats",
+    "Game/Client/View/LayerManager",
 ], 
 
-function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Exception, GameStats) {
-    
-    var AVAILABLE_MESH_FILTERS = {
-        "blur": PIXI.BlurFilter,
-        "desaturate": PIXI.GrayFilter,
-        "pixelate": PIXI.PixelateFilter,
-        "colorRangeReplace": ColorRangeReplaceFilter,
-    };
+function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, LayerManager) {
 
     function PixiView () {
 
         Parent.call(this);
 
+        this.layerManager = null;
         this.movableObjects = [];
         this.stage = null;
         this.container = null;
@@ -55,6 +49,9 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
         this.stage = new PIXI.Stage(0x333333);
 
         this.initCamera();
+
+        this.layerManager = new LayerManager(this.container, this.me);
+
         this.initLoader();
 
         this.initCanvas(this.renderer.view);
@@ -64,140 +61,35 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
     }
 
     PixiView.prototype.render = function () {
-        if(this.me) {
-            var pos = this.calculateCameraPosition();
-            this.setCameraPosition(pos.x, pos.y);
+        if (this.me) {
+            this.layerManager.render(this.calculateCenterPosition(), this.currentZoom);
         }
 
         this.renderer.render(this.stage);
     }
 
-    // Meshes
-
-    PixiView.prototype.addMesh = function(mesh) {
-        this.container.addChild(mesh);
-    };
-
-    PixiView.prototype.removeMesh = function(mesh) {
-        this.container.removeChild(mesh);
-    };
-
-    PixiView.prototype.createMesh = function (texturePath, callback, options) {
-
-        var texture = PIXI.Texture.fromImage(texturePath);
-
-        var mesh = new PIXI.Sprite(texture);
-
-        if(options) this.updateMesh(mesh, options);
-
-        callback(mesh);
-    }
-
-    PixiView.prototype.createAnimatedMesh = function (texturePaths, callback, options) {
-        var textures = [];
-        for (var i = 0; i < texturePaths.length; i++) {
-            var texture = PIXI.Texture.fromImage(texturePaths[i]);
-            texture.width = options.width;
-            texture.height = options.height;
-            PIXI.texturesToUpdate.push(texture);
-            textures.push(texture);
-        }
-
-        var mesh = new PIXI.MovieClip(textures);
-        if(options) this.updateMesh(mesh, options);
-
-        mesh.animationSpeed = 0.5;
-
-        mesh.play();
-
-        callback(mesh);
-    }
-
-    PixiView.prototype.updateMesh = function(mesh, options) {
-        if (options.x) mesh.position.x = options.x;
-        if (options.y) mesh.position.y = options.y;
-        if (options.rotation) mesh.rotation = options.rotation;
-        if (options.alpha) mesh.alpha = options.alpha;
-        if (options.width) mesh.width = options.width;
-        if (options.height) mesh.height = options.height;
-        if (options.xScale) mesh.width = Math.abs(mesh.width) * options.xScale;
-        if (options.yScale) mesh.scale.y = options.yScale;
-        if (options.visible === true || options.visible === false) mesh.visible = options.visible;
-        if (options.pivot) mesh.pivot = new PIXI.Point(options.pivot.x, options.pivot.y);
-    }
-
-    PixiView.prototype.addFilter = function(mesh, filterName, options) {
-
-        if (!AVAILABLE_MESH_FILTERS.hasOwnProperty(filterName)) {
-            throw new Exception('Filter ' + filterName + ' is not available');
-        }
-        
-        var MeshFilter = AVAILABLE_MESH_FILTERS[filterName];
-        var filter = new MeshFilter();
-
-        switch (filterName) {
-            case 'desaturate':
-                if (options.amount) filter.gray = options.amount;
-                break;
-
-            case 'blur':
-                if (options.blurX) filter.blurX = options.blurX;
-                if (options.blurY) filter.blurY = options.blurY;
-                break;
-
-            case 'colorRangeReplace':
-                if (options.minColor) filter.minColor = options.minColor;
-                if (options.maxColor) filter.maxColor = options.maxColor;
-                if (options.newColor) filter.newColor = options.newColor;
-                if (options.brightnessOffset) filter.brightnessOffset = options.brightnessOffset;
-                break;
-
-            case 'pixelate':
-                if (options.sizeX) filter.size.x = options.sizeX;
-                if (options.sizeY) filter.size.y = options.sizeY;
-                break;
-
-            default:
-                break;
-        }
-
-        var filters = mesh.filters;
-
-        if(!filters) {
-            filters = [];
-        } else {
-            // ensure uniqueness of filter by name
-            this.removeFilter(mesh, filterName);
-        }
-
-        filters.push(filter);
-        mesh.filters = filters;
-    };
-
-    PixiView.prototype.removeFilter = function(mesh, filterName) {
-
-        var filters = mesh.filters;
-
-        if(!filters) {
-            return;
-        }
-
-        var MeshFilter = AVAILABLE_MESH_FILTERS[options.filter];
-
-        filters = filters.filter(function(filter){
-            return !filter instanceof MeshFilter;
-        });
-
-        mesh.filters = filter;
-    };
-
     // Camera
-
     PixiView.prototype.initCamera = function () {
         this.container = new PIXI.DisplayObjectContainer();
         this.stage.addChild(this.container);
     }
 
+    PixiView.prototype.calculateCenterPosition = function() {
+        var target = this.me.getHeadPosition();
+        var centerPosition = {x: target.x, y: target.y};
+        centerPosition.x *= -Settings.RATIO * this.currentZoom;
+        centerPosition.y *= -Settings.RATIO * this.currentZoom;
+
+        centerPosition.x += Settings.STAGE_WIDTH / 2;
+        centerPosition.y += Settings.STAGE_HEIGHT / 2;
+
+        centerPosition.x -= this.me.playerController.xyInput.x * Settings.STAGE_WIDTH / 4;
+        centerPosition.y += this.me.playerController.xyInput.y * Settings.STAGE_HEIGHT / 4;
+
+        return centerPosition;
+    };
+
+/*
     PixiView.prototype.calculateCameraPosition = function() {
         var targetZoom = this.currentZoom;
 
@@ -237,7 +129,7 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
 
         return pos;
     };
-
+*/
     PixiView.prototype.setCameraZoom = function (zoom) {
 /*
         var oldZoom = this.container.scale.x;
@@ -400,6 +292,8 @@ function (Parent, DomController, PIXI, ColorRangeReplaceFilter, Settings, Nc, Ex
     };
 
     PixiView.prototype.destroy = function() {
+
+        this.layerManager.destroy();
         
         for (var i = 0; i < this.stage.children.length; i++) {
             this.stage.removeChild(this.stage.children[i]);

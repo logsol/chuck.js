@@ -2,6 +2,7 @@ define([
     "Game/Config/Settings", 
     "Lib/Vendor/Box2D",
     "Lib/Utilities/NotificationCenter",
+    "Lib/Utilities/Abstract",
     "Game/" + GLOBALS.context + "/Collision/Detector",
     "Game/" + GLOBALS.context + "/GameObjects/Tile",
     "Game/" + GLOBALS.context + "/GameObjects/Item",
@@ -9,7 +10,7 @@ define([
     "Game/" + GLOBALS.context + "/GameObjects/Items/RagDoll",
     "Game/" + GLOBALS.context + "/GameObjects/Items/Rube"
 
-], function (Settings, Box2D, Nc, CollisionDetector, Tile, Item, Skateboard, RagDoll, Rube) {
+], function (Settings, Box2D, Nc, Abstract, CollisionDetector, Tile, Item, Skateboard, RagDoll, Rube) {
     
     function Level (uid, engine) {
         this.uid = uid;
@@ -17,22 +18,31 @@ define([
         this.levelObject = null;
         this.isLoaded = false;
         this.load(this.uid);
+        this.spawnPoints = null;
     }
 
     Level.prototype.load = function (uid) {
         var self = this;
         var path = Settings.MAPS_PATH + uid + ".json"
-        this.loadLevelDataFromPath(path, function(levelData) {
-            self.levelData = levelData;
-            self.addBackground();
-            self.createTiles();
-            self.createItems();
-            self.isLoaded = true;
-            Nc.trigger(Nc.ns.core.game.events.level.loaded);
+        this.loadLevelDataFromPath(path, function (levelData) {
+            self.setup(levelData);
         });
     }
 
+    Level.prototype.setup = function(levelData) {
+        this.isLoaded = true;
+        Nc.trigger(Nc.ns.core.game.events.level.loaded);
+    };
+
+    Level.prototype.createItems = function(options) {
+        for (var i = 0; i < options.length; i++) {
+            var uid = "item-" + i;
+            this.createItem(uid, options[i]);
+        };
+    };
+
     Level.prototype.createItem = function(uid, options) {
+
         switch(options.type) {
             //case 'skateboard':
             //    return new Skateboard(this.engine, uid, options);
@@ -45,64 +55,45 @@ define([
         }
     };
 
-    Level.prototype.getRandomSpawnPoint = function() {
-        throw new Error("Level not loaded.");
-        return {
-            x: 150 + Math.random() * 300,
-            y: -500
+    Level.prototype.createTiles = function(options) {
+        for (var i = 0; i < options.length; i++) {
+            new Tile(this.engine, "tile-" + i, options[i]);
         };
+    };
+
+    Level.prototype.createSpawnPoints = function(points) {
+        this.spawnPoints = points;
+    };
+
+    Level.prototype.setupLayer = function(options, behind, referenceId) {
+        // will be extended (so far only in client)
+    }
+
+
+    Level.prototype.createContainer = function(options) {
+        // nothing to do here yet, in the future perhaps synchronize day/night graphics
+    };
+
+    Level.prototype.getRandomSpawnPoint = function() {
+        if(!this.spawnPoints) {
+            return {
+                x: 150 + Math.random() * 300,
+                y: -500
+            };
+        }
+
+        var size = this.spawnPoints.length;
+        var object = this.spawnPoints[parseInt(Math.random() * (size -1), 10)];
+
+        return {
+            x: object.x / Settings.TILE_RATIO,
+            y: object.y / Settings.TILE_RATIO
+        }
     };
 
     Level.prototype.destroy = function () {
-        /*
-        for (var key in this.gameObjects) {
-            for (var i = 0; i < this.gameObjects[key].length; i++) {
-                this.gameObjects[key][i].destroy();
-            }
-        }
-        */
         this.isLoaded = false;
     }
-
-/*  Extended by TiledLevel
-    Level.prototype.createTiles = function () {
-
-        if (!this.levelData || !this.levelData.tiles || this.levelData.tiles.length < 1) {
-            throw "Level: Can't create physic tiles, no tiles found";
-        }
-
-        var tiles = this.levelData.tiles;
-
-        for (var i = 0; i < tiles.length; i++) {
-            var options = tiles[i];
-            //options.m = this.tileAtPositionExists(options.x, options.y - 1) ? "Soil" : "GrassSoil";
-            options.m = "Soil";
-            //this.gameObjects.fixed.push(
-            new Tile(this.engine, "tile-" + i, options);
-            //);
-        }
-    }
-*/
-
-/*  Extended by TiledLevel
-    Level.prototype.createItems = function() {
-        if (!this.levelData || !this.levelData.items) {
-            return;
-        }
-        var items = this.levelData.items;
-
-        for (var i = 0; i < items.length; i++) {
-            var options = items[i];
-            var uid = "item-" + i;
-            var item = this.createItem(uid, options);
-            //this.gameObjects.animated.push(item); 
-        };
-    };
-
-    // Extended by TiledLevel
-    Level.prototype.addBackground = function() {
-    }
-*/
 
     return Level;
 })

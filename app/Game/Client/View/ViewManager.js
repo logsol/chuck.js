@@ -1,9 +1,9 @@
 define([
 	"Game/Config/Settings",
     "Lib/Utilities/Exception",
-    "Game/Client/View/Views/AbstractView",
-	//"Game/Client/View/Views/ThreeView",
-	"Game/Client/View/Views/PixiView",
+    "Game/Client/View/Abstract/View",
+	//"Game/Client/View/Three/View",
+	"Game/Client/View/Pixi/View",
     "Lib/Utilities/NotificationCenter"
 ],
  
@@ -14,9 +14,9 @@ function (Settings, Exception, AbstractView, PixiView, Nc) {
     ViewManager.createView = function() {
         var view = null
         switch(Settings.VIEW_CONTROLLER) {
-            case 'Three': 
-                view = new ThreeView();
-                break;
+            //case 'Three': 
+            //    view = new ThreeView();
+            //    break;
             case 'Pixi':
                 view = new PixiView();
                 break;

@@ -2,10 +2,11 @@ define([
 	"Game/Core/Loader/Level",
 	"Game/Config/Settings",
     "Lib/Utilities/NotificationCenter",
-    "Lib/Vendor/Pixi"
+    "Lib/Vendor/Pixi",
+    "Game/Client/View/Abstract/Layer"
 ],
 
-function (Parent, Settings, Nc, PIXI) {
+function (Parent, Settings, Nc, PIXI, AbstractLayer) {
 
     function Level (uid, engine, gameObjects) {
         Parent.call(this, uid, engine, gameObjects);
@@ -17,13 +18,13 @@ function (Parent, Settings, Nc, PIXI) {
     	var self = this;
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
-                if(xhr.readyState == 4) {
-                        if(xhr.status == 200) {
-                                self.loadAssets(JSON.parse(xhr.responseText), callback);
-                        } else {
-                                console.error("Ajax error: " + xhr.status + " " + xhr.statusText)
-                        }
+            if(xhr.readyState == 4) {
+                if(xhr.status == 200) {
+                    self.loadAssets(JSON.parse(xhr.responseText), callback);
+                } else {
+                    console.error("Ajax error: " + xhr.status + " " + xhr.statusText)
                 }
+            }
         }
         xhr.open("GET", path, true);
         xhr.send(null);
@@ -85,6 +86,15 @@ function (Parent, Settings, Nc, PIXI) {
         );
 
         return paths;
+    };
+
+    Level.prototype.setupLayer = function(options, behind, referenceId) {
+        Parent.prototype.setupLayer.call(this, options, behind, referenceId);
+        var parallaxSpeed = 0.0;
+        if (options.properties && options.properties.parallaxSpeed) {
+            parallaxSpeed = parseFloat(options.properties.parallaxSpeed);
+        } 
+        Nc.trigger(Nc.ns.client.view.layer.createAndInsert, options.layerId, parallaxSpeed, behind, referenceId);
     };
 
     return Level;

@@ -27,7 +27,7 @@ function (Parent, Box2D, Options, Settings, Exception, Nc) {
 
         if(!this.options.category) {
             // FIXME add more validation
-            console.warn('item category empty (' + this.options.name + ')' );
+            //console.warn('item category empty (' + this.options.name + ')' );
         }
 
     	Parent.call(this, physicsEngine, uid);
