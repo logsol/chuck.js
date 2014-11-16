@@ -3,7 +3,7 @@
  "layers":[
          {
          "height":0,
-         "image":"..\/..\/img\/Backgrounds\/londonatnight.jpg",
+         "image":"..\/..\/img\/Backgrounds\/starnight-small.png",
          "name":"background",
          "opacity":1,
          "properties":
@@ -18,24 +18,9 @@
         }, 
         {
          "height":0,
-         "image":"..\/..\/img\/Backgrounds\/londonatnight.jpg",
+         "image":"..\/..\/img\/Backgrounds\/londonatnight-transparent.png",
          "name":"background",
-         "opacity":0.5,
-         "properties":
-            {
-             "parallaxSpeed":"-0.9"
-            },
-         "type":"imagelayer",
-         "visible":false,
-         "width":0,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "height":0,
-         "image":"..\/..\/img\/Backgrounds\/londonatnight.jpg",
-         "name":"background",
-         "opacity":0.8,
+         "opacity":1,
          "properties":
             {
              "parallaxSpeed":"-0.6"
@@ -53,7 +38,7 @@
          "opacity":0.1,
          "properties":
             {
-             "parallaxSpeed":"-0.3"
+             "parallaxSpeed":"-0.5"
             },
          "type":"imagelayer",
          "visible":false,
