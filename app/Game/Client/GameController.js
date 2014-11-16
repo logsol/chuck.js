@@ -11,10 +11,11 @@ define([
     "Game/Client/GameObjects/Doll",
     "Game/Client/View/DomController",
     "Lib/Utilities/Protocol/Helper",
-    "Game/Client/Me"
+    "Game/Client/Me",
+    "Game/Client/AudioPlayer"
 ],
 
-function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, DomController, ProtocolHelper, Me) {
+function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, DomController, ProtocolHelper, Me, AudioPlayer) {
 
     if (!window.cancelAnimationFrame) {
         window.cancelAnimationFrame = function(id) {
@@ -28,6 +29,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         this.view = ViewManager.createView();
         this.me = null;
         this.animationRequestId = null;
+        this.audioPlayer = null;
 
         Parent.call(this, options);
 
@@ -105,6 +107,9 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
                 this.onSpawnPlayer(options.spawnedPlayers[i]);
             }
         }
+
+        this.audioPlayer = new AudioPlayer(Settings.AUDIO_PATH + "city.mp3");
+        this.audioPlayer.play();
     };
 
     GameController.prototype.onWorldUpdate = function (updateData) {
@@ -265,6 +270,8 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         cancelAnimationFrame(this.animationRequestId);
 
         Parent.prototype.destroy.call(this);
+
+        this.audioPlayer.destroy();
 
         this.view.destroy();
     };

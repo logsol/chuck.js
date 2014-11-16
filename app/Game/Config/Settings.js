@@ -21,6 +21,7 @@ define(function() {
         GRAPHICS_SUBPATH_CHARACTERS: 'Characters/',
         GRAPHICS_SUBPATH_TILES: 'Tiles/',
         MAPS_PATH: 'static/maps/tiled/',
+        AUDIO_PATH: 'static/sounds/',
 
         RATIO: 21, //35
         // original tile size is 25 but we want it to resize to 20
