@@ -36,9 +36,8 @@ function (Abstract, DomController, Settings, Exception, Nc) {
     Abstract.prototype.addMethod.call(AbstractView, 'addFilter', ['mesh', 'options']);
     Abstract.prototype.addMethod.call(AbstractView, 'removeFilter', ['mesh', 'options']);
     Abstract.prototype.addMethod.call(AbstractView, 'setCameraPosition', ['x', 'y']);
-    Abstract.prototype.addMethod.call(AbstractView, 'setCameraZoom', ['z']);
     Abstract.prototype.addMethod.call(AbstractView, 'onZoomIn');
-    Abstract.prototype.addMethod.call(AbstractView, 'onZoomIn');
+    Abstract.prototype.addMethod.call(AbstractView, 'onZoomOut');
     Abstract.prototype.addMethod.call(AbstractView, 'onZoomReset');
     Abstract.prototype.addMethod.call(AbstractView, 'toggleInfo', ['show', 'string']);
     Abstract.prototype.addMethod.call(AbstractView, 'onCreateAndAddPlayerInfo', ['options']);

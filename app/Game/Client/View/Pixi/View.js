@@ -48,7 +48,8 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
 
         this.stage = new PIXI.Stage(0x333333);
 
-        this.initCamera();
+        this.container = new PIXI.DisplayObjectContainer();
+        this.stage.addChild(this.container);
 
         this.layerManager = new LayerManager(this.container, this.me);
 
@@ -68,12 +69,6 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
         this.renderer.render(this.stage);
     }
 
-    // Camera
-    PixiView.prototype.initCamera = function () {
-        this.container = new PIXI.DisplayObjectContainer();
-        this.stage.addChild(this.container);
-    }
-
     PixiView.prototype.calculateCenterPosition = function() {
         var target = this.me.getHeadPosition();
         var centerPosition = {x: target.x, y: target.y};
@@ -89,63 +84,12 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
         return centerPosition;
     };
 
-/*
-    PixiView.prototype.calculateCameraPosition = function() {
-        var targetZoom = this.currentZoom;
-
-        var oldZoom = (this.container.scale.x + this.container.scale.y) / 2;
-        var newZoom = (targetZoom -oldZoom) * Settings.CAMERA_GLIDE / 100;
-
-        this.container.scale.x += newZoom;
-        this.container.scale.y += newZoom;
-
-        var target = this.me.getHeadPosition();
-        target.x *= -Settings.RATIO * targetZoom;
-        target.y *= -Settings.RATIO * targetZoom;
-
-        target.x -= this.me.playerController.xyInput.x * Settings.STAGE_WIDTH / 4;
-        target.y += this.me.playerController.xyInput.y * Settings.STAGE_HEIGHT / 4;
-
-        var pos = this.getCameraPosition();
-
-        pos.x += (target.x -pos.x) * Settings.CAMERA_GLIDE / 100;
-        pos.y += (target.y -pos.y) * Settings.CAMERA_GLIDE / 100;
-
-        return pos;
-    };
-
-    PixiView.prototype.setCameraPosition = function (x, y) {
-        if(!this.debugMode) {
-            this.container.position.x = x + Settings.STAGE_WIDTH / 2;
-            this.container.position.y = y + Settings.STAGE_HEIGHT / 2;
-        }
-    };
-
-    PixiView.prototype.getCameraPosition = function () { 
-        var pos = this.container.position;
-
-        pos.x = pos.x - Settings.STAGE_WIDTH / 2;
-        pos.y = pos.y - Settings.STAGE_HEIGHT / 2;
-
-        return pos;
-    };
-*/
-    PixiView.prototype.setCameraZoom = function (zoom) {
-/*
-        var oldZoom = this.container.scale.x;
-
-        this.container.scale.x += (zoom -oldZoom) * Settings.CAMERA_GLIDE / 100;
-        this.container.scale.y += (zoom -oldZoom) * Settings.CAMERA_GLIDE / 100;
-*/
-    };
-
     PixiView.prototype.onFullscreenChange = function(isFullScreen) {
         Parent.prototype.onFullscreenChange.call(this, isFullScreen);
 
         if(isFullScreen) {
             this.renderer.resize(window.innerWidth, window.innerHeight);
             this.currentZoom = window.innerWidth / 600;
-            console.log(this.currentZoom);
         } else {
             this.renderer.resize(600, 400);
             this.currentZoom = 1;
