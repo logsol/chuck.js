@@ -12,7 +12,10 @@ function (Parent, PIXI, Nc, Settings) {
 
 		this.ncTokens = [
             Nc.on(Nc.ns.client.view.playerArrow.createAndAdd, this.onCreateAndAddPlayerArrow, this),
-            Nc.on(Nc.ns.client.view.playerArrow.update, this.onUpdatePlayerArrow, this)
+            Nc.on(Nc.ns.client.view.playerArrow.update, this.onUpdatePlayerArrow, this),
+            Nc.on(Nc.ns.client.view.healthBar.createAndAdd, this.onCreateAndAddHealthBar, this),
+            Nc.on(Nc.ns.client.view.healthBar.update, this.onUpdateHealthBar, this),
+            Nc.on(Nc.ns.client.view.healthBar.remove, this.onRemoveHealthBar, this),
         ];
 
     }
@@ -60,7 +63,48 @@ function (Parent, PIXI, Nc, Settings) {
         arrow.rotation = angle;
     };
 
-    
+        // Player Info
+
+    Ghost.prototype.onCreateAndAddHealthBar = function(callback, options) {
+        var healthBar = new PIXI.Graphics();
+        this.container.addChild(healthBar);
+
+        this.onUpdateHealthBar(healthBar, options);
+        callback(healthBar);
+    };
+
+    Ghost.prototype.onUpdateHealthBar = function(healthBar, options) {
+        var width = 14,
+            height = 2,
+            borderWidth = 1,
+            offsetX = -8,
+            offsetY = -52;
+
+        if(typeof options.healthFactor != 'undefined') {
+            healthBar.clear();
+
+            healthBar.beginFill(0x000000);
+            healthBar.lineStyle(borderWidth, 0x000000);
+            healthBar.drawRect(0, 0, width, height);
+            healthBar.endFill();
+
+            if(options.healthFactor > 0) {
+                var color = 0x00FF00;
+                if(options.healthFactor < 0.30) color = 0xFF0000;
+                healthBar.beginFill(color);
+                healthBar.lineStyle(0, 0x000000);
+                healthBar.drawRect(borderWidth, borderWidth, width * options.healthFactor, height);
+                healthBar.endFill();
+            }
+        }
+
+        if (options.x && options.y) healthBar.position = new PIXI.Point(offsetX + options.x, offsetY + options.y);
+        if (options.visible === true || options.visible === false) healthBar.visible = options.visible;
+    };
+
+    Ghost.prototype.onRemoveHealthBar = function(healthBar) {
+        this.container.removeChild(healthBar);
+    };
 
     Ghost.prototype.destroy = function() {
         for (var i = 0; i < this.ncTokens.length; i++) {

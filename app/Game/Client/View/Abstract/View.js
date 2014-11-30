@@ -17,10 +17,6 @@ function (Abstract, DomController, Settings, Exception, Nc) {
             Nc.on(Nc.ns.client.view.fullscreen.change, this.onFullscreenChange, this),
             Nc.on(Nc.ns.client.view.debugMode.toggle, this.onToggleDebugMode, this),
 
-            Nc.on(Nc.ns.client.view.playerInfo.createAndAdd, this.onCreateAndAddPlayerInfo, this),
-            Nc.on(Nc.ns.client.view.playerInfo.update, this.onUpdatePlayerInfo, this),
-            Nc.on(Nc.ns.client.view.playerInfo.remove, this.onRemovePlayerInfo, this),
-
             Nc.on(Nc.ns.client.game.zoomIn, this.onZoomIn, this),
             Nc.on(Nc.ns.client.game.zoomOut, this.onZoomOut, this),
             Nc.on(Nc.ns.client.game.zoomReset, this.onZoomReset, this),
@@ -37,9 +33,6 @@ function (Abstract, DomController, Settings, Exception, Nc) {
     Abstract.prototype.addMethod.call(AbstractView, 'onZoomOut');
     Abstract.prototype.addMethod.call(AbstractView, 'onZoomReset');
     Abstract.prototype.addMethod.call(AbstractView, 'toggleInfo', ['show', 'string']);
-    Abstract.prototype.addMethod.call(AbstractView, 'onCreateAndAddPlayerInfo', ['options']);
-    Abstract.prototype.addMethod.call(AbstractView, 'onUpdatePlayerInfo', ['mesh', 'options']);
-    Abstract.prototype.addMethod.call(AbstractView, 'onRemovePlayerInfo', ['mesh']);
     Abstract.prototype.addMethod.call(AbstractView, 'onUpdateLoader', ['progress']);
 
     AbstractView.prototype.isWebGlEnabled = function () { 

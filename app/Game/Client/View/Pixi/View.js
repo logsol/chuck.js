@@ -98,54 +98,6 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
         }
     };
 
-
-    // Player Info
-
-    PixiView.prototype.onCreateAndAddPlayerInfo = function(callback, options) {
-        var playerInfo = new PIXI.Graphics();
-        this.container.addChild(playerInfo);
-
-        this.onUpdatePlayerInfo(playerInfo, options);
-
-        callback(playerInfo);
-    };
-
-    PixiView.prototype.onUpdatePlayerInfo = function(playerInfo, options) {
-        var width = 14,
-            height = 2,
-            borderWidth = 1,
-            offsetX = -8,
-            offsetY = -52;
-
-        if(typeof options.healthFactor != 'undefined') {
-            playerInfo.clear();
-
-            playerInfo.beginFill(0x000000);
-            playerInfo.lineStyle(borderWidth, 0x000000);
-            playerInfo.drawRect(0, 0, width, height);
-            playerInfo.endFill();
-
-            if(options.healthFactor > 0) {
-                var color = 0x00FF00;
-                if(options.healthFactor < 0.30) color = 0xFF0000;
-                playerInfo.beginFill(color);
-                playerInfo.lineStyle(0, 0x000000);
-                playerInfo.drawRect(borderWidth, borderWidth, width * options.healthFactor, height);
-                playerInfo.endFill();
-            }
-        }
-
-        if (options.x && options.y) playerInfo.position = new PIXI.Point(offsetX + options.x, offsetY + options.y);
-        if (options.visible === true || options.visible === false) playerInfo.visible = options.visible;
-    };
-
-    PixiView.prototype.onRemovePlayerInfo = function(playerInfo) {
-        this.container.removeChild(playerInfo);
-    };
-
-
-
-
     PixiView.prototype.initLoader = function() {
         this.loader = new PIXI.Graphics();
         this.stage.addChild(this.loader);

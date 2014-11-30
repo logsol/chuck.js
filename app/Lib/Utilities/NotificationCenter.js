@@ -39,7 +39,7 @@ function (Exception) {
                     animatedMesh: {
                         create: null
                     },
-                    playerInfo: {
+                    healthBar: {
                         createAndAdd: null,
                         remove: null,
                         update: null

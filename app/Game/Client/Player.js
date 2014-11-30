@@ -9,9 +9,9 @@ function (Parent, Nc, Settings) {
     function Player(id, physicsEngine, user) {
     	Parent.call(this, id, physicsEngine, user);
 
-    	this.playerInfoView = null;
-    	this.playerInfoViewVisibleTimeout = null;
-    	this.playerInfoViewVisible = false;
+    	this.healthBarView = null;
+    	this.healthBarViewVisibleTimeout = null;
+    	this.healthBarViewVisible = false;
     	this.initHealthBar();
     }
 
@@ -29,36 +29,36 @@ function (Parent, Nc, Settings) {
     Player.prototype.initHealthBar = function() {
     	var self = this;
 
-    	this.playerInfoViewVisible = false;
+    	this.healthBarViewVisible = false;
 
     	var options = {
     		x: 100,
     		y: 100,
     		healthFactor: this.stats.health / 100,
-    		visible: this.playerInfoViewVisible
+    		visible: this.healthBarViewVisible
     	};
 
-    	var callback = function(playerInfoView) {
-    		self.playerInfoView = playerInfoView;
+    	var callback = function(healthBarView) {
+    		self.healthBarView = healthBarView;
     	}
-    	Nc.trigger(Nc.ns.client.view.playerInfo.createAndAdd, callback, options);
+    	Nc.trigger(Nc.ns.client.view.healthBar.createAndAdd, callback, options);
     };
 
     Player.prototype.onHealthChange = function() {
     	if(this.stats.health != 100) {
-    		this.setPlayerInfoVisible(true);
+    		this.setHealthBarVisible(true);
     	} 
     };
 
     Player.prototype.spawn = function(x, y) {
     	Parent.prototype.spawn.call(this, x, y);
-    	this.setPlayerInfoVisible(false);
+    	this.setHealthBarVisible(false);
     };
 
-    Player.prototype.setPlayerInfoVisible = function(visible) {
+    Player.prototype.setHealthBarVisible = function(visible) {
     	var self = this;
-    	this.playerInfoViewVisible = visible;
-    	if(this.playerInfoViewVisibleTimeout) clearTimeout(this.playerInfoViewVisibleTimeout);
+    	this.healthBarViewVisible = visible;
+    	if(this.healthBarViewVisibleTimeout) clearTimeout(this.healthBarViewVisibleTimeout);
 
     	if(visible) {
 	    	var position = this.getPosition();
@@ -67,17 +67,17 @@ function (Parent, Nc, Settings) {
 	    		x: position.x * Settings.RATIO,
 	    		y: position.y * Settings.RATIO,
 	    		healthFactor: this.stats.health / 100,
-	    		visible: this.playerInfoViewVisible
+	    		visible: this.healthBarViewVisible
 	    	};
-	    	Nc.trigger(Nc.ns.client.view.playerInfo.update, this.playerInfoView, options);
+	    	Nc.trigger(Nc.ns.client.view.healthBar.update, this.healthBarView, options);
 
-	    	this.playerInfoViewVisibleTimeout = setTimeout(function() {
-	    		self.playerInfoViewVisible = false;
-	    		Nc.trigger(Nc.ns.client.view.playerInfo.update, self.playerInfoView, {visible: self.playerInfoViewVisible});
+	    	this.healthBarViewVisibleTimeout = setTimeout(function() {
+	    		self.healthBarViewVisible = false;
+	    		Nc.trigger(Nc.ns.client.view.healthBar.update, self.healthBarView, {visible: self.healthBarViewVisible});
 	    	}, Settings.HEALTH_DISPLAY_TIME * 1000);
 
     	} else {
-    		Nc.trigger(Nc.ns.client.view.playerInfo.update, this.playerInfoView, {visible: this.playerInfoViewVisible});
+    		Nc.trigger(Nc.ns.client.view.healthBar.update, this.healthBarView, {visible: this.healthBarViewVisible});
     	}
     };
 
@@ -91,20 +91,20 @@ function (Parent, Nc, Settings) {
             this.doll.render();
         } 
 
-    	if(this.playerInfoViewVisible) {
+    	if(this.healthBarViewVisible) {
 	    	var position = this.getPosition();
 	    	var options = {
 	    		healthFactor: this.stats.health / 100,
 				x: position.x * Settings.RATIO,
 	    		y: position.y * Settings.RATIO,
 	    	}
-	    	Nc.trigger(Nc.ns.client.view.playerInfo.update, this.playerInfoView, options);
+	    	Nc.trigger(Nc.ns.client.view.healthBar.update, this.healthBarView, options);
     	}
     };
 
     Player.prototype.destroy = function() {
-        clearTimeout(this.playerInfoViewVisibleTimeout);
-    	Nc.trigger(Nc.ns.client.view.playerInfo.remove, this.playerInfoView);
+        clearTimeout(this.healthBarViewVisibleTimeout);
+    	Nc.trigger(Nc.ns.client.view.healthBar.remove, this.healthBarView);
         Parent.prototype.destroy.call(this);
     };
  
