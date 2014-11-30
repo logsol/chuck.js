@@ -21,9 +21,6 @@ function (Abstract, DomController, Settings, Exception, Nc) {
             Nc.on(Nc.ns.client.view.playerInfo.update, this.onUpdatePlayerInfo, this),
             Nc.on(Nc.ns.client.view.playerInfo.remove, this.onRemovePlayerInfo, this),
 
-            Nc.on(Nc.ns.client.view.playerArrow.createAndAdd, this.onCreateAndAddPlayerArrow, this),
-            Nc.on(Nc.ns.client.view.playerArrow.update, this.onUpdatePlayerArrow, this),
-
             Nc.on(Nc.ns.client.game.zoomIn, this.onZoomIn, this),
             Nc.on(Nc.ns.client.game.zoomOut, this.onZoomOut, this),
             Nc.on(Nc.ns.client.game.zoomReset, this.onZoomReset, this),
@@ -41,8 +38,6 @@ function (Abstract, DomController, Settings, Exception, Nc) {
     Abstract.prototype.addMethod.call(AbstractView, 'onZoomReset');
     Abstract.prototype.addMethod.call(AbstractView, 'toggleInfo', ['show', 'string']);
     Abstract.prototype.addMethod.call(AbstractView, 'onCreateAndAddPlayerInfo', ['options']);
-    Abstract.prototype.addMethod.call(AbstractView, 'onCreateAndAddPlayerArrow', ['options']);
-    Abstract.prototype.addMethod.call(AbstractView, 'onUpdatePlayerArrow', ['options']);
     Abstract.prototype.addMethod.call(AbstractView, 'onUpdatePlayerInfo', ['mesh', 'options']);
     Abstract.prototype.addMethod.call(AbstractView, 'onRemovePlayerInfo', ['mesh']);
     Abstract.prototype.addMethod.call(AbstractView, 'onUpdateLoader', ['progress']);

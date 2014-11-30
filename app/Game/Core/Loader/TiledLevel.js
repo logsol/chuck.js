@@ -72,6 +72,7 @@ define([
                 continue;
             }
 
+            // Setting up spawnpoints and then all layers behind it
             this.setupLayer(layerOptions, true, lastLayerId);
 
             if(this.layerMapping[layerOptions.name]) {
@@ -100,6 +101,7 @@ define([
                 continue;
             }
 
+            // Setting up all layers before
             this.setupLayer(layerOptions, false, lastLayerId);
 
             if(this.layerMapping[layerOptions.name]) {

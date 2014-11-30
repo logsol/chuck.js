@@ -35,7 +35,11 @@ function (Nc, Exception, Layer) {
      * or in the foreground (behind=false/null)
      */
     LayerManager.prototype.createAndInsert = function(id, parallaxSpeed, behind, referenceId) {
+        var layer =  new Layer(id, parallaxSpeed);
+        this.insert(layer, behind, referenceId);
+    };
 
+    LayerManager.prototype.insert = function(newlayer, behind, referenceId) {
         var referenceIndex = -1;
         behind = !!behind;
 
@@ -55,10 +59,9 @@ function (Nc, Exception, Layer) {
             referenceIndex = behind ? 0 : this.container.children.length;
         }
 
-        var layer =  new Layer(id, parallaxSpeed);
         var layerIndex = behind ? referenceIndex : referenceIndex + 1;
 
-        this.layers.splice(layerIndex, 0, layer);
+        this.layers.splice(layerIndex, 0, newlayer);
         
         this.rearrangeLayers();
     };
