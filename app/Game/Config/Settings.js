@@ -44,6 +44,7 @@ define(function() {
         RESPAWN_TIME: 5,
         HEALTH_DISPLAY_TIME: 2,
         RAGDOLL_DESTRUCTION_TIME: 20,
+        VIEWPORT_SPEED_FACTOR: 640,
 
         // restitution: bouncyness, friction: rubbing, density: mass
         TILE_FRICTION: 0.99,

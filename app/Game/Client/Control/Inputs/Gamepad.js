@@ -1,10 +1,9 @@
 define([
-	"Game/Client/Control/Input/XyInput",
-	"Game/Config/Settings",
-	"Lib/Utilities/NotificationCenter"
+	"Game/Client/Control/Input",
+	"Game/Config/Settings"
 ],
  
-function (Parent, Settings, Nc) {
+function (Parent, Settings) {
  
     function GamepadInput(playerController) {
     	this.playerController = playerController;
@@ -36,7 +35,7 @@ function (Parent, Settings, Nc) {
     		var y = -this.gamepad.axes[3];
 
     		// Looking direction
-    		this.playerController.xyInput.onXyChange(x, y);
+    		this.onXyChange(x, y);
 
     		// Pointer finger holding item
     		var holdingPressure = this.gamepad.axes[5];

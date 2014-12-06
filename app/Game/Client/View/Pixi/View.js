@@ -80,8 +80,9 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
         centerPosition.x += Settings.STAGE_WIDTH / 2;
         centerPosition.y += Settings.STAGE_HEIGHT / 2;
 
-        centerPosition.x -= this.me.playerController.xyInput.x * Settings.STAGE_WIDTH / 4;
-        centerPosition.y += this.me.playerController.xyInput.y * Settings.STAGE_HEIGHT / 4;
+        var lookAt = this.me.getLookAt();
+        centerPosition.x -= lookAt.x * Settings.STAGE_WIDTH / 4;
+        centerPosition.y += lookAt.y * Settings.STAGE_HEIGHT / 4;
 
         return centerPosition;
     };

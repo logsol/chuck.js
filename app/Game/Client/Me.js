@@ -9,6 +9,12 @@ function (Parent, Settings, Nc) {
     function Me(id, physicsEngine, user) {
     	Parent.call(this, id, physicsEngine, user);
 
+        // View uses this to calculate center position
+        this.lookAtXY = {
+            x: 1,
+            y: 0
+        }
+
     	this.lastServerPositionState = {
     		p: {
     			x: 0,
@@ -21,6 +27,22 @@ function (Parent, Settings, Nc) {
     }
 
     Me.prototype = Object.create(Parent.prototype);
+
+    Me.prototype.lookAt = function(x, y) {
+        this.lookAtXY = {
+            x: x,
+            y: y
+        }
+
+        Parent.prototype.lookAt.call(this, x, y);
+    };
+
+    Me.prototype.getLookAt = function() {
+        return {
+            x: this.lookAtXY.x,
+            y: this.lookAtXY.y
+        };
+    };
  
     Me.prototype.setLastServerPositionState = function(update) {
     	this.lastServerPositionState = update;

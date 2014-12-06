@@ -357,6 +357,7 @@ function (ColorConverter, Exception) {
 				clearInterval(instance.channelDestructionTimeout);
 			}
 
+			requestPointerLock();
 		}
 	}
 
@@ -385,6 +386,19 @@ function (ColorConverter, Exception) {
 			});
 		}
 	}
+
+	function requestPointerLock() {
+
+			var c = $("#canvas");
+			c.requestPointerLock = c.requestPointerLock ||
+                    c.mozRequestPointerLock ||
+                    c.webkitRequestPointerLock;
+ 
+            // Ask the browser to lock the pointer)
+            c.requestPointerLock();
+	}
+
+	$("#canvas").onclick = requestPointerLock;
  
     return Menu;
  

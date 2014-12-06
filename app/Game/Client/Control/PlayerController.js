@@ -1,87 +1,30 @@
 define([
     "Game/Core/Control/PlayerController", 
-    "Game/Client/Control/KeyboardInput",
-    "Game/Client/Control/Input/MouseInput",
     "Lib/Utilities/NotificationCenter",
-    "Game/Client/Control/Input/GamepadInput",
+    "Game/Client/Control/Inputs/KeyboardAndMouse",
+    "Game/Client/Control/Inputs/Gamepad",
 ], 
 
-function (Parent, KeyboardInput, MouseInput, Nc, GamepadInput) {
+function (Parent, Nc, KeyboardAndMouse, Gamepad) {
 
     function PlayerController (me) {
 
         Parent.call(this, me);
 
-        this.keyboardInput = new KeyboardInput(this);
-        this.xyInput = new MouseInput(this);
-        this.gamepadInput = new GamepadInput(this);
+        this.keyboardAndMouse = new KeyboardAndMouse(this);
+        this.gamepad = new Gamepad(this);
 
         this.ncTokens = [
-            Nc.on(Nc.ns.client.input.xy.change, this.setXY, this),
-            Nc.on(Nc.ns.client.input.handAction.request, this.handActionRequest, this)
         ];
-
-        var keys = {
-            w:87,
-            a:65,
-            s:83,
-            d:68,
-
-            f:70,
-            g:71,
-            k:75,
-
-            up: 38,
-            left: 37,
-            down: 40,
-            right: 39,
-
-            space: 32,
-
-            tab: 9,
-
-            plus: 187,
-            plusfx: 171,
-            minus: 189,
-            minusfx: 173,
-            zero: 48
-        }
-
-        this.init(keys);
     }
 
     PlayerController.prototype = Object.create(Parent.prototype);
 
     PlayerController.prototype.update = function() {
         Parent.prototype.update.call(this);
-        this.gamepadInput.update();
+        this.gamepad.update();
+        this.keyboardAndMouse.update();
     };
-
-    PlayerController.prototype.init = function (keys)  {
-        
-        this.keyboardInput.registerKey(keys.a, 'moveLeft', 'stop');
-        this.keyboardInput.registerKey(keys.left, 'moveLeft', 'stop');
-        
-        this.keyboardInput.registerKey(keys.d, 'moveRight', 'stop');
-        this.keyboardInput.registerKey(keys.right, 'moveRight', 'stop');
-        
-        this.keyboardInput.registerKey(keys.w, 'jump', 'jumpStop');
-        this.keyboardInput.registerKey(keys.up, 'jump', 'jumpStop');
-        this.keyboardInput.registerKey(keys.space, 'jump', 'jumpStop');
-
-        this.keyboardInput.registerKey(keys.plus, 'zoomIn');
-        this.keyboardInput.registerKey(keys.plusfx, 'zoomIn');
-        this.keyboardInput.registerKey(keys.minus, 'zoomOut');
-        this.keyboardInput.registerKey(keys.minusfx, 'zoomOut');
-        this.keyboardInput.registerKey(keys.zero, 'zoomReset');
-
-        this.keyboardInput.registerKey(keys.tab, 'showInfo', 'hideInfo');
-
-        this.keyboardInput.registerKey(keys.f, 'handActionLeft');
-        this.keyboardInput.registerKey(keys.g, 'handActionRight');
-
-        this.keyboardInput.registerKey(keys.k, 'suicide');
-    }
 
     PlayerController.prototype.moveLeft = function () {
         Parent.prototype.moveLeft.call(this);

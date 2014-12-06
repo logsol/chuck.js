@@ -11,7 +11,6 @@ function (Settings) {
         }
 
         if (typeof window != 'undefined') {
-
             return  window.requestAnimationFrame       || 
                     window.webkitRequestAnimationFrame || 
                     window.mozRequestAnimationFrame    || 

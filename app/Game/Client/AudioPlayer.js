@@ -18,8 +18,8 @@ function () {
     }
  
     AudioPlayer.prototype.play = function() {
-        this.audio.play();
-        this.doPlay = true;
+        //this.audio.play();
+        //this.doPlay = true;
     }
 
     AudioPlayer.prototype.stop = function() {
