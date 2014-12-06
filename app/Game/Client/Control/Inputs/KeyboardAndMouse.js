@@ -3,15 +3,18 @@ define([
 	"Game/Client/Control/KeyboardInput",
 	"Game/Client/View/DomController",
 	"Game/Config/Settings",
+    "Game/Client/Control/Swiper"
 ],
  
-function (Parent, KeyboardInput, DomController, Settings) {
+function (Parent, KeyboardInput, DomController, Settings, Swiper) {
  
     function KeyboardAndMouse(playerController) {
     	Parent.call(this);
 
         this.x = 0;
         this.y = 0;
+        this.modifier = false;
+        this.swiper = null;
 
     	this.playerController = playerController;
     	this.keyboardInit();
@@ -22,7 +25,8 @@ function (Parent, KeyboardInput, DomController, Settings) {
 
     KeyboardAndMouse.prototype.keyboardInit = function() {
 
-    	this.keyboardInput = new KeyboardInput(this.playerController);
+    	this.keyboardInput = new KeyboardInput();
+        var self = this;
 
     	var keys = {
             w:87,
@@ -40,8 +44,8 @@ function (Parent, KeyboardInput, DomController, Settings) {
             right: 39,
 
             space: 32,
-
             tab: 9,
+            shift: 16,
 
             plus: 187,
             plusfx: 171,
@@ -50,80 +54,68 @@ function (Parent, KeyboardInput, DomController, Settings) {
             zero: 48
         }
 
-        this.keyboardInput.registerKey(keys.a, 'moveLeft', 'stop');
-        this.keyboardInput.registerKey(keys.left, 'moveLeft', 'stop');
-        
-        this.keyboardInput.registerKey(keys.d, 'moveRight', 'stop');
-        this.keyboardInput.registerKey(keys.right, 'moveRight', 'stop');
-        
-        this.keyboardInput.registerKey(keys.w, 'jump', 'jumpStop');
-        this.keyboardInput.registerKey(keys.up, 'jump', 'jumpStop');
-        this.keyboardInput.registerKey(keys.space, 'jump', 'jumpStop');
+        function bind2Pc(methodName) {
+            return self.playerController[methodName].bind(self.playerController);
+        }
 
-        this.keyboardInput.registerKey(keys.plus, 'zoomIn');
-        this.keyboardInput.registerKey(keys.plusfx, 'zoomIn');
-        this.keyboardInput.registerKey(keys.minus, 'zoomOut');
-        this.keyboardInput.registerKey(keys.minusfx, 'zoomOut');
-        this.keyboardInput.registerKey(keys.zero, 'zoomReset');
+        this.keyboardInput.registerKey(keys.a, bind2Pc('moveLeft'), bind2Pc('stop'));
+        this.keyboardInput.registerKey(keys.left, bind2Pc('moveLeft'), bind2Pc('stop'));
+        this.keyboardInput.registerKey(keys.d, bind2Pc('moveRight'), bind2Pc('stop'));
+        this.keyboardInput.registerKey(keys.right, bind2Pc('moveRight'), bind2Pc('stop'));
+        this.keyboardInput.registerKey(keys.w, bind2Pc('jump'), bind2Pc('jumpStop'));
+        this.keyboardInput.registerKey(keys.up, bind2Pc('jump'), bind2Pc('jumpStop'));
+        this.keyboardInput.registerKey(keys.space, bind2Pc('jump'), bind2Pc('jumpStop'));
+        this.keyboardInput.registerKey(keys.plus, bind2Pc('zoomIn'));
+        this.keyboardInput.registerKey(keys.plusfx, bind2Pc('zoomIn'));
+        this.keyboardInput.registerKey(keys.minus, bind2Pc('zoomOut'));
+        this.keyboardInput.registerKey(keys.minusfx, bind2Pc('zoomOut'));
+        this.keyboardInput.registerKey(keys.zero, bind2Pc('zoomReset'));
+        this.keyboardInput.registerKey(keys.tab, bind2Pc('showInfo'), bind2Pc('hideInfo'));
+        this.keyboardInput.registerKey(keys.f, bind2Pc('handActionLeft'));
+        this.keyboardInput.registerKey(keys.g, bind2Pc('handActionRight'));
+        this.keyboardInput.registerKey(keys.k, bind2Pc('suicide'));
 
-        this.keyboardInput.registerKey(keys.tab, 'showInfo', 'hideInfo');
-
-        this.keyboardInput.registerKey(keys.f, 'handActionLeft');
-        this.keyboardInput.registerKey(keys.g, 'handActionRight');
-
-        this.keyboardInput.registerKey(keys.k, 'suicide');
+        this.keyboardInput.registerKey(
+            keys.shift,
+            this.activateModifier.bind(this),
+            this.deactivateModifier.bind(this)
+        );
     };
 
     KeyboardAndMouse.prototype.mouseInit = function() {
-
     	var canvas = DomController.getCanvas();
     	var self = this;
 
-		canvas.onmousemove = function(e){
-
-			// 		-1 +1   +1 +1		xy scaling should 
-			// 		-1 -1   +1 -1		be like this
-
-            var movementX = e.movementX ||
-                e.mozMovementX          ||
-                e.webkitMovementX       ||
-                0;
-
-            var movementY = e.movementY ||
-                e.mozMovementY      ||
-                e.webkitMovementY   ||
-                0;
-
-            self.x += movementX / Settings.VIEWPORT_SPEED_FACTOR;
-            if(self.x > 1) {
-                self.x = 1;
+        canvas.onmousedown = function(e) {
+            if(!self.playerController.player.isHoldingSomething()) {
+                self.playerController.handActionRequest(self.x, self.y);
+            } else {
+                self.swiper = new Swiper();
             }
-            if(self.x < -1) {
-                self.x = -1;
-            };
+        }
 
-            self.y -= movementY / Settings.VIEWPORT_SPEED_FACTOR;
-            if(self.y > 1) {
-                self.y = 1;
+		canvas.onmousemove = function(e) {
+            if (self.swiper) {
+                self.draw(e);
+            } else if(self.modifier) {
+                self.updateViewport(e);
             }
-            if(self.y < -1) {
-                self.y = -1;
-            }
-
-			self.onXyChange(self.x, self.y);
 		}
-        
-		canvas.onmousedown = function(e) {
 
-			var x = (((e.clientX - this.offsetLeft) / Settings.STAGE_WIDTH) * 2) - 1;
-			var y = (((Settings.STAGE_HEIGHT - (e.clientY - this.offsetTop)) / Settings.STAGE_HEIGHT) * 2) -1;
-
-			self.playerController.handActionRequest(x, y);
-		}
+        canvas.onmouseup = function(e) {
+            if(self.swiper) {
+                console.log(e)
+                var xya = self.swiper.swipeEnd(e.x, e.y);
+                self.playerController.handActionRequest(xya.x, xya.y);
+                self.swiper = null;
+            }
+        }
     };
 
-    KeyboardAndMouse.prototype.update = function(e) {
-        /*
+    KeyboardAndMouse.prototype.updateViewport = function(e) {
+        //      -1 +1   +1 +1       xy scaling should 
+        //      -1 -1   +1 -1       be like this
+
         var movementX = e.movementX ||
             e.mozMovementX          ||
             e.webkitMovementX       ||
@@ -134,10 +126,7 @@ function (Parent, KeyboardInput, DomController, Settings) {
             e.webkitMovementY   ||
             0;
 
-        //console.log(movementX, movementY);
-
-
-        this.x += movementX;
+        this.x += movementX / Settings.VIEWPORT_SPEED_FACTOR;
         if(this.x > 1) {
             this.x = 1;
         }
@@ -145,7 +134,7 @@ function (Parent, KeyboardInput, DomController, Settings) {
             this.x = -1;
         };
 
-        this.y += movementY;
+        this.y -= movementY / Settings.VIEWPORT_SPEED_FACTOR;
         if(this.y > 1) {
             this.y = 1;
         }
@@ -154,9 +143,32 @@ function (Parent, KeyboardInput, DomController, Settings) {
         }
 
         this.onXyChange(this.x, this.y);
-        */
+    };
+
+    KeyboardAndMouse.prototype.draw = function(e) {
+        var movementX = e.movementX ||
+            e.mozMovementX          ||
+            e.webkitMovementX       ||
+            0;
+
+        var movementY = e.movementY ||
+            e.mozMovementY      ||
+            e.webkitMovementY   ||
+            0;
+
+        this.swiper.swipe(movementX, -movementY);
+    };
+
+    KeyboardAndMouse.prototype.activateModifier = function() {
+        this.modifier = true;
     };
  
+    KeyboardAndMouse.prototype.deactivateModifier = function() {
+        this.modifier = false;
+        this.x = 0.3;
+        this.y = 0;
+        this.onXyChange(this.x, this.y);
+    };
     return KeyboardAndMouse;
  
 });

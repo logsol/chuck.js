@@ -4,11 +4,8 @@ define([
 
 function (Key) {
 
-    function KeyboardInput (playerController) {
-
-        this._registry = {};
-        this._playerController = playerController;
-        
+    function KeyboardInput () {
+        this._registry = {};        
         this.init();
     }
 
@@ -34,7 +31,7 @@ function (Key) {
 
         if (key && !key.getActive()) {
             var callback = key.getKeyDownFunction();
-            if(callback) this._playerController[callback]();
+            if(callback) callback();
             key.setActive(true);
         }
         
@@ -46,7 +43,7 @@ function (Key) {
         var key = this._getKeyByKeyCode(e.keyCode);
         if (key && key.getActive()) {
             var callback = key.getKeyUpFunction();
-            if(callback) this._playerController[callback]();
+            if(callback) callback();
             key.setActive(false);
         }
 

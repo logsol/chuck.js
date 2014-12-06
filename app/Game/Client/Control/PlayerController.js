@@ -13,9 +13,6 @@ function (Parent, Nc, KeyboardAndMouse, Gamepad) {
 
         this.keyboardAndMouse = new KeyboardAndMouse(this);
         this.gamepad = new Gamepad(this);
-
-        this.ncTokens = [
-        ];
     }
 
     PlayerController.prototype = Object.create(Parent.prototype);
@@ -23,7 +20,6 @@ function (Parent, Nc, KeyboardAndMouse, Gamepad) {
     PlayerController.prototype.update = function() {
         Parent.prototype.update.call(this);
         this.gamepad.update();
-        this.keyboardAndMouse.update();
     };
 
     PlayerController.prototype.moveLeft = function () {
@@ -93,12 +89,7 @@ function (Parent, Nc, KeyboardAndMouse, Gamepad) {
     PlayerController.prototype.zoomReset = function() {
         Nc.trigger(Nc.ns.client.game.zoomReset, false);
     };
-
-    PlayerController.prototype.destroy = function() {
-        Nc.offAll(this.ncTokens);
-        Parent.prototype.destroy.call(this);
-    };
-
+    
 
     return PlayerController;
 });

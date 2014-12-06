@@ -102,6 +102,10 @@ function (Parent, Nc, Settings) {
     	}
     };
 
+    Player.prototype.isHoldingSomething = function() {
+        return !!this.holdingItem;
+    };
+
     Player.prototype.destroy = function() {
         clearTimeout(this.healthBarViewVisibleTimeout);
     	Nc.trigger(Nc.ns.client.view.healthBar.remove, this.healthBarView);
