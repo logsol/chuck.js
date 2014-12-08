@@ -11,7 +11,7 @@ function (Parent, Settings, Nc) {
 
         // View uses this to calculate center position
         this.lookAtXY = {
-            x: 1,
+            x: 0.3,
             y: 0
         }
 

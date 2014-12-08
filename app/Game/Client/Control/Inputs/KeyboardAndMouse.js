@@ -104,7 +104,6 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
 
         canvas.onmouseup = function(e) {
             if(self.swiper) {
-                console.log(e)
                 var xya = self.swiper.swipeEnd(e.x, e.y);
                 self.playerController.handActionRequest(xya.x, xya.y);
                 self.swiper = null;

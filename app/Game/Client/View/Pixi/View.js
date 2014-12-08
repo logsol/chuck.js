@@ -7,10 +7,11 @@ define([
     "Lib/Utilities/Exception",
     "Game/Client/View/Pixi/GameStats",
     "Game/Client/View/LayerManager",
-    "Game/Client/View/Pixi/Layers/Ghost"
+    "Game/Client/View/Pixi/Layers/Ghost",
+    "Game/Client/View/Pixi/Layers/Swiper"
 ], 
 
-function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, LayerManager, Ghost) {
+function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, LayerManager, Ghost, Swiper) {
 
     function PixiView () {
 
@@ -56,11 +57,16 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
 
         this.initCanvas(this.renderer.view);
 
+        // Tab Overlay (not using layer manager)
         this.gameStats = new GameStats(this.container);
         this.stage.addChild(this.gameStats.getInfoContainer());
 
         this.ghostLayer = new Ghost();
         this.layerManager.insert(this.ghostLayer, false);
+
+        this.swiperLayer = new Swiper();
+        this.stage.addChild(this.swiperLayer.getContainer());
+        //this.layerManager.insert(this.swiperLayer, false);
     }
 
     PixiView.prototype.render = function () {
@@ -157,6 +163,7 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
         this.layerManager.destroy();
 
         this.ghostLayer.destroy();
+        this.swiperLayer.destroy();
         
         for (var i = 0; i < this.stage.children.length; i++) {
             this.stage.removeChild(this.stage.children[i]);

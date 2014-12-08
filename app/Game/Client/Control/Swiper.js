@@ -1,9 +1,10 @@
 define([
+	"Lib/Utilities/NotificationCenter",
 ],
  
-function () {
+function (Nc) {
 
-	var MAX_LENGTH = 300;
+	var MAX_LENGTH = 150;
  
     function Swiper() {
 	    this.points = [];
@@ -12,11 +13,14 @@ function () {
     }
  
     Swiper.prototype.swipe = function(x, y) {
-    	console.log("swipe")
+
 	            
 	    if(this.lengthSum > MAX_LENGTH) return;
 	    
 	    this.points.push({x:x, y:y});
+
+	    Nc.trigger(Nc.ns.client.view.swiper.swipe, x, y);
+
 	    var points = this.points;
 	    
 	    if(points.length >= 3) {
@@ -77,6 +81,8 @@ function () {
 	    var p0y = this.points[0].y;
 	    var sumx = 0;
 	    var sumy = 0;
+
+	    Nc.trigger(Nc.ns.client.view.swiper.end);
 	    
 	    for(var i=0, count = this.points.length; i < count; i++) {
 	        var p = this.points[i];
@@ -103,6 +109,12 @@ function () {
 	    	spin: spin
 	    }
 	}
+
+	Swiper.prototype.destroy = function() {
+        for (var i = 0; i < this.ncTokens.length; i++) {
+            Nc.off(this.ncTokens[i]);
+        };
+    };
  
     return Swiper;
  
