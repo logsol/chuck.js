@@ -11,7 +11,7 @@ function (Parent, Settings, Nc) {
 
         // View uses this to calculate center position
         this.lookAtXY = {
-            x: 0.3,
+            x: Settings.VIEWPORT_LOOK_AHEAD,
             y: 0
         }
 

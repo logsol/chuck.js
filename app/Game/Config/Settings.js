@@ -45,6 +45,7 @@ define(function() {
         HEALTH_DISPLAY_TIME: 2,
         RAGDOLL_DESTRUCTION_TIME: 20,
         VIEWPORT_SPEED_FACTOR: 640,
+        VIEWPORT_LOOK_AHEAD: 0.1,
 
         // restitution: bouncyness, friction: rubbing, density: mass
         TILE_FRICTION: 0.99,

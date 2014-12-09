@@ -15,6 +15,7 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
         this.y = 0;
         this.modifier = false;
         this.swiper = null;
+        this.lastLookDirection = 1;
 
     	this.playerController = playerController;
     	this.keyboardInit();
@@ -58,10 +59,10 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
             return self.playerController[methodName].bind(self.playerController);
         }
 
-        this.keyboardInput.registerKey(keys.a, bind2Pc('moveLeft'), bind2Pc('stop'));
-        this.keyboardInput.registerKey(keys.left, bind2Pc('moveLeft'), bind2Pc('stop'));
-        this.keyboardInput.registerKey(keys.d, bind2Pc('moveRight'), bind2Pc('stop'));
-        this.keyboardInput.registerKey(keys.right, bind2Pc('moveRight'), bind2Pc('stop'));
+        this.keyboardInput.registerKey(keys.a, this.moveLeft.bind(this), bind2Pc('stop'));
+        this.keyboardInput.registerKey(keys.left, this.moveLeft.bind(this), bind2Pc('stop'));
+        this.keyboardInput.registerKey(keys.d, this.moveRight.bind(this), bind2Pc('stop'));
+        this.keyboardInput.registerKey(keys.right, this.moveRight.bind(this), bind2Pc('stop'));
         this.keyboardInput.registerKey(keys.w, bind2Pc('jump'), bind2Pc('jumpStop'));
         this.keyboardInput.registerKey(keys.up, bind2Pc('jump'), bind2Pc('jumpStop'));
         this.keyboardInput.registerKey(keys.space, bind2Pc('jump'), bind2Pc('jumpStop'));
@@ -80,6 +81,22 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
             this.activateModifier.bind(this),
             this.deactivateModifier.bind(this)
         );
+    };
+
+    KeyboardAndMouse.prototype.moveLeft = function() {
+        if (!this.modifier) {
+            this.lastLookDirection = -1;
+            this.onXyChange(this.lastLookDirection * Settings.VIEWPORT_LOOK_AHEAD, 0);
+        }
+        this.playerController.moveLeft()
+    };
+
+    KeyboardAndMouse.prototype.moveRight = function() {
+        if (!this.modifier) {
+            this.lastLookDirection = 1;
+            this.onXyChange(this.lastLookDirection * Settings.VIEWPORT_LOOK_AHEAD, 0);
+        }
+        this.playerController.moveRight();
     };
 
     KeyboardAndMouse.prototype.mouseInit = function() {
@@ -141,6 +158,8 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
             this.y = -1;
         }
 
+        this.lastLookDirection = this.x >= 0 ? 1 : -1;
+
         this.onXyChange(this.x, this.y);
     };
 
@@ -164,7 +183,7 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
  
     KeyboardAndMouse.prototype.deactivateModifier = function() {
         this.modifier = false;
-        this.x = 0.3;
+        this.x = this.lastLookDirection * Settings.VIEWPORT_LOOK_AHEAD;
         this.y = 0;
         this.onXyChange(this.x, this.y);
     };
