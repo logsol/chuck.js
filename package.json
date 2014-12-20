@@ -25,5 +25,8 @@
   "optionalDependencies": {},
   "engine": "node >= 0.8.4",
   "config": { "port": "1234" },
-  "private": true
+  "private": true,
+  "scripts": {
+    "prestart": "node_modules/requirejs/bin/r.js -o build.js optimize=none > /dev/null && echo '\\033[1;32mcompiled.\\033[0m'"
+  }
 }

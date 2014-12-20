@@ -1,3 +1,3 @@
-define(["/socket.io/socket.io.js"], function() {
+define(["socketio"], function() {
     return io;
 });

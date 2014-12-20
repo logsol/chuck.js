@@ -3,7 +3,11 @@ GLOBALS = { context: "Client" };
 requirejs.config({
     baseUrl: 'app',
     deps: ['Lib/Utilities/Extensions'],
-    waitSeconds: 0
+    waitSeconds: 0,
+    paths: {
+        screenfull: "/screenfull",
+        socketio: "/socket.io/socket.io"
+    },
 });
 
 if(!Chuck) var Chuck = {};
