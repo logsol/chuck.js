@@ -47,6 +47,10 @@ function (http, nodeStatic, Api) {
                             fileServer.serveFile('./client.js', 200, {}, req, res);
                             break;
 
+                        case req.url == '/client.min.js':
+                            fileServer.serveFile('./client.min.js', 200, {}, req, res);
+                            break;
+
                         case req.url == '/require.js':
                             fileServer.serveFile('./node_modules/requirejs/require.js', 200, {}, req, res);
                             break;

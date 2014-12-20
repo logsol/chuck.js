@@ -1,3 +1,3 @@
-define(["/screenfull.js"], function() {
+define(["screenfull"], function() {
     return screenfull;
 });
