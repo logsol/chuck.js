@@ -1,10 +1,11 @@
 define([
     'http', 
     'node-static',
-    'Server/Api'
+    'Server/Api',
+    'zlib'
 ], 
 
-function (http, nodeStatic, Api) {
+function (http, nodeStatic, Api, zlib) {
 
     function HttpServer (options, coordinator) {
         options.port = options.port || 1234;
@@ -20,7 +21,8 @@ function (http, nodeStatic, Api) {
     HttpServer.prototype.init = function (options) {
         var self = this;
 
-        var fileServer = new nodeStatic.Server(options.rootDirectory, { cache: options.caching });
+        //gzip true serves gzip file if there is one with .gz next to the original && if browser supports it
+        var fileServer = new nodeStatic.Server(options.rootDirectory, { cache: options.caching, gzip: true });
 
         this.server = http.createServer(
             function (req, res) {
@@ -48,7 +50,7 @@ function (http, nodeStatic, Api) {
                             break;
 
                         case req.url == '/client.min.js':
-                            fileServer.serveFile('./client.min.js', 200, {}, req, res);
+                            fileServer.serveFile('./build/client.min.js', 200, {}, req, res);
                             break;
 
                         case req.url == '/require.js':

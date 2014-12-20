@@ -27,6 +27,6 @@
   "config": { "port": "1234" },
   "private": true,
   "scripts": {
-    "prestart": "node_modules/requirejs/bin/r.js -o build.js optimize=none > /dev/null && echo '\\033[1;32mcompiled.\\033[0m'"
+    "prestart": "./build/build.sh"
   }
 }
