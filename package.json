@@ -27,6 +27,6 @@
   "config": { "port": "1234" },
   "private": true,
   "scripts": {
-    "prestart": "./build/build.sh"
+    "prestart": "scripts/build.sh"
   }
 }

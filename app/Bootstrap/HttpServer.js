@@ -2,10 +2,10 @@ define([
     'http', 
     'node-static',
     'Server/Api',
-    'zlib'
+    'fs'
 ], 
 
-function (http, nodeStatic, Api, zlib) {
+function (http, nodeStatic, Api, fs) {
 
     function HttpServer (options, coordinator) {
         options.port = options.port || 1234;
@@ -46,7 +46,13 @@ function (http, nodeStatic, Api, zlib) {
                             break;
 
                         case req.url == '/client.js':
-                            fileServer.serveFile('./client.js', 200, {}, req, res);
+                            fs.exists('./build/client.min.js', function (exists) {
+                                if (process.env.NODE_ENV && process.env.NODE_ENV == 'production' && exists) {
+                                    fileServer.serveFile('./build/client.min.js', 200, {}, req, res);
+                                } else {
+                                    fileServer.serveFile('./client.js', 200, {}, req, res);
+                                }
+                            });
                             break;
 
                         case req.url == '/client.min.js':
