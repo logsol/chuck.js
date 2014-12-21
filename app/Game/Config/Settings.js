@@ -36,7 +36,7 @@ define(function() {
         WALK_SPEED: 4,
         RUN_SPEED: 8,
         FLY_SPEED: 6.2,
-        JUMP_SPEED: 20,
+        JUMP_SPEED: 21,
         JUMP_STOP_DAMPING_FACTOR: 0.5,
         MAX_THROW_FORCE: 18 * 3.5,
         MAX_THROW_ANGULAR_VELOCITY: 0,

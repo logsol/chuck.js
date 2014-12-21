@@ -33,16 +33,23 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
 
     PixiView.prototype.init = function () {
 
-        var transparent = false;
-        var antialias = true;
-        var canvas = DomController.getCanvas();
+        var rendererOptions = {
+            view: DomController.getCanvas(),
+            antialiasing: true,
+            transparent: false,
+            resolution: 1
+        }
 
         if(Settings.USE_WEBGL) {
-            this.renderer = new PIXI.WebGLRenderer(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT, canvas, transparent, antialias);
-            console.log('WebGLRenderer')
+
+            this.renderer = new PIXI.WebGLRenderer(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT, rendererOptions);
+            console.log('WebGLRenderer');
+
         } else {
-            this.renderer = new PIXI.CanvasRenderer(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT, canvas, transparent, antialias);
-            console.log('CanvasRenderer - not using WebGL!')
+
+            this.renderer = new PIXI.CanvasRenderer(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT, rendererOptions);
+            console.warn('CanvasRenderer - not using WebGL!');
+
         }
 
         this.stage = new PIXI.Stage(0x333333);

@@ -60,7 +60,7 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings) {
             var texture = PIXI.Texture.fromImage(texturePaths[i]);
             texture.width = options.width;
             texture.height = options.height;
-            PIXI.texturesToUpdate.push(texture);
+            //PIXI.texturesToUpdate.push(texture);
             textures.push(texture);
         }
 
@@ -85,6 +85,7 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings) {
         if (options.yScale) mesh.scale.y = options.yScale;
         if (options.visible === true || options.visible === false) mesh.visible = options.visible;
         if (options.pivot) mesh.pivot = new PIXI.Point(options.pivot.x, options.pivot.y);
+        if (options.anchor) mesh.anchor = options.anchor;
     };
 
     Layer.prototype.addFilter = function(mesh, filterName, options) {
