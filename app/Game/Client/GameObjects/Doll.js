@@ -125,11 +125,15 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
                 Nc.trigger(Nc.ns.client.view.animatedMesh.create, this.layerId, texturePaths, callback, { 
                     visible: false, 
                     pivot: {
-                        x: 35/2 * 4,
+                        x: 0,
                         y: 40 * 4
                     },
                     width: 35,
-                    height: 40
+                    height: 40,
+                    anchor: {
+                        x: 0.5,
+                        y: 0
+                    }
                 });
             }
 
@@ -148,7 +152,11 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
                 y: 12
             },
             width: 10,
-            height: 12
+            height: 12,
+            anchor: {
+                x: 0,
+                y: 0
+            }
         });
 
         // Holding arm
@@ -162,11 +170,16 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
         Nc.trigger(Nc.ns.client.view.mesh.create, this.layerId, texturePath, callback, {
             visible: false,
             pivot: {
-                x: 35/2 * 4,
+                //x: 35/2 * 4,
+                x: 0,
                 y: 40 * 4
             },
             width: 35,
-            height: 40
+            height: 40,
+            anchor: {
+                x: 0.5,
+                y: 0
+            }
         });
 
     }
