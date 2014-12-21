@@ -4,3 +4,4 @@ node_modules/
 lab/audio/
 lab/filter/
 static/items/rube/*-backups
+build/
