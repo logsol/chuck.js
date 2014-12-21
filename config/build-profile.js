@@ -5,7 +5,7 @@
         "socketio": "../node_modules/socket.io/node_modules/socket.io-client/dist/socket.io"
     },
     name: "../client",
-    out: "client.min.js",
+    out: "../build/client.min.js",
     onBuildRead: function (moduleName, path, contents) {
         var contents = contents.replace(/\" \+ GLOBALS.context \+ \"/g, "Client");
         return contents;
