@@ -1,12 +1,11 @@
 define([
     "Server/User", 
-    "Game/Channel/Channel",
     "Server/PipeToChannel",
     "Lib/Utilities/NotificationCenter",
     "Game/Config/Settings"
 ], 
 
-function (User, Channel, PipeToChannel, Nc, Settings) {
+function (User, PipeToChannel, Nc, Settings) {
 
 	"use strict";
 
