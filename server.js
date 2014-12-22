@@ -1,4 +1,4 @@
-"use strict";
+"use strict"
 
 var GLOBALS = { context: "Channel" };
 var requirejs = require('requirejs');

@@ -8,7 +8,7 @@ function() {
 		return f + this.substr(1);
 	}
 
-	if(GLOBALS.context == "Channel") {
+	if(typeof process !== 'undefined') {
 		
 		console.checkpoint = function (s) {
 			console.log('   \033[32mbeep  - \033[0m' + s);
