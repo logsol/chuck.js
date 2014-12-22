@@ -7,8 +7,9 @@ define([
     "Game/" + GLOBALS.context + "/GameObjects/Items/RagDoll"
 ],
 
-
 function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
+
+	"use strict";
 
     function Player (id, physicsEngine, user) {
         this.stats = {

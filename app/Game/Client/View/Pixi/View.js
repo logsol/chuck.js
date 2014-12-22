@@ -13,6 +13,8 @@ define([
 
 function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, LayerManager, Ghost, Swiper) {
 
+	"use strict";
+
     function PixiView () {
 
         Parent.call(this);

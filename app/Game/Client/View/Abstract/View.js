@@ -7,6 +7,8 @@ define([
 ],
 
 function (Abstract, DomController, Settings, Exception, Nc) {
+
+	"use strict";
     
     function AbstractView () {
     	this.me = null;

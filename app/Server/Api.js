@@ -9,6 +9,8 @@ define([
  
 function (Nc, ProtocolHelper, validate, Options, Settings, FileSystem) {
 
+	"use strict";
+
 		function Api(coordinator) {
 			this.coordinator = coordinator;
 			this.isError = false;

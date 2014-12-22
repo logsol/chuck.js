@@ -5,6 +5,8 @@ define([
 ],
  
 function (Parent) {
+
+    "use strict";
  
     function ${1:Module}() {
     	Parent.call(this);

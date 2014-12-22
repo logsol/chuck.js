@@ -6,6 +6,8 @@ define([
 ],
  
 function (Parent, Item, Box2D, Nc) {
+
+	"use strict";
  
     function Doll(physicsEngine, uid, player) {
     	Parent.call(this, physicsEngine, uid, player);
@@ -15,10 +17,12 @@ function (Parent, Item, Box2D, Nc) {
  
     Doll.prototype.findCloseItem = function(x, y) {
 
+        var self = this;
+
     	function findItem(array) {
         	for (var i = 0; i < array.length; i++) {
         		var item = array[i];
-        		if(item.isGrabbingAllowed(this.player)) {
+        		if(item.isGrabbingAllowed(self.player)) {
         			return item;
         		}
         	}

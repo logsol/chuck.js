@@ -9,6 +9,8 @@ define([
 
 function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
 
+	"use strict";
+
     function Networker (socketLink, channelName, nickname) {
         this.channelName = channelName;
         this.nickname = nickname;

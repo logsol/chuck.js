@@ -3,6 +3,8 @@ define([
 ],
  
 function (Parent) {
+
+	"use strict";
  
     function Rube(physicsEngine, uid, options) {
     	Parent.call(this, physicsEngine, uid, options);

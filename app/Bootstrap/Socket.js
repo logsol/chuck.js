@@ -4,6 +4,8 @@ define([
 
 function (io) {
 
+	"use strict";
+
     function Socket (server, options, coordinator) {
         options.logLevel = typeof options.logLevel != 'undefined'
             ? options.logLevel

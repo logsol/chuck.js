@@ -8,6 +8,8 @@ define([
 
 function (User, Channel, PipeToChannel, Nc, Settings) {
 
+	"use strict";
+
     function Coordinator() {
     	this.channelPipes = {};
 

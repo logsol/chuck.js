@@ -7,6 +7,8 @@ define([
 
 function (Parent, Nc, KeyboardAndMouse, Gamepad) {
 
+	"use strict";
+
     function PlayerController (me) {
 
         Parent.call(this, me);

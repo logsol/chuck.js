@@ -5,6 +5,8 @@ define([
 ],
  
 function (Nc, Exception, Layer) {
+
+	"use strict";
  
     function LayerManager(container, me) {
         this.layers = [];

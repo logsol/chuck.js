@@ -7,6 +7,8 @@ define([
 
 function (http, nodeStatic, Api, fs) {
 
+	"use strict";
+
     function HttpServer (options, coordinator) {
         options.port = options.port || 1234;
         options.caching = typeof options.caching != 'undefined' ? options.caching : 3600;

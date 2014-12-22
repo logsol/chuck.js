@@ -4,6 +4,8 @@ define([
 ],
  
 function (Parent, Settings) {
+
+	"use strict";
  
     function GamepadInput(playerController) {
     	this.playerController = playerController;

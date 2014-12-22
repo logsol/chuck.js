@@ -4,6 +4,8 @@ define([
  
 function (Parent) {
 
+	"use strict";
+
     return Parent;
  
 });

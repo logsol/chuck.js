@@ -5,6 +5,8 @@ define([
 ],
  
 function (Parent, Box2D, Settings) {
+
+	"use strict";
  
     function Skateboard(physicsEngine, uid, options) {
 

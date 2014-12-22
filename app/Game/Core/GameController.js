@@ -8,6 +8,8 @@ define([
 
 function (PhysicsEngine, TiledLevel, Player, Nc, Doll) {
 
+	"use strict";
+
     function GameController (options) {
 
         this.options = options;

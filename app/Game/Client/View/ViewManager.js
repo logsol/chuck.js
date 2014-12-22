@@ -8,6 +8,8 @@ define([
 ],
  
 function (Settings, Exception, AbstractView, PixiView, Nc) {
+
+	"use strict";
  
     var ViewManager = {};
 

@@ -7,6 +7,8 @@ define([
 ],
  
 function (Parent, CoreItem, Settings, Nc, Layer) {
+
+	"use strict";
  
     function RagDoll(physicsEngine, uid, options) {
         this.layerId = Layer.ID.SPAWN;

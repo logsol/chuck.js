@@ -6,6 +6,8 @@ define([
 
 function (Parent, ProtocolHelper, Nc) {
 
+	"use strict";
+
     function User (socketLink, coordinator) {
         Parent.call(this, socketLink.id, {});
 

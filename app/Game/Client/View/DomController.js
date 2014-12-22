@@ -7,6 +7,8 @@ define([
 
 function (Settings, Nc, Stats, Screenfull) {
 
+	"use strict";
+
     function DomController() {
         this.canvas = document.getElementById("canvas");
         this.debugCanvas = null;

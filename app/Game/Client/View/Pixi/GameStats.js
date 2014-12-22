@@ -6,6 +6,8 @@ define([
 ],
  
 function (PIXI, Nc, Settings, ColorConverter) {
+
+	"use strict";
  
     function GameStats(container) {
 

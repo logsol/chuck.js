@@ -4,6 +4,8 @@ define([
 
 function (Box2D) {
 
+	"use strict";
+
     function Detector () {
         this.listener = new Box2D.Dynamics.b2ContactListener();
         this.listener.BeginContact = this.beginContact.bind(this);

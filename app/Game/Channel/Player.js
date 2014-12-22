@@ -4,6 +4,8 @@ define([
 ],
  
 function (Parent, Nc) {
+
+	"use strict";
  
     function Player(id, physicsEngine, user) {
     	Parent.call(this, id, physicsEngine, user);

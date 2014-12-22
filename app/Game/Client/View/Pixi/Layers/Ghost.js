@@ -6,6 +6,8 @@ define([
 ],
  
 function (Parent, PIXI, Nc, Settings) {
+
+	"use strict";
  
     function Ghost() {
     	Parent.call(this, "ghost", 0);

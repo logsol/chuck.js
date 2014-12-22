@@ -9,6 +9,8 @@ define([
 
 function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
 
+	"use strict";
+
     function Doll (physicsEngine, uid, player) {
 
         this.characterName = "Chuck";

@@ -1,4 +1,6 @@
-GLOBALS = { context: "Channel" };
+"use strict";
+
+var GLOBALS = { context: "Channel" };
 var requirejs = require('requirejs');
 
 var inspector;

@@ -7,6 +7,8 @@ define([
 
 function (Parent, RubeLoader, Box2D, Settings ) {
 
+	"use strict";
+
     // Fixme - make this loadable
     var __ragdollJson; 
  

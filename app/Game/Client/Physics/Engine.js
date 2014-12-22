@@ -8,6 +8,8 @@ define([
 
 function (Parent, Settings, DomController, Box2D, Nc) {
 
+	"use strict";
+
     function Engine () {
         Parent.call(this);
 
