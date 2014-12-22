@@ -4,6 +4,8 @@ define([
 
 function (Key) {
 
+	"use strict";
+
     function KeyboardInput (playerController) {
 
         this._registry = {};

@@ -4,6 +4,8 @@ define([
 
 function (Exception) {
 
+	"use strict";
+
     function populate(obj, path) {
         path = path || "Nc.ns";
         for(var key in obj) {

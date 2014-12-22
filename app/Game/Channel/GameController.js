@@ -14,6 +14,8 @@ define([
 
 function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, Nc, Box2D, Player, GameObject, Doll, RagDoll) {
 
+	"use strict";
+
     function GameController (options) {
 
         this.animationTimeout = null;

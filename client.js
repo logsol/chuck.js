@@ -1,4 +1,6 @@
-GLOBALS = { context: "Client" };
+"use strict";
+
+var GLOBALS = { context: "Client" };
 
 requirejs.config({
     baseUrl: 'app',

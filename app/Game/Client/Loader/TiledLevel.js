@@ -5,6 +5,8 @@ define([
 ],
  
 function (Parent, Settings, Nc) {
+
+	"use strict";
  
     function TiledLevel(uid, engine, gameObjects) {
         this.layerId = "background";

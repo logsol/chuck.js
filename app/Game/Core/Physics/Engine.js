@@ -7,6 +7,8 @@ define([
 
 function (Settings, Box2D, CollisionDetector, Nc) {
 
+	"use strict";
+
     function Engine () {
         this.world = new Box2D.Dynamics.b2World(
             new Box2D.Common.Math.b2Vec2(0, Settings.BOX2D_GRAVITY),

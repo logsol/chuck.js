@@ -4,6 +4,8 @@ define([
 
 function (Settings) {
 
+	"use strict";
+
     var requestAnimFrame = (function () {
 
         var _setTimeout = function ( callback ) {

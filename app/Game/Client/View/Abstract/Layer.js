@@ -4,6 +4,8 @@ define([
 
 function (Abstract) {
 
+	"use strict";
+
     function Layer(name, parallaxSpeed) {
     	this.name = name;
     	this.parallaxSpeed = parallaxSpeed;

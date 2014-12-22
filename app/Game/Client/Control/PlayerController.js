@@ -8,6 +8,8 @@ define([
 
 function (Parent, KeyboardInput, MouseInput, Nc, GamepadInput) {
 
+	"use strict";
+
     function PlayerController (me) {
 
         Parent.call(this, me);

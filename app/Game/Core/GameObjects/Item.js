@@ -8,6 +8,8 @@ define([
 ],
  
 function (Parent, Box2D, Options, Settings, Exception, Nc) {
+
+	"use strict";
  
     function Item(physicsEngine, uid, options) {
 

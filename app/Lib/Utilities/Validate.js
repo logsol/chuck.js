@@ -2,6 +2,8 @@ define([
 ],
  
 function () {
+
+	"use strict";
  
     function validate(object, description) {
 

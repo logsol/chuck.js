@@ -4,6 +4,8 @@ define([
 ], 
  
 function (Parent, Box2D) {
+
+	"use strict";
  
     function SpectatorDoll(physicsEngine, uid, player) {
     	Parent.call(this, physicsEngine, uid);

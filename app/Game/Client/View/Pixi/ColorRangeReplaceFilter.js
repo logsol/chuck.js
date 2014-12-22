@@ -4,6 +4,8 @@ define([
  
 function (PIXI) {
 
+	"use strict";
+
     var Parent = PIXI.AbstractFilter;
  
     function ColorRangeReplaceFilter() {

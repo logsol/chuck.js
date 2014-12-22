@@ -7,6 +7,8 @@ define([
 ],
  
 function (Parent, Box2D, Settings, Exception, Nc) {
+
+	"use strict";
  
     function Tile(physicsEngine, uid, options) {
     	this.options = options;

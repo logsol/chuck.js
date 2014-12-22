@@ -3,6 +3,8 @@ define([
 ],
  
 function (Exception) {
+
+	"use strict";
  
     function Abstract() {
     }

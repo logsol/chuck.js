@@ -8,6 +8,8 @@ define([
 ],
  
 function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
+
+	"use strict";
  
     function Doll(physicsEngine, uid, player) {   
         this.layerId = Layer.ID.SPAWN;

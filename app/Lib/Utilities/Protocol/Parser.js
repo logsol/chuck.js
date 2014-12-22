@@ -3,6 +3,8 @@ define([
 
 function () {
 
+	"use strict";
+
     var Parser = {};
 
     Parser.encode = function (message) {

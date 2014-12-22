@@ -4,6 +4,8 @@ define([
 ],
  
 function (Box2D, Exception) {
+
+	"use strict";
  
     function GameObject(physicsEngine, uid) {
         this.uid = uid;

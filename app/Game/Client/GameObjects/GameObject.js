@@ -5,6 +5,8 @@ define([
 ],
  
 function (Parent, Exception, Nc) {
+
+	"use strict";
  
     function GameObject(physicsEngine, uid) {
     	Parent.call(this, physicsEngine, uid);

@@ -3,6 +3,8 @@ define([
 ],
  
 function (Nc) {
+
+	"use strict";
  
     function XyInput() {
     	this.x = null;

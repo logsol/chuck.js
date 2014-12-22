@@ -8,6 +8,8 @@ define([
 
 function (Parent, Settings, Nc, PIXI, AbstractLayer) {
 
+	"use strict";
+
     function Level (uid, engine, gameObjects) {
         Parent.call(this, uid, engine, gameObjects);
     }

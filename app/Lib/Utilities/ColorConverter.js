@@ -3,6 +3,8 @@ define([
 ],
  
 function (CryptoJS) {
+
+	"use strict";
  
     function ColorConverter() {
     	this.sin = 0;

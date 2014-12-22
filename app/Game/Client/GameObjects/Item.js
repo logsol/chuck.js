@@ -6,6 +6,8 @@ define([
 ],
  
 function (Parent, Settings, Nc, Layer) {
+
+	"use strict";
  
     function Item(physicsEngine, uid, options) {
         this.layerId = Layer.ID.ITEM;

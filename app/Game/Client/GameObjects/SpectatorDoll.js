@@ -3,6 +3,8 @@ define([
 ],
  
 function (Parent) {
+
+	"use strict";
  
     function SpectatorDoll(physicsEngine, uid) {
     	Parent.call(this, physicsEngine, uid);

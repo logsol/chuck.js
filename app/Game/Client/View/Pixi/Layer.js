@@ -7,6 +7,8 @@ define([
 
 function (Parent, PIXI, ColorRangeReplaceFilter, Settings) {
 
+	"use strict";
+
     var AVAILABLE_MESH_FILTERS = {
         "blur": PIXI.BlurFilter,
         "desaturate": PIXI.GrayFilter,

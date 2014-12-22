@@ -5,6 +5,8 @@ define([
 
 function (Nc, Channel) {
 
+	"use strict";
+
     function PipeToServer (process) {
 
         var self = this;

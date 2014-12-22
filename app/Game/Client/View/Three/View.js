@@ -6,6 +6,8 @@ define([
 ], 
 
 function (Parent, DomController, Three, Settings) {
+
+	"use strict";
     
     function ThreeView () {
         Parent.call(this);

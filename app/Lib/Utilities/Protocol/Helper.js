@@ -5,6 +5,8 @@ define([
 
 function (Parser, Exception) {
 
+	"use strict";
+
     var Helper = {}
 
     Helper.encodeCommand = function (command, options) {

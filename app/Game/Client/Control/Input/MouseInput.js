@@ -6,6 +6,8 @@ define([
 ],
  
 function (Parent, DomController, Settings, Nc) {
+
+	"use strict";
  
     function MouseInput() {
     	Parent.call(this);

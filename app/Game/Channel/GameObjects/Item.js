@@ -3,6 +3,8 @@ define([
 ],
  
 function (Parent) {
+
+	"use strict";
  
     function Item(physicsEngine, uid, options) {
     	Parent.call(this, physicsEngine, uid, options);

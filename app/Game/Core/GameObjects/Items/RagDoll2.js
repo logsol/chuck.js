@@ -5,6 +5,8 @@ define([
 ],
  
 function (Parent, Box2D, Settings) {
+
+	"use strict";
  
 	function RagDoll(physicsEngine, uid, options) {
 		Parent.call(this, physicsEngine, uid, options);

@@ -5,6 +5,8 @@ define([
 
 function (Nc, childProcess) {
 
+	"use strict";
+
 	var fork = childProcess.fork;
 
 	function PipeToChannel (options) {

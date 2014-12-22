@@ -5,6 +5,8 @@ define([
  
 function (ColorConverter, Exception) {
 
+	"use strict";
+
 	var instance = null
  
     function Menu() {

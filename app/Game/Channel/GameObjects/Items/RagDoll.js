@@ -5,6 +5,8 @@ define([
 ],
  
 function (Parent, Settings, Nc) {
+
+	"use strict";
  
     function RagDoll(physicsEngine, uid, options) {
         this.scheduledForDestruction = false;
