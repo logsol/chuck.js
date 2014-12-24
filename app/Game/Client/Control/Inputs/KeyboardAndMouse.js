@@ -105,7 +105,11 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
 
         canvas.onmousedown = function(e) {
             if(!self.playerController.player.isHoldingSomething()) {
-                self.playerController.handActionRequest(self.x, self.y);
+                var options = {
+                    x: self.x, 
+                    y: self.y
+                };
+                self.playerController.handActionRequest(options);
             } else {
                 self.swiper = new Swiper();
             }
@@ -121,8 +125,8 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
 
         canvas.onmouseup = function(e) {
             if(self.swiper) {
-                var xya = self.swiper.swipeEnd(e.x, e.y);
-                self.playerController.handActionRequest(xya.x, xya.y);
+                var options = self.swiper.swipeEnd(e.x, e.y);
+                self.playerController.handActionRequest(options);
                 self.swiper = null;
             }
         }

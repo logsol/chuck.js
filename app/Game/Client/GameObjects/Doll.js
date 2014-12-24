@@ -230,8 +230,8 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
         Nc.trigger(Nc.ns.client.view.mesh.update, this.layerId, this.holdingArmMesh, { visible: true });
     };
 
-    Doll.prototype.throw = function(item, x, y) {
-        Parent.prototype.throw.call(this, item, x, y);
+    Doll.prototype.throw = function(item, options) {
+        Parent.prototype.throw.call(this, item, options);
         this.animatedMeshes = this.animatedMeshesContainer.withArms;
         this.setActionState(this.actionState, true);
         Nc.trigger(Nc.ns.client.view.mesh.update, this.layerId, this.holdingArmMesh, { visible: false });

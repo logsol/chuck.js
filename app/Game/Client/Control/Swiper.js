@@ -75,7 +75,7 @@ function (Nc) {
     }
 
     Swiper.prototype.swipeEnd = function(x, y) {
-	    var spin = this.angleSum;
+	    var angularVelocity = this.angleSum;
 	    var length = this.lengthSum;
 	    var p0x = this.points[0].x;
 	    var p0y = this.points[0].y;
@@ -106,7 +106,7 @@ function (Nc) {
 	    return {
 	    	x: direction.x * length / 100,
 	    	y: direction.y * length / 100,
-	    	spin: spin
+	    	av: angularVelocity / 100
 	    }
 	}
 

@@ -354,12 +354,12 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
         }
     };
 
-    Doll.prototype.throw = function(item, x, y) {
+    Doll.prototype.throw = function(item, options) {
         this.body.GetWorld().DestroyJoint(this.holdingJoint);
         this.holdingJoint = null;
         this.holdingItem = null;
 
-        item.throw(x, y);
+        item.throw(options);
     };
 
     Doll.prototype.isAnotherPlayerNearby = function() {

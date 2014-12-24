@@ -13,7 +13,7 @@ function (Parent, Nc) {
 
     Player.prototype = Object.create(Parent.prototype);
  
-    Player.prototype.handActionRequest = function(x, y) {
+    Player.prototype.handActionRequest = function(options) {
         if(!this.doll) return false;
 
     	var item = null;
@@ -22,29 +22,25 @@ function (Parent, Nc) {
         if (isHolding) {
             item = this.holdingItem;
         } else {
-            item = this.doll.findCloseItem(x, y);
+            item = this.doll.findCloseItem(options.x, options.y);
         }
 
         if(item) {
-	        this.handAction(x, y, isHolding, item);
+	        this.handAction(options, isHolding, item);
         }
     }
 
-    Player.prototype.handAction = function(x, y, isHolding, item) {
+    Player.prototype.handAction = function(options, isHolding, item) {
 
-        var options = {
-            playerId: this.id,
-            itemUid: item.uid            
-        }
+        options.playerId = this.id;
+        options.itemUid = item.uid;
         
         if (isHolding) {
             // throw
             if(item.isReleasingAllowed()) {
-                this.throw(x, y, item);
+                this.throw(options, item);
 
                 options.action = "throw";
-                options.x = x;
-                options.y = y;                
                 Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "handActionResponse", options);
             }
         } else {

@@ -87,9 +87,9 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
         this.holdingItem = item;  
     };
 
-    Player.prototype.throw = function(x, y, item) {
+    Player.prototype.throw = function(options, item) {
         if(!this.isSpawned) return false;
-        this.doll.throw(item, x, y);
+        this.doll.throw(item, options);
         item.beingReleased(this);
         this.holdingItem = null; 
     };
@@ -99,7 +99,7 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
 
         // FIXME: do something better then just respawn in GameController
         if(this.holdingItem) {
-            this.throw(0, 0, this.holdingItem)
+            this.throw(0, 0, 0, this.holdingItem)
         }
 
         // prepare for creating the ragdoll
@@ -144,7 +144,12 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
         Nc.trigger(Nc.ns.core.game.gameObject.remove, 'animated', this);
 
         if(this.holdingItem) {
-            this.throw(0, 0, this.holdingItem);
+            var options = {
+                x: 0,
+                y: 0,
+                av: 0
+            };
+            this.throw(options, this.holdingItem);
         }
         
         this.spectatorDoll.destroy();

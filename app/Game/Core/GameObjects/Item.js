@@ -129,17 +129,17 @@ function (Parent, Box2D, Options, Settings, Exception, Nc) {
         return this.body.GetWorldCenter();
     };
 
-    Item.prototype.throw = function(x, y) {
+    Item.prototype.throw = function(options) {
         var body = this.body;
         body.SetAwake(true);
 
         var vector = new Box2D.Common.Math.b2Vec2(
-            x * Settings.MAX_THROW_FORCE / this.options.weight,
-            -y * Settings.MAX_THROW_FORCE / this.options.weight
+            options.x * Settings.MAX_THROW_FORCE / this.options.weight,
+            -options.y * Settings.MAX_THROW_FORCE / this.options.weight
         );
         this.body.SetLinearVelocity(vector);
 
-        body.SetAngularVelocity(Settings.MAX_THROW_ANGULAR_VELOCITY * x);
+        body.SetAngularVelocity(-options.av * Settings.MAX_THROW_ANGULAR_VELOCITY);
     };
 
     Item.prototype.destroy = function() {

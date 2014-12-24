@@ -33,7 +33,7 @@ function(Parent, Nc, Parser, Settings) {
     };
 
     PlayerController.prototype.handActionRequest = function(options) {
-        if (options) this.player.handActionRequest(options.x, options.y);
+        if (options) this.player.handActionRequest(options);
     };
 
     PlayerController.prototype.suicide = function() {

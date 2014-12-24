@@ -67,8 +67,7 @@ function (Parent, Nc, KeyboardAndMouse, Gamepad) {
         Nc.trigger(Nc.ns.client.to.server.gameCommand.send, "suicide");
     };
 
-    PlayerController.prototype.handActionRequest = function(x, y) {
-        var options = {x:x, y:y};
+    PlayerController.prototype.handActionRequest = function(options) {
         Nc.trigger(Nc.ns.client.to.server.gameCommand.send, "handActionRequest", options);
     };
 

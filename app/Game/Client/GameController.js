@@ -197,7 +197,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
         if(item) {
             if(options.action == "throw") {
-                player.throw(options.x, options.y, item);
+                player.throw(options, item);
             } else if(options.action == "grab") {
                 player.grab(item);
             }            
