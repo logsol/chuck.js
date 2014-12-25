@@ -11,7 +11,7 @@
    */
   apps : [
 
-    // First application
+    // Production
     {
       name      : "chuck",
       script    : "server.js",
@@ -20,6 +20,17 @@
         PORT: "1235"
       }
     },
+
+    // Development
+    {
+      name      : "chuck-dev",
+      script    : "server.js",
+      env  : {
+        NODE_ENV: "dev",
+        PORT: "1236"
+      }
+    }
+    
   ],
 
 
@@ -44,10 +55,6 @@
       repo : "https://github.com/logsol/chuck.js.git",
       path : "/home/chuck/development",
       "post-deploy" : "npm install && pm2 startOrRestart config/ecosystem.json5 --env dev",
-      env  : {
-        NODE_ENV: "dev",
-        PORT: "1234"
-      }
     }
   }
 }
