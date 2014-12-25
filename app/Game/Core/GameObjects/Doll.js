@@ -360,7 +360,7 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
         this.holdingItem = null;
 
         var dollVelocity = {
-            x: this.body.GetLinearVelocity().x
+            x: this.body.GetLinearVelocity().x,
             y: this.body.GetLinearVelocity().y
         };
 
