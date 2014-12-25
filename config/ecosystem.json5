@@ -27,7 +27,7 @@
       script    : "server.js",
       env  : {
         NODE_ENV: "dev",
-        PORT: "1236"
+        PORT: "1234"
       }
     }
     
