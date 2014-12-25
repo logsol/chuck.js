@@ -51,7 +51,7 @@
     dev : {
       user : "chuck",
       host : "fuuuuu.de",
-      ref  : "origin/master",
+      ref  : "origin/controls",
       repo : "https://github.com/logsol/chuck.js.git",
       path : "/home/chuck/development",
       "post-deploy" : "npm install && pm2 startOrRestart config/ecosystem.json5 --env dev",
