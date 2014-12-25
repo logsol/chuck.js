@@ -19,16 +19,6 @@
         NODE_ENV: "production",
         PORT: "1235"
       }
-    },
-
-    // Development
-    {
-      name      : "chuck-dev",
-      script    : "server.js",
-      env  : {
-        NODE_ENV: "dev",
-        PORT: "1234"
-      }
     }
     
   ],
@@ -47,14 +37,6 @@
       repo : "https://github.com/logsol/chuck.js.git",
       path : "/home/chuck/production",
       "post-deploy" : "npm install && NODE_ENV=production sh scripts/build.sh && pm2 startOrRestart config/ecosystem.json5 --env production"
-    },
-    dev : {
-      user : "chuck",
-      host : "fuuuuu.de",
-      ref  : "origin/controls",
-      repo : "https://github.com/logsol/chuck.js.git",
-      path : "/home/chuck/development",
-      "post-deploy" : "npm install && pm2 startOrRestart config/ecosystem.json5 --env dev",
     }
   }
 }
