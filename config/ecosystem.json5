@@ -1,0 +1,60 @@
+{
+  /**
+   * This is a sample configuration file for PM2
+   */
+
+  /**
+   * Here we declare the apps that must be managed by PM2
+   * All options are listed here:
+   * https://github.com/Unitech/PM2/blob/master/ADVANCED_README.md#json-app-declaration
+   *
+   */
+  apps : [
+
+    // Production
+    {
+      name      : "chuck",
+      script    : "server.js",
+      env_production : {
+        NODE_ENV: "production",
+        PORT: "1235"
+      }
+    },
+
+    // Development
+    {
+      name      : "chuck-dev",
+      script    : "server.js",
+      env  : {
+        NODE_ENV: "dev",
+        PORT: "1236"
+      }
+    }
+    
+  ],
+
+
+  /**
+   * PM2 help you to deploy apps over your servers
+   * For more help go to :
+   * https://github.com/Unitech/PM2/blob/master/ADVANCED_README.md#deployment-pm2--090
+   */
+  deploy : {
+    production : {
+      user : "chuck",
+      host : "fuuuuu.de",
+      ref  : "origin/master",
+      repo : "https://github.com/logsol/chuck.js.git",
+      path : "/home/chuck/production",
+      "post-deploy" : "npm install && NODE_ENV=production sh scripts/build.sh && pm2 startOrRestart config/ecosystem.json5 --env production"
+    },
+    dev : {
+      user : "chuck",
+      host : "fuuuuu.de",
+      ref  : "origin/master",
+      repo : "https://github.com/logsol/chuck.js.git",
+      path : "/home/chuck/development",
+      "post-deploy" : "npm install && pm2 startOrRestart config/ecosystem.json5 --env dev",
+    }
+  }
+}
