@@ -129,13 +129,13 @@ function (Parent, Box2D, Options, Settings, Exception, Nc) {
         return this.body.GetWorldCenter();
     };
 
-    Item.prototype.throw = function(options) {
+    Item.prototype.throw = function(options, carrierVelocity) {
         var body = this.body;
         body.SetAwake(true);
 
         var vector = new Box2D.Common.Math.b2Vec2(
-            options.x * Settings.MAX_THROW_FORCE / this.options.weight,
-            -options.y * Settings.MAX_THROW_FORCE / this.options.weight
+            options.x * Settings.MAX_THROW_FORCE / this.options.weight + carrierVelocity.x,
+            -options.y * Settings.MAX_THROW_FORCE / this.options.weight + carrierVelocity.y
         );
         this.body.SetLinearVelocity(vector);
 

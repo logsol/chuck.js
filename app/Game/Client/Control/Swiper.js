@@ -77,6 +77,15 @@ function (Nc) {
     Swiper.prototype.swipeEnd = function(x, y) {
 	    var angularVelocity = this.angleSum;
 	    var length = this.lengthSum;
+
+        if (this.points.length < 1) {
+            return {
+                x: 0,
+                y: 0,
+                av: 0
+            }
+        }
+
 	    var p0x = this.points[0].x;
 	    var p0y = this.points[0].y;
 	    var sumx = 0;
@@ -103,11 +112,11 @@ function (Nc) {
 	    this.lengthSum = 0;
 	    this.points = [];
 	    
-	    return {
-	    	x: direction.x * length / 100,
-	    	y: direction.y * length / 100,
-	    	av: angularVelocity / 100
-	    }
+        return {
+            x: direction.x * length / 100,
+            y: direction.y * length / 100,
+            av: angularVelocity / 100
+        }
 	}
 
 	Swiper.prototype.destroy = function() {

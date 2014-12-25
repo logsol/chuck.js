@@ -359,7 +359,12 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
         this.holdingJoint = null;
         this.holdingItem = null;
 
-        item.throw(options);
+        var dollVelocity = {
+            x: this.body.GetLinearVelocity().x
+            y: this.body.GetLinearVelocity().y
+        };
+
+        item.throw(options, dollVelocity);
     };
 
     Doll.prototype.isAnotherPlayerNearby = function() {
