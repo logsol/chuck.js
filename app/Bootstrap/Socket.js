@@ -24,6 +24,10 @@ function (io) {
             this.set('log level', options.logLevel);
         });
 
+        this.socket.configure('production', function () {
+            this.set('log level', options.logLevel);
+        });
+
         this.socket.on('connection', function (user) {
             console.checkpoint('socket receiving connection');
             self.onConnection(user);
