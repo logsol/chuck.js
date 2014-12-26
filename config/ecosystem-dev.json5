@@ -33,7 +33,7 @@
     dev : {
       user : "chuck",
       host : "fuuuuu.de",
-      ref  : "origin/controls",
+      ref  : "origin/master",
       repo : "https://github.com/logsol/chuck.js.git",
       path : "/home/chuck/development",
       "post-deploy" : "npm install && pm2 startOrRestart config/ecosystem-dev.json5 --env dev",
