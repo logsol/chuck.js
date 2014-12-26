@@ -74,8 +74,7 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
         this.layerManager.insert(this.ghostLayer, false);
 
         this.swiperLayer = new Swiper();
-        this.stage.addChild(this.swiperLayer.getContainer());
-        //this.layerManager.insert(this.swiperLayer, false);
+        this.layerManager.insert(this.swiperLayer, false);
     }
 
     PixiView.prototype.render = function () {

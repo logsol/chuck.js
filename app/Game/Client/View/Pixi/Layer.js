@@ -21,6 +21,7 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings) {
         this.container = new PIXI.DisplayObjectContainer();
         this.container.x = 0;
         this.container.y = 0;
+        this.static = false;
     }
 
     Layer.prototype = Object.create(Parent.prototype);
@@ -166,13 +167,15 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings) {
         this.container.scale.y = this.container.scale.x;
 
         // Position
-        var posXStep = (this.position.target.x - this.position.current.x) * Settings.CAMERA_GLIDE / 100;
-        this.position.current.x += posXStep;
-        this.container.x = this.position.current.x + (this.position.current.x * this.parallaxSpeed);
+        if (!this.static) {
+            var posXStep = (this.position.target.x - this.position.current.x) * Settings.CAMERA_GLIDE / 100;
+            this.position.current.x += posXStep;
+            this.container.x = this.position.current.x + (this.position.current.x * this.parallaxSpeed);
 
-        var posYStep = (this.position.target.y - this.position.current.y) * Settings.CAMERA_GLIDE / 100;
-        this.position.current.y += posYStep;
-        this.container.y = this.position.current.y + (this.position.current.y * this.parallaxSpeed);
+            var posYStep = (this.position.target.y - this.position.current.y) * Settings.CAMERA_GLIDE / 100;
+            this.position.current.y += posYStep;
+            this.container.y = this.position.current.y + (this.position.current.y * this.parallaxSpeed);
+        }
     };
 
     return Layer;

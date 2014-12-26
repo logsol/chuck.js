@@ -8,7 +8,9 @@ define([
 function (Parent, PIXI, Nc, Settings) {
  
     function Swiper() {
-    	Parent.call(this, "ghost", 0);
+    	Parent.call(this, "swiper", 0);
+
+        this.static = true;
 
     	this.ncTokens = [
             Nc.on(Nc.ns.client.view.swiper.swipe, this.swipe, this),
