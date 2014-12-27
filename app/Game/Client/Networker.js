@@ -180,7 +180,7 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
     };
 
     Networker.prototype.onEndRound = function() {
-        this.gameController.toggleInfo(true);
+        this.gameController.toggleGameStats(true);
     };
 
     return Networker;

@@ -168,11 +168,8 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
 
     PixiView.prototype.destroy = function() {
 
-        this.layerManager.destroy();
+        this.layerManager.destroy(); // also calls all layers destroy
 
-        this.ghostLayer.destroy();
-        this.swiperLayer.destroy();
-        
         for (var i = 0; i < this.stage.children.length; i++) {
             this.stage.removeChild(this.stage.children[i]);
         }

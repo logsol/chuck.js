@@ -161,6 +161,10 @@ function (Nc, Exception, Layer) {
         for (var i = 0; i < this.ncTokens.length; i++) {
             Nc.off(this.ncTokens[i]);
         };
+        for (var i = this.layers.length - 1; i >= 0; i--) { 
+            var layer = this.layers[i];
+            layer.destroy();
+        };
     };
 
     return LayerManager;

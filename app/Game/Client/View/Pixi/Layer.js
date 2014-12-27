@@ -180,13 +180,3 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings) {
 
     return Layer;
 });
-
-
-/*
-
-1 = this.zoom.current ? -1
-
-1 = this.zoom.current * (-1) * (-1)
-
-
-*/

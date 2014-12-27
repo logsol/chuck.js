@@ -17,6 +17,8 @@ function (Abstract) {
             current: { x: 0, y: 0},
             target: { x: 0, y: 0}
         };
+
+        this.ncTokens = [];
     }
 
     Object.defineProperty(Layer, 'ID', { 
@@ -47,6 +49,10 @@ function (Abstract) {
 
     Layer.prototype.setZoom = function(z) {
         this.zoom.target = z;
+    };
+
+    Layer.prototype.destroy = function() {
+        
     };
 
     return Layer;

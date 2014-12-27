@@ -25,8 +25,8 @@ function () {
     }
 
     AudioPlayer.prototype.stop = function() {
-    	this.audio.stop();
-    	this.doPlay = false;
+    	//this.audio.stop();
+    	//this.doPlay = false;
     };
 
     AudioPlayer.prototype.destroy = function() {
