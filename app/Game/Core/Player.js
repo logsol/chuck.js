@@ -99,7 +99,12 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
 
         // FIXME: do something better then just respawn in GameController
         if(this.holdingItem) {
-            this.throw(0, 0, 0, this.holdingItem)
+            var options = {
+                x: 0,
+                y: 0,
+                av: 0
+            };
+            this.throw(options, this.holdingItem)
         }
 
         // prepare for creating the ragdoll
