@@ -60,7 +60,6 @@ function (Parent, Settings, Nc, PIXI, AbstractLayer) {
 
         /* 
         // Single File Animations Preloading
-        var characterNames = ["Chuck"];
         var animationSets = ["WithArms", "WithoutArms"];
         var addition = "";
         
@@ -84,15 +83,16 @@ function (Parent, Settings, Nc, PIXI, AbstractLayer) {
         };
         */
 
+        var characterNames = ["Chuck"];
         var characterName = characterNames[0];
 
         paths.push(
-            Settings.GRAPHICS_PATH 
-            + Settings.GRAPHICS_SUBPATH_CHARACTERS 
+            Settings.GRAPHICS_PATH
+            + Settings.GRAPHICS_SUBPATH_CHARACTERS
             + characterName
             + "/Animation/"
             + "/TexturePacker"
-            + "/witharms.json"
+            + "/chuck_sheet.json"
         );
 
         paths.push(
