@@ -166,6 +166,17 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
         this.currentZoom = Settings.ZOOM_DEFAULT;
     };
 
+    PixiView.prototype.getTexturesFromFrame = function(textureNames) {
+
+        var textures = [];
+
+        for (var i = 0; i < textureNames.length; i++) {
+            textures.push(PIXI.Texture.fromFrame(textureNames[i]));
+        };
+
+        return textures;
+    };
+
     PixiView.prototype.destroy = function() {
 
         this.layerManager.destroy(); // also calls all layers destroy

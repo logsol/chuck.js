@@ -107,6 +107,9 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
 
                 var texturePaths = [];
                 for (var i = start; i <= end; i++) {
+
+                    /*
+                    // Multiple File Animations
                     texturePaths.push(
                           Settings.GRAPHICS_PATH 
                         + Settings.GRAPHICS_SUBPATH_CHARACTERS 
@@ -115,7 +118,14 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
                         + padF(i) 
                         + ".png"
                     );
+                    */
+
+                    // Single File Animations (animation names from chuck_sheet.json, use option fromFrame=true)
+                    texturePaths.push(
+                        "Chuck" + arm.toUpperCaseFirstChar() + "0" + padF(i) + ".png"
+                    );
                 }
+
 
                 var callback = function(mesh) {
                     self.animatedMeshesContainer[arm][key] = mesh;
@@ -130,12 +140,13 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
                         x: 0,
                         y: 40 * 4
                     },
-                    width: 35,
-                    height: 40,
+                    xScale: 0.25,
+                    yScale: 0.25,
                     anchor: {
                         x: 0.5,
                         y: 0
-                    }
+                    },
+                    fromFrame: true
                 });
             }
 

@@ -48,7 +48,10 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings) {
 
     Layer.prototype.createMesh = function (texturePath, callback, options) {
 
-        var texture = PIXI.Texture.fromImage(texturePath);
+        var texture = (options && options.fromFrame)
+            ? PIXI.Texture.fromFrame(texturePath)
+            : PIXI.Texture.fromImage(texturePath);
+        
 
         var mesh = new PIXI.Sprite(texture);
 
@@ -60,7 +63,11 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings) {
     Layer.prototype.createAnimatedMesh = function (texturePaths, callback, options) {
         var textures = [];
         for (var i = 0; i < texturePaths.length; i++) {
-            var texture = PIXI.Texture.fromImage(texturePaths[i]);
+
+            var texture = (options && options.fromFrame)
+                ? PIXI.Texture.fromFrame(texturePaths[i])
+                : PIXI.Texture.fromImage(texturePaths[i]);
+
             texture.width = options.width;
             texture.height = options.height;
             //PIXI.texturesToUpdate.push(texture);

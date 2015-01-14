@@ -58,9 +58,12 @@ function (Parent, Settings, Nc, PIXI, AbstractLayer) {
             return n;
         }
 
+        /* 
+        // Single File Animations Preloading
         var characterNames = ["Chuck"];
         var animationSets = ["WithArms", "WithoutArms"];
         var addition = "";
+        
         for (var i = 0; i < characterNames.length; i++) {
             var characterName = characterNames[i];
             for (var j = 1; j <= 126; j++) {
@@ -79,6 +82,18 @@ function (Parent, Settings, Nc, PIXI, AbstractLayer) {
                 };
             };
         };
+        */
+
+        var characterName = characterNames[0];
+
+        paths.push(
+            Settings.GRAPHICS_PATH 
+            + Settings.GRAPHICS_SUBPATH_CHARACTERS 
+            + characterName
+            + "/Animation/"
+            + "/TexturePacker"
+            + "/witharms.json"
+        );
 
         paths.push(
             Settings.GRAPHICS_PATH 
