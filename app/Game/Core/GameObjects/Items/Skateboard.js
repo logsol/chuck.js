@@ -87,18 +87,13 @@ function (Parent, Box2D, Settings) {
         // FIXME: implement body flip if necessary
     };
 
-    Skateboard.prototype.throw = function(x, y) {
-        Parent.prototype.throw.call(this, x, y);
+    Skateboard.prototype.throw = function(options, carrierVelocity) {
+        Parent.prototype.throw.call(this, options, carrierVelocity);
 
         for (var i = 0; i < this.wheels.length; i++) {
             var body = this.wheels[i];
-            body.SetAwake(true);
 
-            var vector = new Box2D.Common.Math.b2Vec2(
-                x * Settings.MAX_THROW_FORCE / this.options.weight,
-                -y * Settings.MAX_THROW_FORCE / this.options.weight
-            );
-            body.SetLinearVelocity(vector);
+            this.accelerateBody(body, options, carrierVelocity);
         }
     };
 

@@ -14,7 +14,11 @@ function (Nc, childProcess) {
 		this.fork = null;
 
 		try {
-            this.fork = fork('channel.js');
+            this.fork = fork('channel.js'
+            /*, { 
+            	execArgv: ['--debug=5859'] 
+            }*/
+            );
         } catch (err) {
             throw 'Failed to fork channel! (' + err + ')';
         }

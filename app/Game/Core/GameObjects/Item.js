@@ -130,15 +130,19 @@ function (Parent, Box2D, Options, Settings, Exception, Nc) {
     };
 
     Item.prototype.throw = function(options, carrierVelocity) {
-        var body = this.body;
+        this.accelerateBody(this.body, options, carrierVelocity);
+    };
+
+    Item.prototype.accelerateBody = function(body, options, carrierVelocity) {
+
         body.SetAwake(true);
 
         var vector = new Box2D.Common.Math.b2Vec2(
             options.x * Settings.MAX_THROW_FORCE / this.options.weight + carrierVelocity.x,
             -options.y * Settings.MAX_THROW_FORCE / this.options.weight + carrierVelocity.y
         );
-        this.body.SetLinearVelocity(vector);
 
+        body.SetLinearVelocity(vector);
         body.SetAngularVelocity(-options.av * Settings.MAX_THROW_ANGULAR_VELOCITY);
     };
 

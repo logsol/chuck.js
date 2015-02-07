@@ -334,21 +334,13 @@ function (Parent, Box2D, Settings, Nc) {
         this.limbs.head.SetAngle((this.options.grabAngle || 0) * direction);
     };
 
-    RagDoll.prototype.throw = function(x, y) {
-        Parent.prototype.throw.call(this, x, y);
-
-        var limbDampingFactor = 1;
+    RagDoll.prototype.throw = function(options, carrierVelocity) {
+        Parent.prototype.throw.call(this, options, carrierVelocity);
 
         for(var name in this.limbs) {
             var body = this.limbs[name];
-            body.SetAwake(true);
 
-            var vector = new Box2D.Common.Math.b2Vec2(
-                x * Settings.MAX_THROW_FORCE * limbDampingFactor / this.options.weight,
-                -y * Settings.MAX_THROW_FORCE * limbDampingFactor / this.options.weight
-            );
-            body.SetLinearVelocity(vector);
-            // body.SetAngularVelocity(Settings.MAX_THROW_ANGULAR_VELOCITY * x);
+            this.accelerateBody(body, options, carrierVelocity);
         }
     };
 
