@@ -73,6 +73,7 @@ function (ColorConverter, Exception) {
 
 				if (channelName == quickstartChannelName) {
 					quickstart();
+					return;
 				}
 
 				if(channelExists(list, channelName)) {
