@@ -8,6 +8,7 @@ function (ColorConverter, Exception) {
 	"use strict";
 
 	var instance = null
+	var quickstartChannelName = "Quickstart";
  
     function Menu() {
 
@@ -69,6 +70,11 @@ function (ColorConverter, Exception) {
 			}
 			refresh(function(list) {
 				var channelName = unescape(window.location.hash.substr(1));
+
+				if (channelName == quickstartChannelName) {
+					quickstart();
+				}
+
 				if(channelExists(list, channelName)) {
 					showCustomJoinForm()
 				} else {
@@ -233,7 +239,7 @@ function (ColorConverter, Exception) {
 
 	function quickstart() {
 		refresh(function(list){
-			var defaultChannelName = "Dungeon";
+			var defaultChannelName = quickstartChannelName;
 			history.pushState("", document.title, window.location.pathname + "#" + defaultChannelName);
 			var nickname = $("#nick").value;
 
