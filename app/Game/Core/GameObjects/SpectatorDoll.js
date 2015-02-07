@@ -8,7 +8,7 @@ function (Parent, Box2D) {
 	"use strict";
  
     function SpectatorDoll(physicsEngine, uid, player) {
-    	Parent.call(this, physicsEngine, uid);
+    	//Parent.call(this, physicsEngine, uid);
     }
 
     SpectatorDoll.prototype = Object.create(Parent.prototype);
@@ -32,6 +32,9 @@ function (Parent, Box2D) {
     }
 
     SpectatorDoll.prototype.update = function() {
+    };
+
+    SpectatorDoll.prototype.destroy = function() {
     };
  
     return SpectatorDoll;
