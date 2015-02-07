@@ -4,7 +4,7 @@ var GLOBALS = { context: "Client" };
 
 requirejs.config({
     baseUrl: 'app',
-    deps: ['Lib/Utilities/Extensions'],
+    deps: ['Lib/Utilities/Client/Extensions'],
     waitSeconds: 0,
     paths: {
         screenfull: "/screenfull",

@@ -4,7 +4,7 @@ var requirejs = require('requirejs');
 requirejs.config({
     nodeRequire: require,
     baseUrl: 'app',
-    deps: ['Lib/Utilities/Extensions']
+    deps: ['Lib/Utilities/Channel/Extensions']
 });
 
 var inspector = {};

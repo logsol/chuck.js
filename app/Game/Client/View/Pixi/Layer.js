@@ -96,6 +96,7 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings) {
         if (options.visible === true || options.visible === false) mesh.visible = options.visible;
         if (options.pivot) mesh.pivot = new PIXI.Point(options.pivot.x, options.pivot.y);
         if (options.anchor) mesh.anchor = options.anchor;
+        if (options.animationSpeed) mesh.animationSpeed = options.animationSpeed;
     };
 
     Layer.prototype.addFilter = function(mesh, filterName, options) {

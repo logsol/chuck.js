@@ -25,6 +25,8 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
             "run": [104,126]
         }
 
+        this.lastStep = Date.now();
+
         this.animatedMeshesContainer = {
             withArms: {},
             withoutArms: {}
@@ -260,12 +262,23 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
 
     Doll.prototype.render = function() {
         if(this.actionState) {
+
+            var stepLength = (Date.now() - this.lastStep);
+            this.lastStep = Date.now();
+
+            // compare current framerate to wanted and get factor
+            // (stepLength / 60) * 2 
+            // * 2 to scale to flash fps 
+
+            var factor = stepLength / 30;
+
             Nc.trigger(Nc.ns.client.view.mesh.update,
                 this.layerId,
                 this.animatedMeshes[this.actionState],
                 {
                     x: this.body.GetPosition().x * Settings.RATIO,
                     y: this.body.GetPosition().y * Settings.RATIO,
+                    animationSpeed: factor
                     //rotation: this.body.GetAngle()
                 }
             );
