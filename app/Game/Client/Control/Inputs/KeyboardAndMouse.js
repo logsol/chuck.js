@@ -13,6 +13,7 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
 
         this.x = 0;
         this.y = 0;
+        this.mousePosition = {x:0,y:0};
         this.modifier = false;
         this.swiper = null;
         this.lastLookDirection = 1;
@@ -104,6 +105,8 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
     	var self = this;
 
         canvas.onmousedown = function(e) {
+            self.mousePosition = {x:0,y:0};
+
             if(!self.playerController.player.isHoldingSomething()) {
                 var options = {
                     x: self.x, 
@@ -112,6 +115,7 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
                 self.playerController.handActionRequest(options);
             } else {
                 self.swiper = new Swiper();
+                self.swiper.draw(e);
             }
         }
 
@@ -178,7 +182,9 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
             e.webkitMovementY   ||
             0;
 
-        this.swiper.swipe(movementX, -movementY);
+        this.mousePosition.x += movementX;
+        this.mousePosition.y += movementY;
+        this.swiper.swipe(this.mousePosition.x, -this.mousePosition.y);
     };
 
     KeyboardAndMouse.prototype.activateModifier = function() {

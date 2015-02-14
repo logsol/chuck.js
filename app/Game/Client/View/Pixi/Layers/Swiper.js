@@ -17,11 +17,6 @@ function (Parent, PIXI, Nc, Settings) {
             Nc.on(Nc.ns.client.view.swiper.end, this.end, this)
         ];
 
-        this.offset = {
-        	x: Settings.STAGE_WIDTH / 2,
-        	y: Settings.STAGE_HEIGHT / 2
-        }
-
         this.sprite = new PIXI.Graphics();
         this.container.addChild(this.sprite);
 
@@ -31,13 +26,17 @@ function (Parent, PIXI, Nc, Settings) {
     Swiper.prototype = Object.create(Parent.prototype);
 
     Swiper.prototype.swipe = function(x, y) {
+        var offset = {
+            x: Settings.STAGE_WIDTH / 2,
+            y: Settings.STAGE_HEIGHT / 2
+        }
 
-		this.sprite.moveTo(this.offset.x + this.last.x, this.offset.y + this.last.y);
+		this.sprite.moveTo(offset.x + this.last.x, offset.y + this.last.y);
 
-		this.last.x += x;
-    	this.last.y -= y;
+		this.last.x = x;
+    	this.last.y = -y;
 
-        this.sprite.lineTo(this.offset.x + this.last.x, this.offset.y + this.last.y);
+        this.sprite.lineTo(offset.x + this.last.x, offset.y + this.last.y);
     };
  
  	Swiper.prototype.end = function(x, y) {
