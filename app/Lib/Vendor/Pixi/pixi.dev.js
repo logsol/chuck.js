@@ -16773,7 +16773,13 @@ PIXI.BaseTexture = function(source, scaleMode)
      * @type Array
      * @private
      */
-    this._dirty = [true, true, true, true];
+    this._dirty = [
+        true, true, true, true, true, true, true, true, true, true,
+        true, true, true, true, true, true, true, true, true, true,
+        true, true, true, true, true, true, true, true, true, true,
+        true, true, true, true, true, true, true, true, true, true,
+        true, true, true, true, true, true, true, true, true, true,
+    ];
 
     if(!source)return;
 
