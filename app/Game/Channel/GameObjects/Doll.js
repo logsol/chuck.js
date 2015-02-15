@@ -59,10 +59,13 @@ function (Parent, Item, Box2D, Nc) {
                         if(item.lastMoved && item.lastMoved.player != this.player) {
                             var damageVector = b2Math.SubtractVV(itemVelocity, ownVelocity);
                             damageVector.Abs();
-                            damageVector.Multiply(0.7);
-                            damageVector.Multiply(itemMass * 1.3);
+                            var velocity = damageVector.Length();
+                            damageVector.Multiply(itemMass / 3.6);
                             var damage = damageVector.Length();
-                            damage *= item.options.danger ? item.options.danger : 1;
+
+                            if(item.options.danger) {
+                                damage += item.options.danger * 90 * (velocity / 128) * (itemMass + 1);
+                            }
 
                             var player = item.lastMoved.player;
 

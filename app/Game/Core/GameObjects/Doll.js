@@ -278,7 +278,10 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
         if (this.isStanding()) {
             
             this.body.SetAwake(true);
-            var vector = new Box2D.Common.Math.b2Vec2(0, -Settings.JUMP_SPEED);
+
+            var jumpSpeed = Settings.JUMP_SPEED;
+
+            var vector = new Box2D.Common.Math.b2Vec2(0, -jumpSpeed);
             this.body.SetLinearVelocity(vector);
             
             this.setStanding(false);

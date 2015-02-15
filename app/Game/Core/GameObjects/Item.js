@@ -72,10 +72,7 @@ function (Parent, Box2D, Options, Settings, Exception, Nc) {
         var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
         fixtureDef.shape = itemShape;
 
-        var offset = 4,
-            factor = 80;
-        var density = ((this.options.weight + offset) / this.options.width / this.options.height) * factor;
-        fixtureDef.density = density;
+        fixtureDef.density = this.options.weight;
         fixtureDef.friction = Settings.ITEM_FRICTION;
 
         fixtureDef.restitution = this.options.bounce 

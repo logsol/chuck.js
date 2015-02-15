@@ -2,6 +2,8 @@ define(function() {
 
     var ItemSettings = {
 
+        // weight is a number between 0.1 for very light and 10 for very heavy
+
         "Default": 
         {
             "category":     "",
@@ -15,7 +17,7 @@ define(function() {
             "rotation":     "0",
             "bounce":       "0",
             "grabAngle":    "-1.5",
-            "danger":       "1",
+            "danger":       "0",
             "bodyType":     "dynamic",
         },
 
@@ -25,7 +27,7 @@ define(function() {
             "image":        "chest.png",
             
             "type":         "ragdoll",
-            "weight":       "5",
+            "weight":       "7",
             "width":        "6",
             "height":       "12",
 
@@ -200,7 +202,7 @@ define(function() {
             "category":     "kitchen",
             "image":        "fridge.gif",
             
-            "weight":       "10",
+            "weight":       "5",
             "width":        "31",
             "height":       "53",
 
@@ -213,11 +215,12 @@ define(function() {
             "category":     "kitchen",
             "image":        "microwave.gif",
             
-            "weight":       "3.6",
+            "weight":       "4.6",
             "width":        "19",
             "height":       "12",
 
             "grabAngle":    "-0.1",
+            "danger":       "2", 
         },
 
         "Coffeemachine": 

@@ -115,7 +115,11 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
                 self.playerController.handActionRequest(options);
             } else {
                 self.swiper = new Swiper();
-                self.swiper.draw(e);
+
+                self.draw({
+                    movementX: 0,
+                    movementY: 0
+                });
             }
         }
 
@@ -184,6 +188,7 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
 
         this.mousePosition.x += movementX;
         this.mousePosition.y += movementY;
+
         this.swiper.swipe(this.mousePosition.x, -this.mousePosition.y);
     };
 

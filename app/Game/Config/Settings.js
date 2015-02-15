@@ -36,7 +36,7 @@ define(function() {
         WALK_SPEED: 4,
         RUN_SPEED: 8,
         FLY_SPEED: 6.2,
-        JUMP_SPEED: 21,
+        JUMP_SPEED: 19,
         JUMP_STOP_DAMPING_FACTOR: 0.5,
         MAX_THROW_FORCE: 28,
         MAX_THROW_ANGULAR_VELOCITY: 3,
@@ -51,7 +51,7 @@ define(function() {
         TILE_FRICTION: 0.99,
         TILE_RESTITUTION: 0.1,
 
-        PLAYER_DENSITY: 3.68,
+        PLAYER_DENSITY: 12.2, //3.68,
         PLAYER_FRICTION: 5,
         PLAYER_MOTION_FRICTION: 0.1,
         PLAYER_RESTITUTION: 0.0,
