@@ -157,7 +157,8 @@ function (Nc, ProtocolHelper, validate, Options, Settings, FileSystem) {
 					maps.push(fileinfo[0]);
 				}
 			};
-			return ["stones"];//maps.sort();
+			//return ["stones"];
+			return maps.sort();
 		};
  
 		return Api;
