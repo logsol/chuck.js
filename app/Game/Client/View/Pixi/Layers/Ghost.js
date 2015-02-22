@@ -92,7 +92,7 @@ function (Parent, PIXI, Nc, Settings) {
 
             if(options.healthFactor > 0) {
                 var color = 0x00FF00;
-                if(options.healthFactor < 0.30) color = 0xFF0000;
+                if(options.healthFactor < Settings.CRITICAL_HEALTH_THRESHOLD) color = 0xFF0000;
                 healthBar.beginFill(color);
                 healthBar.lineStyle(0, 0x000000);
                 healthBar.drawRect(borderWidth, borderWidth, width * options.healthFactor, height);

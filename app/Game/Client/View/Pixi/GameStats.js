@@ -9,7 +9,7 @@ function (PIXI, Nc, Settings, ColorConverter) {
 
 	"use strict";
  
-    function GameStats(container) {
+    function GameStats(gameContainer) {
 
 		this.style = {
 			borderWidth: 3,
@@ -17,114 +17,172 @@ function (PIXI, Nc, Settings, ColorConverter) {
 			colors: {
 				background: 0x000000,
 				text: "red",
+                headline: "#880000",
 				border: 0xAA0000
-			}
+			},
+            line: {
+                height: 16,
+                spacing: 5
+            },
+            fontSize: 12
 		};
 
-    	this.container = container;
+    	this.gameContainer = gameContainer;
 
-        this.infoContainer = new PIXI.DisplayObjectContainer();
+        this.container = new PIXI.DisplayObjectContainer();
 
         var blurFilter = new PIXI.BlurFilter();
         blurFilter.blurX = 12;
         blurFilter.blurY = 12;
         var grayFilter = new PIXI.GrayFilter();
         grayFilter.gray = 0.85;
-        this.infoFilters = [blurFilter, grayFilter];
+        this.filters = [blurFilter, grayFilter];
 
-        this.infoText = new PIXI.Text("", {font: "normal 20px monospace", fill: this.style.colors.text, align: "center"});
-        this.infoBox = new PIXI.Graphics();
-        this.infoBox.alpha = 0.7;
+        this.background = new PIXI.Graphics();
+        this.background.alpha = 0.7;
+        this.container.addChild(this.background);
 
-        this.infoContainer.addChild(this.infoBox);
-        this.infoContainer.addChild(this.infoText);
+        this.dialog = new PIXI.DisplayObjectContainer();
+        this.container.addChild(this.dialog);
 
-        this.infoContainer.visible = false;
+        this.graphics = new PIXI.Graphics();
+        // this.dialog.addChild(this.graphics);
+
+        /*
+            gameContainer
+                filters
+            container
+                background
+                dialog
+                    graphics
+                        playerColor
+                    headline
+                    line
+        */
+
+        this.container.visible = false;
 
         Nc.on(Nc.ns.client.view.gameStats.toggle, this.toggle, this);
     }
 
     GameStats.prototype.getInfoContainer = function() {
-    	return this.infoContainer;
+    	return this.container;
     };
  
     GameStats.prototype.toggle = function(show, sortedPlayers) {
-        
-        function pad(string, max, alignLeft) {
-            string = string.substring(0, max - 1);
-
-            var spaces = new Array( max - string.length + 1 ).join(" ");
-            if(alignLeft) {
-                return string + spaces;
-            } else {
-                return spaces + string;
-            }
-        }
-
-        var string = "" +
-                     pad("#", 2, false) + " " +
-                     pad("Name", 12, true) +
-                     pad("Score", 6, false) +
-                     pad("Deaths", 7, false) +
-                     pad("Health", 7, false) +
-                     "\n-----------------------------------\n";
-
-        var lines = [];
-        sortedPlayers.forEach(function(player, i) {
-            var name = player.getNickname();
-            lines.push(
-                pad("" + (i + 1) + ".", 2, false) + " " + 
-                pad(name, 12, true) + 
-                pad("" + player.stats.score, 6, false) +
-                pad("" + player.stats.deaths, 7, false) +
-                pad("" + parseInt(player.stats.health, 10), 7, false)
-            );
-        }, this);
-
-        string += lines.join("\n");
-
-
         if(show) {
-            this.infoText.setText(string);
-            this.infoText.updateText();
-            this.infoText.dirty = false;
 
-            var x = Settings.STAGE_WIDTH / 2 - this.infoText.width / 2,
-                y = Settings.STAGE_HEIGHT / 2 - this.infoText.height / 2;
-            this.infoText.position = new PIXI.Point(x, y);
+            this.background.clear();
+            this.graphics.clear();
+            this.dialog.removeChildren();
 
-            this.infoBox.clear();
-            this.infoBox.beginFill(this.style.colors.background);
-            this.infoBox.lineStyle(this.style.borderWidth, this.style.colors.border);
-            this.infoBox.drawRect(0, 0, this.infoText.width - this.style.borderWidth + 2 * this.style.padding * 2, this.infoText.height - this.style.borderWidth + 2 * this.style.padding);
-            this.infoBox.endFill();
-            this.infoBox.position.x = this.infoText.position.x + this.style.borderWidth/2 - this.style.padding * 2;
-            this.infoBox.position.y = this.infoText.position.y + this.style.borderWidth/2 - this.style.padding;
+            // redraw background
+            this.background.beginFill(this.style.colors.background);
+            this.background.drawRect(0, 0, Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT);
+            this.background.endFill();
 
-            this.infoContainer.visible = true;
-            this.container.filters = this.infoFilters;
-            this.infoFilters.forEach(function(filter) { filter.dirty = true; });
+            // redraw text and graphics
 
-            this.drawPlayerColors(sortedPlayers);
+            var string = "" +
+                         "  #".pad(7, true) + " " +
+                         "Name".pad(12, true) +
+                         "Score".pad(6, false) +
+                         "Deaths".pad(7, false) +
+                         "Health".pad(9, false) + " ";
+
+            var line = new PIXI.Text(string, {
+                font: "normal " + this.style.fontSize + "px 'Joystix'",
+                fill: this.style.colors.headline
+            });
+
+            line.position = new PIXI.Point(0, 0);
+            this.dialog.addChild(line);
+
+            this.drawPlayers(sortedPlayers);
+
+            var x = Settings.STAGE_WIDTH / 2 - this.dialog.getBounds().width / 2,
+                y = Settings.STAGE_HEIGHT / 2 - (sortedPlayers.length + 1) * (this.style.line.height + this.style.line.spacing) / 2;
+            this.dialog.position = new PIXI.Point(x, y);
+
+            this.dialog.addChild(this.graphics);
+
+            // show stats with filters
+            this.container.visible = true;
+            this.gameContainer.filters = this.filters;
+            this.filters.forEach(function(filter) { filter.dirty = true; });
 
         } else {
-            this.infoText.setText("...");
-            this.infoContainer.visible = false;
-            this.container.filters = null;
+            this.container.visible = false;
+            this.gameContainer.filters = null;
         }
     }
 
-    GameStats.prototype.drawPlayerColors = function(sortedPlayers) {
-    	var converter = new ColorConverter();
+    GameStats.prototype.drawPlayers = function(sortedPlayers) {
+        sortedPlayers.forEach(function(player, i) {
 
-    	sortedPlayers.forEach(function(player, i) {
+            this.drawPlayer(player, i + 1);
+            this.drawPlayerGraphics(player, i + 1)
 
-    		this.infoBox.beginFill(converter.getColorByName(player.getNickname()));
-    		this.infoBox.lineStyle();
-    		this.infoBox.drawRect(this.style.padding, i * 21 + this.style.padding + 42, 16, 16);
-    		this.infoBox.endFill();
+        }, this);
+    };
 
-    	}, this);
+    GameStats.prototype.drawPlayer = function(player, i) {
+        var string = (i + ".   ").pad(7, false) + " " + 
+            player.getNickname().pad(12, true) + 
+            ("" + player.stats.score).pad(6, false) +
+            ("" + player.stats.deaths).pad(7, false) +
+            ("" /* + parseInt(player.stats.health, 10)*/).pad(9, false) + " ";
+
+        var line = new PIXI.Text(string, {
+            font: "normal " + this.style.fontSize + "px 'Joystix'",
+            fill: this.style.colors.text
+        });
+
+        line.position = new PIXI.Point(
+            0,
+            i * (this.style.line.height + this.style.line.spacing)
+        );
+
+        this.dialog.addChild(line);
+    };
+
+    GameStats.prototype.drawPlayerGraphics = function(player, i) {
+        var converter = new ColorConverter();
+
+        // draw shirt color
+        this.graphics.beginFill(converter.getColorByName(player.getNickname()));
+        this.graphics.drawRect(
+            50, 
+            i * (this.style.line.height + this.style.line.spacing),
+            this.style.line.height, 
+            this.style.line.height
+        );
+
+        // draw health bar
+        var height = this.style.line.height / 2,
+            width = height * 7,
+            borderWidth = 2,
+            offsetX = 360,
+            offsetY = (i * (this.style.line.height + this.style.line.spacing)) + ((this.style.line.height - height) / 2);
+
+        this.graphics.beginFill(0x000000);
+        this.graphics.drawRect(offsetX, offsetY, width, height);
+        this.graphics.endFill();
+
+        if(player.stats.health > 0) {
+            var color = player.stats.health / 100 < Settings.CRITICAL_HEALTH_THRESHOLD
+                ? 0xFF0000
+                : 0x00FF00;
+
+            this.graphics.beginFill(color);
+            this.graphics.drawRect(
+                offsetX + borderWidth, 
+                offsetY + borderWidth, 
+                width * player.stats.health / 100 - 2 * borderWidth, 
+                height - 2 * borderWidth
+            );
+            this.graphics.endFill();
+        }
     };
  
     return GameStats;

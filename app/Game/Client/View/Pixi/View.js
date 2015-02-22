@@ -38,7 +38,7 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
 
         var rendererOptions = {
             view: DomController.getCanvas(),
-            antialiasing: true,
+            antialiasing: false,
             transparent: false,
             resolution: 1
         }
