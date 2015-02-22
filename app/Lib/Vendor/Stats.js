@@ -28,13 +28,13 @@ define(function() {
 
 		var fpsGraph = document.createElement( 'div' );
 		fpsGraph.id = 'fpsGraph';
-		fpsGraph.style.cssText = 'position:relative;width:74px;height:20px;background-color:#0ff';
+		fpsGraph.style.cssText = 'position:relative;width:74px;height:30px;background-color:#0ff';
 		fpsDiv.appendChild( fpsGraph );
 
 		while ( fpsGraph.children.length < 74 ) {
 
 			var bar = document.createElement( 'span' );
-			bar.style.cssText = 'width:1px;height:20px;float:left;background-color:#113';
+			bar.style.cssText = 'width:1px;height:30px;float:left;background-color:#113';
 			fpsGraph.appendChild( bar );
 
 		}

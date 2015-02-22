@@ -13,7 +13,7 @@
 		<label>
 			Nickname:<br>
 			<input id="nick" name="nick" type="text">
-			<input id="primarycolor">
+			<input readonly id="primarycolor">
 		</label>
 	</p>
 
@@ -74,7 +74,7 @@
 	</form>
 </article>
 <article id="game">
-	<button id="back-to-menu" onclick="window.location.href='/'">Menu</button>
+	<ul id="menuBar"><li><button id="back-to-menu" onclick="window.location.href='/'">Menu</button></ul>
     <div id="canvasContainer">
         <canvas id="canvas"></canvas>
     </div>

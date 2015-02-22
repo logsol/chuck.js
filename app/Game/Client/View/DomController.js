@@ -23,38 +23,17 @@ function (Settings, Nc, Stats, Screenfull) {
         var self = this;
 
         // create dev tools container
-        this.devToolsContainer = document.createElement("div");
-        this.devToolsContainer.id = "devtools";
-        document.body.appendChild(this.devToolsContainer);
-
-        // create Fullscreen
-        var p = document.createElement("p");
-        var button = document.createElement("button");
-        button.innerHTML = "Fullscreen";
-        button.onclick = function() {
-            if(Screenfull.enabled) {
-                Screenfull.request(self.canvas);
-            }
-        }
-        p.appendChild(button);
-        this.devToolsContainer.appendChild(p);
-
-        window.onresize = function() {
-            if(Screenfull.enabled) {
-                Nc.trigger(Nc.ns.client.view.fullscreen.change, Screenfull.isFullscreen);
-            }
-        }
-
-        // create Ping: container
-        this.ping = document.createElement("span");
-        this.devToolsContainer.appendChild(this.ping);
+        this.devToolsContainer = document.getElementById("menuBar");
 
         // create FPS stats
+        li = document.createElement("li");
         this.stats = new Stats();
         this.stats.setMode(0);
-        this.devToolsContainer.appendChild(this.stats.domElement);
+        li.appendChild(this.stats.domElement);
+        this.devToolsContainer.appendChild(li);
 
         // create debug mode
+        li = document.createElement("li");
         var label = document.createElement("label");
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
@@ -64,14 +43,31 @@ function (Settings, Nc, Stats, Screenfull) {
         }
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode("Debug"));
-        this.devToolsContainer.appendChild(label);
+        li.appendChild(label);
+        this.devToolsContainer.appendChild(li);
 
-        // create health
-        this.health = document.createElement("span");
-        this.health.innerHTML = "Health: 100";
-        p = document.createElement("p");
-        p.appendChild(this.health);
-        this.devToolsContainer.appendChild(p);
+        // create Ping: container
+        this.ping = document.createElement("li");
+        this.devToolsContainer.appendChild(this.ping);
+
+                // create Fullscreen
+        var li = document.createElement("li");
+        li.id = "fullscreen"
+        var button = document.createElement("button");
+        button.innerHTML = "Fullscreen";
+        button.onclick = function() {
+            if(Screenfull.enabled) {
+                Screenfull.request(self.canvas);
+            }
+        }
+        li.appendChild(button);
+        this.devToolsContainer.appendChild(li);
+
+        window.onresize = function() {
+            if(Screenfull.enabled) {
+                Nc.trigger(Nc.ns.client.view.fullscreen.change, Screenfull.isFullscreen);
+            }
+        }
     };
 
     DomController.prototype.statsBegin = function() {
@@ -120,10 +116,6 @@ function (Settings, Nc, Stats, Screenfull) {
 
         return this.debugCanvas;
     }
-
-    DomController.prototype.setHealth = function(health) {
-        this.health.innerHTML = "Health: " + parseInt(health, 10);     
-    };
 
     DomController.prototype.setConnected = function(connected) {
         if(connected) {

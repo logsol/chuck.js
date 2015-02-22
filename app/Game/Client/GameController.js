@@ -210,11 +210,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
     GameController.prototype.onUpdateStats = function(options) {
         var player = this.players[options.playerId];
         player.setStats(options.stats);
-
-        // FIXME: move to canvas later
-        if(player == this.me) {
-            DomController.setHealth(player.stats.health);
-        }
     };
 
     GameController.prototype.onPlayerKill = function(options) {
