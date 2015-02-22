@@ -40,6 +40,9 @@ function (Parent, ProtocolHelper, Nc) {
     }
 
     User.prototype.onDisconnect = function () {
+
+        this.coordinator.removeUser(this);
+
         if(!this.channelPipe) {
             console.warn("Disconnecting user without a channel.");
             return;

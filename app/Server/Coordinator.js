@@ -11,6 +11,7 @@ function (User, PipeToChannel, Nc, Settings) {
 
     function Coordinator() {
     	this.channelPipes = {};
+        this.users = [];
 
         Nc.on(Nc.ns.server.events.controlCommand.coordinator, this.onMessage, this);
 
@@ -18,7 +19,16 @@ function (User, PipeToChannel, Nc, Settings) {
     }
 
     Coordinator.prototype.createUser = function (socketLink) {
-    	new User(socketLink, this);
+    	this.users.push(new User(socketLink, this));
+    }
+
+    Coordinator.prototype.removeUser = function (user) {
+        for(var i = 0; i < this.users.length; i++) {
+            if(this.users[i] === user) {
+                this.users.splice(i, 1);
+                break;
+            }
+        }
     }
 
     Coordinator.prototype.assignUserToChannel = function (user, channelName) {
@@ -33,8 +43,18 @@ function (User, PipeToChannel, Nc, Settings) {
     Coordinator.prototype.getChannels = function(options) {
     	var list = [];
         for (var channelName in this.channelPipes) {
+
+            var count = 0;
+
+            for(var i = 0; i < this.users.length; i++) {
+                if(this.users[i].channelPipe === this.channelPipes[channelName]){
+                    count++;
+                }
+            }
+
             list.push({
-                name: channelName
+                name: channelName,
+                playerCount: count
             });
         }
         return list;

@@ -145,17 +145,20 @@ function (ColorConverter, Exception) {
 	}
 
 	function populate(list) {
+
+
 		var html = "";
 		if(list.length > 0) {
 			for (var i = 0; i < list.length; i++) {
 				var channel = list[i];
-				html += "<tr><td>";
-					html += "<a href='#" + channel.name + "'>";
-				html += channel.name
-				html += "</a></td><td>death match</td></tr>";
+				html += "<tr>";
+				html += "<td><a href='#" + channel.name + "'>" + channel.name + "</a></td>";
+				html += "<td>death match</td>";
+				html += "<td>" + channel.playerCount + "</td>";
+				html += "</tr>";
 			};
 		} else {
-			html += "<tr><td colspan='2'>No channels found.</td></tr>";
+			html += "<tr><td colspan='3'>No channels found.</td></tr>";
 		}
 
 		$("#list").innerHTML = html;
