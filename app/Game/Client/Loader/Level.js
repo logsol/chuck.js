@@ -106,8 +106,9 @@ function (Parent, Settings, Nc, PIXI, AbstractLayer) {
     };
 
     Level.prototype.setupLayer = function(options, behind, referenceId) {
+
         Parent.prototype.setupLayer.call(this, options, behind, referenceId);
-        var parallaxSpeed = 0.0;
+        var parallaxSpeed = 0.0; // default parallax
         if (options.properties && options.properties.parallaxSpeed) {
             parallaxSpeed = parseFloat(options.properties.parallaxSpeed);
         } 

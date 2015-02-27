@@ -26,6 +26,10 @@ function (Exception) {
         var i = 0;
         this.ns = {
             client: {
+                pointerLock: {
+                    request: null,
+                    change: null
+                },
                 view: {
                     layer: {
                         createAndInsert: null
@@ -53,7 +57,7 @@ function (Exception) {
                     preloadBar: {
                         update: null
                     },
-                    fullscreen: {
+                    display: {
                         change: null
                     },
                     debugMode: {

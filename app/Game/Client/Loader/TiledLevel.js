@@ -70,6 +70,8 @@ function (Parent, Settings, Nc) {
 
     TiledLevel.prototype.setupLayer = function(options, behind, referenceId) {
         
+        var self = this;
+
         Parent.prototype.setupLayer.call(this, options, behind, referenceId);
 
         // So far only one image per layer is possible because of Tiled editor
@@ -80,8 +82,8 @@ function (Parent, Settings, Nc) {
             var callback = function(mesh) {
                 Nc.trigger(Nc.ns.client.view.mesh.add, options.layerId, mesh);
                 Nc.trigger(Nc.ns.client.view.mesh.update, options.layerId, mesh, {
-                    x: Settings.STAGE_WIDTH / 2,
-                    y: Settings.STAGE_HEIGHT / 2,
+                    x: 0,//self.levelData.width * Settings.TILE_SIZE / 2,
+                    y: 0,//self.levelData.height * Settings.TILE_SIZE / 2,
                     pivot: {
                         x: mesh.texture.width / 2,
                         y: mesh.texture.height / 2

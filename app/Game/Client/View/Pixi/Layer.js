@@ -3,9 +3,10 @@ define([
 	"Lib/Vendor/Pixi",
     "Game/Client/View/Pixi/ColorRangeReplaceFilter",
     "Game/Config/Settings",
+    "Lib/Utilities/ColorConverter"
 ],
 
-function (Parent, PIXI, ColorRangeReplaceFilter, Settings) {
+function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
 
 	"use strict";
 
@@ -22,6 +23,39 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings) {
         this.container.x = 0;
         this.container.y = 0;
         this.static = false;
+
+        if (Settings.SHOW_LAYER_INFO) {
+
+            var self = this;
+            var g = new PIXI.Graphics();
+            var converter = new ColorConverter();
+            var c = converter.getColorByName(name);
+            var fontSize = 12;
+            var textOptions = {
+                font: "normal " + fontSize + "px 'Joystix'",
+                fill: "#" + c.toString(16),
+            };
+
+            var t = new PIXI.Text(name, textOptions);
+
+            var y = 0;
+            switch (name) {
+                case "ghost": y++;
+                case "item": y++;
+                case "tile": y++;
+                case "spawn": y=y;
+            }
+
+            t.position = new PIXI.Point(0, fontSize * y);
+
+            g.lineStyle (1, c, 1); 
+            g.drawRect (0, 0, 100 + y, 100 + y);
+
+            setTimeout(function(){
+                self.container.addChild(t);
+                self.container.addChild(g);
+            }, 500);
+        }
     }
 
     Layer.prototype = Object.create(Parent.prototype);
@@ -166,6 +200,7 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings) {
 
     Layer.prototype.render = function(centerPosition, zoom) {
         this.setPosition(centerPosition);
+        
         this.setZoom(zoom);
 
         // Zoom
@@ -174,8 +209,37 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings) {
         this.container.scale.x = this.zoom.current;
         this.container.scale.y = this.container.scale.x;
 
+
+        /*
+
+        // we would need another zoom state, 
+        // to separate fixed zooming (by window size)
+        // and user zoom by +/-/0 keys
+
+        // this snippet would zoom the layers by its parallax
+        // so further away layers would not zoom as much.
+
+        var zoomParallax = this.parallaxSpeed == 0 
+            ? 1
+            : this.parallaxSpeed < 0 
+                ? (1 + this.parallaxSpeed)
+                : this.parallaxSpeed + 1000;
+
+        var newZoomTarget = 1 + Math.log(this.zoom.target+2) * (zoomParallax)
+        console.log(newZoomTarget)
+
+        this.container.scale.x = newZoomTarget;
+        this.container.scale.y = newZoomTarget;
+
+        // Later, this would need to be added as well:
+        this.container.x *= newZoomTarget;
+        this.container.y *= newZoomTarget;
+        */
+
+
         // Position
-        if (!this.static) {
+
+        /*
             var posXStep = (this.position.target.x - this.position.current.x) * Settings.CAMERA_GLIDE / 100;
             this.position.current.x += posXStep;
             this.container.x = this.position.current.x + (this.position.current.x * this.parallaxSpeed);
@@ -183,7 +247,41 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings) {
             var posYStep = (this.position.target.y - this.position.current.y) * Settings.CAMERA_GLIDE / 100;
             this.position.current.y += posYStep;
             this.container.y = this.position.current.y + (this.position.current.y * this.parallaxSpeed);
-        }
+        */
+
+        if (!this.static) {
+            var levelSize = {
+                x: 600,
+                y: 400
+            }
+
+            var posXStep = (this.position.target.x - this.position.current.x) * Settings.CAMERA_GLIDE / 100;
+            this.position.current.x += posXStep;
+
+            var posYStep = (this.position.target.y - this.position.current.y) * Settings.CAMERA_GLIDE / 100;
+            this.position.current.y += posYStep;
+
+            this.container.x = this.position.current.x + levelSize.x / 2 - (-this.parallaxSpeed) * (this.position.current.x + levelSize.x / 2);
+            this.container.y = this.position.current.y + levelSize.y / 2 - (-this.parallaxSpeed) * (this.position.current.y + levelSize.y / 2);
+
+            if (this.name == "spawn" 
+                || this.name == "tile" 
+                || this.name == "item"
+                || this.name == "ghost"
+                || this.name == "swiper") {
+                this.container.x = this.position.current.x;
+                this.container.y = this.position.current.y;
+            }
+
+            this.container.x *= this.zoom.current;
+            this.container.y *= this.zoom.current;
+
+            this.container.x += Settings.STAGE_WIDTH / 2;
+            this.container.y += Settings.STAGE_HEIGHT / 2;
+        }    
+
+
+
     };
 
     return Layer;

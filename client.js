@@ -8,6 +8,7 @@ requirejs.config({
     waitSeconds: 0,
     paths: {
         screenfull: "/screenfull",
+        chart: "/chart",
         socketio: "/socket.io/socket.io"
     },
 });

@@ -2,10 +2,12 @@ define([
     'Game/Config/Settings',
     'Lib/Utilities/NotificationCenter',
     "Lib/Vendor/Stats",
-    "Lib/Vendor/Screenfull"
+    "Lib/Vendor/Screenfull",
+    "Game/Client/View/GraphManager",
+    "Game/Client/PointerLockManager"
 ], 
 
-function (Settings, Nc, Stats, Screenfull) {
+function (Settings, Nc, Stats, Screenfull, GraphManager, PointerLockManager) {
 
 	"use strict";
 
@@ -14,6 +16,9 @@ function (Settings, Nc, Stats, Screenfull) {
         this.debugCanvas = null;
         this.stats = null;
         this.ping = null;
+
+        var contextFps = document.getElementById('graph-fps').getContext("2d");
+        this.gm = new GraphManager(contextFps);
 
         Nc.on(Nc.ns.client.view.events.ready, this.initDevTools, this);
     }
@@ -57,6 +62,7 @@ function (Settings, Nc, Stats, Screenfull) {
         button.innerHTML = "Fullscreen";
         button.onclick = function() {
             if(Screenfull.enabled) {
+                PointerLockManager.request();
                 Screenfull.request(self.canvas);
             }
         }
@@ -64,13 +70,12 @@ function (Settings, Nc, Stats, Screenfull) {
         this.devToolsContainer.appendChild(li);
 
         window.onresize = function() {
-            if(Screenfull.enabled) {
-                Nc.trigger(Nc.ns.client.view.fullscreen.change, Screenfull.isFullscreen);
-            }
+            Nc.trigger(Nc.ns.client.view.display.change);
         }
     };
 
     DomController.prototype.statsBegin = function() {
+        this.gm.fpsStep();
         if(this.stats) {
             this.stats.begin();
         }
@@ -80,6 +85,7 @@ function (Settings, Nc, Stats, Screenfull) {
         if(this.stats) {
             this.stats.end();
         }
+
     };
 
     DomController.prototype.setPing = function(ping) {
@@ -101,7 +107,7 @@ function (Settings, Nc, Stats, Screenfull) {
     }
 
     DomController.prototype.initCanvas = function (canvas) {
-        Nc.trigger(Nc.ns.client.view.fullscreen.change, Screenfull.isFullscreen);
+        Nc.trigger(Nc.ns.client.view.display.change, Screenfull.isFullscreen);
     }
 
     DomController.prototype.getDebugCanvas = function () {

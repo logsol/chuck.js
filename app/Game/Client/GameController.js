@@ -12,10 +12,11 @@ define([
     "Game/Client/View/DomController",
     "Lib/Utilities/Protocol/Helper",
     "Game/Client/Me",
-    "Game/Client/AudioPlayer"
+    "Game/Client/AudioPlayer",
+    "Game/Client/PointerLockManager"
 ],
 
-function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, DomController, ProtocolHelper, Me, AudioPlayer) {
+function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, DomController, ProtocolHelper, Me, AudioPlayer, PointerLockManager) {
 
 	"use strict";
 
@@ -240,6 +241,10 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
     GameController.prototype.loadLevel = function (path) {
         Parent.prototype.loadLevel.call(this, path);
+    }
+
+    GameController.prototype.onLevelLoaded = function () {
+        PointerLockManager.update(null, {start:true});
     }
 
     GameController.prototype.toggleGameStats = function(show) {

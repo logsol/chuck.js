@@ -16,7 +16,7 @@ function (Abstract, DomController, Settings, Exception, Nc) {
         this.debugMode = false;
 
         this.ncTokens = [
-            Nc.on(Nc.ns.client.view.fullscreen.change, this.onFullscreenChange, this),
+            Nc.on(Nc.ns.client.view.display.change, this.onDisplaySizeChange, this),
             Nc.on(Nc.ns.client.view.debugMode.toggle, this.onToggleDebugMode, this),
 
             Nc.on(Nc.ns.client.game.zoomIn, this.onZoomIn, this),
@@ -70,8 +70,9 @@ function (Abstract, DomController, Settings, Exception, Nc) {
         return pos;
     };
 */
-    AbstractView.prototype.onFullscreenChange = function(isFullScreen) {
+    AbstractView.prototype.onDisplaySizeChange = function(isFullScreen) {
 
+/*
         if (!isFullScreen) {
             Settings.STAGE_WIDTH = 600;
             Settings.STAGE_HEIGHT = 400;
@@ -81,6 +82,10 @@ function (Abstract, DomController, Settings, Exception, Nc) {
             Settings.STAGE_WIDTH = window.innerWidth;
             Settings.STAGE_HEIGHT = window.innerHeight;
         }
+        */
+        
+        Settings.STAGE_WIDTH = window.innerWidth;
+        Settings.STAGE_HEIGHT = window.innerHeight;
     };
 
     AbstractView.prototype.onToggleDebugMode = function(debugMode) {

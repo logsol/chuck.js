@@ -69,6 +69,10 @@ function (http, nodeStatic, Api, fs) {
                             fileServer.serveFile('./node_modules/screenfull/dist/screenfull.js', 200, {}, req, res);
                             break;
 
+                        case req.url == '/chart.js':
+                            fileServer.serveFile('./node_modules/chart.js/Chart.js', 200, {}, req, res);
+                            break;
+
                         case req.url == '/api':
                             self.api.handleCall(fullBody);
                             var status = self.api.isError ? 400 : 200;

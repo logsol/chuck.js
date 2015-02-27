@@ -31,7 +31,12 @@ body {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    background: #333;
+    background: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    /*display: none;*/
+
 }
 #menuBar li {
     display: inline-block;
@@ -127,12 +132,18 @@ a {
     height: 100%;
 }
 
-canvas { 
-    position: absolute;
+#canvasContainer canvas { 
+    position: absolute;/*
     top: 50%;
     left: 50%;
     margin-top: -200px;
-    margin-left: -300px;
+    margin-left: -300px;*/
+}
+
+#graph-fps {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(0,0,0,0.5);
+    padding: 2px;
 }
 
 :-webkit-full-screen {

@@ -1,9 +1,11 @@
 define([
 	"Lib/Utilities/ColorConverter",
-	"Lib/Utilities/Exception"
+	"Lib/Utilities/Exception",
+	"Game/Client/PointerLockManager",
+	"Lib/Utilities/QuerySelector"
 ],
  
-function (ColorConverter, Exception) {
+function (ColorConverter, Exception, PointerLockManager, Qs) {
 
 	"use strict";
 
@@ -20,28 +22,28 @@ function (ColorConverter, Exception) {
     	if(localStorage["player"]) {
 			var player = JSON.parse(localStorage["player"]);
 			if(player.nickname) {
-				$("#nick").value = player.nickname;
+				Qs.$("#nick").value = player.nickname;
 			}
 		}
 
 		if(localStorage["customname"]) {
-			$("#customname").value = localStorage["customname"];
+			Qs.$("#customname").value = localStorage["customname"];
 		}
 
 
-		$("#refresh").onclick = refresh;
+		Qs.$("#refresh").onclick = refresh;
 		refresh();
 		populateMaps();
 		this.channelDestructionTimeout = null;
 		this.refreshInterval = setInterval(refresh, 5000);
 
-		$("#createbutton").onclick = function() {
+		Qs.$("#createbutton").onclick = function() {
 			show('#createform');
 			return false;
 		};
-		$("#quickstartbutton").onclick = quickstart;
+		Qs.$("#quickstartbutton").onclick = quickstart;
 
-		var cancelButtons = $$(".cancel");
+		var cancelButtons = Qs.$$(".cancel");
 		for (var i = 0; i < cancelButtons.length; i++) {
 			cancelButtons[i].onclick = function() {
 				show('#listform');
@@ -50,13 +52,13 @@ function (ColorConverter, Exception) {
 		};
 
 		this.colorConverter = new ColorConverter();
-		var c = $("#nick");
+		var c = Qs.$("#nick");
 		c.onchange = c.onkeyup = c.onblur = c.onclick = this.updatePrimaryColor.bind(this);
 		this.updatePrimaryColor({target:c});
     };
 
     Menu.prototype.updatePrimaryColor = function(e) {
-    	$("#primarycolor").style.backgroundColor = "#" + this.colorConverter.getColorByName(e.target.value).toString(16);
+    	Qs.$("#primarycolor").style.backgroundColor = "#" + this.colorConverter.getColorByName(e.target.value).toString(16);
     };
 
 	Menu.prototype.onRun = function(channelName, nickname) {
@@ -65,7 +67,7 @@ function (ColorConverter, Exception) {
 
 	window.onhashchange = function() {
 		if(window.location.hash) {
-			if($("#game").style.display == "block") {
+			if(Qs.$("#game").style.display == "block") {
 				window.location.reload();
 			}
 			refresh(function(list) {
@@ -87,14 +89,6 @@ function (ColorConverter, Exception) {
 	}
 
 	window.onload = window.onhashchange;
-
-	function $(selector) {
-		return document.querySelector(selector);
-	}
-
-	function $$(selector) {
-		return document.querySelectorAll(selector);
-	}
 
 	var lastRefreshResponse;
 	function refresh(callback) {
@@ -131,7 +125,7 @@ function (ColorConverter, Exception) {
 							errorCallback(xhr.status, xhr.responseText);
 		                } else {
 							console.error("Ajax error: " + xhr.status + " " + xhr.responseText)
-							$("#list").innerHTML = "";
+							Qs.$("#list").innerHTML = "";
 							document.body.className = "offline";				
 						}
 		            }
@@ -161,7 +155,7 @@ function (ColorConverter, Exception) {
 			html += "<tr><td colspan='3'>No channels found.</td></tr>";
 		}
 
-		$("#list").innerHTML = html;
+		Qs.$("#list").innerHTML = html;
 	}
 
 	function populateMaps() {
@@ -176,15 +170,15 @@ function (ColorConverter, Exception) {
 				html += "</label></li>";
 			};
 
-			$("#maps").innerHTML = html;
+			Qs.$("#maps").innerHTML = html;
 		}, function(status, responseText) {
 			console.error("getMaps error:", status, responseText);
 		});
 	}
 
-	$("form#listform").onsubmit = function(e) {
+	Qs.$("form#listform").onsubmit = function(e) {
 		try {
-			var nickname = $("#nick").value;
+			var nickname = Qs.$("#nick").value;
 			var channelName = getSelectedChannel();
 			join(nickname, channelName);
 		} catch(e) {
@@ -194,9 +188,9 @@ function (ColorConverter, Exception) {
 		return false;
 	}
 
-	$("form#createform").onsubmit = function(e) {
+	Qs.$("form#createform").onsubmit = function(e) {
 		try {
-			var channelName = $("#customname").value;
+			var channelName = Qs.$("#customname").value;
 			create(channelName, onCreateSuccess);
 		} catch(e) {
 			console.error(e)
@@ -205,10 +199,10 @@ function (ColorConverter, Exception) {
 		return false;
 	}
 
-	$("form#customjoinform").onsubmit = function(e) {
+	Qs.$("form#customjoinform").onsubmit = function(e) {
 		try {
-			var nickname = $("#nick").value;
-			var channelName = $("#customname").value;
+			var nickname = Qs.$("#nick").value;
+			var channelName = Qs.$("#customname").value;
 			join(nickname, channelName);
 		} catch(e) {
 			console.error(e);
@@ -223,29 +217,29 @@ function (ColorConverter, Exception) {
 	}
 
 	function showCustomJoinForm() {
-		$("#customname").value = unescape(window.location.hash.substr(1));
-		$("#link").value = window.location.href;
+		Qs.$("#customname").value = unescape(window.location.hash.substr(1));
+		Qs.$("#link").value = window.location.href;
 		show("#customjoinform");
 	}
 
 	function show(id) {
-		$("#createform").style.display = "none";
-		$("#listform").style.display = "none";
-		$("#customjoinform").style.display = "none";
-		$("#game").style.display = "none";
+		Qs.$("#createform").style.display = "none";
+		Qs.$("#listform").style.display = "none";
+		Qs.$("#customjoinform").style.display = "none";
+		Qs.$("#game").style.display = "none";
 
 		if(id != "#customjoinform") {
 			history.pushState("", document.title, window.location.pathname);
 		}
 
-		$(id).style.display = "block";
+		Qs.$(id).style.display = "block";
 	}
 
 	function quickstart() {
 		refresh(function(list){
 			var defaultChannelName = quickstartChannelName;
 			history.pushState("", document.title, window.location.pathname + "#" + defaultChannelName);
-			var nickname = $("#nick").value;
+			var nickname = Qs.$("#nick").value;
 
 			if(!nickname) {
 				nickname = "Guest" + (Math.floor(Math.random() * 899) + 100)
@@ -272,7 +266,7 @@ function (ColorConverter, Exception) {
 				alert("Your channel has timed out.");
 				window.location.href = "/";
 			} else {
-				$("#timeout").innerHTML = " within " + formatDate(diff) + " minutes";
+				Qs.$("#timeout").innerHTML = " within " + formatDate(diff) + " minutes";
 			}
 		}, 1000);
 	}
@@ -357,8 +351,8 @@ function (ColorConverter, Exception) {
 			});
 
 			//window.location.href = "/game.html";
-			$("#menu").style.display = "none";
-			$("#game").style.display = "block";
+			Qs.$("#menu").style.display = "none";
+			Qs.$("#game").style.display = "block";
 			instance.onRun(channelName, nickname); // Dumm und dümmer
 			
 			if(instance.refreshInterval) {
@@ -369,7 +363,7 @@ function (ColorConverter, Exception) {
 				clearInterval(instance.channelDestructionTimeout);
 			}
 
-			requestPointerLock();
+			PointerLockManager.request();
 		}
 	}
 
@@ -383,7 +377,7 @@ function (ColorConverter, Exception) {
 				levelUids: maps,
 				maxUsers: 10,
 				minUsers: 2,
-				scoreLimit: parseInt($("#scoreLimit").value, 10)
+				scoreLimit: parseInt(Qs.$("#scoreLimit").value, 10)
 			}
 
 			localStorage["customname"] = channelName;
@@ -399,18 +393,9 @@ function (ColorConverter, Exception) {
 		}
 	}
 
-	function requestPointerLock() {
-
-			var c = $("#canvas");
-			c.requestPointerLock = c.requestPointerLock ||
-                    c.mozRequestPointerLock ||
-                    c.webkitRequestPointerLock;
- 
-            // Ask the browser to lock the pointer)
-            c.requestPointerLock();
-	}
-
-	$("#canvas").onclick = requestPointerLock;
+	Qs.$("#canvas").onclick = function(){
+		PointerLockManager.request();
+	};
  
     return Menu;
  

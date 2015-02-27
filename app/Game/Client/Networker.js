@@ -90,6 +90,8 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
             }            
         }
 
+        this.gameController.onLevelLoaded();
+
         this.sendGameCommand("clientReady");
     };
 

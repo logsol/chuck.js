@@ -27,8 +27,8 @@ function (Parent, PIXI, Nc, Settings) {
 
     Swiper.prototype.swipe = function(x, y) {
         var offset = {
-            x: Settings.STAGE_WIDTH / 2,
-            y: Settings.STAGE_HEIGHT / 2
+            x: Settings.STAGE_WIDTH / 2 / this.zoom.current,
+            y: Settings.STAGE_HEIGHT / 2 / this.zoom.current,
         }
 
 		this.sprite.moveTo(offset.x + this.last.x, offset.y + this.last.y);

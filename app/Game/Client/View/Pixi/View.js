@@ -8,10 +8,11 @@ define([
     "Game/Client/View/Pixi/GameStats",
     "Game/Client/View/LayerManager",
     "Game/Client/View/Pixi/Layers/Ghost",
-    "Game/Client/View/Pixi/Layers/Swiper"
+    "Game/Client/View/Pixi/Layers/Swiper",
+    "Game/Client/PointerLockManager"
 ], 
 
-function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, LayerManager, Ghost, Swiper) {
+function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, LayerManager, Ghost, Swiper, PointerLockManager) {
 
 	"use strict";
 
@@ -23,11 +24,15 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
         this.stage = null;
         this.container = null;
         this.infoContainer = null;
-        this.infoFilters = [];
         this.loader = null;
         this.currentZoom = Settings.ZOOM_DEFAULT;
+        this.clickToEnable = null;
 
         this.init();
+
+        this.ncTokens = this.ncTokens.concat([
+            Nc.on(Nc.ns.client.pointerLock.change, this.onPointerLockChange, this)
+        ]);
 
         PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
     }
@@ -66,7 +71,9 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
 
         this.initCanvas(this.renderer.view);
 
-        // Tab Overlay (not using layer manager)
+        this.initPointerLockView();
+
+        // Tab Overlay (not using layer manager, cause of filters)
         this.gameStats = new GameStats(this.container);
         this.stage.addChild(this.gameStats.getInfoContainer());
 
@@ -75,6 +82,8 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
 
         this.swiperLayer = new Swiper();
         this.layerManager.insert(this.swiperLayer, false);
+
+        this.render();
     }
 
     PixiView.prototype.render = function () {
@@ -85,32 +94,74 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
         this.renderer.render(this.stage);
     }
 
+    PixiView.prototype.initPointerLockView = function() {
+
+        var blurFilter = new PIXI.BlurFilter();
+        blurFilter.blurX = 42 * this.currentZoom;
+        blurFilter.blurY = 42 * this.currentZoom;
+
+        var pixelFilter = new PIXI.PixelateFilter();
+        pixelFilter.pixelSize = 10 * this.currentZoom   ;
+
+        var grayFilter = new PIXI.GrayFilter();
+        grayFilter.gray = 0.99;
+        this.pointerLockFilters = [pixelFilter, grayFilter];
+
+        this.clickToEnable = new PIXI.Text("Click to start playing.");
+        this.clickToEnable.visible = false;
+        this.stage.addChild(this.clickToEnable)
+    };
+
+    PixiView.prototype.onPointerLockChange = function(isLocked, options) {
+        if(isLocked) {
+            this.container.filters = null;
+            this.clickToEnable.visible = false;
+            this.onZoomReset();
+        } else {
+
+            if(!options || options.start !== true) {
+                this.clickToEnable.setText("Click to continue playing.");
+            }
+
+            this.clickToEnable.setStyle({
+                font: "normal " + (14 * this.currentZoom) + "px 'Joystix'",
+                fill: "#ffffff",
+                stroke: "rgba(0,0,0,0.8)",
+                strokeThickness: 6 * this.currentZoom
+            });
+
+            this.container.filters = this.pointerLockFilters;
+            this.pointerLockFilters.forEach(function(filter) { filter.dirty = true; });
+
+            this.clickToEnable.position = new PIXI.Point(Settings.STAGE_WIDTH / 2 - this.clickToEnable.width / 2, Settings.STAGE_HEIGHT / 2 - this.clickToEnable.height / 2)
+            this.clickToEnable.visible = true;
+
+            this.onZoomReset();
+            this.currentZoom *= 0.9;
+        }
+    };
+
     PixiView.prototype.calculateCenterPosition = function() {
         var target = this.me.getHeadPosition();
-        var centerPosition = {x: target.x, y: target.y};
-        centerPosition.x *= -Settings.RATIO * this.currentZoom;
-        centerPosition.y *= -Settings.RATIO * this.currentZoom;
 
-        centerPosition.x += Settings.STAGE_WIDTH / 2;
-        centerPosition.y += Settings.STAGE_HEIGHT / 2;
+        var centerPosition = {x: target.x, y: target.y};
+        centerPosition.x *= Settings.RATIO * -1;
+        centerPosition.y *= Settings.RATIO * -1;
 
         var lookAt = this.me.getLookAt();
-        centerPosition.x -= lookAt.x * Settings.STAGE_WIDTH / 4;
-        centerPosition.y += lookAt.y * Settings.STAGE_HEIGHT / 4;
+        centerPosition.x -= lookAt.x * 600 / 4;
+        centerPosition.y += lookAt.y * 400 / 4;
 
         return centerPosition;
     };
 
-    PixiView.prototype.onFullscreenChange = function(isFullScreen) {
-        Parent.prototype.onFullscreenChange.call(this, isFullScreen);
+    PixiView.prototype.onDisplaySizeChange = function(isFullScreen) {
+        Parent.prototype.onDisplaySizeChange.call(this, isFullScreen);
 
-        if(isFullScreen) {
-            this.renderer.resize(window.innerWidth, window.innerHeight);
-            this.currentZoom = window.innerWidth / 600;
-        } else {
-            this.renderer.resize(600, 400);
-            this.currentZoom = 1;
-        }
+        this.renderer.resize(window.innerWidth, window.innerHeight);
+        this.currentZoom = window.innerWidth / 600;
+
+        PointerLockManager.update(null, {}); // only to reposition clickToEnable text
     };
 
     PixiView.prototype.initLoader = function() {
@@ -150,20 +201,19 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
     };
 
     PixiView.prototype.onZoomIn = function() {
-        console.log("onZoomIn")
         if(this.currentZoom + Settings.ZOOM_FACTOR <= Settings.ZOOM_MAX) {
             this.currentZoom += Settings.ZOOM_FACTOR;
         }
     };
     
     PixiView.prototype.onZoomOut = function() {
-        if(this.currentZoom - Settings.ZOOM_FACTOR > 0) {
+        //if(this.currentZoom - Settings.ZOOM_FACTOR > window.innerWidth / 600) {
             this.currentZoom -= Settings.ZOOM_FACTOR;
-        }
-    };    
+        //}
+    };
 
     PixiView.prototype.onZoomReset = function() {
-        this.currentZoom = Settings.ZOOM_DEFAULT;
+        this.currentZoom = window.innerWidth / 600;
     };
 
     PixiView.prototype.getTexturesFromFrame = function(textureNames) {

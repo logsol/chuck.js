@@ -1,9 +1,8 @@
 define([
-	"Lib/Utilities/Core/Extensions",
-	"Lib/Vendor/Pixi"
+	"Lib/Utilities/Core/Extensions"
 ],
  
-function (Parent, PIXI) {
+function (Parent) {
 
     "use strict";
 });
