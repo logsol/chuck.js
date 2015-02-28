@@ -63,9 +63,6 @@ function (Exception) {
                     debugMode: {
                         toggle: null
                     },
-                    events: {
-                        ready: null
-                    },
                     gameStats: {
                         toggle: null
                     },

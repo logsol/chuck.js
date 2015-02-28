@@ -3,11 +3,11 @@ define([
     'Lib/Utilities/NotificationCenter',
     "Lib/Vendor/Stats",
     "Lib/Vendor/Screenfull",
-    "Game/Client/View/GraphManager",
+    "Game/Client/View/Graph",
     "Game/Client/PointerLockManager"
 ], 
 
-function (Settings, Nc, Stats, Screenfull, GraphManager, PointerLockManager) {
+function (Settings, Nc, Stats, Screenfull, Graph, PointerLockManager) {
 
 	"use strict";
 
@@ -16,30 +16,75 @@ function (Settings, Nc, Stats, Screenfull, GraphManager, PointerLockManager) {
         this.debugCanvas = null;
         this.stats = null;
         this.ping = null;
+        this.nickContainer = null;
 
-        var contextFps = document.getElementById('graph-fps').getContext("2d");
-        this.gm = new GraphManager(contextFps);
+        this.devToolsContainer = document.getElementById("menuBar");
 
-        Nc.on(Nc.ns.client.view.events.ready, this.initDevTools, this);
+        this.initDevTools();
     }
 
     DomController.prototype.initDevTools = function() {
 
         var self = this;
+        var li, button, label;
 
-        // create dev tools container
-        this.devToolsContainer = document.getElementById("menuBar");
+        // create back to menu button
+        li = document.createElement("li");
+        li.id = "back-to-menu";
+        button = document.createElement("button");
+        button.innerHTML = "Menu";
+        button.onclick = function() {
+            window.location.href="/";
+        }
+        li.appendChild(button);
+        this.devToolsContainer.appendChild(li);
 
-        // create FPS stats
+        // create user name
+        li = document.createElement("li");
+        label = document.createElement("label");
+        label.appendChild(document.createTextNode("?"));
+        li.appendChild(label);
+        this.devToolsContainer.appendChild(li);
+        this.nickContainer = label;
+
+        // create new fps meter
+        li = document.createElement("li");
+        var fpsCanvas = document.createElement("canvas");
+        fpsCanvas.id = "graph-fps";
+        fpsCanvas.width = "100";
+        fpsCanvas.height = "27";
+        li.appendChild(fpsCanvas);
+        this.devToolsContainer.appendChild(li);
+
+        this.fpsGraph = new Graph(fpsCanvas.getContext("2d"));
+
+        li = document.createElement("li");
+        label = document.createElement("label");
+        label.id = "label-fps";
+        label.innerHTML = "FPS:0";
+        li.appendChild(label);
+        this.devToolsContainer.appendChild(li);
+
+
+        // create old FPS stats
+        /*
         li = document.createElement("li");
         this.stats = new Stats();
         this.stats.setMode(0);
         li.appendChild(this.stats.domElement);
         this.devToolsContainer.appendChild(li);
+        */
+
+        // create Ping: container
+        li = document.createElement("li");
+        this.ping = document.createElement("label");
+        li.appendChild(this.ping);
+        this.devToolsContainer.appendChild(li);
+
 
         // create debug mode
         li = document.createElement("li");
-        var label = document.createElement("label");
+        label = document.createElement("label");
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.onclick = function(e) {
@@ -51,14 +96,11 @@ function (Settings, Nc, Stats, Screenfull, GraphManager, PointerLockManager) {
         li.appendChild(label);
         this.devToolsContainer.appendChild(li);
 
-        // create Ping: container
-        this.ping = document.createElement("li");
-        this.devToolsContainer.appendChild(this.ping);
 
-                // create Fullscreen
-        var li = document.createElement("li");
+        // create Fullscreen
+        li = document.createElement("li");
         li.id = "fullscreen"
-        var button = document.createElement("button");
+        button = document.createElement("button");
         button.innerHTML = "Fullscreen";
         button.onclick = function() {
             if(Screenfull.enabled) {
@@ -69,27 +111,37 @@ function (Settings, Nc, Stats, Screenfull, GraphManager, PointerLockManager) {
         li.appendChild(button);
         this.devToolsContainer.appendChild(li);
 
+
+        // FIXME : isn't this a weird place for this?
         window.onresize = function() {
             Nc.trigger(Nc.ns.client.view.display.change);
         }
     };
 
+    DomController.prototype.setNick = function (nick) {
+        this.nickContainer.innerHTML = nick
+    }
+
     DomController.prototype.statsBegin = function() {
-        this.gm.fpsStep();
+        /*
         if(this.stats) {
             this.stats.begin();
         }
+        */
     };
 
     DomController.prototype.statsEnd = function() {
+
+        /*
         if(this.stats) {
             this.stats.end();
         }
-
+        */
+        this.fpsGraph.step();
     };
 
     DomController.prototype.setPing = function(ping) {
-        this.ping.innerHTML = "Ping: " + ping;
+        this.ping.innerHTML = "Ping:" + ping;
     };
 
     DomController.prototype.getCanvasContainer = function () {

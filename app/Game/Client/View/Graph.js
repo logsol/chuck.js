@@ -6,18 +6,18 @@ function (Chart) {
 
     "use strict";
  
-    function GraphManager(ctxFps) {
+    function Graph(ctx) {
 
-    	var numberOfGraphBarsFPS = 25;
+    	var numberOfGraphBars = 25;
 
-    	var empty = new Array(numberOfGraphBarsFPS);
+    	var empty = new Array(numberOfGraphBars);
     	for (var i = empty.length - 1; i >= 0; i--) empty[i] = -1;
 
     	var data = {
 	    labels: empty,
 	    datasets: [
 	        {
-	            label: "My First dataset",
+	            label: "no label",
 	            fillColor: "rgba(220,220,220,1)",
 	            strokeColor: "rgba(220,220,220,1)",
 	            highlightFill: "rgba(220,220,220,1)",
@@ -46,13 +46,13 @@ function (Chart) {
 		    scaleSteps: 60
 		}
         
-        this.fpsGraph = new Chart(ctxFps).Bar(data, options);
+        this.chart = new Chart(ctx).Bar(data, options);
         this.frameCounter = 0;
 
         var self = this;
 
         setInterval(function(){
-        	self.fpsGraph.addData( [self.frameCounter], "" );
+        	self.chart.addData( [self.frameCounter], "" );
         	var color;
         	var alpha = 0.8;
 
@@ -64,17 +64,18 @@ function (Chart) {
         		color = "rgba(224, 018, 018, " + 1 +  ")";
         	}
 
-        	self.fpsGraph.datasets[0].bars[self.fpsGraph.datasets[0].bars.length-1].fillColor = color;
-	        self.fpsGraph.removeData();
-		    self.fpsGraph.update();
+        	self.chart.datasets[0].bars[self.chart.datasets[0].bars.length-1].fillColor = color;
+	        self.chart.removeData();
+		    self.chart.update();
 		    self.frameCounter = 0;
+
         }, 1000);
     }
  
-    GraphManager.prototype.fpsStep = function() {
+    Graph.prototype.step = function() {
     	this.frameCounter++;
     }
  
-    return GraphManager;
+    return Graph;
  
 });

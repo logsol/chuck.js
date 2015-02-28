@@ -90,7 +90,7 @@ function (Abstract, DomController, Settings, Exception, Nc) {
 
     AbstractView.prototype.onToggleDebugMode = function(debugMode) {
         if(debugMode) {
-            this.setCameraPosition(-Settings.STAGE_WIDTH / 2, -Settings.STAGE_HEIGHT / 2);
+            //this.setCameraPosition(-Settings.STAGE_WIDTH / 2, -Settings.STAGE_HEIGHT / 2);
         }
 
         this.debugMode = debugMode;

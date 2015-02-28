@@ -38,8 +38,6 @@ function (Settings, Exception, AbstractView, PixiView, Nc) {
             throw new Exception("In the view", Settings.VIEW_CONTROLLER + 'View', "this.setCanvas(canvas) has not been called with a valid HTMLCanvasElement!");
         }
 
-        Nc.trigger(Nc.ns.client.view.events.ready, view);
-
         return view;
     }
  

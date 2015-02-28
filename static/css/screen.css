@@ -28,30 +28,54 @@ body {
 }
 
 #menuBar {
+
     list-style-type: none;
-    margin: 0;
-    padding: 0;
     background: rgba(0, 0, 0, 0.5);
     position: absolute;
     z-index: 1;
     width: 100%;
-    /*display: none;*/
+    margin: 0;
+    padding: 5px 0;
 
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
+
+#menuBar button {
+    outline : 0;
+    -moz-outline : 0;
+}
+
 #menuBar li {
-    display: inline-block;
-    padding: 0;
-    vertical-align: middle;
-    padding: 0 2em;
+    float: left;
+    margin-left: 40px;
+}
+
+#menuBar li label {
+
+    padding: 5px 0;
+    display: block;
 }
 
 #back-to-menu {
-    display: inline-block;
+    margin-left: 5px !important;
 }
 
+#graph-fps {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(0,0,0,0.5);
+    padding: 2px;
+    display: inline;
+}
+
+
 #fullscreen {
-    float: right;
-    margin-top: 0.5em;
+    float: right !important;
+    margin-right: 5px;
 }
 
 ::selection {
@@ -132,7 +156,7 @@ a {
     height: 100%;
 }
 
-#canvasContainer canvas { 
+#canvasContainer canvas {
     position: absolute;/*
     top: 50%;
     left: 50%;
@@ -140,11 +164,6 @@ a {
     margin-left: -300px;*/
 }
 
-#graph-fps {
-    background: rgba(0,0,0,0.3);
-    border: 1px solid rgba(0,0,0,0.5);
-    padding: 2px;
-}
 
 :-webkit-full-screen {
     top: 0;

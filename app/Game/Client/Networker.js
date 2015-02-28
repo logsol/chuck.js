@@ -12,6 +12,7 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
 	"use strict";
 
     function Networker (socketLink, channelName, nickname) {
+
         this.channelName = channelName;
         this.nickname = nickname;
         this.socketLink = socketLink;
@@ -36,6 +37,8 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
 
         Nc.on(Nc.ns.client.to.server.gameCommand.send, this.sendGameCommand, this);
         Nc.on(Nc.ns.core.game.events.level.loaded, this.onLevelLoaded, this);
+
+        DomController.setNick(nickname);        
     }
 
     // Socket callbacks
