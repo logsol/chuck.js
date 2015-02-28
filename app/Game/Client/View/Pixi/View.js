@@ -9,10 +9,11 @@ define([
     "Game/Client/View/LayerManager",
     "Game/Client/View/Pixi/Layers/Ghost",
     "Game/Client/View/Pixi/Layers/Swiper",
-    "Game/Client/PointerLockManager"
+    "Game/Client/PointerLockManager",
+    "Game/Client/View/Pixi/Layers/Debug"
 ], 
 
-function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, LayerManager, Ghost, Swiper, PointerLockManager) {
+function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, LayerManager, Ghost, Swiper, PointerLockManager, Debug) {
 
 	"use strict";
 
@@ -82,6 +83,9 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
 
         this.swiperLayer = new Swiper();
         this.layerManager.insert(this.swiperLayer, false);
+
+        this.debugLayer = Debug;
+        this.layerManager.insert(this.debugLayer, false);
 
         this.render();
     }

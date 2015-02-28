@@ -3,10 +3,11 @@ define([
     "Game/Config/Settings",
     "Game/Client/View/DomController",
     "Lib/Vendor/Box2D",
-    "Lib/Utilities/NotificationCenter"
+    "Lib/Utilities/NotificationCenter",
+    "Game/Client/View/Pixi/DebugDraw"
 ],
 
-function (Parent, Settings, DomController, Box2D, Nc) {
+function (Parent, Settings, DomController, Box2D, Nc, DebugDraw) {
 
 	"use strict";
 
@@ -33,7 +34,7 @@ function (Parent, Settings, DomController, Box2D, Nc) {
         var debugSprite = DomController.getDebugCanvas().getContext("2d");
 
         // set debug draw
-        this.debugDraw = new Box2D.Dynamics.b2DebugDraw();
+        this.debugDraw = new DebugDraw();
 
         this.debugDraw.SetSprite(debugSprite);
         this.debugDraw.SetDrawScale(Settings.RATIO);

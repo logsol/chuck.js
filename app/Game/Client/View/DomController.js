@@ -89,7 +89,7 @@ function (Settings, Nc, Stats, Screenfull, Graph, PointerLockManager) {
         checkbox.type = "checkbox";
         checkbox.onclick = function(e) {
             Nc.trigger(Nc.ns.client.view.debugMode.toggle, e.target.checked);
-            self.getDebugCanvas().style.display = e.target.checked ? "" : "none";
+            //self.getDebugCanvas().style.display = e.target.checked ? "" : "none";
         }
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode("Debug"));
@@ -170,6 +170,7 @@ function (Settings, Nc, Stats, Screenfull, Graph, PointerLockManager) {
             canvas.height = Settings.STAGE_HEIGHT;
             this.debugCanvas = canvas;
             this.getCanvasContainer().appendChild(canvas);
+            this.debugCanvas.style.display = "none";
         }
 
         return this.debugCanvas;

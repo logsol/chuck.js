@@ -43,6 +43,7 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
                 case "ghost": y++;
                 case "item": y++;
                 case "tile": y++;
+                case "debug": y++;
                 case "spawn": y=y;
             }
 
@@ -268,6 +269,7 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
                 || this.name == "tile" 
                 || this.name == "item"
                 || this.name == "ghost"
+                || this.name == "debug"
                 || this.name == "swiper") {
                 this.container.x = this.position.current.x;
                 this.container.y = this.position.current.y;
