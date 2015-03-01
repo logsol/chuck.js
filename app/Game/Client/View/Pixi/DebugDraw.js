@@ -19,7 +19,7 @@ function (Box2D, Debug) {
              graphics: {
                 clear: function () {
                     Debug.graphics.clear();
-                    Debug.graphics.lineStyle ( 1, 0x00ff00 , .8 )
+                    Debug.graphics.lineStyle(1, 0x00ff00 , 0.8);
 
                    //__this.m_ctx.clearRect(0, 0, __this.m_ctx.canvas.width, __this.m_ctx.canvas.height)
                 }
@@ -30,24 +30,69 @@ function (Box2D, Debug) {
 
     DebugDraw.prototype = Object.create(Parent.prototype);
 
-    DebugDraw.prototype.SetSprite = function (sprite) {
+    DebugDraw.prototype.setColor = function(color) {
+        this.m_ctx.debugColor = color.color;
+        this.m_ctx.debugFillAlpha = this.m_fillAlpha;
+        Debug.graphics.lineStyle(1, this.m_ctx.debugColor, this.m_alpha);
+    };
+
+    DebugDraw.prototype.SetSprite = function(sprite) {
         this.m_ctx = Debug.graphics;
 
-        this.m_ctx.beginPath = function(){
-            Debug.graphics.beginFill(0x00ff00, 0.2);
+        this.m_ctx.beginPath = function() {
+            Debug.graphics.beginFill(this.debugColor, this.debugFillAlpha);
         };
-        this.m_ctx.closePath = function(){
+
+        this.m_ctx.closePath = function() {
             Debug.graphics.endFill();
         };
-        this.m_ctx.fill = function(){
+
+        this.m_ctx.fill = function() {
             this.endFill();
         };
-        this.m_ctx.stroke = function(){
+
+        this.m_ctx.stroke = function() {
             //console.log('customStroke');
         };
 
+        this.m_ctx.arc = function(x, y, radius, startingAngle, endingAngle, counterClockwise) {
+            Debug.graphics.drawCircle(x, y, radius);
+        }
+
     };
 
+    DebugDraw.prototype.DrawPolygon = function (vertices, vertexCount, color) {
+        this.setColor(color);
+        Parent.prototype.DrawPolygon.call(this, arguments);
+    };
+
+    DebugDraw.prototype.DrawSolidPolygon = function (vertices, vertexCount, color) {
+        this.setColor(color);
+        Parent.prototype.DrawSolidPolygon.apply(this, arguments);
+    };
+
+    DebugDraw.prototype.DrawCircle = function (center, radius, color) {
+        this.setColor(color);
+        Parent.prototype.DrawCircle.apply(this, arguments);
+    };
+
+    DebugDraw.prototype.DrawSolidCircle = function (center, radius, axis, color) {
+        this.setColor(color);
+        Parent.prototype.DrawSolidCircle.apply(this, arguments);
+    };
+
+    DebugDraw.prototype.DrawSegment = function (p1, p2, color) {
+        this.setColor(color);
+        Parent.prototype.DrawSegment.apply(this, arguments);
+    };
+
+    DebugDraw.prototype.DrawTransform = function (xf) {
+        this.setColor(0xff0000);
+        Parent.prototype.DrawTransform.apply(this, arguments);
+    };
+
+
+/*
     DebugDraw.prototype.DrawPolygon = function (vertices, vertexCount, color) {
         if (!vertexCount) return;
         var s = this.m_ctx;
@@ -134,7 +179,7 @@ function (Box2D, Debug) {
         s.closePath();
         s.stroke();
     };
-
+*/
     return DebugDraw;
  
 });
