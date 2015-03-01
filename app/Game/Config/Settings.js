@@ -22,6 +22,7 @@ define(function() {
         GRAPHICS_SUBPATH_TILES: 'Tiles/',
         MAPS_PATH: 'static/maps/tiled/',
         AUDIO_PATH: 'static/sounds/',
+        CHANNEL_RECORDING_PATH: 'recordings/',
 
         RATIO: 21, //35
         // original tile size is 25 but we want it to resize to 20
@@ -45,7 +46,7 @@ define(function() {
         RESPAWN_TIME: 5,
         HEALTH_DISPLAY_TIME: 2,
         CRITICAL_HEALTH_THRESHOLD: 0.3,
-        RAGDOLL_DESTRUCTION_TIME: 20,
+        RAGDOLL_DESTRUCTION_TIME: 20000,
         VIEWPORT_SPEED_FACTOR: 640,
         VIEWPORT_LOOK_AHEAD: 0.1,
 
@@ -76,11 +77,12 @@ define(function() {
         NETWORK_LOG_FILTER: ['ping', 'pong', 'worldUpdate', 'lookAt'],
 
         // CHANNEL
-        CHANNEL_DESTRUCTION_TIME: 5 * 60,
+        CHANNEL_DESTRUCTION_TIME: 0.5 * 60,
         CHANNEL_END_ROUND_TIME: 4, //10,
         CHANNEL_DEFAULT_MAX_USERS: 40,
         CHANNEL_DEFAULT_SCORE_LIMIT: 10,
         CHANNEL_DEFAULT_LEVELS: ['debug'],
+        CHANNEL_RECORD_SESSION: false,
 
         // ME STATE
         ME_STATE_MAX_DIFFERENCE_METERS: 1,
