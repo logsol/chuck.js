@@ -4,10 +4,11 @@ define([
     "Game/Client/View/DomController",
     "Lib/Vendor/Box2D",
     "Lib/Utilities/NotificationCenter",
-    "Game/Client/View/Pixi/DebugDraw"
+    "Game/Client/View/Pixi/DebugDraw",
+    "Game/Client/View/Pixi/Layers/Debug"
 ],
 
-function (Parent, Settings, DomController, Box2D, Nc, DebugDraw) {
+function (Parent, Settings, DomController, Box2D, Nc, DebugDraw, DebugLayer) {
 
 	"use strict";
 
@@ -31,12 +32,10 @@ function (Parent, Settings, DomController, Box2D, Nc, DebugDraw) {
 
     Engine.prototype.setupDebugDraw = function () {
 
-        var debugSprite = DomController.getDebugCanvas().getContext("2d");
-
         // set debug draw
         this.debugDraw = new DebugDraw();
 
-        this.debugDraw.SetSprite(debugSprite);
+        this.debugDraw.SetSprite(DebugLayer.graphics);
         this.debugDraw.SetDrawScale(Settings.RATIO);
         this.debugDraw.SetFillAlpha(0.5);
         this.debugDraw.SetLineThickness(1.0);

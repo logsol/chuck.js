@@ -13,7 +13,6 @@ function (Settings, Nc, Stats, Screenfull, Graph, PointerLockManager) {
 
     function DomController() {
         this.canvas = document.getElementById("canvas");
-        this.debugCanvas = null;
         this.stats = null;
         this.ping = null;
         this.nickContainer = null;
@@ -89,7 +88,6 @@ function (Settings, Nc, Stats, Screenfull, Graph, PointerLockManager) {
         checkbox.type = "checkbox";
         checkbox.onclick = function(e) {
             Nc.trigger(Nc.ns.client.view.debugMode.toggle, e.target.checked);
-            //self.getDebugCanvas().style.display = e.target.checked ? "" : "none";
         }
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode("Debug"));
@@ -122,21 +120,8 @@ function (Settings, Nc, Stats, Screenfull, Graph, PointerLockManager) {
         this.nickContainer.innerHTML = nick
     }
 
-    DomController.prototype.statsBegin = function() {
-        /*
-        if(this.stats) {
-            this.stats.begin();
-        }
-        */
-    };
 
-    DomController.prototype.statsEnd = function() {
-
-        /*
-        if(this.stats) {
-            this.stats.end();
-        }
-        */
+    DomController.prototype.fpsStep = function() {
         this.fpsGraph.step();
     };
 
@@ -160,20 +145,6 @@ function (Settings, Nc, Stats, Screenfull, Graph, PointerLockManager) {
 
     DomController.prototype.initCanvas = function (canvas) {
         Nc.trigger(Nc.ns.client.view.display.change, Screenfull.isFullscreen);
-    }
-
-    DomController.prototype.getDebugCanvas = function () {
-
-        if(!this.debugCanvas) {
-            var canvas = document.createElement('canvas');
-            canvas.width = Settings.STAGE_WIDTH;
-            canvas.height = Settings.STAGE_HEIGHT;
-            this.debugCanvas = canvas;
-            this.getCanvasContainer().appendChild(canvas);
-            this.debugCanvas.style.display = "none";
-        }
-
-        return this.debugCanvas;
     }
 
     DomController.prototype.setConnected = function(connected) {

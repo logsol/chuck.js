@@ -51,10 +51,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
         Parent.prototype.update.call(this);
 
-        DomController.statsBegin();
-
         this.animationRequestId = requestAnimFrame(this.update.bind(this));
-
         this.physicsEngine.update();
         
         if(this.me) {
@@ -67,8 +64,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         }
 
         this.view.render();
-
-        DomController.statsEnd();
+        DomController.fpsStep();
     }
 
     GameController.prototype.mePositionStateUpdate = function() {   
