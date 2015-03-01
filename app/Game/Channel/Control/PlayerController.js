@@ -52,7 +52,7 @@ function(Parent, Nc, Parser, Settings) {
             y: Math.abs(update.p.y - this.player.doll.body.GetPosition().y)
         }
 
-        if(difference.x < Settings.PUNKBUSTER_DIFFERENCE_METERS
+        if(true || difference.x < Settings.PUNKBUSTER_DIFFERENCE_METERS
            && difference.y < Settings.PUNKBUSTER_DIFFERENCE_METERS) {
             this.player.doll.updatePositionState(update);
         } else {
