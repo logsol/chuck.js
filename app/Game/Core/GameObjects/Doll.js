@@ -1,5 +1,6 @@
 define([
     "Game/" + GLOBALS.context + "/GameObjects/GameObject",
+    "Lib/Utilities/Exception",
     "Lib/Vendor/Box2D", 
     "Game/Config/Settings", 
     "Game/" + GLOBALS.context + "/Collision/Detector",
@@ -7,7 +8,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ], 
 
-function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
+function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
 
 	"use strict";
 
@@ -358,7 +359,14 @@ function (Parent, Box2D, Settings, CollisionDetector, Item, Nc) {
     };
 
     Doll.prototype.throw = function(item, options) {
-        this.body.GetWorld().DestroyJoint(this.holdingJoint);
+        if(this.holdingJoint) {
+            this.body.GetWorld().DestroyJoint(this.holdingJoint);
+        } else {
+            // log stack if we called throw without a holdingJoint
+            var w = new Error("Throwing without a holdingJoint");
+            console.error(w.message + "\n" + w.stack);
+        }
+
         this.holdingJoint = null;
         this.holdingItem = null;
 
