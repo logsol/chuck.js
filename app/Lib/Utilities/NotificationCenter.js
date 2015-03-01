@@ -64,7 +64,8 @@ function (Exception) {
                         toggle: null
                     },
                     gameStats: {
-                        toggle: null
+                        toggle: null,
+                        kill: null
                     },
                     swiper: {
                         swipe: null,

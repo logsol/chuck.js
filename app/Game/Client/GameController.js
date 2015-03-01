@@ -213,6 +213,18 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         var player = this.players[options.playerId];
         var killedByPlayer = this.players[options.killedByPlayerId];
         player.kill(killedByPlayer, options.ragDollId);
+
+        Nc.trigger(Nc.ns.client.view.gameStats.kill, {
+            victim: {
+                name: player.user.options.nickname,
+                isMe: player === this.me
+            },
+            killer: {
+                name: killedByPlayer.user.options.nickname,
+                isMe: killedByPlayer === this.me
+            },
+            item: options.item
+        });
     };
 
     GameController.prototype.onPositionStateReset = function(options) {

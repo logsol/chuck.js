@@ -70,7 +70,7 @@ function (Parent, Item, Box2D, Nc) {
                             var player = item.lastMoved.player;
 
                             var callback = function() {
-                                self.player.addDamage(damage, player);
+                                self.player.addDamage(damage, player, item);
                             }
 
                             Nc.trigger(Nc.ns.channel.engine.worldQueue.add, callback)

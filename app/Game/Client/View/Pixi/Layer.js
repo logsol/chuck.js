@@ -43,7 +43,6 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
                 case "ghost": y++;
                 case "item": y++;
                 case "tile": y++;
-                case "debug": y++;
                 case "spawn": y=y;
             }
 
@@ -212,7 +211,6 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
 
 
         /*
-
         // we would need another zoom state, 
         // to separate fixed zooming (by window size)
         // and user zoom by +/-/0 keys
@@ -240,17 +238,8 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
 
         // Position
 
-        /*
-            var posXStep = (this.position.target.x - this.position.current.x) * Settings.CAMERA_GLIDE / 100;
-            this.position.current.x += posXStep;
-            this.container.x = this.position.current.x + (this.position.current.x * this.parallaxSpeed);
-
-            var posYStep = (this.position.target.y - this.position.current.y) * Settings.CAMERA_GLIDE / 100;
-            this.position.current.y += posYStep;
-            this.container.y = this.position.current.y + (this.position.current.y * this.parallaxSpeed);
-        */
-
         if (!this.static) {
+            // Fixme: needs to read from actual level size
             var levelSize = {
                 x: 600,
                 y: 400
@@ -265,11 +254,12 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
             this.container.x = this.position.current.x + levelSize.x / 2 - (-this.parallaxSpeed) * (this.position.current.x + levelSize.x / 2);
             this.container.y = this.position.current.y + levelSize.y / 2 - (-this.parallaxSpeed) * (this.position.current.y + levelSize.y / 2);
 
+
+            // Add here to set 0,0 not in the center of the map but the level origin in the top left
             if (this.name == "spawn" 
                 || this.name == "tile" 
                 || this.name == "item"
                 || this.name == "ghost"
-                || this.name == "debug"
                 || this.name == "swiper") {
                 this.container.x = this.position.current.x;
                 this.container.y = this.position.current.y;

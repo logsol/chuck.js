@@ -58,14 +58,14 @@ function (Parent, Nc) {
         this.addDamage(100, this);
     };
 
-    Player.prototype.addDamage = function(damage, enemy) {
+    Player.prototype.addDamage = function(damage, enemy, byItem) {
         this.stats.health -= damage;
         
         if(this.stats.health < 0) this.stats.health = 0;
 
         if(this.stats.health <= 0) {
             if(enemy != this) enemy.score();
-            this.kill(enemy);
+            this.kill(enemy, byItem);
         } else {
             this.broadcastStats();
         }
@@ -77,7 +77,7 @@ function (Parent, Nc) {
         this.broadcastStats();
     };
 
-    Player.prototype.kill = function(killedByPlayer) {
+    Player.prototype.kill = function(killedByPlayer, byItem) {
         this.stats.deaths++;
         var ragDollId = this.stats.deaths;
         Parent.prototype.kill.call(this, killedByPlayer, ragDollId);
@@ -86,8 +86,11 @@ function (Parent, Nc) {
         Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "playerKill", {
             playerId: this.id,
             killedByPlayerId: killedByPlayer.id,
-            ragDollId: ragDollId
+            ragDollId: ragDollId,
+            item: byItem.options.name
         });
+
+
 
         Nc.trigger(Nc.ns.channel.events.game.player.killed, this, killedByPlayer); // sends endround
 

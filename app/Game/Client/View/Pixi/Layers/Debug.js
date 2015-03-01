@@ -10,7 +10,7 @@ function (Parent, PIXI, Settings) {
 	"use strict";
  
     function Debug() {
-    	Parent.call(this, "Debug", 0);
+    	Parent.call(this, "debug", 0);
 
 
       this.graphics = new PIXI.Graphics();
