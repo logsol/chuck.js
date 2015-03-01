@@ -1,9 +1,8 @@
 define([
-    "Lib/Vendor/Box2D",
-    "Game/Client/View/Pixi/Layers/Debug"
+    "Lib/Vendor/Box2D"
 ],
  
-function (Box2D, Debug) {
+function (Box2D) {
 
     "use strict";
 
