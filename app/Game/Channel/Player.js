@@ -55,7 +55,7 @@ function (Parent, Nc) {
     };
 
     Player.prototype.suicide = function() {
-        this.addDamage(100, this);
+        this.addDamage(100, this, null);
     };
 
     Player.prototype.addDamage = function(damage, enemy, byItem) {
@@ -87,7 +87,7 @@ function (Parent, Nc) {
             playerId: this.id,
             killedByPlayerId: killedByPlayer.id,
             ragDollId: ragDollId,
-            item: byItem.options.name
+            item: byItem ? byItem.options.name : "Suicide"
         });
 
 
