@@ -5,7 +5,7 @@ then
 	mkdir -p build
 	echo "- compiling client scripts.."
 	rm -f "build/client.min.js.gz"
-	node_modules/requirejs/bin/r.js -o config/build-profile.js > /dev/null \
+	node_modules/requirejs/bin/r.js -o config/build-profile.js \
 		&& gzip -c build/client.min.js > build/client.min.js.gz \
 		&& echo "- done."
 else 
