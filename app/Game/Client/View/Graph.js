@@ -6,7 +6,7 @@ function (Chart) {
 
     "use strict";
  
-    function Graph(ctx) {
+    function Graph(ctx, isStepCounter, newOptions) {
 
     	var numberOfGraphBars = 25;
 
@@ -45,36 +45,54 @@ function (Chart) {
 		    scaleStepWidth: 1, 
 		    scaleSteps: 60
 		}
+
+		if (newOptions) {
+			if (newOptions.scaleOverride) options.scaleOverride = newOptions.scaleOverride;
+			if (newOptions.scaleStartValue) options.scaleStartValue = newOptions.scaleStartValue;
+			if (newOptions.scaleSteps) options.scaleSteps = newOptions.scaleSteps;
+			if (newOptions.scaleStepWidth) options.scaleStepWidth = newOptions.scaleStepWidth;
+		} 
         
         this.chart = new Chart(ctx).Bar(data, options);
-        this.frameCounter = 0;
+        this.stepCounter = 0;
+        this.currentValue = 0;
+        this.updateFunction = function(value){};
 
         var self = this;
 
-        setInterval(function(){
-        	self.chart.addData( [self.frameCounter], "" );
-        	var color;
-        	var alpha = 0.8;
+        if (isStepCounter) {
+	        setInterval(function(){
+	        	self.addValue(null);
+	        }, 1000);
+        }
 
-        	if (self.frameCounter >= 50) {
-        		color = "rgba(136, 209, 018, " + alpha +  ")";
-        	} else if (self.frameCounter > 25) {
-        		color = "rgba(204, 114, 018, " + alpha +  ")";
-        	} else {
-        		color = "rgba(224, 018, 018, " + 1 +  ")";
-        	}
+    }
 
-        	self.chart.datasets[0].bars[self.chart.datasets[0].bars.length-1].fillColor = color;
-	        self.chart.removeData();
-		    self.chart.update();
-		    self.frameCounter = 0;
+    Graph.prototype.addValue = function (value) {
 
-        }, 1000);
+    	value = value ? value : this.stepCounter;
+
+    	this.chart.addData( [value], "" );
+	    this.currentValue = value;
+	    this.stepCounter = 0;
+	    var color = this.updateFunction(this.currentValue);
+	    color = color ? color : "rgba(136, 209, 018, 1)"; // green
+	    this.chart.datasets[0].bars[this.chart.datasets[0].bars.length-1].fillColor = color;
+	  	this.chart.removeData();
+	    this.chart.update();
     }
  
     Graph.prototype.step = function() {
-    	this.frameCounter++;
-    }
+    	this.stepCounter++;
+    };
+
+    Graph.prototype.getCurrentValue = function() {
+    	return this.currentValue;
+    };
+
+    Graph.prototype.onUpdate = function(f) {
+    	this.updateFunction = f;
+    };
  
     return Graph;
  

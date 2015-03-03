@@ -1,13 +1,12 @@
 define([
     'Game/Config/Settings',
     'Lib/Utilities/NotificationCenter',
-    "Lib/Vendor/Stats",
     "Lib/Vendor/Screenfull",
     "Game/Client/View/Graph",
     "Game/Client/PointerLockManager"
 ], 
 
-function (Settings, Nc, Stats, Screenfull, Graph, PointerLockManager) {
+function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
 
 	"use strict";
 
@@ -16,6 +15,7 @@ function (Settings, Nc, Stats, Screenfull, Graph, PointerLockManager) {
         this.stats = null;
         this.ping = null;
         this.nickContainer = null;
+        this.fpsContainer = "";
 
         this.devToolsContainer = document.getElementById("menuBar");
 
@@ -55,24 +55,48 @@ function (Settings, Nc, Stats, Screenfull, Graph, PointerLockManager) {
         li.appendChild(fpsCanvas);
         this.devToolsContainer.appendChild(li);
 
-        this.fpsGraph = new Graph(fpsCanvas.getContext("2d"));
+        this.fpsGraph = new Graph(fpsCanvas.getContext("2d"), true);
 
+        // create fps label with updater
         li = document.createElement("li");
         label = document.createElement("label");
         label.id = "label-fps";
-        label.innerHTML = "FPS:0";
         li.appendChild(label);
         this.devToolsContainer.appendChild(li);
+        this.fpsContainer = label;
 
+        this.fpsGraph.onUpdate(function(value){
+            self.fpsContainer.innerHTML = "FPS:" + value;
 
-        // create old FPS stats
-        /*
+            var color, 
+                alpha = 0.8;
+
+            if (value >= 50) {
+                color = "rgba(136, 209, 018, " + alpha +  ")";
+            } else if (value > 25) {
+                color = "rgba(204, 114, 018, " + alpha +  ")";
+            } else {
+                color = "rgba(224, 018, 018, " + 1 +  ")";
+            }
+
+            return color;
+        });
+
+        // create new ping meter
         li = document.createElement("li");
-        this.stats = new Stats();
-        this.stats.setMode(0);
-        li.appendChild(this.stats.domElement);
+        var pingCanvas = document.createElement("canvas");
+        pingCanvas.id = "graph-fps";
+        pingCanvas.width = "100";
+        pingCanvas.height = "27";
+        li.appendChild(pingCanvas);
         this.devToolsContainer.appendChild(li);
-        */
+
+        this.pingGraph = new Graph(pingCanvas.getContext("2d"), false, {
+            scaleOverride: false, 
+            scaleStartValue: 0, 
+            scaleStepWidth: 0, 
+            scaleSteps: 0
+        })
 
         // create Ping: container
         li = document.createElement("li");
@@ -127,6 +151,7 @@ function (Settings, Nc, Stats, Screenfull, Graph, PointerLockManager) {
 
     DomController.prototype.setPing = function(ping) {
         this.ping.innerHTML = "Ping:" + ping;
+        this.pingGraph.addValue(ping);
     };
 
     DomController.prototype.getCanvasContainer = function () {
@@ -152,6 +177,15 @@ function (Settings, Nc, Stats, Screenfull, Graph, PointerLockManager) {
             document.body.style.backgroundColor = '';
         } else {
             document.body.style.backgroundColor = '#aaaaaa';
+            this.ping.innerHTML = "Disconnected. ".replace(/ /g, '&nbsp;');
+            this.ping.style.color = "#ff0000";
+
+            self = this;
+            setTimeout(function(){self.ping.innerHTML = "Reload Page...".replace(/ /g, '&nbsp;');}, 3000);
+            setTimeout(function(){self.ping.innerHTML = "Reload in 3...".replace(/ /g, '&nbsp;');}, 6000);
+            setTimeout(function(){self.ping.innerHTML = "Reload in 2...".replace(/ /g, '&nbsp;');}, 7000);
+            setTimeout(function(){self.ping.innerHTML = "Reload in 1...".replace(/ /g, '&nbsp;');}, 8000);
+            setTimeout(function(){self.ping.innerHTML = "Reload now.   ".replace(/ /g, '&nbsp;'); location.reload(); }, 9000);
         }
     };
 
