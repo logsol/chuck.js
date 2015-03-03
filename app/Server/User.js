@@ -14,6 +14,7 @@ function (Parent, ProtocolHelper, Nc) {
         this.coordinator = coordinator;
         this.socketLink = socketLink;
         this.channelPipe = null;
+        this.options = null;
 
         socketLink.on('message', this.onMessage.bind(this));
         socketLink.on('disconnect', this.onDisconnect.bind(this));
@@ -23,15 +24,23 @@ function (Parent, ProtocolHelper, Nc) {
 
     User.prototype = Object.create(Parent.prototype);
 
+/*
     User.prototype.setChannelPipe = function(channelPipe) {
         if(channelPipe) {
-            this.channelPipe = channelPipe;
+            if (channelPipe.isWithinUserLimit()) {
+                this.channelPipe = channelPipe;
+                this.channelPipe.addUser(this);
+            } else {
+                var message = ProtocolHelper.encodeCommand("joinError", {message:"Channel is full"});
+                this.socketLink.send(message);
+            }
+            
         } else {
             var message = ProtocolHelper.encodeCommand("joinError", {message:"Channel not found"});
             this.socketLink.send(message);
         }
     };
-    
+    */
     
     // Socket callbacks
 
@@ -41,14 +50,12 @@ function (Parent, ProtocolHelper, Nc) {
 
     User.prototype.onDisconnect = function () {
 
-        this.coordinator.removeUser(this);
-
         if(!this.channelPipe) {
-            console.warn("Disconnecting user without a channel.");
+            console.warn("Disconnecting user without a channel. (Maybe channel was full)");
             return;
         }
 
-        this.channelPipe.send('channel', { releaseUser: this.id });
+        this.channelPipe.removeUser(this);
     }
 
 
@@ -56,18 +63,29 @@ function (Parent, ProtocolHelper, Nc) {
     // Remember: control commands are coordinator relevant commands
 
     User.prototype.onJoin = function(options) {
-        this.coordinator.assignUserToChannel(this, options.channelName);
 
-        if(!this.channelPipe) {
-            console.warn("Can not join user because channel (" + options.channelName + ") does not exist.")
+        var channelPipe = this.coordinator.getChannelPipeByName(options.channelName);
+
+        if(!channelPipe) {
+            var message = ProtocolHelper.encodeCommand("joinError", {message:"Channel " + options.channelName + " not found."});
+            this.socketLink.send(message);
             return;
         }
+
+        if (channelPipe.isFull()) {
+            var message = ProtocolHelper.encodeCommand("joinError", {message:"Sorry! Channel " + options.channelName + " is full."});
+            this.socketLink.send(message);
+            return;
+        }
+
+        this.channelPipe = channelPipe;
 
         var userOptions = {
             id: this.id,
             nickname: options.nickname
         }
-        this.channelPipe.send('channel', { addUser: userOptions });
+        this.options = userOptions;
+        this.channelPipe.addUser(this);
     };
 
     /* FIXME: watch out and check in wich direction game and control commands flow */

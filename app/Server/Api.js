@@ -96,22 +96,23 @@ function (Nc, ProtocolHelper, validate, Options, Settings, FileSystem) {
 				newOptions.maxUsers = options.maxUsers;
 			} else {
 				this.isError = true;
-				return "Could not create channel, Max users invalid. (Limited to " + Settings.CHANNEL_MAX_USERS + " users)";
+				return "Could not create channel, user limit invalid. Limited to " + Settings.CHANNEL_MAX_USERS + " users";
 			}
 
 			if(validate(options.minUsers, {optional: true, type: 'number', min: 0, max: Settings.CHANNEL_MAX_USERS})) {
 				newOptions.minUsers = options.minUsers;
 			} else {
 				this.isError = true;
-				return "Could not create channel, Max users too high. Limited to: " + Settings.CHANNEL_MAX_USERS;
+				return "Could not create channel, minimal users limit too high. Limited to: " + Settings.CHANNEL_MAX_USERS;
 			}
 
 			// Limits
-			if(validate(options.scoreLimit, {type: 'number', min: 1, max: 999})) {
+			var scoreLimitPreferences =  {type: 'number', min: 1, max: 999};
+			if(validate(options.scoreLimit, scoreLimitPreferences)) {
 				newOptions.scoreLimit = options.scoreLimit;
 			} else {
 				this.isError = true;
-				return "Could not create channel, score limit (" + options.scoreLimit + ").";
+				return "Could not create channel, score limit (" + options.scoreLimit + ") must be between " + scoreLimitPreferences.min + " and " + scoreLimitPreferences.max;
 			}
 
 			var defaultOptions = {

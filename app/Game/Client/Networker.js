@@ -53,6 +53,7 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
             this.sendCommand('join', options);
             DomController.setConnected(true);
         } else {
+            alert("Error: no channel name");
             window.location.href = "/";
         }
     }
@@ -80,7 +81,7 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
     }
 
     Networker.prototype.onJoinError = function(options) {
-        // alert(options.message);
+        alert(options.message);
         window.location.href = "/";
     };
 

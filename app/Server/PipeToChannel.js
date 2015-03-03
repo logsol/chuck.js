@@ -12,6 +12,8 @@ function (Nc, childProcess) {
 	function PipeToChannel (options) {
 
 		this.fork = null;
+		this.options = options;
+		this.users = [];
 
 		try {
             this.fork = fork('channel.js'
@@ -28,8 +30,6 @@ function (Nc, childProcess) {
         this.send('channel/' + options.channelName, { CREATE: true, options: options });
 
         this.fork.on('message', this.onMessage.bind(this));
-
-        var self = this;
 	}
 
 	// While creating user
@@ -52,6 +52,10 @@ function (Nc, childProcess) {
 		this.fork.send(message);
 	}
 
+	PipeToChannel.prototype.isFull = function() {
+		return this.users.length >= this.options.maxUsers;
+	};
+
 	PipeToChannel.prototype.onMessage = function (message) {
 		switch(message.recipient) {
 			case 'coordinator':
@@ -63,6 +67,26 @@ function (Nc, childProcess) {
 		}
 		
 	}
+
+	PipeToChannel.prototype.addUser = function(user) {
+		this.users.push(user);
+		this.send('channel', { addUser: user.options });
+	};
+
+	PipeToChannel.prototype.removeUser = function(user) {
+        for(var i = 0; i < this.users.length; i++) {
+            if(this.users[i] === user) {
+                this.users.splice(i, 1);
+                break;
+            }
+        }
+
+        this.send('channel', { releaseUser: user.id });
+	};
+
+	PipeToChannel.prototype.getUsers = function() {
+		return this.users;
+	};
 
 	return PipeToChannel;
 

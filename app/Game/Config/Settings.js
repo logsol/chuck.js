@@ -76,6 +76,7 @@ define(function() {
         NETWORK_LOG_FILTER: ['ping', 'pong', 'worldUpdate', 'lookAt'],
 
         // CHANNEL
+        CHANNEL_MAX_USERS: 20,
         CHANNEL_DESTRUCTION_TIME: 5 * 60,
         CHANNEL_END_ROUND_TIME: 4, //10,
         CHANNEL_DEFAULT_MAX_USERS: 40,

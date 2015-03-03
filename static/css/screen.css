@@ -20,7 +20,7 @@ body {
     background: #222;
     color: #ccc;
     font-family: 'Joystix', "Lucida Grande", sans-serif;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
     margin: 0; 
     padding: 0; 
     display: table;
@@ -113,7 +113,7 @@ article#menu {
     margin: 4em auto;
     background: #1a1a1a;
     padding: 2em;
-    max-width: 30em;
+    max-width: 40em;
 }
 
 table, th, td {
@@ -140,6 +140,31 @@ ul {
 
 tr:hover td {
     background: #222;
+}
+
+.full {
+    color: #777;
+}
+
+.full a {
+    color: inherit;
+    cursor:not-allowed;;
+}
+
+#players {
+    position: absolute;
+
+    border: 1px solid #777;
+    padding: 20px;
+    margin-left: 35px;
+    margin-top: -10px;
+    background: rgba(20, 20, 20, 0.95);
+    box-shadow: 5px 5px 5px #000;
+    display: none;
+}
+
+.playersCell:hover #players {
+    display: block;
 }
 
 a {

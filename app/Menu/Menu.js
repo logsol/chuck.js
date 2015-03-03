@@ -144,11 +144,19 @@ function (ColorConverter, Exception, PointerLockManager, Qs) {
 		var html = "";
 		if(list.length > 0) {
 			for (var i = 0; i < list.length; i++) {
+				
 				var channel = list[i];
-				html += "<tr>";
-				html += "<td><a href='#" + channel.name + "'>" + channel.name + "</a></td>";
+				var fullState = channel.playerCount >= channel.maxUsers;
+				var fullString = fullState ? "&nbsp;Full" : "";
+				var fullStyle = fullState ? 'class="full"' : "";
+				var players = channel.playerCount 
+					? "<span id='players'>Player:<br>- " + channel.players.join("<br>- ") + "</span>"
+					: "";
+				
+				html += "<tr "+fullStyle+">";
+				html += "<td><a href='#" + channel.channelName + "'>" + channel.channelName + "</a></td>";
 				html += "<td>death match</td>";
-				html += "<td>" + channel.playerCount + "</td>";
+				html += "<td class='playersCell'>" + channel.playerCount + fullString + players + "</td>";
 				html += "</tr>";
 			};
 		} else {
@@ -190,8 +198,15 @@ function (ColorConverter, Exception, PointerLockManager, Qs) {
 
 	Qs.$("form#createform").onsubmit = function(e) {
 		try {
-			var channelName = Qs.$("#customname").value;
-			create(channelName, onCreateSuccess);
+
+			var options = {
+				channelName: Qs.$("#customname").value,
+				levelUids: getSelectedMaps(),
+				maxUsers: parseInt(Qs.$("#userLimit").value, 10),
+				scoreLimit: parseInt(Qs.$("#scoreLimit").value, 10)
+			};
+
+			create(options, onCreateSuccess);
 		} catch(e) {
 			console.error(e)
 		}
@@ -246,7 +261,15 @@ function (ColorConverter, Exception, PointerLockManager, Qs) {
 			}
 
 			if(!channelExists(list, defaultChannelName)) {
-				create(defaultChannelName, function() {
+
+				var options = {
+					channelName: defaultChannelName,
+					levelUids: getSelectedMaps(),
+					maxUsers: parseInt(Qs.$("#userLimit").value, 10),
+					scoreLimit: parseInt(Qs.$("#scoreLimit").value, 10)
+				};
+
+				create(options, function() {
 					join(nickname, defaultChannelName); // only called on success
 				});
 			} else {
@@ -283,7 +306,7 @@ function (ColorConverter, Exception, PointerLockManager, Qs) {
 	function channelExists(list, channelName) {
 		for (var i = 0; i < list.length; i++) {
 			var channel = list[i];
-			if(channel.name == channelName) {
+			if(channel.channelName == channelName) {
 				return true;
 			}
 		}
@@ -302,18 +325,33 @@ function (ColorConverter, Exception, PointerLockManager, Qs) {
 		return true;
 	}
 
-	function validateForCreate(channelName, maps) {
+	function validateForCreate(options) {
+
 		return true;
-		if(maps.length < 1) {
+		// great validation on server side does it all.
+
+		/*
+		if(options.levelUids.length < 1) {
 			alert("Please choose at least one map.")
 			return false;
 		}
 		
-		if(!channelName) {
-			alert("Please provide a channel name.")
+		if(!options.channelName || options.channelName.length < 3) {
+			alert("Please provide a channel name of at least 3 characters.")
+			return false;
+		}
+
+		if(!parseInt(options.maxUsers) > 1 || !parseInt(options.maxUsers) < 20) {
+			alert("Number of users must be larger than 1 and smaller than 20.");
+			return false;
+		}
+
+		if(!parseInt(options.scoreLimit) > 1 || !parseInt(options.scoreLimit) < 99) {
+			alert("Score limit must be larger than 1 and smaller than 99.");
 			return false;
 		}
 		return true;
+		*/
 	}
 
 	function getSelectedMaps() {
@@ -367,20 +405,12 @@ function (ColorConverter, Exception, PointerLockManager, Qs) {
 		}
 	}
 
-	function create(channelName, callback) {
-		var maps = getSelectedMaps();
+	function create(options, callback) {
 			
-		if(validateForCreate(channelName, maps)) {
+		if(validateForCreate(options)) {
 
-			var options = {
-				channelName: channelName,
-				levelUids: maps,
-				maxUsers: 10,
-				minUsers: 2,
-				scoreLimit: parseInt(Qs.$("#scoreLimit").value, 10)
-			}
-
-			localStorage["customname"] = channelName;
+			options["minUsers"] = 1;
+			localStorage["customname"] = options.channelName;
 
 			ajax("createChannel", options, function(responseText) {
 				if(typeof callback == 'function') {

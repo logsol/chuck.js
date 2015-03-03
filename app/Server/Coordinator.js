@@ -11,7 +11,6 @@ function (User, PipeToChannel, Nc, Settings) {
 
     function Coordinator() {
     	this.channelPipes = {};
-        this.users = [];
 
         Nc.on(Nc.ns.server.events.controlCommand.coordinator, this.onMessage, this);
 
@@ -19,21 +18,12 @@ function (User, PipeToChannel, Nc, Settings) {
     }
 
     Coordinator.prototype.createUser = function (socketLink) {
-    	this.users.push(new User(socketLink, this));
+    	new User(socketLink, this);
     }
 
-    Coordinator.prototype.removeUser = function (user) {
-        for(var i = 0; i < this.users.length; i++) {
-            if(this.users[i] === user) {
-                this.users.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    Coordinator.prototype.assignUserToChannel = function (user, channelName) {
-    	var channelPipe = this.channelPipes[channelName];
-    	user.setChannelPipe(channelPipe);
+    // was assignUserToChannel...
+    Coordinator.prototype.getChannelPipeByName = function (channelName) {
+    	return this.channelPipes[channelName];
     }
 
     Coordinator.prototype.onDestroyPipe = function(channelName) {
@@ -44,18 +34,17 @@ function (User, PipeToChannel, Nc, Settings) {
     	var list = [];
         for (var channelName in this.channelPipes) {
 
-            var count = 0;
+            var options = this.channelPipes[channelName].options;
 
-            for(var i = 0; i < this.users.length; i++) {
-                if(this.users[i].channelPipe === this.channelPipes[channelName]){
-                    count++;
-                }
-            }
+            var playerNames = [];
+            var users = this.channelPipes[channelName].getUsers();
+            for (var i = 0; i < users.length; i++) {
+                playerNames[i] = users[i].options.nickname;
+            };
+            options.players = playerNames;
+            options.playerCount = options.players.length;
 
-            list.push({
-                name: channelName,
-                playerCount: count
-            });
+            list.push(options);
         }
         return list;
     }
