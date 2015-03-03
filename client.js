@@ -21,10 +21,11 @@ requirejs([
     "Lib/Vendor/SocketIO",
     "Game/Config/Settings",
     "Lib/Utilities/Exception",
+    "Lib/Utilities/NotificationCenter",
     "Menu/Menu"
 ], 
 
-function (Networker, SocketIO, Settings, Exception, Menu) {
+function (Networker, SocketIO, Settings, Exception, Nc, Menu) {
 
     var menu = new Menu();
     menu.onRun = function(channelName, nickname) {
@@ -41,6 +42,7 @@ function (Networker, SocketIO, Settings, Exception, Menu) {
         var networker = new Networker(socket, channelName, nickname);
         Chuck.inspector.networker = networker;
         Chuck.inspector.settings = Settings;
+        Chuck.inspector.nc = Nc;
         Chuck.inspector.resetLevel = function() { networker.sendGameCommand("resetLevel"); } 
     }
     menu.init();
