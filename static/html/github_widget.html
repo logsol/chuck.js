@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chuck</title>
+<style>
+body {
+        background: #222;
+        color: #ccc;
+        font-family: "Lucida Grande", sans-serif;
+        -moz-osx-font-smoothing: grayscale;
+}
+a {
+     color: #ff1760; 
+}
+#wrap {
+    margin-top: 100px;
+    width: 600px ;
+    margin-left: auto ;
+    margin-right: auto ;
+}
+#widget {
+    background: #333;
+    font-size: 12px;
+}
+#widget h3 {
+    margin: 0;
+    padding: 0;
+}
+#widget p {
+    margin: 0;
+    padding: 0;
+}
+#widget {
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
+}
+#widget th {
+    background: #444;
+}
+#widget td, th {
+    text-align: left;
+    padding: 10px;
+    border: 1px dotted gray;
+}
+#m-title {
+    width: 45%;
+}
+
+</style>
+
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+<script type="text/javascript">
+
+var url = "https://api.github.com/repos/logsol/chuck.js/milestones?access_token=e54ce2084dcca03983780524fad234296cbc640a";
+var lookingFor = "Alpha-";
+
+$.get(url, function( data ) {
+
+    var lowestNonClosed = 999, lookingForIndex;
+    for (var i = 0; i < data.length; i++) {
+        var milestone = data[i];
+
+        if (milestone.title.indexOf(lookingFor) != -1) {
+            var num = (milestone.title.split("-")[1]);
+            if(num < lowestNonClosed) {
+                lowestNonClosed = num;
+                lookingForIndex = i;
+            }
+        }
+    };
+
+    var milestone = data[lookingForIndex];
+    var progress =  parseInt(milestone.closed_issues) / (parseInt(milestone.open_issues)+parseInt(milestone.closed_issues));
+    progress = Math.round(progress * 100);
+
+    $("#m-title").text(milestone.title);
+    $("#m-open").text(milestone.open_issues);
+    $("#m-closed").text(milestone.closed_issues);
+    $("#m-progress").text(progress + "%");
+});
+</script>
+
+</head>
+<body>
+    <div id="wrap">
+        <h2>
+            Hi There!
+        </h2>
+        <p>
+            The game is currently <strong>not available</strong>.
+        </p>
+
+        <p>We will announce the date of the next test session, once we finish the current alpha milestone.</p>
+        <p>Here you can see the current status:</p>
+
+        <table id="widget">
+            <tr>
+                <th>Current milestone</th>
+                <th id="m-title">&nbsp;</th>
+            </tr>
+            <tr>
+                <td>Tasks still open</td>
+                <td id="m-open">&nbsp;</td>
+            </tr>
+            <tr>
+                <td>Tasks finished</td>
+                <td id="m-closed">&nbsp;</td>
+            </tr>
+            <tr>
+                <td>Progress</td>
+                <td id="m-progress">&nbsp;</td>
+            </tr>
+        </table>
+
+        <p>
+            To get notified and be able to join the next test session, join the alpha team by requesting an invitation.
+        </p>
+        <p>
+            You can do that on our blog: 
+            <a href="http://chuck-game.tumblr.com/about">http://chuck-game.tumblr.com</a>
+        </p>
+
+        <p>
+            Thanks for testing &amp; see you soon!<br>
+            <i>The developers</i>
+        </p>
+    </div>
+</body>
+</html>
