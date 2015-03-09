@@ -118,5 +118,4 @@ function (Parent, Settings, Nc) {
     };
 
     return Me;
- 
-})
+});

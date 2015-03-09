@@ -62,4 +62,4 @@ function (Parent, Settings, DomController, Box2D, Nc, DebugDraw, DebugLayer) {
     }
 
     return Engine;
-})
+});

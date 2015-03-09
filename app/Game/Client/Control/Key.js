@@ -1,4 +1,9 @@
-    define(function () {
+define([
+],
+ 
+function () {
+
+    "use strict";
 
     function Key () {
         this._active = false;

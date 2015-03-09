@@ -1,4 +1,7 @@
-define(function() {
+define([
+],
+ 
+function () {
 
 /*
 * Copyright (c) 2006-2007 Erin Catto http://www.gphysics.com

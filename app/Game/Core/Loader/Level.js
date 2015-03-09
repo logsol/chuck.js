@@ -96,4 +96,4 @@ define([
     }
 
     return Level;
-})
+});

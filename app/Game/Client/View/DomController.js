@@ -11,13 +11,12 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
 	"use strict";
 
     function DomController() {
-        this.canvas = document.getElementById("canvas");
+        this.canvas = null;
         this.stats = null;
         this.ping = null;
         this.nickContainer = null;
         this.fpsContainer = "";
-
-        this.devToolsContainer = document.getElementById("menuBar");
+        this.devToolsContainer = null;
 
         this.initDevTools();
     }
@@ -26,6 +25,9 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
 
         var self = this;
         var li, button, label;
+
+        this.canvas = document.getElementById("canvas");
+        this.devToolsContainer = document.getElementById("menuBar");
 
         // create back to menu button
         li = document.createElement("li");

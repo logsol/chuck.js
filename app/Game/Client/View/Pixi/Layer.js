@@ -9,13 +9,6 @@ define([
 function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
 
 	"use strict";
-
-    var AVAILABLE_MESH_FILTERS = {
-        "blur": PIXI.BlurFilter,
-        "desaturate": PIXI.GrayFilter,
-        "pixelate": PIXI.PixelateFilter,
-        "colorRangeReplace": ColorRangeReplaceFilter,
-    };
     
     function Layer (name, parallaxSpeed) {
         Parent.call(this, name, parallaxSpeed);
@@ -59,6 +52,15 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
     }
 
     Layer.prototype = Object.create(Parent.prototype);
+
+    Layer.prototype.getAvailableMeshFilters = function() {
+        return {
+            "blur": PIXI.BlurFilter,
+            "desaturate": PIXI.GrayFilter,
+            "pixelate": PIXI.PixelateFilter,
+            "colorRangeReplace": ColorRangeReplaceFilter,
+        };
+    };
 
     Layer.prototype.getContainer = function() {
         return this.container;
@@ -135,11 +137,11 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
 
     Layer.prototype.addFilter = function(mesh, filterName, options) {
 
-        if (!AVAILABLE_MESH_FILTERS.hasOwnProperty(filterName)) {
+        if (!this.getAvailableMeshFilters().hasOwnProperty(filterName)) {
             throw new Exception('Filter ' + filterName + ' is not available');
         }
         
-        var MeshFilter = AVAILABLE_MESH_FILTERS[filterName];
+        var MeshFilter = this.getAvailableMeshFilters()[filterName];
         var filter = new MeshFilter();
 
         switch (filterName) {
@@ -189,7 +191,7 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
             return;
         }
 
-        var MeshFilter = AVAILABLE_MESH_FILTERS[options.filter];
+        var MeshFilter = this.getAvailableMeshFilters()[options.filter];
 
         filters = filters.filter(function(filter){
             return !filter instanceof MeshFilter;
@@ -271,9 +273,6 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
             this.container.x += Settings.STAGE_WIDTH / 2;
             this.container.y += Settings.STAGE_HEIGHT / 2;
         }    
-
-
-
     };
 
     return Layer;

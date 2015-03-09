@@ -7,8 +7,6 @@ function (Nc, childProcess) {
 
 	"use strict";
 
-	var fork = childProcess.fork;
-
 	function PipeToChannel (options) {
 
 		this.fork = null;
@@ -16,7 +14,7 @@ function (Nc, childProcess) {
 		this.users = [];
 
 		try {
-            this.fork = fork('channel.js'
+            this.fork = childProcess.fork('channel.js'
             /*, { 
             	execArgv: ['--debug=5859'] 
             }*/

@@ -20,12 +20,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
 	"use strict";
 
-    if (!window.cancelAnimationFrame) {
-        window.cancelAnimationFrame = function(id) {
-            clearTimeout(id);
-        };
-    }
-
     function GameController (options) {
 
         this.clientIsReady = false;
@@ -276,6 +270,12 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
     };
 
     GameController.prototype.destroy = function() {
+
+        if (!window.cancelAnimationFrame) {
+            window.cancelAnimationFrame = function(id) {
+                clearTimeout(id);
+            };
+        }
 
         cancelAnimationFrame(this.animationRequestId);
 
