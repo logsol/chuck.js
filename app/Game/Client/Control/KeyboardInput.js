@@ -5,46 +5,46 @@ define([
 function (Key) {
 
     function KeyboardInput () {
-        this._registry = {};        
+        this.registry = {};        
         this.init();
     }
 
     KeyboardInput.prototype.init = function () {    
         // Using window is ok here because it only runs in the browser
-        window.onkeydown = this._onKeyDown.bind(this);
-        window.onkeyup = this._onKeyUp.bind(this);
+        window.onkeydown = this.onKeyDown.bind(this);
+        window.onkeyup = this.onKeyUp.bind(this);
     }
 
     KeyboardInput.prototype.registerKey = function (keyCode, onKeyDown, onKeyUp) {
         var key = new Key();
         if(onKeyDown) key.setKeyDownFunction(onKeyDown);
         if(onKeyUp) key.setKeyUpFunction(onKeyUp);
-        this._registry[keyCode] = key;
+        this.registry[keyCode] = key;
     }
 
-    KeyboardInput.prototype._getKeyByKeyCode = function (keyCode) {
-        return this._registry[keyCode];
+    KeyboardInput.prototype.getKeyByKeyCode = function (keyCode) {
+        return this.registry[keyCode];
     }
 
-    KeyboardInput.prototype._onKeyDown = function (e) {
-        var key = this._getKeyByKeyCode(e.keyCode);
+    KeyboardInput.prototype.onKeyDown = function (e) {
+        var key = this.getKeyByKeyCode(e.keyCode);
 
         if (key && !key.getActive()) {
             var callback = key.getKeyDownFunction();
-            if(callback) callback();
             key.setActive(true);
+            if(callback) callback();
         }
         
         // Prevent tab from changing focus
         if(e.keyCode == 9) return false;
     }
 
-    KeyboardInput.prototype._onKeyUp = function (e) {
-        var key = this._getKeyByKeyCode(e.keyCode);
+    KeyboardInput.prototype.onKeyUp = function (e) {
+        var key = this.getKeyByKeyCode(e.keyCode);
         if (key && key.getActive()) {
             var callback = key.getKeyUpFunction();
-            if(callback) callback();
             key.setActive(false);
+            if(callback) callback();
         }
 
         // Prevent tab from changing focus

@@ -62,16 +62,6 @@ function (Parent, Nc, KeyboardAndMouse, Gamepad, PointerLockManager) {
         Nc.trigger(Nc.ns.client.to.server.gameCommand.send, 'lookAt', options);
     };
 
-    PlayerController.prototype.handActionLeft = function() {
-        if (!PointerLockManager.isLocked()) return;
-        this.handActionRequest(-0.5, 0.5);
-    };
-
-    PlayerController.prototype.handActionRight = function() {
-        if (!PointerLockManager.isLocked()) return;
-        this.handActionRequest(0.5, 0.5);
-    };
-
     PlayerController.prototype.suicide = function() {
         if (!PointerLockManager.isLocked()) return;
         Nc.trigger(Nc.ns.client.to.server.gameCommand.send, "suicide");
