@@ -136,7 +136,7 @@ define([
                 r: parseInt(tileType[1], 10),
                 t: imagePath,
                 x: i % options.width,
-                y: parseInt(i / options.height , 10)
+                y: parseInt(i / options.width , 10)
             }
 
             tilesOptions.push(tileOptions);
