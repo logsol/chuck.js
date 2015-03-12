@@ -246,6 +246,18 @@ function () {
             "height":       "9",
         },
 
+        "Table": 
+        {
+            "category":     "kitchen",
+            "image":        "table.gif",
+            
+            "weight":       "3.5",
+            "width":        "60",
+            "height":       "21",
+
+            "grabAngle":    "-0.2",
+        },
+
         "Banana": 
         {
             "category":     "kitchen",
@@ -321,6 +333,45 @@ function () {
             "grabAngle":    "-0.2",
         },
 
+        "Couch": 
+        {
+            "category":     "livingroom",
+            "image":        "couch.gif",
+            
+            "weight":       "7",
+            "width":        "50",
+            "height":       "29",
+            "bounce":       "3",
+
+            "grabAngle":    "-0.2", 
+        },
+
+        "Cactus": 
+        {
+            "category":     "livingroom",
+            "image":        "cactus.gif",
+            
+            "weight":       "2.5",
+            "width":        "17",
+            "height":       "31",
+
+            "danger":       "1.9",
+
+            "grabAngle":    "-0.2", 
+        },
+
+        "Piano": 
+        {
+            "category":     "livingroom",
+            "image":        "piano.gif",
+            
+            "weight":       "15",
+            "width":        "66",
+            "height":       "48",
+
+            "grabAngle":    "-0.2", 
+        },
+
         "Bible": 
         {
             "category":     "livingroom",
@@ -372,7 +423,7 @@ function () {
 
             "grabAngle":    "0.5",
         }
-    }
+    };
 
     return ItemSettings;
 });
