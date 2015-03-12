@@ -110,7 +110,7 @@ function (Parent, Settings, Nc) {
 
     };
 
-    
+
     TiledLevel.prototype.createNonCollidingTiles = function(options) {
 
         var data = options.data;
@@ -136,7 +136,7 @@ function (Parent, Settings, Nc) {
                     width: Settings.TILE_SIZE, 
                     height: Settings.TILE_SIZE,
                     x: (i % options.width) * Settings.TILE_SIZE,
-                    y: parseInt(i / options.height , 10) * Settings.TILE_SIZE,
+                    y: parseInt(i / options.width , 10) * Settings.TILE_SIZE,
                 }
             );
         }
