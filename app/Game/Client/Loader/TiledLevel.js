@@ -103,7 +103,44 @@ function (Parent, Settings, Nc) {
             );
         }
 
+        // Adding tiles without collision
+        else if (options.type == "tilelayer" && options.name != "tiles") {
+            this.createNonCollidingTiles(options);
+        }
+
     };
+
+    
+    TiledLevel.prototype.createNonCollidingTiles = function(options) {
+
+        var data = options.data;
+        var tilesOptions = [];
+        for (var i = 0; i < data.length; i++) {
+
+            var gid = data[i];
+            if(gid === 0) continue;
+
+            var imagePath = this.getTileImagePath(gid);
+            var parts = imagePath.split("/");
+            var tileType = parts[parts.length - 1].split(".")[0].split("")
+
+            var callback = function(mesh) {
+                Nc.trigger(Nc.ns.client.view.mesh.add, options.layerId, mesh);
+            }
+       
+            Nc.trigger(Nc.ns.client.view.mesh.create,
+                options.layerId,
+                Settings.MAPS_PATH + imagePath,
+                callback,
+                {
+                    width: Settings.TILE_SIZE, 
+                    height: Settings.TILE_SIZE,
+                    x: (i % options.width) * Settings.TILE_SIZE,
+                    y: parseInt(i / options.height , 10) * Settings.TILE_SIZE,
+                }
+            );
+        }
+    }
 
     TiledLevel.prototype.getLayer = function(levelData, name) {
         for (var i = 0; i < levelData.layers.length; i++) {

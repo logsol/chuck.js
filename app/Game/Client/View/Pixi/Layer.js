@@ -262,7 +262,8 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
                 || this.name == "tile" 
                 || this.name == "item"
                 || this.name == "ghost"
-                || this.name == "swiper") {
+                || this.name == "swiper"
+                || this.parallaxSpeed == 0) {
                 this.container.x = this.position.current.x;
                 this.container.y = this.position.current.y;
             }
