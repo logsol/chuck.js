@@ -2,10 +2,11 @@ define([
     "Lib/Utilities/NotificationCenter",
     "Game/Channel/Channel",
     "Game/Config/Settings",
-    'fs'
+    'fs',
+    'util',
 ],
 
-function (Nc, Channel, Settings, fs) {
+function (Nc, Channel, Settings, fs, util) {
 
 	"use strict";
 
@@ -35,7 +36,7 @@ function (Nc, Channel, Settings, fs) {
             }
             
             if(Settings.CHANNEL_RECORD_SESSION) {
-                this.recordingFileName = Settings.CHANNEL_RECORDING_PATH + "/" + this.channel.name + "-" + Date.now() + ".log";
+                this.recordingFileName = Settings.CHANNEL_RECORDING_PATH + this.channel.name + "-" + Date.now() + ".log";
                 if(!fs.existsSync(Settings.CHANNEL_RECORDING_PATH)) {
                     fs.mkdirSync(Settings.CHANNEL_RECORDING_PATH);
                 }
@@ -82,7 +83,7 @@ function (Nc, Channel, Settings, fs) {
 
     PipeToServer.prototype.play = function(playingFileName) {
         var self = this;
-        var data = fs.readFileSync(Settings.CHANNEL_RECORDING_PATH + "/" + playingFileName);    
+        var data = fs.readFileSync(Settings.CHANNEL_RECORDING_PATH + playingFileName);    
         var lines = data.toString().split("\n");
         var now = Date.now();
         var start = 0;
@@ -101,6 +102,8 @@ function (Nc, Channel, Settings, fs) {
                     var message = JSON.parse(jsonString);
 
                     setTimeout(function() {
+                        console.log(" ");
+                        console.log(util.inspect(message, { showHidden: true, depth: 4 }));
                         self.onProcessMessage(message, null);
                     }, time);                
                 }
