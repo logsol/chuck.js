@@ -13,7 +13,7 @@ function () {
  
     ${1:Module}.prototype.${2:name} = function(${3:arguments}) {
         return null;
-    }
+    };
  
     return ${1:Module};
  
