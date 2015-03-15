@@ -9,6 +9,8 @@
 
     function (GameController, Nc, User, ProtocolHelper, Options, Settings) {
 
+        "use strict";
+
         function Channel (pipeToServer, options) {
 
             var self = this;
@@ -17,6 +19,7 @@
             this.users = {};
             this.pipeToServer = pipeToServer;
             this.levelListIndex = -1;
+            this.gameController = null;
 
             this.options = options = Options.merge(options, {
                 levelUids: Settings.CHANNEL_DEFAULT_LEVELS
@@ -34,7 +37,7 @@
 
             this.beginRound();
 
-            console.checkpoint('channel ' + this.name + ' created');
+            console.checkpoint("channel " + this.name + " created");
 
             setTimeout(function() {
                 if(Object.keys(self.users).length < 1) {
@@ -53,7 +56,7 @@
 
             if(this.gameController) {
                 this.gameController.destroy();
-                delete this.gameController;
+                this.gameController = null;
             }
 
             var gameControllerOptions = {
@@ -108,14 +111,14 @@
                 this.sendJoinSuccess(options);
                 this.users[options.id].sendControlCommand("beginRound", clientGameControllerOptions);
             }
-        }
+        };
 
         Channel.prototype.sendJoinSuccess = function(options) {
             var user = new User(options.id, options);
 
             var joinedUsers = [];
             for(var userId in this.users) {
-                joinedUsers.push(this.users[userId].options)
+                joinedUsers.push(this.users[userId].options);
             }
             
             var levelUid = null;
@@ -125,13 +128,13 @@
 
             this.users[user.id] = user;
 
-            var options = {
+            options = {
                 user: user.options,
                 joinedUsers: joinedUsers,
                 levelUid: levelUid
             };                 
 
-            //Nc.trigger('user/' + user.id + "/joinSuccess", options);
+            //Nc.trigger("user/" + user.id + "/joinSuccess", options);
             user.sendControlCommand("joinSuccess", options);
             Nc.trigger(Nc.ns.channel.events.user.joined, user);
 
@@ -140,7 +143,6 @@
 
         Channel.prototype.onReleaseUser = function (userId) {
             var self = this;
-            var user = this.users[userId];
             Nc.trigger(Nc.ns.channel.events.user.left, userId);
             delete this.users[userId];
 
@@ -158,7 +160,7 @@
                     }
                 }, Settings.CHANNEL_DESTRUCTION_TIME * 1000);
             }
-        }
+        };
 
         Channel.prototype.destroy = function() {
             console.checkpoint("channel (" + this.name + ") destroyed");
@@ -172,7 +174,7 @@
             for(var id in this.users) {
                 this.users[id].sendControlCommand(command, options);
             }
-        }
+        };
 
         Channel.prototype.broadcastControlCommandExcept = function (command, options, exceptUser) {
             for(var id in this.users) {
@@ -180,13 +182,13 @@
                     this.users[id].sendControlCommand(command, options);
                 }
             }
-        }
+        };
 
         Channel.prototype.broadcastGameCommand = function (command, options) {
             for(var id in this.users) {
                 this.users[id].sendGameCommand(command, options);
             }
-        }
+        };
 
         Channel.prototype.broadcastGameCommandExcept = function (command, options, exceptUser) {
             for(var id in this.users) {
@@ -194,7 +196,7 @@
                     this.users[id].sendGameCommand(command, options);
                 }
             }
-        }
+        };
 
         return Channel;
         

@@ -12,6 +12,8 @@ define([
 
 ], function (Settings, Box2D, Nc, Abstract, CollisionDetector, Tile, Item, Skateboard, RagDoll, Rube) {
     
+    "use strict";
+    
     function Level (uid, engine) {
         this.uid = uid;
         this.engine = engine;

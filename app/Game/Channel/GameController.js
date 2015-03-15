@@ -107,11 +107,11 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         var update = this.getWorldUpdateObject(false);
 
         if(Object.getOwnPropertyNames(update).length > 0) {
-            Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, 'worldUpdate', update);
+            Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "worldUpdate", update);
         }
 
         this.worldUpdateTimeout = setTimeout(this.updateWorld.bind(this), Settings.NETWORK_UPDATE_INTERVAL);
-    }
+    };
 
     GameController.prototype.getWorldUpdateObject = function(getSleeping) {
         getSleeping = getSleeping || false;
@@ -149,7 +149,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         var spawnedPlayers = [];
         for(var id in this.players) {
             var player = this.players[id];
-            if(player.isSpawned) {
+            if(player.isSpawned()) {
                 
                 var options = {
                     id: id,
@@ -169,7 +169,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
     };
 
     GameController.prototype.getRuntimeItems = function() {
-        var objects = []
+        var objects = [];
 
         for (var i = 0; i < this.gameObjects.animated.length; i++) {
             if(this.gameObjects.animated[i] instanceof RagDoll) {
@@ -182,7 +182,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
                     options: object.options
                 });
             }
-        };
+        }
 
         return objects;
     };
@@ -195,7 +195,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
             worldUpdate: this.getWorldUpdateObject(true),
             runtimeItems: this.getRuntimeItems(),
             userId: userId
-        }
+        };
 
         Nc.trigger(Nc.ns.channel.to.client.user.gameCommand.send + userId, "clientReadyResponse", options);
 

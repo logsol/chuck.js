@@ -21,14 +21,14 @@ function (Parent) {
             this.lastMoved = {
                 player: player,
                 timestamp: new Date()
-            }
+            };
         } else {
             this.lastMoved = null;
         }
     };
 
-    Item.prototype.isGrabbingAllowed = function(player) {
-        return this.heldByPlayers.length == 0;
+    Item.prototype.isGrabbingAllowed = function(player) { // jshint unused:false
+        return this.heldByPlayers.length === 0;
     };
 
     Item.prototype.beingGrabbed = function(player) {
@@ -40,7 +40,7 @@ function (Parent) {
         }
     };
 
-    Item.prototype.isReleasingAllowed = function(player) {
+    Item.prototype.isReleasingAllowed = function(player) { // jshint unused:false
         return true;
     };
 
@@ -81,8 +81,7 @@ function (Parent) {
 				}
 			}
 		}
-	}
-
+	};
 
     return Item;
  

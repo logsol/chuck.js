@@ -14,6 +14,8 @@ define([
 
 ], function (Parent, Settings, ItemSettings, Box2D, Options, Exception, Nc, AbstractLayer, CollisionDetector, Tile, Item, Skateboard) {
     
+    "use strict";
+
     function TiledLevel (path, engine) {
 
         this.layerMapping = {
@@ -109,7 +111,7 @@ define([
             }
 
             lastLayerId = layerOptions.layerId;
-        };
+        }
 
 
         Parent.prototype.setup.call(this, levelData);
@@ -137,21 +139,21 @@ define([
                 t: imagePath,
                 x: i % options.width,
                 y: parseInt(i / options.width , 10)
-            }
+            };
 
             tilesOptions.push(tileOptions);
         }
 
         Parent.prototype.createTiles.call(this, tilesOptions);
-    }
+    };
 
     TiledLevel.prototype.createItems = function(options) {
         var objects = options.objects;
-        var itemsOptions = []
+        var itemsOptions = [];
         for (var i = 0; i < objects.length; i++) {
-            var options = this.gatherOptions(objects[i]);
+            options = this.gatherOptions(objects[i]);
             itemsOptions.push(options);
-        };
+        }
 
         Parent.prototype.createItems.call(this, itemsOptions);
     };
@@ -188,18 +190,14 @@ define([
     TiledLevel.prototype.getDefaultItemSettingsByName = function(name) {
 
         if(!name) {
-            throw new Exception('Item name cannot be be empty');
+            throw new Exception("Item name cannot be be empty");
         }
 
         if(ItemSettings[name] === undefined) {
-            throw new Exception('Item name (' + name + ') cannot be found in item list');
+            throw new Exception("Item name (" + name + ") cannot be found in item list");
         }
 
-        var options = ItemSettings.Default;
-
-        options = Options.merge(ItemSettings[name], options);
-
-        return options;
+        return Options.merge(ItemSettings[name], ItemSettings.Default);
     };
 
     TiledLevel.prototype.getTileImagePath = function(gid) {
@@ -210,7 +208,7 @@ define([
                 return tileset.tiles["" + (gid - offset)].image;
             }
         }
-    }
+    };
 
     return TiledLevel;
 });

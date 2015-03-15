@@ -22,13 +22,13 @@ function (Parent, Nc) {
         if (isHolding) {
             item = this.holdingItem;
         } else {
-            item = this.doll.findCloseItem(options.x, options.y);
+            item = this.doll.findCloseItem(options.x);
         }
 
         if(item) {
 	        this.handAction(options, isHolding, item);
         }
-    }
+    };
 
     Player.prototype.handAction = function(options, isHolding, item) {
 
@@ -110,8 +110,7 @@ function (Parent, Nc) {
             stats: this.stats
         });
     };
-
-
+    
  
     return Player;
  

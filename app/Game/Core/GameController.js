@@ -4,9 +4,11 @@ define([
     "Game/" + GLOBALS.context + "/Player",
     "Lib/Utilities/NotificationCenter",
     "Game/" + GLOBALS.context + "/GameObjects/Doll",
+    "Game/" + GLOBALS.context + "/GameObjects/GameObject",
+    "Lib/Utilities/Assert"
 ],
 
-function (PhysicsEngine, TiledLevel, Player, Nc, Doll) {
+function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Assert) {
 
 	"use strict";
 
@@ -53,7 +55,7 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll) {
 
     GameController.prototype.getPhysicsEngine = function () {
         return this.physicsEngine;
-    }
+    };
 
     GameController.prototype.loadLevel = function (levelUid) {
 
@@ -63,7 +65,50 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll) {
         }
 
         this.level = new TiledLevel(levelUid, this.physicsEngine, this.gameObjects);
-    }
+    };
+
+    GameController.prototype.onWorldUpdate = function (updateData) {
+
+        var body = this.physicsEngine.world.GetBodyList();
+        do {
+            var userData = body.GetUserData();
+            if (userData instanceof GameObject) {
+                var gameObject = userData;
+                if(updateData[gameObject.uid]) {
+                    var update = updateData[gameObject.uid];
+                    this.onWorldUpdateGameObject(body, gameObject, update);
+                }
+            }
+
+        } while (body = body.GetNext());
+
+    };
+
+    GameController.prototype.onWorldUpdateGameObject = function(body, gameObject, update) {
+        if (gameObject instanceof Doll) {
+            /*
+            if(gameObject === this.me.doll) {
+                this.me.setLastServerPositionState(update);
+                if(!this.me.acceptPositionStateUpdateFromServer()) {
+                    return; // this is to ignore own doll updates from world update 
+                }
+            }
+            */
+            gameObject.setActionState(update.as);
+            gameObject.lookAt(update.laxy.x, update.laxy.y);
+        }
+
+        Assert.number(update.p.x, update.p.y);
+        Assert.number(update.a);
+        Assert.number(update.lv.x, update.lv.y);
+        Assert.number(update.av);
+
+        body.SetAwake(true);
+        body.SetPosition(update.p);
+        body.SetAngle(update.a);
+        body.SetLinearVelocity(update.lv);
+        body.SetAngularVelocity(update.av);
+    };
 
     GameController.prototype.onResetLevel = function() {
         this.loadLevel(this.level.uid);
@@ -84,7 +129,7 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll) {
         
         player.destroy();
         delete this.players[userId];
-    }
+    };
 
     GameController.prototype.createPlayer = function(user) {
         var player = new Player(user.id, this.physicsEngine, user);
@@ -93,17 +138,21 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll) {
     };
 
     GameController.prototype.destroy = function () {
+        var i = 0;
+
+        /*
         for(var player in this.players) {
             // this.players[player].destroy();
 
             // FIXME: 
             // commented out for now, because players are in gameObjects array.
             // try using a real gameobject for the health bar
-        }
+        }*/
 
-        for (var i = 0; i < this.ncTokens.length; i++) {
+
+        for (i = 0; i < this.ncTokens.length; i++) {
             Nc.off(this.ncTokens[i]);
-        };
+        }
 
         /*
          *   Contents of gameObject: Players, Items, Tiles, RagDolls
@@ -111,12 +160,12 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll) {
          */
 
         for (var key in this.gameObjects) {
-            for (var i = 0; i < this.gameObjects[key].length; i++) {
+            for (i = 0; i < this.gameObjects[key].length; i++) {
                 var gameObject = this.gameObjects[key][i];
 
                 gameObject.destroy();
-            };
-        };
+            }
+        }
 
         this.gameObjects = {
             fixed: [],
@@ -124,7 +173,7 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll) {
         };
 
         this.physicsEngine.destroy();
-    }
+    };
 
     return GameController;
 });

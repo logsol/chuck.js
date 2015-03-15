@@ -3,10 +3,11 @@ define([
 	"Lib/Vendor/Box2D",
 	"Game/Config/Settings",
     "Lib/Utilities/Exception",
-    "Lib/Utilities/NotificationCenter"
+    "Lib/Utilities/NotificationCenter",
+    "Lib/Utilities/Assert"
 ],
  
-function (Parent, Box2D, Settings, Exception, Nc) {
+function (Parent, Box2D, Settings, Exception, Nc, Assert) {
 
 	"use strict";
  
@@ -15,12 +16,14 @@ function (Parent, Box2D, Settings, Exception, Nc) {
     	Parent.call(this, physicsEngine, uid);
     	this.createPhysicTile(this.options);
 
-        Nc.trigger(Nc.ns.core.game.gameObject.add, 'fixed', this);
+        Nc.trigger(Nc.ns.core.game.gameObject.add, "fixed", this);
     }
 
     Tile.prototype = Object.create(Parent.prototype);
  
     Tile.prototype.getBodyDef = function() {
+        Assert.number(this.options.x, this.options.y);
+        Assert.number(this.options.r);
 
     	var bodyDef = new Box2D.Dynamics.b2BodyDef();
         bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
@@ -29,7 +32,7 @@ function (Parent, Box2D, Settings, Exception, Nc) {
         bodyDef.angle = (this.options.r || 0) * 90 * Math.PI / 180;
 
         return bodyDef;
-    }
+    };
 
     Tile.prototype.createPhysicTile = function (tile) {
         var vertices = this.createVertices(tile);
@@ -43,7 +46,7 @@ function (Parent, Box2D, Settings, Exception, Nc) {
         fixtureDef.restitution = Settings.TILE_RESTITUTION;
         fixtureDef.isSensor = false;
         this.body.CreateFixture(fixtureDef);
-    }
+    };
 
     Tile.prototype.createVertices = function (tile) {
         var vs = [];
@@ -104,22 +107,21 @@ function (Parent, Box2D, Settings, Exception, Nc) {
 
             default:
                 throw new Exception("Tile Creation - no shape given");
-                break;
         }
 
         return vs;
-    }
+    };
 
     Tile.prototype.mkArg = function (multiplier) {
         return Settings.TILE_SIZE / 2 / Settings.RATIO * multiplier;
-    }
+    };
 
     Tile.prototype.addVec = function (vs, m1, m2) {
         return vs.push(new Box2D.Common.Math.b2Vec2(this.mkArg(m1), this.mkArg(m2)));
-    }
+    };
 
     Tile.prototype.destroy = function() {
-        Nc.trigger(Nc.ns.core.game.gameObject.remove, 'fixed', this);
+        Nc.trigger(Nc.ns.core.game.gameObject.remove, "fixed", this);
     };
  
     return Tile;
