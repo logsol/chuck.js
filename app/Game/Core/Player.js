@@ -23,7 +23,7 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
         this.playerController = null;
         this.doll;
         this.id = id;
-        this.isSpawned = false;
+        this.spawned = false;
         this.holdingItem = null;
         this.spectatorDoll = new SpectatorDoll(this.physicsEngine, "spectatorDoll-" + this.id, this);
 
@@ -31,7 +31,7 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
     }
 
     Player.prototype.getActiveDoll = function() {
-        if(this.isSpawned) {
+        if(this.spawned) {
             return this.doll;
         } else if (this.ragDoll) {
             return this.ragDoll;
@@ -42,8 +42,12 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
     Player.prototype.spawn = function (x, y) {
         this.doll = new Doll(this.physicsEngine, "doll-" + this.id, this);
         this.doll.spawn(x, y);
-        this.isSpawned = true;
+        this.spawned = true;
     }
+
+    Player.prototype.isSpawned = function() {
+        return this.spawned;
+    };
 
     Player.prototype.getPosition = function () {
         return this.getActiveDoll().getPosition();
@@ -55,47 +59,47 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
 
 
     Player.prototype.move = function (direction) {
-        if(!this.isSpawned) return false;
+        if(!this.spawned) return false;
         this.doll.move(direction);
     }
 
     Player.prototype.stop = function () {
-        if(!this.isSpawned) return false;
+        if(!this.spawned) return false;
         this.doll.stop();
     }
 
     Player.prototype.jump = function () {
-        if(!this.isSpawned) return false;
+        if(!this.spawned) return false;
         this.doll.jump();
     }
 
     Player.prototype.jumpStop = function () {
-        if(!this.isSpawned) return false;
+        if(!this.spawned) return false;
         this.doll.jumpStop();
     }
 
     Player.prototype.lookAt = function (x, y) {
-        if(!this.isSpawned) return false;
+        if(!this.spawned) return false;
         // FIXME implement spectator movement here
         this.doll.lookAt(x, y);
     }
 
     Player.prototype.grab = function(item) {
-        if(!this.isSpawned) return false;
+        if(!this.spawned) return false;
         this.doll.grab(item);
         item.beingGrabbed(this);
         this.holdingItem = item;  
     };
 
     Player.prototype.throw = function(options, item) {
-        if(!this.isSpawned) return false;
+        if(!this.spawned) return false;
         this.doll.throw(item, options);
         item.beingReleased(this);
         this.holdingItem = null; 
     };
 
     Player.prototype.kill = function(killedByPlayer, ragDollId) {
-        if(!this.isSpawned) return false;
+        if(!this.spawned) return false;
 
         // FIXME: do something better then just respawn in GameController
         if(this.holdingItem) {
@@ -125,7 +129,7 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
         var ragDoll = new RagDoll(this.physicsEngine, "ragDoll-" + this.id + "-" + ragDollId, options);
         ragDoll.setVelocities(this.doll.getVelocities());
 
-        this.isSpawned = false;
+        this.spawned = false;
 
         this.doll.destroy();
         this.doll = null;

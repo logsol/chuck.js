@@ -47,9 +47,9 @@ function(Parent, Nc, Parser, Settings) {
 
     PlayerController.prototype.mePositionStateUpdate = function(update) {
 
-        if(!this.player.doll) {
-            console.warn("me state update, even though doll does not exist");
-            return;
+        if(!this.player.isSpawned()) {
+            // if someone still falls but is dead on the server already
+            return; 
         }
 
         var difference = {

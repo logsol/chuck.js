@@ -204,7 +204,7 @@ function (Exception) {
         this.validate(topic);
 
         if (!this.topics[topic]) {
-            console.warn("No such topic " + topic + ". Could not trigger. arguments: " + arguments.join);
+            //console.warn("No such topic " + topic + ". Could not trigger. arguments: " + arguments.join);
         }
 
         var args = Array.prototype.slice.call(arguments, 1);

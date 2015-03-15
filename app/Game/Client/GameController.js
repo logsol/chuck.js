@@ -107,42 +107,15 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         this.audioPlayer.play();
     };
 
-    GameController.prototype.onWorldUpdate = function (updateData) {
-
-        var body = this.physicsEngine.world.GetBodyList();
-        do {
-            var userData = body.GetUserData();
-            if (userData instanceof GameObject) {
-                var gameObject = userData;
-                if(updateData[gameObject.uid]) {
-                    var update = updateData[gameObject.uid];
-
-                    if (gameObject instanceof Doll) {
-                        if(gameObject === this.me.doll) {
-                            this.me.setLastServerPositionState(update);
-                            if(!this.me.acceptPositionStateUpdateFromServer()) {
-                                continue; // this is to ignore own doll updates from world update 
-                            }
-                        }
-                        gameObject.setActionState(update.as);
-                        gameObject.lookAt(update.laxy.x, update.laxy.y);
-                    }
-
-                    Assert.number(update.p.x, update.p.y);
-                    Assert.number(update.a);
-                    Assert.number(update.lv.x, update.lv.y);
-                    Assert.number(update.av);
-
-                    body.SetAwake(true);
-                    body.SetPosition(update.p);
-                    body.SetAngle(update.a);
-                    body.SetLinearVelocity(update.lv);
-                    body.SetAngularVelocity(update.av);
-                }
+    GameController.prototype.onWorldUpdateGameObject = function(body, gameObject, update) {
+        if(gameObject === this.me.doll) {
+            this.me.setLastServerPositionState(update);
+            if(!this.me.acceptPositionStateUpdateFromServer()) {
+                return; // this is to ignore own doll updates from world update 
             }
+        } 
 
-        } while (body = body.GetNext());
-
+        Parent.prototype.onWorldUpdateGameObject.call(this, body, gameObject, update);
     };
 
     GameController.prototype.createMe = function(user) {
