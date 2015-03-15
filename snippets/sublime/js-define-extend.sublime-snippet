@@ -16,7 +16,7 @@ function (Parent) {
  
     ${1:Module}.prototype.${3:name} = function(${4:arguments}) {
         return null;
-    }
+    };
  
     return ${1:Module};
  
