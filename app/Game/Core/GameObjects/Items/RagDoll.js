@@ -2,10 +2,13 @@ define([
 	"Game/" + GLOBALS.context + "/GameObjects/Item",
 	"Lib/Vendor/Box2D",
 	"Game/Config/Settings",
-    "Lib/Utilities/NotificationCenter"
+    "Lib/Utilities/NotificationCenter",
+    "Lib/Utilities/Assert",
+    "Lib/Utilities/Options",
+    "Game/Config/ItemSettings",
 ],
  
-function (Parent, Box2D, Settings, Nc) {
+function (Parent, Box2D, Settings, Nc, Assert, Options, ItemSettings) {
 
 	"use strict";
  
@@ -92,10 +95,9 @@ function (Parent, Box2D, Settings, Nc) {
 
 
 
-
-
-
-
+        // FIXME
+        var ragdollOptions = Options.merge(ItemSettings.RagDoll, ItemSettings.Default);
+        options = Options.merge(options, ragdollOptions);
         Parent.call(this, physicsEngine, uid, options);
         //this.createSensor();
 
@@ -187,6 +189,8 @@ function (Parent, Box2D, Settings, Nc) {
     };
 
     RagDoll.prototype.getFixtureDef = function() {
+        Assert.number(this.options.limbs.chest.width, this.options.limbs.chest.height);
+
         var fixtureDef = Parent.prototype.getFixtureDef.call(this);
         fixtureDef.density = Settings.PLAYER_DENSITY;
         fixtureDef.friction = Settings.PLAYER_FRICTION;
@@ -206,6 +210,8 @@ function (Parent, Box2D, Settings, Nc) {
     };
 
     RagDoll.prototype.createSensor = function() {
+        Assert.number(this.options.width, this.options.height);
+
         var w = this.options.width / Settings.RATIO;
         var h = this.options.height / Settings.RATIO;
 
@@ -218,12 +224,16 @@ function (Parent, Box2D, Settings, Nc) {
 
         fixtureDef.userData = {
             onCollisionChange: this.onCollisionChange.bind(this)
-        }
+        };
 
         this.body.CreateFixture(fixtureDef);
     };
 
     RagDoll.prototype.addHead = function() {
+        Assert.number(this.options.x, this.options.y);
+        Assert.number(this.options.limbs.head.x, this.options.limbs.head.y);
+        Assert.number(this.options.limbs.head.width);
+
         var x = this.options.x + this.options.limbs.head.x,
             y = this.options.y + this.options.limbs.head.y;
 
@@ -270,6 +280,11 @@ function (Parent, Box2D, Settings, Nc) {
     };
 
     RagDoll.prototype.addLimb = function(name, connectTo, xOffset, yOffset) {
+        Assert.number(xOffset, yOffset);
+        Assert.number(this.options.x, this.options.y);
+        Assert.number(this.options.limbs[name].x, this.options.limbs[name].y);
+        Assert.number(this.options.limbs[name].width, this.options.limbs[name].height);
+
         var x = this.options.x + this.options.limbs[name].x,
             y = this.options.y + this.options.limbs[name].y;
 
@@ -322,6 +337,10 @@ function (Parent, Box2D, Settings, Nc) {
     };
 
     RagDoll.prototype.reposition = function(handPosition, direction) {
+        Assert.number(this.options.limbs.head.x, this.options.limbs.head.y);
+        Assert.number(this.options.grabAngle);
+        Assert.number(direction);
+
         Parent.prototype.reposition.call(this, handPosition, direction);
 
         var chestPosition = this.body.GetPosition();
@@ -329,7 +348,7 @@ function (Parent, Box2D, Settings, Nc) {
         var position = new Box2D.Common.Math.b2Vec2(
             chestPosition.x + this.options.limbs.head.x / Settings.RATIO,
             chestPosition.y + this.options.limbs.head.y / Settings.RATIO
-        )
+        );
         this.limbs.head.SetPosition(position);
         this.limbs.head.SetAngle((this.options.grabAngle || 0) * direction);
     };
@@ -345,6 +364,9 @@ function (Parent, Box2D, Settings, Nc) {
     };
 
     RagDoll.prototype.setVelocities = function(options) {
+        Assert.number(options.linearVelocity.x, options.linearVelocity.y);
+        Assert.number(options.angularVelocity);
+
         this.body.SetLinearVelocity(options.linearVelocity);
         this.body.SetAngularVelocity(options.angularVelocity);
         for(var name in this.limbs) {
@@ -354,7 +376,7 @@ function (Parent, Box2D, Settings, Nc) {
 
     RagDoll.prototype.destroy = function() {
 
-        Nc.trigger(Nc.ns.core.game.gameObject.remove, 'animated', this);
+        Nc.trigger(Nc.ns.core.game.gameObject.remove, "animated", this);
         var world = this.body.GetWorld();
         
         for (var name in this.limbs) {

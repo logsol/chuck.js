@@ -13,10 +13,11 @@ define([
     "Lib/Utilities/Protocol/Helper",
     "Game/Client/Me",
     "Game/Client/AudioPlayer",
-    "Game/Client/PointerLockManager"
+    "Game/Client/PointerLockManager",
+    "Lib/Utilities/Assert"
 ],
 
-function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, DomController, ProtocolHelper, Me, AudioPlayer, PointerLockManager) {
+function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, DomController, ProtocolHelper, Me, AudioPlayer, PointerLockManager, Assert) {
 
 	"use strict";
 
@@ -39,7 +40,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
     GameController.prototype.getMe = function () {
         return this.me;
-    }
+    };
 
     GameController.prototype.update  = function () {
 
@@ -59,7 +60,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
         this.view.render();
         DomController.fpsStep();
-    }
+    };
 
     GameController.prototype.mePositionStateUpdate = function() {   
         if(this.me.isPositionStateUpdateNeeded()) {
@@ -68,27 +69,28 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
     };
 
     GameController.prototype.onClientReadyResponse = function(options) {
-        
+        var i;
+
         if (options.worldUpdate) {
             this.onWorldUpdate(options.worldUpdate);
         }
 
         if (options.runtimeItems) {
-            for (var i = 0; i < options.runtimeItems.length; i++) {
+            for (i = 0; i < options.runtimeItems.length; i++) {
                 var itemDef = options.runtimeItems[i];
 
                 var alreadyExists = false;
-                for (var i = 0; i < this.gameObjects.animated.length; i++) {
-                    if(this.gameObjects.animated[i].uid == itemDef.uid) {
+                for (var j = 0; j < this.gameObjects.animated.length; j++) {
+                    if(this.gameObjects.animated[j].uid == itemDef.uid) {
                         alreadyExists = true;
                         break;
                     } 
-                };
+                }
 
                 if(!alreadyExists) {
-                    var item = this.level.createItem(itemDef.uid, itemDef.options);
+                    this.level.createItem(itemDef.uid, itemDef.options);
                 }
-            };
+            }
         }
 
         this.setMe();
@@ -96,7 +98,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         this.clientIsReady = true; // needs to stay before onSpawnPlayer
 
         if (options.spawnedPlayers) {
-            for(var i = 0; i < options.spawnedPlayers.length; i++) {
+            for(i = 0; i < options.spawnedPlayers.length; i++) {
                 this.onSpawnPlayer(options.spawnedPlayers[i]);
             }
         }
@@ -126,6 +128,11 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
                         gameObject.lookAt(update.laxy.x, update.laxy.y);
                     }
 
+                    Assert.number(update.p.x, update.p.y);
+                    Assert.number(update.a);
+                    Assert.number(update.lv.x, update.lv.y);
+                    Assert.number(update.av);
+
                     body.SetAwake(true);
                     body.SetPosition(update.p);
                     body.SetAngle(update.a);
@@ -133,10 +140,10 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
                     body.SetAngularVelocity(update.av);
                 }
             }
-            
+
         } while (body = body.GetNext());
 
-    }
+    };
 
     GameController.prototype.createMe = function(user) {
         this.me = new Me(user.id, this.physicsEngine, user);
@@ -146,7 +153,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
     GameController.prototype.setMe = function() {
         this.me.setPlayerController(new PlayerController(this.me));
         this.view.setMe(this.me);
-    }
+    };
 
     GameController.prototype.onGameCommand = function(message) {
         ProtocolHelper.applyCommand(message, this);
@@ -172,7 +179,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
                 playerId: playerId
             });
         }
-    }
+    };
 
     GameController.prototype.onHandActionResponse = function(options) {
         var player = this.players[options.playerId];
@@ -184,7 +191,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
                 item = currentItem;
                 break;
             }
-        };
+        }
 
         if(item) {
             if(options.action == "throw") {
@@ -193,7 +200,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
                 player.grab(item);
             }            
         } else {
-            console.warn("Item for joint can not be found locally. " + options.itemUid)
+            console.warn("Item for joint can not be found locally. " + options.itemUid);
         }
 
     };
@@ -243,18 +250,18 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
     GameController.prototype.loadLevel = function (path) {
         Parent.prototype.loadLevel.call(this, path);
-    }
+    };
 
     GameController.prototype.onLevelLoaded = function () {
         PointerLockManager.update(null, {start:true});
-    }
+    };
 
     GameController.prototype.toggleGameStats = function(show) {
 
         var playersArray = [];
         for (var key in this.players) {
             playersArray.push(this.players[key]);
-        };
+        }
 
         var sortedPlayers = playersArray.sort(function(a,b) {
             if(a.stats.score  > b.stats.score)  return -1;

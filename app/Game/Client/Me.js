@@ -1,10 +1,11 @@
 define([
 	"Game/Client/Player",
 	"Game/Config/Settings",
-    "Lib/Utilities/NotificationCenter"
+    "Lib/Utilities/NotificationCenter",
+    "Lib/Utilities/Assert"
 ],
  
-function (Parent, Settings, Nc) {
+function (Parent, Settings, Nc, Assert) {
 
 	"use strict";
  
@@ -15,7 +16,7 @@ function (Parent, Settings, Nc) {
         this.lookAtXY = {
             x: Settings.VIEWPORT_LOOK_AHEAD,
             y: 0
-        }
+        };
 
     	this.lastServerPositionState = {
     		p: {
@@ -34,7 +35,7 @@ function (Parent, Settings, Nc) {
         this.lookAtXY = {
             x: x,
             y: y
-        }
+        };
 
         Parent.prototype.lookAt.call(this, x, y);
     };
@@ -63,10 +64,10 @@ function (Parent, Settings, Nc) {
 		var difference = {
 			x: Math.abs(this.lastServerPositionState.p.x - this.doll.body.GetPosition().x),
 			y: Math.abs(this.lastServerPositionState.p.y - this.doll.body.GetPosition().y)
-		}
+		};
 
-		if(difference.x > Settings.ME_STATE_MAX_DIFFERENCE_METERS
-		   || difference.y > Settings.ME_STATE_MAX_DIFFERENCE_METERS) {
+		if(difference.x > Settings.ME_STATE_MAX_DIFFERENCE_METERS ||
+            difference.y > Settings.ME_STATE_MAX_DIFFERENCE_METERS) {
 			return true;
 		}
     	return false;
@@ -76,7 +77,7 @@ function (Parent, Settings, Nc) {
     	return {
     		p: this.doll.body.GetPosition().Copy(),
     		lv: this.doll.body.GetLinearVelocity().Copy()
-    	}
+    	};
     };
 
     Me.prototype.acceptPositionStateUpdateFromServer = function() {
@@ -85,11 +86,13 @@ function (Parent, Settings, Nc) {
     };
 
     Me.prototype.resetPositionState = function(options) {
+        Assert.number(options.p.x, options.p.y);
+        Assert.number(options.lv.x, options.lv.y);
         this.doll.body.SetPosition(options.p);
         this.doll.body.SetLinearVelocity(options.lv);
     };
 
-    Me.prototype.createAndAddArrow = function(visible) {
+    Me.prototype.createAndAddArrow = function() {
         var self = this;
 
         var position = this.getPosition();
@@ -101,7 +104,7 @@ function (Parent, Settings, Nc) {
 
         var callback = function(arrowMesh) {
             self.arrowMesh = arrowMesh;
-        }
+        };
         Nc.trigger(Nc.ns.client.view.playerArrow.createAndAdd, callback, options);
     };
 
@@ -113,7 +116,7 @@ function (Parent, Settings, Nc) {
         var options = {
             x: position.x * Settings.RATIO,
             y: position.y * Settings.RATIO,
-        }
+        };
         Nc.trigger(Nc.ns.client.view.playerArrow.update, this.arrowMesh, options);
     };
 

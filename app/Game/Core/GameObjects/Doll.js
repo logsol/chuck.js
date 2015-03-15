@@ -5,10 +5,11 @@ define([
     "Game/Config/Settings", 
     "Game/" + GLOBALS.context + "/Collision/Detector",
     "Game/" + GLOBALS.context + "/GameObjects/Item",
-    "Lib/Utilities/NotificationCenter"
+    "Lib/Utilities/NotificationCenter",
+    "Lib/Utilities/Assert"
 ], 
 
-function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
+function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc, Assert) {
 
 	"use strict";
 
@@ -27,8 +28,8 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
         this.standing = false;
         this.moveDirection = 0;
         this.lookDirection = 0;
-        this.legs;
-        this.footSensor;
+        this.legs = null;
+        this.footSensor = null;
         this.actionState = null;
         this.lookAtXY = { x:0, y:0 };
         this.reachableItems = {
@@ -59,6 +60,10 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
     };
 
     Doll.prototype.createFixtures = function () {
+        Assert.number(this.width, this.height);
+        Assert.number(this.reachDistance);
+        Assert.number(this.areaSize);
+
         var self = this;
 
         var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
@@ -67,13 +72,15 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
         fixtureDef.restitution = Settings.PLAYER_RESTITUTION;
 
         var headShape = new Box2D.Collision.Shapes.b2CircleShape();
-        headShape.SetRadius(this.width / 2 / Settings.RATIO);
+        var radius = this.width / 2 / Settings.RATIO;
+        headShape.SetRadius(radius);
+
         headShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0, -(this.height - (this.width / 2)) / Settings.RATIO));
         fixtureDef.shape = headShape;
         fixtureDef.isSensor = false;
         fixtureDef.userData = {
             onCollisionChange: this.onImpact.bind(this)
-        }
+        };
 
         this.body.CreateFixture(fixtureDef);
 
@@ -106,7 +113,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
 
         fixtureDef.userData = {
             onCollisionChange: this.onFootSensorDetection.bind(this)
-        }
+        };
 
         this.footSensor = this.body.CreateFixture(fixtureDef);
 
@@ -125,7 +132,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
             onCollisionChange: function(isColliding, fixture) {
                 self.onFixtureWithinReach(isColliding, "left", fixture);
             }
-        }
+        };
         this.body.CreateFixture(fixtureDef);
 
         var grabSensorRightShape = new Box2D.Collision.Shapes.b2PolygonShape();
@@ -144,7 +151,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
             onCollisionChange: function(isColliding, fixture) {
                 self.onFixtureWithinReach(isColliding, "right", fixture);
             }
-        }
+        };
 
         this.body.CreateFixture(fixtureDef);
 
@@ -163,7 +170,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
         
         fixtureDef.userData = {
             onCollisionChange: function(isColliding, fixture) {
-                var userData = fixture.GetBody().GetUserData()
+                var userData = fixture.GetBody().GetUserData();
                 if(userData instanceof Doll) {
                     var doll = userData;
                     var i = self.nearbyDolls.indexOf(doll);
@@ -178,28 +185,29 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
                     }
                 } 
             }
-        }
+        };
 
         this.body.CreateFixture(fixtureDef);
-    }
+    };
 
     Doll.prototype.setActionState = function(state) {
         this.actionState = state;
-    }
+    };
 
     Doll.prototype.getActionState = function() {
         return this.actionState;
-    }
+    };
 
     Doll.prototype.isWalking = function() {
         return ["walk", "walkback", "run"].indexOf(this.actionState) >= 0;
-    }
+    };
 
     Doll.prototype.spawn = function (x, y) {
+        Assert.number(x, y);
         this.body.SetPosition(new Box2D.Common.Math.b2Vec2(x / Settings.RATIO, y / Settings.RATIO));
         this.body.SetActive(true);
         this.setActionState("fall");
-    }
+    };
 
     Doll.prototype.getHeadPosition = function() {
         var pos = this.body.GetPosition();
@@ -212,10 +220,12 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
     Doll.prototype.setFriction = function (friction) {
         if(!friction) friction = -1;
 
+        Assert.number(friction);
+
         if (this.legs.GetFriction() != friction) {
             this.legs.SetFriction(friction);
         }
-    }
+    };
 
     Doll.prototype.move = function (direction) {
 
@@ -245,6 +255,8 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
 
         this.setFriction(Settings.PLAYER_MOTION_FRICTION);
         this.body.SetAwake(true);
+
+        Assert.number(speed, direction);
         var vector = new Box2D.Common.Math.b2Vec2(speed * direction, this.body.GetLinearVelocity().y);
         this.body.SetLinearVelocity(vector);
 
@@ -261,7 +273,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
                 this.setActionState("walkback");
             }
         }
-    }
+    };
 
     Doll.prototype.stop = function () {
         this.moveDirection = 0;
@@ -273,23 +285,20 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
             vector.x *= Settings.JUMP_STOP_DAMPING_FACTOR;
             this.body.SetLinearVelocity(vector);
         }
-    }
+    };
 
     Doll.prototype.jump = function () {
         if (this.isStanding()) {
             
             this.body.SetAwake(true);
 
-            var jumpSpeed = Settings.JUMP_SPEED;
-
-            var vector = new Box2D.Common.Math.b2Vec2(0, -jumpSpeed);
+            var vector = new Box2D.Common.Math.b2Vec2(0, -Settings.JUMP_SPEED);
             this.body.SetLinearVelocity(vector);
             
             this.setStanding(false);
-
             this.setActionState("jump");
         }
-    }
+    };
 
     Doll.prototype.jumpStop = function () {
         if (!this.isStanding() ) {
@@ -300,17 +309,17 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
                 this.body.SetLinearVelocity(vector);
             }
         }
-    }
+    };
 
     Doll.prototype.setStanding = function (isStanding) {
         if (this.standing == isStanding) return;
         this.standing = isStanding;
         if(isStanding) this.setActionState("stand");
-    }
+    };
 
     Doll.prototype.isStanding = function () {
         return this.standing;
-    }
+    };
 
     Doll.prototype.lookAt = function(x, y) {
         var oldLookDirection = this.lookDirection;
@@ -344,6 +353,9 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
             }
 
             var bodyPosition = this.body.GetPosition();
+
+            Assert.number(this.width, this.height);
+            Assert.number(this.lookDirection);
             var handPosition = new Box2D.Common.Math.b2Vec2(
                 bodyPosition.x + ((this.width / 2 / Settings.RATIO) * this.lookDirection),
                 bodyPosition.y - this.height / 4 * 2 / Settings.RATIO // 2/3 of the body height
@@ -382,7 +394,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
         return this.nearbyDolls.length > 0;
     };
 
-    Doll.prototype.onFootSensorDetection = function(isColliding, fixture) {
+    Doll.prototype.onFootSensorDetection = function(isColliding, fixture) { // jshint unused:false
 
         var self = this;
 
@@ -419,9 +431,9 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
                 self.setStanding(false);
             }
         }
-    }
+    };
 
-    Doll.prototype.onImpact = function(isColliding, fixture) {
+    Doll.prototype.onImpact = function(isColliding, fixture) { // jshint unused:false
         // overwrite if necessary
     };
 
@@ -439,7 +451,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
                 this.reachableItems[side].splice(i, 1);
             }
         }
-    }
+    };
 
     Doll.prototype.getVelocities = function() {
         return {
@@ -450,7 +462,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc) {
 
     Doll.prototype.update = function() {
      
-        if (this.body.GetLinearVelocity().x == 0 && this.isWalking()) {
+        if (this.body.GetLinearVelocity().x === 0 && this.isWalking()) {
             this.stop();
         }
 

@@ -7,6 +7,8 @@ define([
 ],
  
 function (Parent, KeyboardInput, DomController, Settings, Swiper) {
+
+    "use strict";
  
     function KeyboardAndMouse(playerController) {
     	Parent.call(this);
@@ -42,7 +44,7 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
             minus: 189,
             minusfx: 173,
             zero: 48
-        }
+        };
 
     	this.playerController = playerController;
     	this.keyboardInit();
@@ -87,7 +89,7 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
             this.lastLookDirection = -1;
             this.onXyChange(this.lastLookDirection * Settings.VIEWPORT_LOOK_AHEAD, 0);
         }
-        this.playerController.moveLeft()
+        this.playerController.moveLeft();
     };
 
     KeyboardAndMouse.prototype.moveRight = function() {
@@ -129,7 +131,8 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
             if(!self.playerController.player.isHoldingSomething()) {
                 var options = {
                     x: self.x, 
-                    y: self.y
+                    y: self.y,
+                    av: 0
                 };
                 self.playerController.handActionRequest(options);
             } else {

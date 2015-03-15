@@ -1,10 +1,11 @@
 define([
 	"Game/" + GLOBALS.context + "/GameObjects/Item",
 	"Lib/Vendor/Box2D",
-	"Game/Config/Settings"
+	"Game/Config/Settings",
+    "Lib/Utilities/Assert"
 ],
  
-function (Parent, Box2D, Settings) {
+function (Parent, Box2D, Settings, Assert) {
 
 	"use strict";
  
@@ -27,6 +28,8 @@ function (Parent, Box2D, Settings) {
     Skateboard.prototype = Object.create(Parent.prototype);
 
     Skateboard.prototype.createFixture = function () {
+        Assert.number(this.options.width, this.options.height);
+        Assert.number(this.options.weight);
 
         var deckShape = new Box2D.Collision.Shapes.b2PolygonShape();
         var w = this.options.width / Settings.RATIO;
@@ -45,9 +48,11 @@ function (Parent, Box2D, Settings) {
         fixtureDef.isSensor = false;
 
         this.body.CreateFixture(fixtureDef);
-    }
+    };
 
     Skateboard.prototype.addWheel = function(x, y) {
+
+        Assert.number(x, y);
 
     	var bodyDef = new Box2D.Dynamics.b2BodyDef();
         bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;

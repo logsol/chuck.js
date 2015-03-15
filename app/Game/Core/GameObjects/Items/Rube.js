@@ -2,10 +2,11 @@ define([
     "Game/" + GLOBALS.context + "/GameObjects/Item",
     "Lib/Vendor/RubeLoader",
     "Lib/Vendor/Box2D",
-    "Game/Config/Settings"
+    "Game/Config/Settings",
+    "Lib/Utilities/Assert"
 ],
 
-function (Parent, RubeLoader, Box2D, Settings ) {
+function (Parent, RubeLoader, Box2D, Settings, Assert) {
 
 	"use strict";
 
@@ -13,6 +14,7 @@ function (Parent, RubeLoader, Box2D, Settings ) {
     var __ragdollJson; 
  
     function Rube(physicsEngine, uid, options) {
+        Assert.number(options.x, options.y);
 
         this.rubeLoader = null;
         this.body = null;
@@ -1398,7 +1400,7 @@ function (Parent, RubeLoader, Box2D, Settings ) {
     "subStepping" : false,
     "velocityIterations" : 8,
     "warmStarting" : true
-}
+};
 
 
 

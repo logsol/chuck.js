@@ -6,6 +6,8 @@ define([
 ],
  
 function(Parent, Nc, Parser, Settings) {
+
+    "use strict";
  
     function PlayerController(player) {
 
@@ -33,6 +35,9 @@ function(Parent, Nc, Parser, Settings) {
     };
 
     PlayerController.prototype.handActionRequest = function(options) {
+        options.x = parseFloat(options.x) || 0;
+        options.y = parseFloat(options.y) || 0;
+        options.av = parseFloat(options.av) || 0;
         if (options) this.player.handActionRequest(options);
     };
 
@@ -43,21 +48,21 @@ function(Parent, Nc, Parser, Settings) {
     PlayerController.prototype.mePositionStateUpdate = function(update) {
 
         if(!this.player.doll) {
-            console.warn('me state update, even though doll does not exist');
+            console.warn("me state update, even though doll does not exist");
             return;
         }
 
         var difference = {
             x: Math.abs(update.p.x - this.player.doll.body.GetPosition().x),
             y: Math.abs(update.p.y - this.player.doll.body.GetPosition().y)
-        }
+        };
 
-        if(true || difference.x < Settings.PUNKBUSTER_DIFFERENCE_METERS
-           && difference.y < Settings.PUNKBUSTER_DIFFERENCE_METERS) {
+        if(true || difference.x < Settings.PUNKBUSTER_DIFFERENCE_METERS &&
+           difference.y < Settings.PUNKBUSTER_DIFFERENCE_METERS) {
             this.player.doll.updatePositionState(update);
         } else {
             // HARD UPDATE FOR SELF
-            console.log(this.player.user.options.nickname + ' is cheating.')
+            console.log(this.player.user.options.nickname + " is cheating.");
 
             var body = this.player.doll.body;
 
@@ -66,7 +71,7 @@ function(Parent, Nc, Parser, Settings) {
                 lv: body.GetLinearVelocity()
             };
 
-            Nc.trigger(Nc.ns.channel.to.client.user.gameCommand.send + this.player.id, 'positionStateReset', options);
+            Nc.trigger(Nc.ns.channel.to.client.user.gameCommand.send + this.player.id, "positionStateReset", options);
         }
     };
 

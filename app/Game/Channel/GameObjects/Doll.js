@@ -2,10 +2,11 @@ define([
 	"Game/Core/GameObjects/Doll",
     "Game/Channel/GameObjects/Item",
     "Lib/Vendor/Box2D",
-    "Lib/Utilities/NotificationCenter"
+    "Lib/Utilities/NotificationCenter",
+    "Lib/Utilities/Assert"
 ],
  
-function (Parent, Item, Box2D, Nc) {
+function (Parent, Item, Box2D, Nc, Assert) {
 
 	"use strict";
  
@@ -15,7 +16,7 @@ function (Parent, Item, Box2D, Nc) {
 
     Doll.prototype = Object.create(Parent.prototype);
  
-    Doll.prototype.findCloseItem = function(x, y) {
+    Doll.prototype.findCloseItem = function(x) {
 
         var self = this;
 
@@ -33,7 +34,7 @@ function (Parent, Item, Box2D, Nc) {
         } else {
         	return findItem(this.reachableItems.right);
         }
-    }
+    };
 
     Doll.prototype.onImpact = function(isColliding, fixture) {
         var self = this;
@@ -52,7 +53,7 @@ function (Parent, Item, Box2D, Nc) {
 
                     var b2Math = Box2D.Common.Math.b2Math;
 
-                    var absItemVelocity = b2Math.AbsV(itemVelocity)
+                    var absItemVelocity = b2Math.AbsV(itemVelocity);
                     var max = 1;
                     
                     if(absItemVelocity.x > max || absItemVelocity.y > max) {
@@ -71,9 +72,9 @@ function (Parent, Item, Box2D, Nc) {
 
                             var callback = function() {
                                 self.player.addDamage(damage, player, item);
-                            }
+                            };
 
-                            Nc.trigger(Nc.ns.channel.engine.worldQueue.add, callback)
+                            Nc.trigger(Nc.ns.channel.engine.worldQueue.add, callback);
                         }
                     }
 
@@ -81,10 +82,12 @@ function (Parent, Item, Box2D, Nc) {
                 }
             }
         }
-    }
+    };
 
     Doll.prototype.updatePositionState = function(update) {
         if(!this.isAnotherPlayerNearby()) {
+            Assert.number(update.p.x, update.p.y);
+            Assert.number(update.lv.x, update.lv.y);
             this.body.SetAwake(true);
             this.body.SetPosition(update.p);
             this.body.SetLinearVelocity(update.lv);
