@@ -51,7 +51,6 @@ function (Parent, Box2D, Settings, Assert) {
     };
 
     Skateboard.prototype.addWheel = function(x, y) {
-
         Assert.number(x, y);
 
     	var bodyDef = new Box2D.Dynamics.b2BodyDef();
@@ -71,15 +70,20 @@ function (Parent, Box2D, Settings, Assert) {
         fixtureDef.density = density;
         fixtureDef.shape = wheelShape;
         fixtureDef.isSensor = false;
+        fixtureDef.friction = 0;
 
         var wheelBody = this.body.GetWorld().CreateBody(bodyDef);
         wheelBody.CreateFixture(fixtureDef);
             
-		var revoluteJointDef = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
-		revoluteJointDef.enableMotor = false;
+		//var revoluteJointDef = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
+        var revoluteJointDef = new Box2D.Dynamics.Joints.b2WeldJointDef();
+		//revoluteJointDef.enableMotor = false;
+
+
 
 		revoluteJointDef.Initialize(this.body, wheelBody, wheelBody.GetWorldCenter());
-		this.body.GetWorld().CreateJoint(revoluteJointDef);
+		var j = this.body.GetWorld().CreateJoint(revoluteJointDef);
+
 
 		// FIXME this means, that we will have bodies in the world, which must not be
 		// updated (wheels) because they are always connected to a body which will be updated.

@@ -13,7 +13,7 @@
          "type":"imagelayer",
          "visible":true,
          "width":0,
-         "x":121,
+         "x":120,
          "y":43
         }, 
         {
@@ -402,6 +402,66 @@
                  "width":0,
                  "x":286.077500264968,
                  "y":59.318656270437
+                }, 
+                {
+                 "height":0,
+                 "id":35,
+                 "name":"Skateboard",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1317,
+                 "y":458
+                }, 
+                {
+                 "height":0,
+                 "id":36,
+                 "name":"Laundry Machine",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":557,
+                 "y":711
+                }, 
+                {
+                 "height":0,
+                 "id":39,
+                 "name":"Laundry Machine",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1557,
+                 "y":508
+                }, 
+                {
+                 "height":0,
+                 "id":40,
+                 "name":"Laundry Machine",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1457,
+                 "y":733
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -550,7 +610,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":35,
+ "nextobjectid":41,
  "orientation":"orthogonal",
  "properties":
     {

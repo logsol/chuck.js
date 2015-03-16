@@ -28,7 +28,7 @@ function () {
         MAPS_PATH: "static/maps/tiled/",
         AUDIO_PATH: "static/sounds/",
         CHANNEL_RECORDING_PATH: "recordings/",
-        CHANNEL_PLAY_RECORDING: false, //"Quickstart-2015-03-15T19:00:28.545Z-debug_residence_stones.log",
+        CHANNEL_PLAY_RECORDING: false, //"Varberg-2015-03-15T23:10:29.316Z-stones.log",
 
         RATIO: 21, //35
         // original tile size is 25 but we want it to resize to 20
@@ -52,7 +52,7 @@ function () {
         RESPAWN_TIME: 5,
         HEALTH_DISPLAY_TIME: 2,
         CRITICAL_HEALTH_THRESHOLD: 0.3,
-        RAGDOLL_DESTRUCTION_TIME: 20000,
+        RAGDOLL_DESTRUCTION_TIME: 10,
         VIEWPORT_SPEED_FACTOR: 640,
         VIEWPORT_LOOK_AHEAD: 0.1,
 

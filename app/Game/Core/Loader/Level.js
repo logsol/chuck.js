@@ -25,13 +25,13 @@ define([
 
     Level.prototype.load = function (uid) {
         var self = this;
-        var path = Settings.MAPS_PATH + uid + ".json"
+        var path = Settings.MAPS_PATH + uid + ".json";
         this.loadLevelDataFromPath(path, function (levelData) {
             self.setup(levelData);
         });
-    }
+    };
 
-    Level.prototype.setup = function(levelData) {
+    Level.prototype.setup = function(levelData) { // jshint unused:false
         this.isLoaded = true;
         Nc.trigger(Nc.ns.core.game.events.level.loaded);
     };
@@ -40,17 +40,17 @@ define([
         for (var i = 0; i < options.length; i++) {
             var uid = "item-" + i;
             this.createItem(uid, options[i]);
-        };
+        }
     };
 
     Level.prototype.createItem = function(uid, options) {
 
         switch(options.type) {
-            //case 'skateboard':
+            //case "skateboard":
             //    return new Skateboard(this.engine, uid, options);
-            case 'ragdoll':
+            case "ragdoll":
                 return new RagDoll(this.engine, uid, options);
-            case 'rube':
+            case "rube":
                 return new Rube(this.engine, uid, options);
             default:
                 return new Item(this.engine, uid, options);
@@ -60,19 +60,19 @@ define([
     Level.prototype.createTiles = function(options) {
         for (var i = 0; i < options.length; i++) {
             new Tile(this.engine, "tile-" + i, options[i]);
-        };
+        }
     };
 
     Level.prototype.createSpawnPoints = function(points) {
         this.spawnPoints = points;
     };
 
-    Level.prototype.setupLayer = function(options, behind, referenceId) {
+    Level.prototype.setupLayer = function(options, behind, referenceId) { // jshint unused:false
         // will be extended (so far only in client)
-    }
+    };
 
 
-    Level.prototype.createContainer = function(options) {
+    Level.prototype.createContainer = function(options) { // jshint unused:false
         // nothing to do here yet, in the future perhaps synchronize day/night graphics
     };
 
@@ -90,12 +90,12 @@ define([
         return {
             x: object.x / Settings.TILE_RATIO,
             y: object.y / Settings.TILE_RATIO
-        }
+        };
     };
 
     Level.prototype.destroy = function () {
         this.isLoaded = false;
-    }
+    };
 
     return Level;
 });

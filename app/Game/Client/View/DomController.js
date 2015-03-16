@@ -1,6 +1,6 @@
 define([
-    'Game/Config/Settings',
-    'Lib/Utilities/NotificationCenter',
+    "Game/Config/Settings",
+    "Lib/Utilities/NotificationCenter",
     "Lib/Vendor/Screenfull",
     "Game/Client/View/Graph",
     "Game/Client/PointerLockManager"
@@ -36,7 +36,7 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
         button.innerHTML = "Menu";
         button.onclick = function() {
             window.location.href="/";
-        }
+        };
         li.appendChild(button);
         this.devToolsContainer.appendChild(li);
 
@@ -98,7 +98,7 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
             scaleStartValue: 0, 
             scaleStepWidth: 0, 
             scaleSteps: 0
-        })
+        });
 
         // create Ping: container
         li = document.createElement("li");
@@ -114,7 +114,7 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
         checkbox.type = "checkbox";
         checkbox.onclick = function(e) {
             Nc.trigger(Nc.ns.client.view.debugMode.toggle, e.target.checked);
-        }
+        };
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode("Debug"));
         li.appendChild(label);
@@ -123,7 +123,7 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
 
         // create Fullscreen
         li = document.createElement("li");
-        li.id = "fullscreen"
+        li.id = "fullscreen";
         button = document.createElement("button");
         button.innerHTML = "Fullscreen";
         button.onclick = function() {
@@ -131,7 +131,7 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
                 PointerLockManager.request();
                 Screenfull.request(self.canvas);
             }
-        }
+        };
         li.appendChild(button);
         this.devToolsContainer.appendChild(li);
 
@@ -139,13 +139,12 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
         // FIXME : isn't this a weird place for this?
         window.onresize = function() {
             Nc.trigger(Nc.ns.client.view.display.change);
-        }
+        };
     };
 
     DomController.prototype.setNick = function (nick) {
-        this.nickContainer.innerHTML = nick
-    }
-
+        this.nickContainer.innerHTML = nick;
+    };
 
     DomController.prototype.fpsStep = function() {
         this.fpsGraph.step();
@@ -164,15 +163,15 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
         } else {
             throw 'Canvas Container missing: #' + Settings.CANVAS_DOM_ID;
         }
-    }
+    };
 
     DomController.prototype.getCanvas = function () {
         return this.canvas;
-    }
+    };
 
     DomController.prototype.initCanvas = function (canvas) {
         Nc.trigger(Nc.ns.client.view.display.change, Screenfull.isFullscreen);
-    }
+    };
 
     DomController.prototype.setConnected = function(connected) {
         if(connected) {

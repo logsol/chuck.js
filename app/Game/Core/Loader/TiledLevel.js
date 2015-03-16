@@ -6,13 +6,14 @@ define([
     "Lib/Utilities/Options",
     "Lib/Utilities/Exception",
     "Lib/Utilities/NotificationCenter",
+    "Lib/Utilities/Assert",
     "Game/Client/View/Abstract/Layer", 
     "Game/" + GLOBALS.context + "/Collision/Detector",
     "Game/" + GLOBALS.context + "/GameObjects/Tile",
     "Game/" + GLOBALS.context + "/GameObjects/Item",
     "Game/" + GLOBALS.context + "/GameObjects/Items/Skateboard",
 
-], function (Parent, Settings, ItemSettings, Box2D, Options, Exception, Nc, AbstractLayer, CollisionDetector, Tile, Item, Skateboard) {
+], function (Parent, Settings, ItemSettings, Box2D, Options, Exception, Nc, Assert, AbstractLayer, CollisionDetector, Tile, Item, Skateboard) {
     
     "use strict";
 
@@ -40,7 +41,7 @@ define([
         });
 
         if (!spawnpointsExists) {
-            console.warn('No layerMapping for level file layer: ' + layerOptions.name);
+            console.warn("No layerMapping for level file layer: " + layerOptions.name);
             return;
         }
 
@@ -49,7 +50,7 @@ define([
                 tiles: AbstractLayer.ID.TILE,
                 items: AbstractLayer.ID.ITEM,
                 spawnpoints: AbstractLayer.ID.SPAWN
-            }
+            };
             if(mapping[name]) {
                 return mapping[name];
             }
@@ -167,25 +168,14 @@ define([
     };
 
     TiledLevel.prototype.gatherOptions = function(tiledObject) {
-        var options = {};
-
+        var options = this.getDefaultItemSettingsByName(tiledObject.name);
         options.name = tiledObject.name;
-        options.rotation = tiledObject.rotation;
-        options.width = tiledObject.width / Settings.TILE_RATIO;
-        options.height = tiledObject.height / Settings.TILE_RATIO;
-        options.x = (tiledObject.x + tiledObject.width / 2) / Settings.TILE_RATIO;
+        options.x = (tiledObject.x + options.width / 2) / Settings.TILE_RATIO;
         options.y = (tiledObject.y + options.height / 2) / Settings.TILE_RATIO;
-
-        if (!options.width) options.width = undefined;
-        if (!options.height) options.height = undefined;
-
-        var defaultOptions = this.getDefaultItemSettingsByName(options.name);
-
-        options = Options.merge(options, defaultOptions);
+        // FIXME: check RAD vs. DEG for options.rotation = tiledObject.rotation;
 
         return options;
     };
-
 
     TiledLevel.prototype.getDefaultItemSettingsByName = function(name) {
 

@@ -14,10 +14,11 @@ define([
     "Game/Client/Me",
     "Game/Client/AudioPlayer",
     "Game/Client/PointerLockManager",
-    "Lib/Utilities/Assert"
+    "Lib/Utilities/Assert",
+    "Lib/Utilities/Exception"
 ],
 
-function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, DomController, ProtocolHelper, Me, AudioPlayer, PointerLockManager, Assert) {
+function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, DomController, ProtocolHelper, Me, AudioPlayer, PointerLockManager, Assert, Exception) {
 
 	"use strict";
 
@@ -88,7 +89,11 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
                 }
 
                 if(!alreadyExists) {
+                    // When creating from synchronization we need to bring it into level format (px)
+                    itemDef.options.x *= Settings.RATIO;
+                    itemDef.options.y *= Settings.RATIO;
                     this.level.createItem(itemDef.uid, itemDef.options);
+                    console.log("Creating runtime Item: ", itemDef.options.name, itemDef.uid)
                 }
             }
         }
@@ -180,6 +185,9 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
     GameController.prototype.onUpdateStats = function(options) {
         var player = this.players[options.playerId];
+        if(!player) {
+            throw new Exception("No player with id: " + options.playerId);
+        }
         player.setStats(options.stats);
     };
 

@@ -55,7 +55,9 @@ function (Parent, Nc) {
     };
 
     Player.prototype.suicide = function() {
-        this.addDamage(100, this, null);
+        if(this.isSpawned()) {
+            this.addDamage(100, this, null);            
+        }
     };
 
     Player.prototype.addDamage = function(damage, enemy, byItem) {

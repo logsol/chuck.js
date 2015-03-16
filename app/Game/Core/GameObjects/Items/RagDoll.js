@@ -102,8 +102,8 @@ function (Parent, Box2D, Settings, Nc, Assert, Options, ItemSettings) {
         //this.createSensor();
 
         this.limbs = {};
-
     	this.addHead();
+
 
 
         this.addLimb(
@@ -137,7 +137,6 @@ function (Parent, Box2D, Settings, Nc, Assert, Options, ItemSettings) {
 
 
 
-
         this.addLimb(
             "upperLeftArm", 
             this.body, 
@@ -165,6 +164,7 @@ function (Parent, Box2D, Settings, Nc, Assert, Options, ItemSettings) {
             0, 
             options.limbs.upperRightArm.height / 2
         );
+
     }
 
     RagDoll.prototype = Object.create(Parent.prototype);
@@ -185,6 +185,8 @@ function (Parent, Box2D, Settings, Nc, Assert, Options, ItemSettings) {
         var bodyDef = Parent.prototype.getBodyDef.call(this);
         bodyDef.linearDamping = Settings.PLAYER_LINEAR_DAMPING;
         bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+        bodyDef.position.y -= this.options.height / 2 / Settings.RATIO; // position it on top of ground
+
         return bodyDef;
     };
 
@@ -235,7 +237,7 @@ function (Parent, Box2D, Settings, Nc, Assert, Options, ItemSettings) {
         Assert.number(this.options.limbs.head.width);
 
         var x = this.options.x + this.options.limbs.head.x,
-            y = this.options.y + this.options.limbs.head.y;
+            y = this.options.y + this.options.limbs.head.y - this.options.height / 2; // position it on top of ground;
 
         var bodyDef = new Box2D.Dynamics.b2BodyDef();
         bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
@@ -286,7 +288,7 @@ function (Parent, Box2D, Settings, Nc, Assert, Options, ItemSettings) {
         Assert.number(this.options.limbs[name].width, this.options.limbs[name].height);
 
         var x = this.options.x + this.options.limbs[name].x,
-            y = this.options.y + this.options.limbs[name].y;
+            y = this.options.y + this.options.limbs[name].y - this.options.height / 2; // position it on top of ground;;
 
         var bodyDef = new Box2D.Dynamics.b2BodyDef();
         bodyDef.linearDamping = Settings.PLAYER_LINEAR_DAMPING;

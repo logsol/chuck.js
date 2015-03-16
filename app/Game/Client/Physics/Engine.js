@@ -8,7 +8,7 @@ define([
     "Game/Client/View/Pixi/Layers/Debug"
 ],
 
-function (Parent, Settings, DomController, Box2D, Nc, DebugDraw, DebugLayer) {
+function (Parent, Settings, DomController, Box2D, Nc, DebugDraw, debugLayer) {
 
 	"use strict";
 
@@ -25,9 +25,11 @@ function (Parent, Settings, DomController, Box2D, Nc, DebugDraw, DebugLayer) {
     Engine.prototype.onToggleDebugMode = function(debugMode) {
         this.debugMode = debugMode;
 
-        if(this.debugMode && !this.debugDraw) {
+        if(!this.debugDraw) {
             this.setupDebugDraw();
         }
+
+        debugLayer.container.visible = this.debugMode;
     };
 
     Engine.prototype.setupDebugDraw = function () {
@@ -35,7 +37,7 @@ function (Parent, Settings, DomController, Box2D, Nc, DebugDraw, DebugLayer) {
         // set debug draw
         this.debugDraw = new DebugDraw();
 
-        this.debugDraw.SetSprite(DebugLayer.graphics);
+        this.debugDraw.SetSprite(debugLayer.graphics);
         this.debugDraw.SetDrawScale(Settings.RATIO);
         this.debugDraw.SetFillAlpha(0.5);
         this.debugDraw.SetLineThickness(1.0);
@@ -51,7 +53,7 @@ function (Parent, Settings, DomController, Box2D, Nc, DebugDraw, DebugLayer) {
         );
 
         this.world.SetDebugDraw(this.debugDraw);
-    }
+    };
 
     Engine.prototype.update = function () {
         Parent.prototype.update.call(this);
@@ -59,7 +61,7 @@ function (Parent, Settings, DomController, Box2D, Nc, DebugDraw, DebugLayer) {
         if(this.debugMode) {
             this.world.DrawDebugData();
         }
-    }
+    };
 
     return Engine;
 });
