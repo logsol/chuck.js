@@ -37,6 +37,14 @@
       repo : "https://github.com/logsol/chuck.js.git",
       path : "/home/chuck/production",
       "post-deploy" : "npm install && NODE_ENV=production sh scripts/build.sh && pm2 startOrRestart config/ecosystem.json5 --env production"
+    },
+    production2 : {
+      user : "chuck",
+      host : "fuuuuu.de",
+      ref  : "origin/master",
+      repo : "https://github.com/logsol/chuck.js.git",
+      path : "/home/chuck/production",
+      "post-deploy" : "npm install && NODE_ENV=production sh scripts/build.sh && pm2 startOrRestart config/ecosystem.json5 --env production"
     }
   }
 }

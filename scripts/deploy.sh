@@ -15,4 +15,10 @@ then
 	exit 
 fi
 
+if [ "$1" == "production2" ]
+then
+	pm2 deploy $DIR/config/ecosystem.json5 production2
+	exit 
+fi
+
 echo "Case ($1) not defined. doing nothing."
