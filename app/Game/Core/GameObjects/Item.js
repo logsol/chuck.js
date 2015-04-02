@@ -37,6 +37,9 @@ function (Parent, Box2D, Options, Settings, Exception, Nc, Assert) {
         this.createFixture();
         this.body.ResetMassData();
         this.flipDirection = 1;
+        if (this.body.GetMass() < 1) {
+            this.body.SetBullet(true);
+        }
 
         Nc.trigger(Nc.ns.core.game.gameObject.add, "animated", this);
     }

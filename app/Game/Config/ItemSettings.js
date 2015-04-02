@@ -265,7 +265,7 @@ function () {
             "category":     "kitchen",
             "image":        "banana.gif",
             
-            "weight":       "1",
+            "weight":       "3",
             "width":        "5",
             "height":       "9",
 
