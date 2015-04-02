@@ -13,14 +13,14 @@
          "type":"imagelayer",
          "visible":false,
          "width":0,
-         "x":0,
-         "y":0
-        },
+         "x":-25,
+         "y":-68
+        }, 
         {
          "height":0,
          "image":"..\/..\/img\/Backgrounds\/clouds.png",
          "name":"clouds",
-         "opacity":0.3,
+         "opacity":0.300000011920929,
          "properties":
             {
              "parallaxSpeed":"-0.3"
@@ -50,6 +50,7 @@
                 {
                  "ellipse":true,
                  "height":0,
+                 "id":1,
                  "name":"",
                  "properties":
                     {
@@ -65,6 +66,7 @@
                 {
                  "ellipse":true,
                  "height":0,
+                 "id":2,
                  "name":"",
                  "properties":
                     {
@@ -80,6 +82,7 @@
                 {
                  "ellipse":true,
                  "height":0,
+                 "id":3,
                  "name":"",
                  "properties":
                     {
@@ -95,6 +98,7 @@
                 {
                  "ellipse":true,
                  "height":0,
+                 "id":4,
                  "name":"",
                  "properties":
                     {
@@ -110,6 +114,7 @@
                 {
                  "ellipse":true,
                  "height":0,
+                 "id":5,
                  "name":"",
                  "properties":
                     {
@@ -125,6 +130,7 @@
                 {
                  "ellipse":true,
                  "height":0,
+                 "id":6,
                  "name":"",
                  "properties":
                     {
@@ -140,6 +146,7 @@
                 {
                  "ellipse":true,
                  "height":0,
+                 "id":7,
                  "name":"",
                  "properties":
                     {
@@ -177,6 +184,7 @@
          "objects":[
                 {
                  "height":0,
+                 "id":8,
                  "name":"Large Cleaver",
                  "properties":
                     {
@@ -191,6 +199,7 @@
                 }, 
                 {
                  "height":0,
+                 "id":9,
                  "name":"Small Cleaver",
                  "properties":
                     {
@@ -205,6 +214,7 @@
                 }, 
                 {
                  "height":0,
+                 "id":10,
                  "name":"Rube",
                  "properties":
                     {
@@ -219,6 +229,7 @@
                 }, 
                 {
                  "height":0,
+                 "id":11,
                  "name":"Knife",
                  "properties":
                     {
@@ -233,6 +244,7 @@
                 }, 
                 {
                  "height":0,
+                 "id":12,
                  "name":"Large Cleaver",
                  "properties":
                     {
@@ -247,6 +259,7 @@
                 }, 
                 {
                  "height":0,
+                 "id":13,
                  "name":"Small Cleaver",
                  "properties":
                     {
@@ -261,6 +274,7 @@
                 }, 
                 {
                  "height":0,
+                 "id":14,
                  "name":"Knife",
                  "properties":
                     {
@@ -272,6 +286,21 @@
                  "width":0,
                  "x":464,
                  "y":357
+                }, 
+                {
+                 "height":0,
+                 "id":15,
+                 "name":"Piano",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":206,
+                 "y":183
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -280,11 +309,13 @@
          "x":0,
          "y":0
         }],
+ "nextobjectid":16,
  "orientation":"orthogonal",
  "properties":
     {
 
     },
+ "renderorder":"right-down",
  "tileheight":25,
  "tilesets":[
         {

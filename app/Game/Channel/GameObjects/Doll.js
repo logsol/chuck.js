@@ -47,31 +47,32 @@ function (Parent, Item, Box2D, Nc, Assert) {
                 var item = otherBody.GetUserData();
                 if(item instanceof Item) {
                     var itemVelocity = item.body.GetLinearVelocity();
-                    var itemMass = item.body.GetMass();
+                    //var itemMass = item.body.GetMass();
 
                     var ownVelocity = this.body.GetLinearVelocity();
 
                     var b2Math = Box2D.Common.Math.b2Math;
-
                     var absItemVelocity = b2Math.AbsV(itemVelocity);
-                    var max = 1;
+                    var min = 1;
                     
-                    if(absItemVelocity.x > max || absItemVelocity.y > max) {
+                    if(absItemVelocity.x > min || absItemVelocity.y > min) {
                         if(item.lastMoved && item.lastMoved.player != this.player) {
-                            var damageVector = b2Math.SubtractVV(itemVelocity, ownVelocity);
-                            damageVector.Abs();
-                            var velocity = damageVector.Length();
-                            damageVector.Multiply(itemMass / 3.6);
-                            var damage = damageVector.Length();
 
-                            if(item.options.danger) {
-                                damage += item.options.danger * 90 * (velocity / 128) * (itemMass + 1);
-                            }
+                            var collision = b2Math.SubtractVV(itemVelocity, ownVelocity);
 
-                            var player = item.lastMoved.player;
+                            // Tested max velocity banana: 50
+                            var velocityDamage = collision.Length() / 50;
+
+                            // Max weight of piano: 15
+                            var weightDamage = item.options.weight / 15;
+
+                            // Max danger of knife: 3
+                            var dangerDamage = item.options.danger / 3;
+
+                            var damage = velocityDamage * (weightDamage * 180 + dangerDamage * 80);
 
                             var callback = function() {
-                                self.player.addDamage(damage, player, item);
+                                self.player.addDamage(damage, item.lastMoved.player, item);
                             };
 
                             Nc.trigger(Nc.ns.channel.engine.worldQueue.add, callback);
