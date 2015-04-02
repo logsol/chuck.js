@@ -69,7 +69,10 @@ function (Parent, Item, Box2D, Nc, Assert) {
                             // Max danger of knife: 3
                             var dangerDamage = item.options.danger / 3;
 
-                            var damage = velocityDamage * (weightDamage * 180 + dangerDamage * 80);
+                            // + 0.5 and / 2: offsetting for lower velocity impact
+                            // * 300: tested imperically by throwing piano from deadly height
+                            // * 80: tested imperically by throwing knife fast
+                            var damage = (velocityDamage + 0.5) * (weightDamage * 300 + dangerDamage * 80) / 2;
 
                             var callback = function() {
                                 self.player.addDamage(damage, item.lastMoved.player, item);

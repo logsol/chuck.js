@@ -367,7 +367,7 @@ function () {
             "category":     "livingroom",
             "image":        "piano.gif",
             
-            "weight":       "15",
+            "weight":       "10",
             "width":        "66",
             "height":       "48",
 

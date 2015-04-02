@@ -186,7 +186,7 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
             setTimeout(function(){self.ping.innerHTML = "Reload in 3...".replace(/ /g, '&nbsp;');}, 6000);
             setTimeout(function(){self.ping.innerHTML = "Reload in 2...".replace(/ /g, '&nbsp;');}, 7000);
             setTimeout(function(){self.ping.innerHTML = "Reload in 1...".replace(/ /g, '&nbsp;');}, 8000);
-            setTimeout(function(){self.ping.innerHTML = "Reload now.   ".replace(/ /g, '&nbsp;'); location.reload(); }, 1000);
+            setTimeout(function(){self.ping.innerHTML = "Reload now.   ".replace(/ /g, '&nbsp;'); location.reload(); }, 9000);
         }
     };
 

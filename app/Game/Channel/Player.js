@@ -60,29 +60,19 @@ function (Parent, Nc) {
         }
     };
 
-    Player.prototype.addDamage = function(damage, enemy, byItem, reheal) {
+    Player.prototype.addDamage = function(damage, enemy, byItem) {
         this.stats.health -= damage;
         
-        if(this.stats.health > 100) this.stats.health = 100;
         if(this.stats.health < 0) this.stats.health = 0;
-
-        /*
+        
         if(this.stats.health <= 0) {
             if(enemy != this) enemy.score();
             this.kill(enemy, byItem);
         } else {
             this.broadcastStats();
         }
-        */
+        
         this.broadcastStats();
-
-        if (!reheal) {
-            // reheal hack after 1 second
-            var self = this;
-            setTimeout(function(){
-                self.addDamage(-100, enemy, byItem, true);
-            }, 2500);
-        }
     };
 
     Player.prototype.spawn = function(x, y) {
@@ -103,8 +93,6 @@ function (Parent, Nc) {
             ragDollId: ragDollId,
             item: byItem ? byItem.options.name : "Suicide"
         });
-
-
 
         Nc.trigger(Nc.ns.channel.events.game.player.killed, this, killedByPlayer); // sends endround
 
