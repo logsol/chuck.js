@@ -37,7 +37,7 @@ define([
         this.levelData = levelData;
 
         var spawnpointsExists = levelData.layers.some(function(o) {
-            return o.name == "spawnpoints";
+            return o.name == AbstractLayer.ID.SPAWN;
         });
 
         if (!spawnpointsExists) {
@@ -67,7 +67,7 @@ define([
             layerOptions.z = i;
             layerOptions.layerId = getLayerId(layerOptions.name, i);
 
-            if (layerOptions.name == "spawnpoints") {
+            if (layerOptions.name == AbstractLayer.ID.SPAWN) {
                 spawnpointsFound = true;
             }
 
@@ -95,7 +95,7 @@ define([
             layerOptions.z = i;
             layerOptions.layerId = getLayerId(layerOptions.name, i);
 
-            if (layerOptions.name == "spawnpoints") {
+            if (layerOptions.name == AbstractLayer.ID.SPAWN) {
                 spawnpointsFound = true;
                 continue;
             }

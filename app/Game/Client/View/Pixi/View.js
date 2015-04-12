@@ -22,6 +22,8 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
 
         Parent.call(this);
 
+        this.xyz = Math.random()
+
         this.layerManager = null;
         this.stage = null;
         this.container = null;
@@ -52,6 +54,7 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
 
         if(Settings.USE_WEBGL) {
 
+            PIXI.WebGLRenderer.glContextId = 0;
             this.renderer = new PIXI.WebGLRenderer(Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT, rendererOptions);
             console.log('WebGLRenderer');
 
@@ -61,6 +64,7 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
             console.warn('CanvasRenderer - not using WebGL!');
 
         }
+
 
         this.stage = new PIXI.Stage(0x333333);
 
@@ -95,6 +99,7 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
     }
 
     PixiView.prototype.render = function () {
+
         if (this.me) {
             this.layerManager.render(this.calculateCenterPosition(), this.currentZoom);
         }
@@ -244,6 +249,9 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
         }
 
         this.renderer.render(this.stage);
+
+        this.renderer.destroy();
+        delete this.renderer;
 
         Parent.prototype.destroy.call(this);
     };

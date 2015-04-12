@@ -86,13 +86,14 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
     };
 
     Networker.prototype.onLevelLoaded = function() { 
+        /*
         this.gameController.createMe(this.users[this.meUserId]);
 
         for (var userId in this.users) {
             if(this.meUserId != userId) {
                 this.gameController.createPlayer(this.users[userId]);
             }            
-        }
+        }*/
 
         this.gameController.onLevelLoaded();
 
@@ -166,7 +167,11 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
     }
 
     Networker.prototype.onGameCommand = function(message) {
-        this.gameController.onGameCommand(message);
+        if (this.gameController) {
+            this.gameController.onGameCommand(message);
+        } else {
+            console.warn("Networker.onGameCommand: this.gameController is undefined", message);
+        }
     }
 
     Networker.prototype.onPong = function(timestamp) {
@@ -183,6 +188,14 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
         }
 
         this.gameController = new GameController(options);
+        
+        this.gameController.createMe(this.users[this.meUserId]);
+
+        for (var userId in this.users) {
+            if(this.meUserId != userId) {
+                this.gameController.createPlayer(this.users[userId]);
+            }            
+        }
     };
 
     Networker.prototype.onEndRound = function() {

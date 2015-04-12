@@ -25,7 +25,7 @@ function (Abstract) {
         value: {
             TILE: 'tile',
             ITEM: 'item',
-            SPAWN: 'spawn'
+            SPAWN: 'spawnpoints'
         }
     });
 

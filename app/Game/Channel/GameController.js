@@ -214,6 +214,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
     };
 
     GameController.prototype.destroy = function() {
+        console.log("clearTimeout")
         clearTimeout(this.animationTimeout);
         clearTimeout(this.worldUpdateTimeout);
 

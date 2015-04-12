@@ -68,8 +68,6 @@ function (Parent, Nc) {
         if(this.stats.health <= 0) {
             if(enemy != this) enemy.score();
             this.kill(enemy, byItem);
-        } else {
-            this.broadcastStats();
         }
         
         this.broadcastStats();
@@ -86,7 +84,6 @@ function (Parent, Nc) {
         var ragDollId = this.stats.deaths;
         Parent.prototype.kill.call(this, killedByPlayer, ragDollId);
 
-        this.broadcastStats();
         Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "playerKill", {
             playerId: this.id,
             killedByPlayerId: killedByPlayer.id,
@@ -103,7 +100,6 @@ function (Parent, Nc) {
 
     Player.prototype.score = function() {
         this.stats.score++;
-        this.broadcastStats();
     };
 
     Player.prototype.broadcastStats = function() {

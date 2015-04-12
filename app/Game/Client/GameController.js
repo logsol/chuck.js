@@ -108,8 +108,8 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
             }
         }
 
-        this.audioPlayer = new AudioPlayer(Settings.AUDIO_PATH + "city.mp3");
-        this.audioPlayer.play();
+        //this.audioPlayer = new AudioPlayer(Settings.AUDIO_PATH + "city.mp3");
+        //this.audioPlayer.play();
     };
 
     GameController.prototype.onWorldUpdateGameObject = function(body, gameObject, update) {
@@ -269,7 +269,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
         Parent.prototype.destroy.call(this);
 
-        this.audioPlayer.destroy();
+        //this.audioPlayer.destroy();
 
         this.view.destroy();
     };

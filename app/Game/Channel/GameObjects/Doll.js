@@ -74,8 +74,9 @@ function (Parent, Item, Box2D, Nc, Assert) {
                             // * 80: tested imperically by throwing knife fast
                             var damage = (velocityDamage + 0.5) * (weightDamage * 300 + dangerDamage * 80) / 2;
 
+                            var lastMovedPlayer = item.lastMoved.player;
                             var callback = function() {
-                                self.player.addDamage(damage, item.lastMoved.player, item);
+                                self.player.addDamage(damage, lastMovedPlayer, item);
                             };
 
                             Nc.trigger(Nc.ns.channel.engine.worldQueue.add, callback);
