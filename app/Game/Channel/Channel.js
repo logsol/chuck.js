@@ -77,7 +77,6 @@
                 levelUid: gameControllerOptions.levelUid
             };
 
-            console.log("beginRound")
             this.broadcastControlCommand("beginRound", clientGameControllerOptions);
         };
 
