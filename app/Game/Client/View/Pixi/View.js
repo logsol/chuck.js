@@ -35,7 +35,8 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
         this.init();
 
         this.ncTokens = this.ncTokens.concat([
-            Nc.on(Nc.ns.client.pointerLock.change, this.onPointerLockChange, this)
+            Nc.on(Nc.ns.client.pointerLock.change, this.onPointerLockChange, this),
+            Nc.on(Nc.ns.core.game.events.level.loaded, this.showDefaultLayers, this)
         ]);
 
         PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
@@ -84,19 +85,30 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
         this.stage.addChild(this.gameStats.getInfoContainer());
 
         this.ghostLayer = new Ghost();
+        this.ghostLayer.hide();
         this.layerManager.insert(this.ghostLayer, false);
 
         this.swiperLayer = new Swiper();
+        this.swiperLayer.hide()
         this.layerManager.insert(this.swiperLayer, false);
 
         this.debugLayer = Debug;
+        this.debugLayer.hide();
         this.layerManager.insert(this.debugLayer, false);
 
         this.messagesLayer = new Messages();
+        this.messagesLayer.hide();
         this.layerManager.insert(this.messagesLayer, false);
 
         this.render();
     }
+
+    PixiView.prototype.showDefaultLayers = function() {
+        this.ghostLayer.show();
+        this.swiperLayer.show()
+        this.debugLayer.show();
+        this.messagesLayer.show();
+    };
 
     PixiView.prototype.render = function () {
 
