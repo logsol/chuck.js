@@ -202,6 +202,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         this.spawnPlayer(player, 0);
     };
 
+    // FIXME: remove this method
     GameController.prototype.onResetLevel = function(userId) {
 
         console.log('OH NO!!! ON RESET LEVEL IS CALLED AND RESPAWNES PLAYERS');
@@ -214,7 +215,6 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
     };
 
     GameController.prototype.destroy = function() {
-        console.log("clearTimeout")
         clearTimeout(this.animationTimeout);
         clearTimeout(this.worldUpdateTimeout);
 

@@ -55,6 +55,7 @@ function () {
         RAGDOLL_DESTRUCTION_TIME: 10,
         VIEWPORT_SPEED_FACTOR: 640,
         VIEWPORT_LOOK_AHEAD: 0.1,
+        SCORE_MESSAGE_TIMEOUT: 3500,
 
         // restitution: bouncyness, friction: rubbing, density: mass
         TILE_FRICTION: 0.99,

@@ -65,12 +65,12 @@ function (Parent, Nc) {
         
         if(this.stats.health < 0) this.stats.health = 0;
         
-        this.broadcastStats();
-
         if(this.stats.health <= 0) {
             if(enemy != this) enemy.score();
             this.kill(enemy, byItem);
         }
+
+        this.broadcastStats();
     };
 
     Player.prototype.spawn = function(x, y) {

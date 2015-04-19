@@ -46,7 +46,6 @@ function (PIXI, Nc, Settings, ColorConverter) {
         this.container.addChild(this.dialog);
 
         this.graphics = new PIXI.Graphics();
-        // this.dialog.addChild(this.graphics);
 
         /*
             gameContainer
@@ -61,61 +60,71 @@ function (PIXI, Nc, Settings, ColorConverter) {
         */
 
         this.container.visible = false;
+        this.sortedPlayers = [];
 
-        Nc.on(Nc.ns.client.view.gameStats.toggle, this.toggle, this);
+        this.ncTokens = [
+            Nc.on(Nc.ns.client.view.gameStats.toggle, this.toggle, this),
+            Nc.on(Nc.ns.client.view.gameStats.update, this.update, this)
+        ];
     }
 
     GameStats.prototype.getInfoContainer = function() {
     	return this.container;
     };
  
-    GameStats.prototype.toggle = function(show, sortedPlayers) {
+    GameStats.prototype.toggle = function(show) {
         if(show) {
-
-            this.background.clear();
-            this.graphics.clear();
-            this.dialog.removeChildren();
-
-            // redraw background
-            this.background.beginFill(this.style.colors.background);
-            this.background.drawRect(0, 0, Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT);
-            this.background.endFill();
-
-            // redraw text and graphics
-
-            var string = "" +
-                         "  #".pad(7, true) + " " +
-                         "Name".pad(12, true) +
-                         "Score".pad(6, false) +
-                         "Deaths".pad(7, false) +
-                         "Health".pad(9, false) + " ";
-
-            var line = new PIXI.Text(string, {
-                font: "normal " + this.style.fontSize + "px 'Joystix'",
-                fill: this.style.colors.headline
-            });
-
-            line.position = new PIXI.Point(0, 0);
-            this.dialog.addChild(line);
-
-            this.drawPlayers(sortedPlayers);
-
-            var x = Settings.STAGE_WIDTH / 2 - this.dialog.getBounds().width / 2,
-                y = Settings.STAGE_HEIGHT / 2 - (sortedPlayers.length + 1) * (this.style.line.height + this.style.line.spacing) / 2;
-            this.dialog.position = new PIXI.Point(x, y);
-
-            this.dialog.addChild(this.graphics);
-
+            this.redraw();
             // show stats with filters
             this.container.visible = true;
             this.gameContainer.filters = this.filters;
             this.filters.forEach(function(filter) { filter.dirty = true; });
-
         } else {
             this.container.visible = false;
             this.gameContainer.filters = null;
         }
     }
+
+    GameStats.prototype.update = function(sortedPlayers) {
+        this.sortedPlayers = sortedPlayers;
+        this.redraw();
+    };
+
+    GameStats.prototype.redraw = function() {
+        this.background.clear();
+        this.graphics.clear();
+        this.dialog.removeChildren();
+
+        // redraw background
+        this.background.beginFill(this.style.colors.background);
+        this.background.drawRect(0, 0, Settings.STAGE_WIDTH, Settings.STAGE_HEIGHT);
+        this.background.endFill();
+
+        // redraw text and graphics
+
+        var string = "" +
+                     "  #".pad(7, true) + " " +
+                     "Name".pad(12, true) +
+                     "Score".pad(6, false) +
+                     "Deaths".pad(7, false) +
+                     "Health".pad(9, false) + " ";
+
+        var line = new PIXI.Text(string, {
+            font: "normal " + this.style.fontSize + "px 'Joystix'",
+            fill: this.style.colors.headline
+        });
+
+        line.position = new PIXI.Point(0, 0);
+        this.dialog.addChild(line);
+
+        this.drawPlayers(this.sortedPlayers);
+
+        var x = Settings.STAGE_WIDTH / 2 - this.dialog.getBounds().width / 2,
+            y = Settings.STAGE_HEIGHT / 2 - (this.sortedPlayers.length + 1) * (this.style.line.height + this.style.line.spacing) / 2;
+        this.dialog.position = new PIXI.Point(x, y);
+
+        this.dialog.addChild(this.graphics);
+    };
 
     GameStats.prototype.drawPlayers = function(sortedPlayers) {
         sortedPlayers.forEach(function(player, i) {
@@ -183,6 +192,12 @@ function (PIXI, Nc, Settings, ColorConverter) {
             );
             this.graphics.endFill();
         }
+    };
+
+    GameStats.prototype.destroy = function() {
+        for (var i = 0; i < this.ncTokens.length; i++) {
+            Nc.off(this.ncTokens[i]);
+        };
     };
  
     return GameStats;

@@ -1,8 +1,9 @@
 define([
 	"Lib/Utilities/Abstract",
+    "Lib/Utilities/NotificationCenter"
 ], 
 
-function (Abstract) {
+function (Abstract, Nc) {
 
 	"use strict";
 

@@ -50,7 +50,7 @@ function (Parent, PIXI, Nc, Settings) {
         var self = this;
         setTimeout(function(){
             self.mainText.visible = false;
-        }, 2000);
+        }, Settings.SCORE_MESSAGE_TIMEOUT);
 
     }
 

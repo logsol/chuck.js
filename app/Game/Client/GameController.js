@@ -189,6 +189,23 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
             throw new Exception("No player with id: " + options.playerId);
         }
         player.setStats(options.stats);
+
+        var playersArray = [];
+        for (var key in this.players) {
+            playersArray.push(this.players[key]);
+        }
+
+        var sortedPlayers = playersArray.sort(function(a,b) {
+            if(a.stats.score  > b.stats.score)  return -1;
+            if(a.stats.score  < b.stats.score)  return 1;
+            if(a.stats.deaths < b.stats.deaths) return -1;
+            if(a.stats.deaths > b.stats.deaths) return 1;
+            if(a.stats.health > b.stats.health) return -1;
+            if(a.stats.health < b.stats.health) return 1;
+            return 0;
+        });
+
+        Nc.trigger(Nc.ns.client.view.gameStats.update, sortedPlayers);
     };
 
     GameController.prototype.onPlayerKill = function(options) {
@@ -238,23 +255,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
     };
 
     GameController.prototype.toggleGameStats = function(show) {
-
-        var playersArray = [];
-        for (var key in this.players) {
-            playersArray.push(this.players[key]);
-        }
-
-        var sortedPlayers = playersArray.sort(function(a,b) {
-            if(a.stats.score  > b.stats.score)  return -1;
-            if(a.stats.score  < b.stats.score)  return 1;
-            if(a.stats.deaths < b.stats.deaths) return -1;
-            if(a.stats.deaths > b.stats.deaths) return 1;
-            if(a.stats.health > b.stats.health) return -1;
-            if(a.stats.health < b.stats.health) return 1;
-            return 0;
-        });
-
-        Nc.trigger(Nc.ns.client.view.gameStats.toggle, show, sortedPlayers);
+        Nc.trigger(Nc.ns.client.view.gameStats.toggle, show);
     };
 
     GameController.prototype.destroy = function() {
