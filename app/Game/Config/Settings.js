@@ -1,4 +1,4 @@
-define([
+    define([
 ],
  
 function () {
@@ -86,7 +86,7 @@ function () {
         // CHANNEL
         CHANNEL_MAX_USERS: 20,
         CHANNEL_DESTRUCTION_TIME: 0.5 * 60,
-        CHANNEL_END_ROUND_TIME: 4, //10,
+        CHANNEL_END_ROUND_TIME: 20, //10,
         CHANNEL_DEFAULT_MAX_USERS: 40,
         CHANNEL_DEFAULT_SCORE_LIMIT: 10,
         CHANNEL_DEFAULT_LEVELS: ["debug"],

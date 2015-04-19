@@ -70,7 +70,7 @@ function (Parent, Nc) {
             this.kill(enemy, byItem);
         }
 
-        this.broadcastStats();
+        this.broadcastStats(enemy);
     };
 
     Player.prototype.spawn = function(x, y) {
@@ -102,11 +102,18 @@ function (Parent, Nc) {
         this.stats.score++;
     };
 
-    Player.prototype.broadcastStats = function() {
+    Player.prototype.broadcastStats = function(enemy) {
         Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "updateStats", {
             playerId: this.id,
             stats: this.stats
         });
+        
+        if(enemy && enemy != this) {
+            Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "updateStats", {
+                playerId: enemy.id,
+                stats: enemy.stats
+            });            
+        }
     };
     
  
