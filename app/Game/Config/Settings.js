@@ -35,7 +35,7 @@ function () {
         ORIGINAL_TILE_SIZE: 25,
         TILE_SIZE: 20,
         CAMERA_IS_ORTHOGRAPHIC: true,
-        CAMERA_GLIDE: 12, // % of the way per frame
+        CAMERA_GLIDE: 6, // % of the way per frame
         VIEW_CONTROLLER: 0 ? "Three" : "Pixi",
         ARROW_GLIDE: 30, // % of the way per frame     
         SHOW_LAYER_INFO: false,

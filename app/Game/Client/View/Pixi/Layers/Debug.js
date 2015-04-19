@@ -10,9 +10,8 @@ function (Parent, PIXI) {
     function Debug() {
     	Parent.call(this, "debug", 0.00000001);
 
-
-      this.graphics = new PIXI.Graphics();
-      this.container.addChild(this.graphics);
+        this.graphics = new PIXI.Graphics();
+        this.container.addChild(this.graphics);
     }
 
     Debug.prototype = Object.create(Parent.prototype);

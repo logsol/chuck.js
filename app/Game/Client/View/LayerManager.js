@@ -36,8 +36,8 @@ function (Nc, Exception, Layer) {
      * If no referenceId is given, the layer is inserted in the far background (behind=true)
      * or in the foreground (behind=false/null)
      */
-    LayerManager.prototype.createAndInsert = function(id, parallaxSpeed, behind, referenceId) {
-        var layer =  new Layer(id, parallaxSpeed);
+    LayerManager.prototype.createAndInsert = function(id, options, behind, referenceId) {
+        var layer =  new Layer(id, options);
         this.insert(layer, behind, referenceId);
     };
 

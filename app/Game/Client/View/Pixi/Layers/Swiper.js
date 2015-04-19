@@ -8,14 +8,14 @@ define([
 function (Parent, PIXI, Nc, Settings) {
  
     function Swiper() {
-    	Parent.call(this, "swiper", 0);
+    	Parent.call(this, "swiper", {parallaxSpeed:0});
 
         this.static = true;
 
-    	this.ncTokens = [
+    	this.ncTokens = this.ncTokens.concat([
             Nc.on(Nc.ns.client.view.swiper.swipe, this.swipe, this),
             Nc.on(Nc.ns.client.view.swiper.end, this.end, this)
-        ];
+        ]);
 
         this.sprite = new PIXI.Graphics();
         this.container.addChild(this.sprite);

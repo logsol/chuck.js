@@ -66,6 +66,7 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
 
         }
 
+        this.onDisplaySizeChange(false);
 
         this.stage = new PIXI.Stage(0x333333);
 
@@ -168,7 +169,7 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
 
     PixiView.prototype.calculateCenterPosition = function() {
         var target = this.me.getHeadPosition();
-
+        
         var centerPosition = {x: target.x, y: target.y};
         centerPosition.x *= Settings.RATIO * -1;
         centerPosition.y *= Settings.RATIO * -1;

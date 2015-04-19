@@ -16,16 +16,14 @@ function (Parent, Settings, Nc) {
     TiledLevel.prototype = Object.create(Parent.prototype);
 
     TiledLevel.prototype.setup = function(levelData) {
-        /*
-        FIXME: find a name for this shit!
-        for (var i = 0; i < levelData.layers.length; i++) {
-            var layerOptions = levelData.layers[i];
-            layerOptions.z = i;
-            if(!this.layerMapping[layerOptions.name]) {
-                this.createLayer(layerOptions);
-            }
+        var tilesLayerData = this.getLayer(levelData, "tiles");
+        this.levelSize = {
+            width: tilesLayerData.width * Settings.TILE_SIZE,
+            height: tilesLayerData.height * Settings.TILE_SIZE
         };
-        */
+
+        Nc.trigger(Nc.ns.client.view.layer.levelSizeUpdate, this.levelSize);
+
         Parent.prototype.setup.call(this, levelData);
     };
 

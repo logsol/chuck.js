@@ -3,19 +3,28 @@ define([
 	"Lib/Vendor/Pixi",
     "Game/Client/View/Pixi/ColorRangeReplaceFilter",
     "Game/Config/Settings",
-    "Lib/Utilities/ColorConverter"
+    "Lib/Utilities/ColorConverter",
+    "Lib/Utilities/NotificationCenter"
 ],
 
-function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
+function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter, Nc) {
 
 	"use strict";
     
-    function Layer (name, parallaxSpeed) {
-        Parent.call(this, name, parallaxSpeed);
+    function Layer (name, options) {
+        Parent.call(this, name, options);
         this.container = new PIXI.DisplayObjectContainer();
         this.container.x = 0;
         this.container.y = 0;
         this.static = false;
+        this.levelSize = {
+            width: 0,
+            height: 0
+        }
+
+        this.ncTokens = this.ncTokens.concat([
+            Nc.on(Nc.ns.client.view.layer.levelSizeUpdate, this.onLevelSizeUpdate, this)
+        ]);
 
         if (Settings.SHOW_LAYER_INFO) {
 
@@ -52,6 +61,10 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
     }
 
     Layer.prototype = Object.create(Parent.prototype);
+
+    Layer.prototype.onLevelSizeUpdate = function(levelSize) {
+        this.levelSize = levelSize;
+    };
 
     Layer.prototype.getAvailableMeshFilters = function() {
         return {
@@ -241,31 +254,29 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter) {
         // Position
 
         if (!this.static) {
-            // Fixme: needs to read from actual level size
-            var levelSize = {
-                x: 600,
-                y: 400
-            }
-
             var posXStep = (this.position.target.x - this.position.current.x) * Settings.CAMERA_GLIDE / 100;
             this.position.current.x += posXStep;
 
             var posYStep = (this.position.target.y - this.position.current.y) * Settings.CAMERA_GLIDE / 100;
             this.position.current.y += posYStep;
 
-            this.container.x = this.position.current.x + levelSize.x / 2 - (-this.parallaxSpeed) * (this.position.current.x + levelSize.x / 2);
-            this.container.y = this.position.current.y + levelSize.y / 2 - (-this.parallaxSpeed) * (this.position.current.y + levelSize.y / 2);
-
-
             // Add here to set 0,0 not in the center of the map but the level origin in the top left
+            // FIXME: use a different kind of flag than "name"
             if (this.name == "spawn" 
                 || this.name == "tile" 
                 || this.name == "item"
                 || this.name == "ghost"
                 || this.name == "swiper"
                 || this.parallaxSpeed == 0) {
+
                 this.container.x = this.position.current.x;
                 this.container.y = this.position.current.y;
+
+            } else {
+                var x = this.position.current.x + this.levelSize.width / 2;
+                this.container.x = x - x * -this.parallaxSpeed;
+                var y = this.position.current.y + this.levelSize.height / 2;
+                this.container.y = y - y * -this.parallaxSpeed;
             }
 
             this.container.x *= this.zoom.current;

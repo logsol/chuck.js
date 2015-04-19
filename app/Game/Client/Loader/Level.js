@@ -12,6 +12,10 @@ function (Parent, Settings, Nc, PIXI, AbstractLayer) {
 
     function Level (uid, engine, gameObjects) {
         Parent.call(this, uid, engine, gameObjects);
+        this.levelSize = {
+            width: 0,
+            height: 0
+        }
     }
 
     Level.prototype = Object.create(Parent.prototype);
@@ -112,7 +116,16 @@ function (Parent, Settings, Nc, PIXI, AbstractLayer) {
         if (options.properties && options.properties.parallaxSpeed) {
             parallaxSpeed = parseFloat(options.properties.parallaxSpeed);
         } 
-        Nc.trigger(Nc.ns.client.view.layer.createAndInsert, options.layerId, parallaxSpeed, behind, referenceId);
+        Nc.trigger(
+            Nc.ns.client.view.layer.createAndInsert,
+            options.layerId,
+            {
+                parallaxSpeed: parallaxSpeed,
+                levelSize: this.levelSize
+            },
+            behind,
+            referenceId
+        );
     };
 
     return Level;

@@ -6,17 +6,22 @@ function (Abstract) {
 
 	"use strict";
 
-    function Layer(name, parallaxSpeed) {
+    function Layer(name, options) {
     	this.name = name;
-    	this.parallaxSpeed = parallaxSpeed;
+    	this.parallaxSpeed = options.parallaxSpeed || 0;
         this.zoom = { 
-            current: 1, 
-            target: 1
+            current: window.innerWidth / 600,
+            target: window.innerWidth / 600
         };
         this.position = {
             current: { x: 0, y: 0},
             target: { x: 0, y: 0}
         };
+
+        if(options.levelSize) {
+            this.position.current.x = -options.levelSize.width / 2;
+            this.position.current.y = -options.levelSize.height / 2;            
+        }
 
         this.ncTokens = [];
     }
@@ -52,7 +57,9 @@ function (Abstract) {
     };
 
     Layer.prototype.destroy = function() {
-        
+        for (var i = 0; i < this.ncTokens.length; i++) {
+            Nc.off(this.ncTokens[i]);
+        };
     };
 
     return Layer;

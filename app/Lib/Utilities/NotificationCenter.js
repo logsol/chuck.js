@@ -32,7 +32,8 @@ function (Exception) {
                 },
                 view: {
                     layer: {
-                        createAndInsert: null
+                        createAndInsert: null,
+                        levelSizeUpdate: null
                     },
                     mesh: {
                         create: null,

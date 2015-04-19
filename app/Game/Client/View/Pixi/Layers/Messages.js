@@ -10,11 +10,11 @@ function (Parent, PIXI, Nc, Settings) {
     "use strict";
  
     function Messages() {
-    	Parent.call(this, "messages", -1);
+    	Parent.call(this, "messages", {parallaxSpeed:-1});
 
-		this.ncTokens = [
+		this.ncTokens = this.ncTokens.concat([
             Nc.on(Nc.ns.client.view.gameStats.kill, this.onKill, this)
-        ];
+        ]);
 
         this.mainTextOptions = {
             font: "normal 22px 'Joystix'",

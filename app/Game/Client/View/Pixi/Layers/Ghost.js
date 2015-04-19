@@ -10,19 +10,25 @@ function (Parent, PIXI, Nc, Settings) {
 	"use strict";
  
     function Ghost() {
-    	Parent.call(this, "ghost", 0);
+    	Parent.call(this, "ghost", {parallaxSpeed: 0});
 
-		this.ncTokens = [
+		this.ncTokens = this.ncTokens.concat([
+            Nc.on(Nc.ns.client.view.layer.levelSizeUpdate, this.onLevelSizeUpdate, this),
             Nc.on(Nc.ns.client.view.playerArrow.createAndAdd, this.onCreateAndAddPlayerArrow, this),
             Nc.on(Nc.ns.client.view.playerArrow.update, this.onUpdatePlayerArrow, this),
             Nc.on(Nc.ns.client.view.healthBar.createAndAdd, this.onCreateAndAddHealthBar, this),
             Nc.on(Nc.ns.client.view.healthBar.update, this.onUpdateHealthBar, this),
             Nc.on(Nc.ns.client.view.healthBar.remove, this.onRemoveHealthBar, this),
-        ];
+        ]);
 
     }
 
     Ghost.prototype = Object.create(Parent.prototype);
+
+    Ghost.prototype.onLevelSizeUpdate = function(levelSize) {
+        this.position.current.x = -levelSize.width / 2;
+        this.position.current.y = -levelSize.height / 2;  
+    };
  
     Ghost.prototype.onCreateAndAddPlayerArrow = function(callback, options) {
 
@@ -106,12 +112,6 @@ function (Parent, PIXI, Nc, Settings) {
 
     Ghost.prototype.onRemoveHealthBar = function(healthBar) {
         this.container.removeChild(healthBar);
-    };
-
-    Ghost.prototype.destroy = function() {
-        for (var i = 0; i < this.ncTokens.length; i++) {
-            Nc.off(this.ncTokens[i]);
-        };
     };
  
     return Ghost;
