@@ -1,5 +1,5 @@
 define([
-    "Game/Core/GameObjects/Items/Rube"
+    "Game/Core/GameObjects/Items/RubeDoll"
 ],
  
 function (Parent) {

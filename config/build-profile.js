@@ -1,6 +1,8 @@
 ({
     baseUrl: "../app",
     paths: {
+        "text": 'Lib/Vendor/RequireJs/Plugin/Text',
+        "json": 'Lib/Vendor/RequireJs/Plugin/Json',
         "screenfull": "../node_modules/screenfull/dist/screenfull",
         "socketio": "../node_modules/socket.io/node_modules/socket.io-client/dist/socket.io",
 	"chart": "../node_modules/chart.js/Chart"

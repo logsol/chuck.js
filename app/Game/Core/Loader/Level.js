@@ -8,9 +8,9 @@ define([
     "Game/" + GLOBALS.context + "/GameObjects/Item",
     "Game/" + GLOBALS.context + "/GameObjects/Items/Skateboard",
     "Game/" + GLOBALS.context + "/GameObjects/Items/RagDoll",
-    "Game/" + GLOBALS.context + "/GameObjects/Items/Rube"
+    "Game/" + GLOBALS.context + "/GameObjects/Items/RubeDoll"
 
-], function (Settings, Box2D, Nc, Abstract, CollisionDetector, Tile, Item, Skateboard, RagDoll, Rube) {
+], function (Settings, Box2D, Nc, Abstract, CollisionDetector, Tile, Item, Skateboard, RagDoll, RubeDoll) {
     
     "use strict";
     
@@ -50,8 +50,8 @@ define([
                 return new Skateboard(this.engine, uid, options);
             case "ragdoll":
                 return new RagDoll(this.engine, uid, options);
-            case "rube":
-                return new Rube(this.engine, uid, options);
+            case "rubedoll":
+                return new RubeDoll(this.engine, uid, options);
             default:
                 return new Item(this.engine, uid, options);
         }
