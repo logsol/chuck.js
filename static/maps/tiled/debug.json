@@ -221,11 +221,11 @@
 
                     },
                  "rotation":0,
-                 "type":"",
+                 "type":"rube",
                  "visible":true,
                  "width":0,
                  "x":236.607333333333,
-                 "y":471.255333333333
+                 "y":462.255333333333
                 }, 
                 {
                  "height":0,
@@ -286,6 +286,21 @@
                  "width":0,
                  "x":464,
                  "y":357
+                }, 
+                {
+                 "height":0,
+                 "id":15,
+                 "name":"Skateboard",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":206,
+                 "y":183
                 }],
          "opacity":1,
          "type":"objectgroup",
