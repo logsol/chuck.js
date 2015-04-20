@@ -51,8 +51,6 @@ function (Parent, Box2D, Settings, Assert) {
 
     };
 
-    
-
     Skateboard.prototype.addWheel = function(x, y) {
         Assert.number(x, y);
 
@@ -80,15 +78,9 @@ function (Parent, Box2D, Settings, Assert) {
         this.body.CreateFixture(fixtureDef);
     };
 
-    
-
     Skateboard.prototype.flip = function(direction) {
         this.flipDirection = direction;
-
-        // FIXME: implement body flip if necessary
     };
-
-
  
     return Skateboard;
  
