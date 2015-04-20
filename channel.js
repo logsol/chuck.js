@@ -4,7 +4,11 @@ var requirejs = require('requirejs');
 requirejs.config({
     nodeRequire: require,
     baseUrl: 'app',
-    deps: ['Lib/Utilities/Channel/Extensions']
+    deps: ['Lib/Utilities/Channel/Extensions'],
+    paths: {
+        text: 'Lib/Vendor/RequireJs/Plugin/Text',
+        json: 'Lib/Vendor/RequireJs/Plugin/Json',
+    },
 });
 
 var inspector = {};

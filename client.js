@@ -7,6 +7,8 @@ requirejs.config({
     deps: ['Lib/Utilities/Client/Extensions'],
     waitSeconds: 0,
     paths: {
+        text: 'Lib/Vendor/RequireJs/Plugin/Text',
+        json: 'Lib/Vendor/RequireJs/Plugin/Json',
         screenfull: "/screenfull",
         chart: "/chart",
         socketio: "/socket.io/socket.io"

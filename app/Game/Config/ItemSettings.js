@@ -411,19 +411,17 @@ function () {
         },
 
 
-
-
-        "Rube": 
+        "RubeDoll": 
         {
             "category":     "kitchen",
             "image":        "banana.gif",
-            
-   //         "type":         "rube",
-            "weight":       "1",
+
+            "weight":       "3",
             "width":        "5",
             "height":       "9",
 
-            "grabAngle":    "0.5",
+            "type":         "rubedoll",
+            "grabAngle":    "0", 
         }
     };
 
