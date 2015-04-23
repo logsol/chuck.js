@@ -304,21 +304,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":192,
-                 "name":"Piano",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":1584,
-                 "y":942
-                }, 
-                {
-                 "height":0,
                  "id":194,
                  "name":"Laundry Powder",
                  "properties":

@@ -60,8 +60,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":222.535368857004,
-                 "y":170.525492560429
+                 "x":247.535368857004,
+                 "y":177.525492560429
                 }, 
                 {
                  "ellipse":true,
@@ -286,21 +286,6 @@
                  "width":0,
                  "x":464,
                  "y":357
-                }, 
-                {
-                 "height":0,
-                 "id":15,
-                 "name":"Piano",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":206,
-                 "y":183
                 }],
          "opacity":1,
          "type":"objectgroup",
