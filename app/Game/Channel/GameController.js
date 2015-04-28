@@ -9,10 +9,10 @@ define([
     "Game/Channel/Player",
     "Game/Channel/GameObjects/GameObject",
     "Game/Channel/GameObjects/Doll",
-    "Game/Channel/GameObjects/Items/RagDoll"
+    "Game/Channel/GameObjects/Items/RubeDoll"
 ],
 
-function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, Nc, Box2D, Player, GameObject, Doll, RagDoll) {
+function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, Nc, Box2D, Player, GameObject, Doll, RubeDoll) {
 
 	"use strict";
 
@@ -172,7 +172,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         var objects = [];
 
         for (var i = 0; i < this.gameObjects.animated.length; i++) {
-            if(this.gameObjects.animated[i] instanceof RagDoll) {
+            if(this.gameObjects.animated[i] instanceof RubeDoll) {
                 var object = this.gameObjects.animated[i];
                 var options = object.options;
                 options.x = object.getPosition().x;

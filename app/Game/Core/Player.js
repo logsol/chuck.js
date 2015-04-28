@@ -129,22 +129,23 @@ function (Doll, Settings, Nc, Exception, ColorConverter, SpectatorDoll, RubeDoll
             image: "chest.png",
             name: "RagDoll",
             rotation: 0,
-            type: "ragdoll",
+            type: "rubedoll",
             weight: 3,
             width: 5,
             height: 12,
-            primaryColor: primaryColor
+            primaryColor: primaryColor,
+            direction: this.doll.lookDirection
         };
 
-        var ragDoll = new RubeDoll(this.physicsEngine, "ragDoll-" + this.id + "-" + ragDollId, options);
-        ragDoll.setVelocities(this.doll.getVelocities());
+        var rubeDoll = new RubeDoll(this.physicsEngine, "rubeDoll-" + this.id + "-" + ragDollId, options);
+        rubeDoll.setVelocities(this.doll.getVelocities());
 
         this.spawned = false;
 
         this.doll.destroy();
         this.doll = null;
 
-        this.ragDoll = ragDoll;
+        this.ragDoll = rubeDoll;
     };
 
     Player.prototype.update = function () {

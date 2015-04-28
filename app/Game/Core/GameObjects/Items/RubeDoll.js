@@ -18,10 +18,27 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
         this.rubeLoader = null;
         this.body = null;
         this.limbs = {};
+        this.joints = null;
+        this.limits = [];
 
         var chest = null;
         var world = physicsEngine.getWorld();
         this.rubeLoader = new RubeLoader(RubeDollJson, world);
+
+        this.loadRubeDollFromScene(options);
+
+        Parent.call(this, physicsEngine, uid, options);
+        world.DestroyBody(this.body);
+        this.body = this.limbs.chest;
+
+        this.body.SetUserData(this);
+
+        this.flip(options.direction);
+    }
+
+    RubeDoll.prototype = Object.create(Parent.prototype);
+
+    RubeDoll.prototype.loadRubeDollFromScene = function(options) {
         var scene = this.rubeLoader.getScene();
 
         for (var i in scene.bodies) {
@@ -35,19 +52,17 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
             this.limbs[body.name] = body;
         }
 
-        Parent.call(this, physicsEngine, uid, options);
-        world.DestroyBody(this.body);
-        this.body = this.limbs.chest;
+        this.joints = scene.joints;
 
-        var def = this.body.GetDefinition();
-        def.userData = this;
-        this.body.SetUserData(this);
-    }
-
-    RubeDoll.prototype = Object.create(Parent.prototype);
+        for (var i in this.joints) {
+            this.limits[i] = {
+                lower: this.joints[i].GetLowerLimit(),
+                upper: this.joints[i].GetUpperLimit(),
+            };
+        }
+    };
 
     RubeDoll.prototype.getFixtureDef = function() {
-         
         var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
         fixtureDef.shape = new Box2D.Collision.Shapes.b2CircleShape();
         return fixtureDef;
@@ -55,7 +70,28 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
 
     RubeDoll.prototype.flip = function(direction) {
         Parent.prototype.flip.call(this, direction);
-        // Extend
+
+        for (var i in this.joints) {
+            var joint = this.joints[i];
+            var limits = this.limits[i];
+
+            if (joint instanceof Box2D.Dynamics.Joints.b2RevoluteJoint) {
+
+                if (direction > 0) {
+                    joint.SetLimits(limits.lower, limits.upper);
+                    continue;
+                }
+
+                var a1 = limits.lower * -1;
+                var a2 = limits.upper * -1;
+
+                if (a2 > a1) {
+                    joint.SetLimits(a1, a2);
+                } else {
+                    joint.SetLimits(a2, a1);
+                }
+            }
+        }
     };
 
     RubeDoll.prototype.reposition = function(handPosition, direction) {

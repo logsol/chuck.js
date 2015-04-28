@@ -40,7 +40,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc, Asser
         this.holdingJoint = null;
         this.holdingItem = null;
 
-        this.ragDoll = {head: null, body: null};
+        this.ragDoll = {head: null, body: null}; // FIXME: wtf is this? can we remove it?
         
         this.createFixtures();
         this.body.SetActive(false);

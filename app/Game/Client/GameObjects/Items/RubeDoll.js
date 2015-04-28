@@ -93,6 +93,7 @@ function (Parent, Layer, Settings, Nc) {
         this.limbMeshes = {};
         this.baseMeshName = "chest";
         this.characterName = "Chuck";
+        this.lastFlipDirection = 1;
 
         Parent.call(this, physicsEngine, uid, options);
     }
@@ -101,10 +102,8 @@ function (Parent, Layer, Settings, Nc) {
  
     RubeDoll.prototype.createMesh = function() {
 
-
         this.createLimbMesh("lowerRightLeg");
         this.createLimbMesh("upperRightLeg");
-
         this.createLimbMesh("lowerRightArm");
         this.createLimbMesh("upperRightArm");
 
@@ -113,7 +112,6 @@ function (Parent, Layer, Settings, Nc) {
 
         this.createLimbMesh("lowerLeftLeg");
         this.createLimbMesh("upperLeftLeg");
-
         this.createLimbMesh("lowerLeftArm");
         this.createLimbMesh("upperLeftArm");
 
@@ -187,6 +185,48 @@ function (Parent, Layer, Settings, Nc) {
     };
 
     RubeDoll.prototype.flip = function(direction) {
+        Parent.prototype.flip.call(this, direction);
+
+        if(this.limbs) {
+            for(var name in this.limbMeshes) {
+                if(this.limbs[name]) {
+                    Nc.trigger(Nc.ns.client.view.mesh.update,
+                        this.layerId,
+                        this.limbMeshes[name],
+                        {
+                            xScale: direction,
+                        }
+                    );
+                }
+            }
+        }
+
+        // flipping depth of right body side arm/leg images with left
+        if (this.lastFlipDirection != direction) {
+
+            this.lastFlipDirection = direction;
+
+            Nc.trigger(Nc.ns.client.view.mesh.swapMeshIndexes,
+                this.layerId,
+                this.limbMeshes["lowerRightLeg"], 
+                this.limbMeshes["lowerLeftLeg"]
+            );
+            Nc.trigger(Nc.ns.client.view.mesh.swapMeshIndexes,
+                this.layerId,
+                this.limbMeshes["upperRightLeg"], 
+                this.limbMeshes["upperLeftLeg"]
+            );
+            Nc.trigger(Nc.ns.client.view.mesh.swapMeshIndexes,
+                this.layerId,
+                this.limbMeshes["lowerRightArm"], 
+                this.limbMeshes["lowerLeftArm"]
+            );
+            Nc.trigger(Nc.ns.client.view.mesh.swapMeshIndexes,
+                this.layerId,
+                this.limbMeshes["upperRightArm"], 
+                this.limbMeshes["upperLeftArm"]
+            );
+        }
     };
 
     return RubeDoll;
