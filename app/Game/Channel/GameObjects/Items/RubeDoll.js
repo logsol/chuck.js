@@ -9,10 +9,20 @@ function (Parent, Settings, Nc) {
     "use strict";
  
     function RubeDoll(physicsEngine, uid, options) {
+        this.scheduledForDestruction = false;
+        this.destructionTimeout = null;
+
     	Parent.call(this, physicsEngine, uid, options);
     }
 
     RubeDoll.prototype = Object.create(Parent.prototype);
+
+    RubeDoll.prototype.beingGrabbed = function(player) {
+        Parent.prototype.beingGrabbed.call(this, player);
+        if(this.scheduledForDestruction) {
+            clearTimeout(this.destructionTimeout);
+        }
+    };
  
     RubeDoll.prototype.beingReleased = function(player) {
         Parent.prototype.beingReleased.call(this, player);

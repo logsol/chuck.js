@@ -426,7 +426,7 @@ function (Box2D) {
 
 	    var scene = {
 	    	bodies: loadedBodies,
-	    //	joints: loadedJoints
+	    	joints: loadedJoints
 	    };
 
 	    return scene;

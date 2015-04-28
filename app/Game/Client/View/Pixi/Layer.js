@@ -95,6 +95,14 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter, Nc) {
         this.container.removeChild(mesh);
     };
 
+    Layer.prototype.swapMeshIndexes = function(meshA, meshB) {
+        var indexA = this.container.getChildIndex(meshA);
+        var indexB = this.container.getChildIndex(meshB);
+
+        this.container.setChildIndex(meshA, indexB);
+        this.container.setChildIndex(meshB, indexA);
+    };
+
     Layer.prototype.createMesh = function (texturePath, callback, options) {
 
         var texture = (options && options.fromFrame)
