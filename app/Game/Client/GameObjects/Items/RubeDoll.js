@@ -11,7 +11,7 @@ function (Parent, Layer, Settings, Nc) {
  
     function RubeDoll(physicsEngine, uid, options) {
 
-        this.primaryColor = 0x008800;
+        this.primaryColor = options.primaryColor;
 
         var limbOptions = {};
 
@@ -160,6 +160,12 @@ function (Parent, Layer, Settings, Nc) {
     };
 
     RubeDoll.prototype.destroy = function() {
+        
+        for (var name in this.limbMeshes) {
+            Nc.trigger(Nc.ns.client.view.mesh.remove, this.layerId, this.limbMeshes[name]);
+        };
+
+        Parent.prototype.destroy.call(this);
     };
 
     RubeDoll.prototype.render = function() {

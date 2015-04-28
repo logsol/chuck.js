@@ -83,10 +83,6 @@ function (Parent, Nc, Settings) {
     	}
     };
 
-    Player.prototype.getNickname = function() {
-        return this.user.options.nickname;
-    };
-
     Player.prototype.render = function() {
 
         if(this.doll) {
