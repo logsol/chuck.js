@@ -3,11 +3,12 @@ define([
     "Game/Config/Settings",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Exception",
+    "Lib/Utilities/ColorConverter",
     "Game/" + GLOBALS.context + "/GameObjects/SpectatorDoll",
-    "Game/" + GLOBALS.context + "/GameObjects/Items/RagDoll"
+    "Game/" + GLOBALS.context + "/GameObjects/Items/RubeDoll"
 ],
 
-function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
+function (Doll, Settings, Nc, Exception, ColorConverter, SpectatorDoll, RubeDoll) {
 
 	"use strict";
 
@@ -29,6 +30,10 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
 
         Nc.trigger(Nc.ns.core.game.gameObject.add, 'animated', this);
     }
+
+    Player.prototype.getNickname = function() {
+        return this.user.options.nickname;
+    };
 
     Player.prototype.getActiveDoll = function() {
         if(this.spawned) {
@@ -112,6 +117,10 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
         }
 
         // prepare for creating the ragdoll
+
+        var converter = new ColorConverter();
+        var primaryColor = converter.getColorByName(this.getNickname());
+
         var options = {
             x: this.getPosition().x * Settings.RATIO, 
             y: this.getPosition().y * Settings.RATIO,
@@ -123,10 +132,11 @@ function (Doll, Settings, Nc, Exception, SpectatorDoll, RagDoll) {
             type: "ragdoll",
             weight: 3,
             width: 5,
-            height: 12
+            height: 12,
+            primaryColor: primaryColor
         };
 
-        var ragDoll = new RagDoll(this.physicsEngine, "ragDoll-" + this.id + "-" + ragDollId, options);
+        var ragDoll = new RubeDoll(this.physicsEngine, "ragDoll-" + this.id + "-" + ragDollId, options);
         ragDoll.setVelocities(this.doll.getVelocities());
 
         this.spawned = false;

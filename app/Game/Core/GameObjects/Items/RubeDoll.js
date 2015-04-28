@@ -4,10 +4,11 @@ define([
     "Lib/Vendor/Box2D",
     "Game/Config/Settings",
     "Lib/Utilities/Assert",
+    "Lib/Utilities/NotificationCenter",
     "json!Game/Asset/RubeDoll.json" // using requirejs json loader plugin
 ],
 
-function (Parent, RubeLoader, Box2D, Settings, Assert, RubeDollJson) {
+function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
 
 	"use strict";
  
@@ -45,6 +46,13 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, RubeDollJson) {
 
     RubeDoll.prototype = Object.create(Parent.prototype);
 
+    RubeDoll.prototype.getFixtureDef = function() {
+         
+        var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
+        fixtureDef.shape = new Box2D.Collision.Shapes.b2CircleShape();
+        return fixtureDef;
+    };
+
     RubeDoll.prototype.flip = function(direction) {
         Parent.prototype.flip.call(this, direction);
         // Extend
@@ -60,6 +68,37 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, RubeDollJson) {
         );
 
         this.body.SetPosition(position);
+    };
+
+    RubeDoll.prototype.setVelocities = function(options) {
+        Assert.number(options.linearVelocity.x, options.linearVelocity.y);
+        Assert.number(options.angularVelocity);
+
+        this.body.SetLinearVelocity(options.linearVelocity);
+        this.body.SetAngularVelocity(options.angularVelocity);
+        for(var name in this.limbs) {
+            this.limbs[name].SetLinearVelocity(options.linearVelocity);
+        }
+    };
+
+    RubeDoll.prototype.getPosition = function() {
+        return this.body.GetPosition().Copy();
+    };
+
+    RubeDoll.prototype.getHeadPosition = function() {
+        return this.limbs.head.GetPosition().Copy();
+    };
+
+    RubeDoll.prototype.destroy = function() {
+
+        Nc.trigger(Nc.ns.core.game.gameObject.remove, "animated", this);
+        var world = this.body.GetWorld();
+        
+        for (var name in this.limbs) {
+            world.DestroyBody(this.limbs[name]);
+        }
+
+        Parent.prototype.destroy.call(this);
     };
  
     return RubeDoll;
