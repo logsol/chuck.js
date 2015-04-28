@@ -152,8 +152,7 @@ function (Box2D) {
 	    if ( bodyJson.hasOwnProperty('linearVelocity') && bodyJson.linearVelocity instanceof Object )
 	        bd.linearVelocity.SetV( bodyJson.linearVelocity );
 	    if ( bodyJson.hasOwnProperty('position') && bodyJson.position instanceof Object )
-	    	bodyJson.position.y *= -1;
-	        bd.position.SetV( bodyJson.position );
+	        bd.position.SetV( this.getVectorValue(bodyJson.position) );
 	    if ( bodyJson.hasOwnProperty('awake') )
 	        bd.awake = bodyJson.awake;
 	    else
@@ -169,6 +168,7 @@ function (Box2D) {
 	        body.name = bodyJson.name;
 	    if ( bodyJson.hasOwnProperty('customProperties') )
 	        body.customProperties = bodyJson.customProperties;
+
 	    return body;
 	}
 
@@ -231,8 +231,7 @@ function (Box2D) {
 
 	RubeLoader.prototype.getVectorValue = function (val) {
 	    if ( val instanceof Object ) {
-	    	val.y *= -1;
-	        return val;
+	        return { x: val.x, y: val.y * -1 };
 	    } else {
 	        return { x:0, y:0 };
 	    }
