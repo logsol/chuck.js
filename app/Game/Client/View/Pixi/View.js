@@ -121,7 +121,8 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
     }
 
     PixiView.prototype.initPointerLockView = function() {
-
+        if (!Settings.ENABLE_POINTER_LOCK_FILTER) return;
+        
         var blurFilter = new PIXI.BlurFilter();
         blurFilter.blurX = 42 * this.currentZoom;
         blurFilter.blurY = 42 * this.currentZoom;
@@ -139,6 +140,8 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
     };
 
     PixiView.prototype.onPointerLockChange = function(isLocked, options) {
+        if (!Settings.ENABLE_POINTER_LOCK_FILTER) return;
+
         if(isLocked) {
             this.container.filters = null;
             this.clickToEnable.visible = false;
