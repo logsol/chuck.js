@@ -39,6 +39,7 @@ function () {
         VIEW_CONTROLLER: 0 ? "Three" : "Pixi",
         ARROW_GLIDE: 30, // % of the way per frame     
         SHOW_LAYER_INFO: false,
+        ENABLE_POINTER_LOCK_FILTER: false,
 
         // GAME PLAY 
         WALK_SPEED: 4,
