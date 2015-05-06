@@ -21,7 +21,8 @@ function (Nc, Exception, Layer) {
             Nc.on(Nc.ns.client.view.mesh.update, this.updateMesh, this),
             Nc.on(Nc.ns.client.view.mesh.addFilter, this.addFilter, this),
             Nc.on(Nc.ns.client.view.mesh.removeFilter, this.removeFilter, this),
-            Nc.on(Nc.ns.client.view.mesh.swapMeshIndexes, this.swapMeshIndexes, this)
+            Nc.on(Nc.ns.client.view.mesh.swapMeshIndexes, this.swapMeshIndexes, this),
+            Nc.on(Nc.ns.client.view.mesh.swapMeshes, this.swapMeshes, this)
         ];
     }
 
@@ -160,6 +161,11 @@ function (Nc, Exception, Layer) {
 
     LayerManager.prototype.swapMeshIndexes = function() {
         Array.prototype.splice.call(arguments, 0, 0, 'swapMeshIndexes')
+        this.delegate.apply(this, arguments);
+    };
+
+    LayerManager.prototype.swapMeshes = function() {
+        Array.prototype.splice.call(arguments, 0, 0, 'swapMeshes')
         this.delegate.apply(this, arguments);
     };
 

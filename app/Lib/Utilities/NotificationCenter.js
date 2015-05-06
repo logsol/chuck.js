@@ -42,7 +42,8 @@ function (Exception) {
                         update: null,
                         addFilter: null,
                         removeFilter: null,
-                        swapMeshIndexes: null
+                        swapMeshIndexes: null,
+                        swapMeshes: null
                     },
                     animatedMesh: {
                         create: null

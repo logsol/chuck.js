@@ -103,6 +103,22 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter, Nc) {
         this.container.setChildIndex(meshB, indexA);
     };
 
+    Layer.prototype.swapMeshes = function(meshA, meshB) {
+        var textureA = meshA.texture;
+        var textureB = meshB.texture;
+
+        meshA.setTexture(textureB);
+        meshA.onTextureUpdate();
+        meshA.scale.x = 1;
+        meshA.scale.y = 1;
+
+        meshB.setTexture(textureA);
+        meshB.onTextureUpdate();
+        meshB.scale.x = 1;
+        meshB.scale.y = 1;
+
+    };
+
     Layer.prototype.createMesh = function (texturePath, callback, options) {
 
         var texture = (options && options.fromFrame)
