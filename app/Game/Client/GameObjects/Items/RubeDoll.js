@@ -37,21 +37,21 @@ function (Parent, Layer, Settings, Nc) {
         };
 
         limbOptions.upperRightLeg = {
-            width: 4,
-            height: 9,
+            width: 5,
+            height: 8,
             x: 2,
             y: limbOptions.chest.height / 2
         };
 
         limbOptions.lowerLeftLeg = {
-            width: 4,
+            width: 5,
             height: 4,
             x: -2,
             y: limbOptions.chest.height / 2 + limbOptions.upperLeftLeg.height
         };
 
         limbOptions.lowerRightLeg = {
-            width: 4,
+            width: 5,
             height: 4,
             x: 2,
             y: limbOptions.chest.height / 2 + limbOptions.upperRightLeg.height
@@ -60,28 +60,28 @@ function (Parent, Layer, Settings, Nc) {
 
 
         limbOptions.upperLeftArm = {
-            width: 2,
+            width: 4,
             height: 8,
             x: -2,
             y: -limbOptions.chest.height / 2
         };
 
         limbOptions.upperRightArm = {
-            width: 3,
+            width: 4,
             height: 8,
             x: 2,
             y: -limbOptions.chest.height / 2
         };
 
         limbOptions.lowerLeftArm = {
-            width: 2,
+            width: 4,
             height: 5,
             x: -2,
             y: -limbOptions.chest.height / 2 + limbOptions.upperLeftArm.height
         };
 
         limbOptions.lowerRightArm = {
-            width: 2,
+            width: 4,
             height: 5,
             x: 2,
             y: -limbOptions.chest.height / 2 + limbOptions.upperRightArm.height
@@ -93,7 +93,9 @@ function (Parent, Layer, Settings, Nc) {
         this.limbMeshes = {};
         this.baseMeshName = "chest";
         this.characterName = "Chuck";
-        this.lastFlipDirection = 1;
+        this.lastFlipDirection = -options.direction || 1;
+
+        console.log(this.lastFlipDirection);
 
         Parent.call(this, physicsEngine, uid, options);
     }
@@ -187,22 +189,10 @@ function (Parent, Layer, Settings, Nc) {
     RubeDoll.prototype.flip = function(direction) {
         Parent.prototype.flip.call(this, direction);
 
-        if(this.limbs) {
-            for(var name in this.limbMeshes) {
-                if(this.limbs[name]) {
-                    Nc.trigger(Nc.ns.client.view.mesh.update,
-                        this.layerId,
-                        this.limbMeshes[name],
-                        {
-                            xScale: direction,
-                        }
-                    );
-                }
-            }
-        }
+        console.log("last", this.lastFlipDirection, "now", direction);
 
         // flipping depth of right body side arm/leg images with left
-        if (this.lastFlipDirection != direction) {
+        if (this.lastFlipDirection != direction) { // FIXME : this is a bit broken.
 
             this.lastFlipDirection = direction;
 
@@ -226,6 +216,28 @@ function (Parent, Layer, Settings, Nc) {
                 this.limbMeshes["upperRightArm"], 
                 this.limbMeshes["upperLeftArm"]
             );
+
+            // swap short images
+            Nc.trigger(Nc.ns.client.view.mesh.swapMeshes,
+                this.layerId,
+                this.limbMeshes["upperRightLeg"],
+                this.limbMeshes["upperLeftLeg"]
+            );
+        }
+
+        // x flipping has to happen after (see swapMeshes)
+        if(this.limbs) {
+            for(var name in this.limbMeshes) {
+                if(this.limbs[name]) {
+                    Nc.trigger(Nc.ns.client.view.mesh.update,
+                        this.layerId,
+                        this.limbMeshes[name],
+                        {
+                            xScale: direction,
+                        }
+                    );
+                }
+            }
         }
     };
 
