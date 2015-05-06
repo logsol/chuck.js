@@ -33,13 +33,15 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
 
         this.body.SetUserData(this);
 
-        this.flip(options.direction);
+        this.flip(options.direction || 1);
     }
 
     RubeDoll.prototype = Object.create(Parent.prototype);
 
     RubeDoll.prototype.loadRubeDollFromScene = function(options) {
         var scene = this.rubeLoader.getScene();
+
+
 
         for (var i in scene.bodies) {
             var body = scene.bodies[i];
@@ -50,6 +52,15 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
             ));
             body.SetPosition(position);
             this.limbs[body.name] = body;
+
+            // code snipped possibly needed for filtering between doll and rubedoll while holding
+            //var filterData = new Box2D.Dynamics.b2FilterData();
+            //filterData.groupIndex = -66;
+            //if(body.name != "head" && body.name != "chest") {
+            //    for (var fixture = body.GetFixtureList(); fixture; fixture = fixture.GetNext()) {
+            //        fixture.SetFilterData(filterData);
+            //    }
+            //}
         }
 
         this.joints = scene.joints;
