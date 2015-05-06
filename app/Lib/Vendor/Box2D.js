@@ -6006,6 +6006,10 @@ Box2D.postDefs = [];
             xf = b.m_xf;
             for (f = b.GetFixtureList();
             f; f = f.m_next) {
+               // Disable drawing sensors by removing false ||
+               if (false || f.IsSensor()) {
+                  continue;
+               }
                s = f.GetShape();
                if (b.IsActive() == false) {
                   color.Set(0.5, 0.5, 0.3);
