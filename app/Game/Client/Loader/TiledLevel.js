@@ -8,9 +8,9 @@ function (Parent, Settings, Nc) {
 
 	"use strict";
  
-    function TiledLevel(uid, engine, gameObjects) {
+    function TiledLevel(uid, engine) {
         this.layerId = "background";
-    	Parent.call(this, uid, engine, gameObjects);
+    	Parent.call(this, uid, engine);
     }
 
     TiledLevel.prototype = Object.create(Parent.prototype);

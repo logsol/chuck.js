@@ -55,9 +55,11 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
             this.mePositionStateUpdate();
         }
 
-        for (var i = 0; i < this.gameObjects.animated.length; i++) {
-            this.gameObjects.animated[i].render();
-        }
+        //for (var uid in this.gameObjects.animated) {
+        //    this.gameObjects.animated[uid].render();
+        //}
+
+        Nc.trigger(Nc.ns.client.game.events.render);
 
         this.view.render();
         DomController.fpsStep();
@@ -78,17 +80,10 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
         if (options.runtimeItems) {
             for (i = 0; i < options.runtimeItems.length; i++) {
+                
                 var itemDef = options.runtimeItems[i];
 
-                var alreadyExists = false;
-                for (var j = 0; j < this.gameObjects.animated.length; j++) {
-                    if(this.gameObjects.animated[j].uid == itemDef.uid) {
-                        alreadyExists = true;
-                        break;
-                    } 
-                }
-
-                if(!alreadyExists) {
+                if(!this.getItemByUid(itemDef.uid)) {
                     // When creating from synchronization we need to bring it into level format (px)
                     itemDef.options.x *= Settings.RATIO;
                     itemDef.options.y *= Settings.RATIO;
@@ -112,6 +107,13 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         //this.audioPlayer.play();
     };
 
+
+    /*
+
+    TODO : 
+    - remove this 
+    - overwrite setUpdateData inside client / Me with an empty function
+
     GameController.prototype.onWorldUpdateGameObject = function(body, gameObject, update) {
         if(gameObject === this.me.doll) {
             this.me.setLastServerPositionState(update);
@@ -122,6 +124,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
         Parent.prototype.onWorldUpdateGameObject.call(this, body, gameObject, update);
     };
+    */
 
     GameController.prototype.createMe = function(user) {
         this.me = new Me(user.id, this.physicsEngine, user);
@@ -161,15 +164,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
     GameController.prototype.onHandActionResponse = function(options) {
         var player = this.players[options.playerId];
-
-        var item = null;
-        for (var i = 0; i < this.gameObjects.animated.length; i++) {
-            var currentItem = this.gameObjects.animated[i];
-            if(currentItem.uid == options.itemUid) {
-                item = currentItem;
-                break;
-            }
-        }
+        var item = this.getItemByUid(options.itemUid);
 
         if(item) {
             if(options.action == "throw") {
@@ -228,22 +223,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
     GameController.prototype.onPositionStateReset = function(options) {
         this.me.resetPositionState(options);
-    };
-
-    GameController.prototype.onRemoveGameObject = function(options) {
-        var object = null;
-        for (var i = 0; i < this.gameObjects[options.type].length; i++) {
-            if(this.gameObjects[options.type][i].uid == options.uid) {
-                object = this.gameObjects[options.type][i];
-                break;
-            }
-        }
-        if(object) {
-            //this.onGameObjectRemove(options.type, object);
-            object.destroy();
-        } else {
-            console.warn("GameObject for removal can not be found locally. " + options.uid);
-        }
     };
 
     GameController.prototype.loadLevel = function (path) {

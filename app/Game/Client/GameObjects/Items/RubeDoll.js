@@ -189,8 +189,6 @@ function (Parent, Layer, Settings, Nc) {
     RubeDoll.prototype.flip = function(direction) {
         Parent.prototype.flip.call(this, direction);
 
-        console.log("last", this.lastFlipDirection, "now", direction);
-
         // flipping depth of right body side arm/leg images with left
         if (this.lastFlipDirection != direction) { // FIXME : this is a bit broken.
 

@@ -378,7 +378,6 @@ function (Parent, Box2D, Settings, Nc, Assert, Options, ItemSettings) {
 
     RagDoll.prototype.destroy = function() {
 
-        Nc.trigger(Nc.ns.core.game.gameObject.remove, "animated", this);
         var world = this.body.GetWorld();
         
         for (var name in this.limbs) {

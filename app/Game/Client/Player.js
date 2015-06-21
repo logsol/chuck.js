@@ -15,6 +15,8 @@ function (Parent, Nc, Settings) {
     	this.healthBarViewVisibleTimeout = null;
     	this.healthBarViewVisible = false;
     	this.initHealthBar();
+
+        Nc.on(Nc.ns.client.game.events.render, this.render, this);
     }
 
     Player.prototype = Object.create(Parent.prototype);

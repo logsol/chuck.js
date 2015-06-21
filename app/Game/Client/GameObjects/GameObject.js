@@ -27,7 +27,7 @@ function (Parent, Exception, Nc) {
     GameObject.prototype.createMesh = function() {
     	throw new Exception('Abstract method GameObject.createMesh not overwritten');
     };
- 
+
     return GameObject;
  
 });

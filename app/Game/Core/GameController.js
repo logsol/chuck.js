@@ -17,15 +17,14 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Assert) {
         this.options = options;
         this.players = {};
         this.level = null;
-        this.gameObjects = null;
-        this.resetGameObjects();
+        this.worldUpdateObjects = {};
 
         this.physicsEngine = new PhysicsEngine();
         this.physicsEngine.setCollisionDetector();
 
         this.ncTokens = [
-            Nc.on(Nc.ns.core.game.gameObject.add, this.onGameObjectAdd, this),
-            Nc.on(Nc.ns.core.game.gameObject.remove, this.onGameObjectRemove, this)
+            Nc.on(Nc.ns.core.game.worldUpdateObjects.add, this.onWorldUpdateObjectAdd, this),
+            Nc.on(Nc.ns.core.game.worldUpdateObjects.remove, this.onWorldUpdateObjectRemove, this)
         ];
 
         this.loadLevel(options.levelUid);
@@ -37,78 +36,57 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Assert) {
         // extend for both sides if necessary
     };
 
-    GameController.prototype.resetGameObjects = function() {
-        this.gameObjects = {
-            fixed: [],
-            animated: []
-        };
+    GameController.prototype.onWorldUpdateObjectAdd = function(object) {
+        this.worldUpdateObjects[object.uid] = object;
     };
 
-    GameController.prototype.onGameObjectAdd = function(type, object) {
-        this.gameObjects[type].push(object);
-    };
-
-    GameController.prototype.onGameObjectRemove = function(type, object) {
-        var i = this.gameObjects[type].indexOf(object);
-        if(i>=0) this.gameObjects[type].splice(i, 1);
+    GameController.prototype.onWorldUpdateObjectRemove = function(object) {
+        delete this.worldUpdateObjects[object.uid];
     };
 
     GameController.prototype.getPhysicsEngine = function () {
         return this.physicsEngine;
     };
 
+    GameController.prototype.getItemByUid = function(uid) {
+        // FIXME : maybe divide this into a dedicated item pool?
+        return this.worldUpdateObjects[uid];
+    };
+
     GameController.prototype.loadLevel = function (levelUid) {
 
         if (this.level) {
             this.level.destroy();
-            this.resetGameObjects();
+            this.worldUpdateObjects = {};
         }
 
-        this.level = new TiledLevel(levelUid, this.physicsEngine, this.gameObjects);
+        this.level = new TiledLevel(levelUid, this.physicsEngine);
     };
 
+    /*
+     *  This is now in core, because the recorder/player 
+     *  uses the world update mechanism on the channel side
+     */ 
     GameController.prototype.onWorldUpdate = function (updateData) {
 
-        var body = this.physicsEngine.world.GetBodyList();
-        do {
-            var userData = body.GetUserData();
-            if (userData instanceof GameObject) {
-                var gameObject = userData;
-                if(updateData[gameObject.uid]) {
-                    var update = updateData[gameObject.uid];
-                    this.onWorldUpdateGameObject(body, gameObject, update);
-                }
+        for (var uid in updateData) {
+
+            var gameObject = this.worldUpdateObjects[uid];
+
+            if (!(gameObject instanceof GameObject)) {
+                console.warn('Cant find object ' + uid + ' in worldUpdateObjects pool');
+                continue;
             }
 
-        } while (body = body.GetNext());
-
-    };
-
-    GameController.prototype.onWorldUpdateGameObject = function(body, gameObject, update) {
-        if (gameObject instanceof Doll) {
-            /*
-            if(gameObject === this.me.doll) {
-                this.me.setLastServerPositionState(update);
-                if(!this.me.acceptPositionStateUpdateFromServer()) {
-                    return; // this is to ignore own doll updates from world update 
-                }
-            }
-            */
-            gameObject.setActionState(update.as);
-            gameObject.lookAt(update.laxy.x, update.laxy.y);
+            gameObject.setUpdateData(updateData[uid]);
         }
-
-        Assert.number(update.p.x, update.p.y);
-        Assert.number(update.a);
-        Assert.number(update.lv.x, update.lv.y);
-        Assert.number(update.av);
-
-        body.SetAwake(true);
-        body.SetPosition(update.p);
-        body.SetAngle(update.a);
-        body.SetLinearVelocity(update.lv);
-        body.SetAngularVelocity(update.av);
     };
+
+/*
+    GameController.prototype.onWorldUpdateGameObject = function(body, gameObject, update) {
+        FIXME : call gameObject.setUpdateData(updateData[uid]);
+    };
+*/
 
     GameController.prototype.onResetLevel = function() {
         this.loadLevel(this.level.uid);
@@ -140,39 +118,23 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Assert) {
     GameController.prototype.destroy = function () {
         var i = 0;
 
-        /*
         for(var player in this.players) {
-            // this.players[player].destroy();
-
-            // FIXME: 
-            // commented out for now, because players are in gameObjects array.
-            // try using a real gameobject for the health bar
-        }*/
-
-
-        for (i = 0; i < this.ncTokens.length; i++) {
-            Nc.off(this.ncTokens[i]);
+            this.players[player].destroy();
         }
 
-        /*
-         *   Contents of gameObject: Players, Items, Tiles, RagDolls
-         *   No Dolls.
-         */
+        Nc.trigger(Nc.ns.client.game.events.destroy);
 
-        for (var key in this.gameObjects) {
-            for (i = 0; i < this.gameObjects[key].length; i++) {
-                var gameObject = this.gameObjects[key][i];
-
-                gameObject.destroy();
-            }
+        // Testing after destroy if worldUpdateObjects is empty
+        // events.game.destroy -> gameobjects.destroy() -> Nc.trigger(worldUpdateObjects.remove)
+        if(Object.keys(this.worldUpdateObjects).length > 0) {
+            console.warn('Not all worldUpdateObjects have been removed... ', Object.keys(this.worldUpdateObjects));
         }
-
-        this.gameObjects = {
-            fixed: [],
-            animated: []
-        };
 
         this.physicsEngine.destroy();
+        this.worldUpdateObjects = null;
+
+        Nc.off(this.ncTokens);
+
     };
 
     return GameController;

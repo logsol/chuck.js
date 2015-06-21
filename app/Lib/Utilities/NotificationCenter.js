@@ -85,6 +85,10 @@ function (Exception) {
                     }
                 },
                 game: {
+                    events: {
+                        render: null,
+                        destroy: null
+                    },
                     gameStats: {
                         toggle: null
                     },
@@ -102,9 +106,9 @@ function (Exception) {
             },
             core: {
                 game: {
-                    gameObject: {
+                    worldUpdateObjects: {
                         add: null,
-                        remove: null
+                        remove: null,
                     },
                     events: {
                         level: {
@@ -241,18 +245,24 @@ function (Exception) {
 
     NotificationCenter.prototype.off = function (token) {
 
+        if(token && token.constructor === Array) {
+            this.offAll(token);
+            return;
+        }
+
         for(var m in this.topics) {
             if (this.topics[m]) {
                 for(var i = 0, j = this.topics[m].length; i < j; i++) {
                     if (this.topics[m][i].token === token) {
                         this.topics[m].splice(i, 1);
-                        return token;
+                        return;
                     }
                 }
             }
         }
     }
 
+    // should be treated as a private function - use Nc.off(Array);
     NotificationCenter.prototype.offAll = function (tokens) {
         for (var i = 0; i < tokens.length; i++) {
             this.off(tokens[i]);

@@ -45,6 +45,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc, Asser
         this.createFixtures();
         this.body.SetActive(false);
 
+        Nc.trigger(Nc.ns.core.game.worldUpdateObjects.add, this);
     }
 
     Doll.prototype = Object.create(Parent.prototype);
@@ -471,7 +472,16 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc, Asser
         }
     };
 
+    Doll.prototype.setUpdateData = function(update) {
+
+        Parent.prototype.setUpdateData.call(this, update);
+
+        this.setActionState(update.as);
+        this.lookAt(update.laxy.x, update.laxy.y);
+    };
+
     Doll.prototype.destroy = function() {
+        Nc.trigger(Nc.ns.core.game.worldUpdateObjects.remove, this);
         Parent.prototype.destroy.call(this);
     };
 

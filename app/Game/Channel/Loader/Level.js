@@ -8,8 +8,8 @@ function (Parent, Settings, FileSystem) {
 
 	"use strict";
 
-    function Level (uid, engine, gameObjects) {
-        Parent.call(this, uid, engine, gameObjects);
+    function Level (uid, engine) {
+        Parent.call(this, uid, engine);
     }
 
     Level.prototype = Object.create(Parent.prototype);

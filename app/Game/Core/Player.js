@@ -27,8 +27,6 @@ function (Doll, Settings, Nc, Exception, ColorConverter, SpectatorDoll, RubeDoll
         this.spawned = false;
         this.holdingItem = null;
         this.spectatorDoll = new SpectatorDoll(this.physicsEngine, "spectatorDoll-" + this.id, this);
-
-        Nc.trigger(Nc.ns.core.game.gameObject.add, 'animated', this);
     }
 
     Player.prototype.getNickname = function() {
@@ -161,7 +159,7 @@ function (Doll, Settings, Nc, Exception, ColorConverter, SpectatorDoll, RubeDoll
 
     Player.prototype.destroy = function () {
 
-        Nc.trigger(Nc.ns.core.game.gameObject.remove, 'animated', this);
+        // FIXME add destroy nc hook
 
         if(this.holdingItem) {
             var options = {
@@ -174,8 +172,10 @@ function (Doll, Settings, Nc, Exception, ColorConverter, SpectatorDoll, RubeDoll
         
         this.spectatorDoll.destroy();
 
+        // doll destoys itself at the end cause its a gameobject
+        // but on userLeft, the player has to destroy it.
         if(this.doll) {
-            this.doll.destroy();
+            this.doll.destroy(); 
         }
 
         if(this.playerController) {

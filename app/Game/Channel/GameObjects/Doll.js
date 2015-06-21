@@ -98,6 +98,18 @@ function (Parent, Item, Box2D, Nc, Assert) {
             this.body.SetLinearVelocity(update.lv);
         }
     };
+
+    Doll.prototype.getUpdateData = function(getSleeping) {
+
+        var updateData = Parent.prototype.getUpdateData.call(this, getSleeping);
+
+        if(updateData) {
+            updateData.as = this.getActionState();
+            updateData.laxy = this.lookAtXY;
+        }
+
+        return updateData;
+    };
  
     return Doll;
 

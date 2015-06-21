@@ -83,8 +83,6 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
         var spawnTimeout = setTimeout(function() {
             player.spawn(spawnPoint.x, spawnPoint.y);
-            // put it into 
-            self.gameObjects.animated.push(player);
 
             var options = {
                 id: player.id, 
@@ -118,6 +116,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
         var update = {};
 
+/*
         var body = this.physicsEngine.world.GetBodyList();
         do {
             if((getSleeping || body.IsAwake()) && body.GetType() === Box2D.Dynamics.b2Body.b2_dynamicBody) {
@@ -125,22 +124,33 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
                 if (userData instanceof GameObject) {
                     var gameObject = userData;
-
-                    update[gameObject.uid] = {
-                        p: body.GetPosition(),
-                        a: body.GetAngle(),
-                        lv: body.GetLinearVelocity(),
-                        av: body.GetAngularVelocity()
-                    };
-
-                    if(gameObject instanceof Doll) {
-                        update[gameObject.uid].as = gameObject.getActionState();
-                        update[gameObject.uid].laxy = gameObject.lookAtXY;
+                    var updateData = gameObject.getUpdateData();
+                    
+                    if (updateData) {
+                        update[gameObject.uid] = updateData;
                     }
                 }
             }
 
         } while (body = body.GetNext());
+*/
+
+        for (var uid in this.worldUpdateObjects) {
+
+            var gameObject = this.worldUpdateObjects[uid];
+
+            if (!(gameObject instanceof GameObject)) {
+                console.warn('Cant find object ' + uid + ' in worldUpdateObjects pool (channel side), here is the object:');
+                console.log(gameObject);
+                continue;
+            }
+
+            var updateData = gameObject.getUpdateData(getSleeping);
+                    
+            if (updateData) {
+                update[gameObject.uid] = updateData;
+            }
+        }
 
         return update;
     };
@@ -171,9 +181,11 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
     GameController.prototype.getRuntimeItems = function() {
         var objects = [];
 
-        for (var i = 0; i < this.gameObjects.animated.length; i++) {
-            if(this.gameObjects.animated[i] instanceof RubeDoll) {
-                var object = this.gameObjects.animated[i];
+        // This is using the level.createItem mechanism to 
+        // create the RubeDoll from its ItemSettings
+        for (var uid in this.worldUpdateObjects) {
+            if(this.worldUpdateObjects[uid] instanceof RubeDoll) {
+                var object = this.worldUpdateObjects[uid];
                 var options = object.options;
                 options.x = object.getPosition().x;
                 options.y = object.getPosition().y;

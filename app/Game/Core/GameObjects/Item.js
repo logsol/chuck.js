@@ -41,7 +41,7 @@ function (Parent, Box2D, Options, Settings, Exception, Nc, Assert) {
             this.body.SetBullet(true);
         }
 
-        Nc.trigger(Nc.ns.core.game.gameObject.add, "animated", this);
+        Nc.trigger(Nc.ns.core.game.worldUpdateObjects.add, this);
     }
 
     Item.prototype = Object.create(Parent.prototype);
@@ -158,7 +158,7 @@ function (Parent, Box2D, Options, Settings, Exception, Nc, Assert) {
     };
 
     Item.prototype.destroy = function() {
-        Nc.trigger(Nc.ns.core.game.gameObject.remove, "animated", this);
+        Nc.trigger(Nc.ns.core.game.worldUpdateObjects.remove, this);
         Parent.prototype.destroy.call(this);
     };
  

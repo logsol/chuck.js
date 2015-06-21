@@ -1,9 +1,11 @@
 define([
     "Lib/Vendor/Box2D",
-    "Lib/Utilities/Exception"
+    "Lib/Utilities/Exception",
+    "Lib/Utilities/Assert",
+    "Lib/Utilities/NotificationCenter"
 ],
  
-function (Box2D, Exception) {
+function (Box2D, Exception, Assert, Nc) {
 
 	"use strict";
  
@@ -13,6 +15,10 @@ function (Box2D, Exception) {
         var def = this.getBodyDef();
         def.userData = this;
         this.body = physicsEngine.getWorld().CreateBody(def);
+
+        this.ncTokens = (this.ncTokens || []).concat([
+            Nc.on(Nc.ns.client.game.events.destroy, this.destroy, this)
+        ]);
     }
 
     GameObject.prototype.getBodyDef = function() {
@@ -20,11 +26,14 @@ function (Box2D, Exception) {
     };
 
     GameObject.prototype.destroy = function() {
+        
         if(this.body instanceof Box2D.Dynamics.b2Body) {
             this.body.GetWorld().DestroyBody(this.body);   
         } else {
             throw new Exception("can not destroy body");
         }
+
+        Nc.off(this.ncTokens);
     };
 
     GameObject.prototype.getBody = function() {
@@ -33,6 +42,20 @@ function (Box2D, Exception) {
 
     GameObject.prototype.getPosition = function() {
         return this.body.GetPosition().Copy();
+    };
+
+    GameObject.prototype.setUpdateData = function(update) {
+
+        Assert.number(update.p.x, update.p.y);
+        Assert.number(update.a);
+        Assert.number(update.lv.x, update.lv.y);
+        Assert.number(update.av);
+
+        this.body.SetAwake(true);
+        this.body.SetPosition(update.p);
+        this.body.SetAngle(update.a);
+        this.body.SetLinearVelocity(update.lv);
+        this.body.SetAngularVelocity(update.av);
     };
  
     return GameObject;

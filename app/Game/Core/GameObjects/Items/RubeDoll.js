@@ -138,7 +138,6 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
 
     RubeDoll.prototype.destroy = function() {
 
-        Nc.trigger(Nc.ns.core.game.gameObject.remove, "animated", this);
         var world = this.body.GetWorld();
         
         for (var name in this.limbs) {
