@@ -91,7 +91,7 @@ function () {
         CHANNEL_DEFAULT_MAX_USERS: 40,
         CHANNEL_DEFAULT_SCORE_LIMIT: 10,
         CHANNEL_DEFAULT_LEVELS: ["debug"],
-        CHANNEL_RECORD_SESSION: true,
+        CHANNEL_RECORD_SESSION: false,
 
         // ME STATE
         ME_STATE_MAX_DIFFERENCE_METERS: 1,

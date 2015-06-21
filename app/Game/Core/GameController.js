@@ -5,10 +5,11 @@ define([
     "Lib/Utilities/NotificationCenter",
     "Game/" + GLOBALS.context + "/GameObjects/Doll",
     "Game/" + GLOBALS.context + "/GameObjects/GameObject",
-    "Lib/Utilities/Assert"
+    "Game/" + GLOBALS.context + "/GameObjects/Item",
+    "Lib/Utilities/Assert",
 ],
 
-function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Assert) {
+function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Item, Assert) {
 
 	"use strict";
 
@@ -104,6 +105,8 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Assert) {
             console.warn("User (", userId ,") left who has not joined");
             return;
         }
+
+        this.clearItemsOfPlayerFingerPrints(player);
         
         player.destroy();
         delete this.players[userId];
@@ -113,6 +116,20 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Assert) {
         var player = new Player(user.id, this.physicsEngine, user);
         this.players[user.id] = player;
         return player;
+    };
+
+    GameController.prototype.clearItemsOfPlayerFingerPrints = function(player) {
+        for (var key in this.gameObjects) {
+            for (var i = 0; i < this.gameObjects[key].length; i++) { // to go through animated and fixed.
+                var gameObject = this.gameObjects[key][i];
+                if (gameObject instanceof Item) {
+
+                    if (gameObject.getLastMovedBy() && gameObject.getLastMovedBy().player === player) {
+                        gameObject.setLastMovedBy(null);
+                    }
+                }
+            }
+        }
     };
 
     GameController.prototype.destroy = function () {

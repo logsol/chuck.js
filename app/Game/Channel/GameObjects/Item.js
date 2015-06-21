@@ -14,6 +14,9 @@ function (Parent) {
 
     Item.prototype = Object.create(Parent.prototype);
  
+    Item.prototype.getLastMovedBy = function() {
+        return this.lastMoved;
+    }
 
     Item.prototype.setLastMovedBy = function(player) {
 
