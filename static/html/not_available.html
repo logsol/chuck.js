@@ -75,7 +75,7 @@ $.get(url, function( data ) {
     var progress =  parseInt(milestone.closed_issues) / (parseInt(milestone.open_issues)+parseInt(milestone.closed_issues));
     progress = Math.round(progress * 100);
 
-    $("#m-title").text(milestone.title);
+    $("#m-title").html('<a href="' + milestone.html_url + '">' + milestone.title + '</a>');
     $("#m-open").text(milestone.open_issues);
     $("#m-closed").text(milestone.closed_issues);
     $("#m-progress").text(progress + "%");
