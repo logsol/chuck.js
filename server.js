@@ -2,6 +2,7 @@
 
 var GLOBALS = { context: "Channel" };
 var requirejs = require('requirejs');
+var fs = require('fs');
 
 var inspector;
 
@@ -25,10 +26,17 @@ var options = {
 requirejs([
     "Bootstrap/HttpServer", 
     "Bootstrap/Socket",
-    "Server/Coordinator"
+    "Server/Coordinator",
+    "Game/Config/Settings"
 ], 
 
-function (HttpServer, Socket, Coordinator) {
+function (HttpServer, Socket, Coordinator, Settings) {
+
+    var records = fs.readdirSync(Settings.CHANNEL_RECORDING_PATH);
+    if (records.length > 200) {
+        console.warn('Too many recordings!');
+    }
+
     var coordinator = new Coordinator();
     var httpServer = new HttpServer(options, coordinator);
     var socket = new Socket(httpServer.getServer(), options, coordinator);
