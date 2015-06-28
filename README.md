@@ -2,8 +2,10 @@ chuck.js
 ========
 
 Physical JavaScript Action Browser Multiplayer Game - it will be awesome!
-
-[![Foo](http://25.media.tumblr.com/8249dcd3bdb176686421d1914937db1c/tumblr_mzc1ejGxNC1ry8awho1_400.png)](http://chuck-game.tumblr.com/ "Screenshot of chuck.js - click to visit our development blog!")
+  
+<a href="http://chuck-game.tumblr.com/about" title="Play the chuck trailer" target="_blank">
+  <img src="https://cloud.githubusercontent.com/assets/692826/8396811/3369df82-1db6-11e5-939f-5ceeba64d802.png">
+</a>
 
 Follow the development at http://chuck-game.tumblr.com/
 
