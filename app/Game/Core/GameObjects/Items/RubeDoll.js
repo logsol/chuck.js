@@ -148,6 +148,24 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
         return this.limbs.head.GetPosition().Copy();
     };
 
+    RubeDoll.prototype.setUpdateData = function(update) {
+        
+        Parent.prototype.setUpdateData.call(this, update);
+
+        for(var name in update.limbs) {
+            Assert.number(update.limbs[name].p.x, update.limbs[name].p.y);
+            Assert.number(update.limbs[name].a);
+            Assert.number(update.limbs[name].lv.x, update.limbs[name].lv.y);
+            Assert.number(update.limbs[name].av);
+
+            this.limbs[name].SetAwake(true);
+            this.limbs[name].SetPosition(update.limbs[name].p);
+            this.limbs[name].SetAngle(update.limbs[name].a);
+            this.limbs[name].SetLinearVelocity(update.limbs[name].lv);
+            this.limbs[name].SetAngularVelocity(update.limbs[name].av);
+        }
+    }
+
     RubeDoll.prototype.destroy = function() {
 
         var world = this.body.GetWorld();

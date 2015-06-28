@@ -43,6 +43,30 @@ function (Parent, Settings, Nc) {
         }, Settings.RAGDOLL_DESTRUCTION_TIME * 1000);
     };
 
+    RubeDoll.prototype.getUpdateData = function(getSleeping) {
+        var updateData = Parent.prototype.getUpdateData.call(this, getSleeping);
+
+        // if parent is asleep it sends null, to do no update
+        if(!updateData) {
+            return updateData;
+        }
+
+        // adding limb update data
+        var limbUpdateData = {};
+
+        for(var name in this.limbs) {
+            limbUpdateData[name] = {
+                p: this.limbs[name].GetPosition(),
+                a: this.limbs[name].GetAngle(),
+                lv: this.limbs[name].GetLinearVelocity(),
+                av: this.limbs[name].GetAngularVelocity()
+            };
+        }
+        updateData['limbs'] = limbUpdateData;
+
+        return updateData;
+    }
+
     RubeDoll.prototype.destroy = function() {
         if(this.scheduledForDestruction) {
             clearTimeout(this.destructionTimeout);
