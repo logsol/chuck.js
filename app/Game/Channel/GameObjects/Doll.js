@@ -54,6 +54,7 @@ function (Parent, Item, Box2D, Nc, Assert) {
                     var b2Math = Box2D.Common.Math.b2Math;
                     var absItemVelocity = b2Math.AbsV(itemVelocity);
                     var min = 1;
+                    var damage = 0;
                     
                     if(absItemVelocity.x > min || absItemVelocity.y > min) {
                         if(item.lastMoved && item.lastMoved.player != this.player) {
@@ -72,7 +73,7 @@ function (Parent, Item, Box2D, Nc, Assert) {
                             // + 0.5 and / 2: offsetting for lower velocity impact
                             // * 300: tested imperically by throwing piano from deadly height
                             // * 80: tested imperically by throwing knife fast
-                            var damage = (velocityDamage + 0.5) * (weightDamage * 300 + dangerDamage * 80) / 2;
+                            damage = (velocityDamage + 0.5) * (weightDamage * 300 + dangerDamage * 80) / 2;
 
                             var lastMovedPlayer = item.lastMoved.player;
                             var callback = function() {
@@ -83,7 +84,10 @@ function (Parent, Item, Box2D, Nc, Assert) {
                         }
                     }
 
-                    item.setLastMovedBy(this.player);
+                    // only set lastMovedBy if player wasn't hurt by collision
+                    if (damage === 0) {
+                        item.setLastMovedBy(this.player);
+                    }
                 }
             }
         }
