@@ -421,7 +421,7 @@ function () {
             "height":       "9",
 
             "type":         "rubedoll",
-            "grabAngle":    "0", 
+            "grabAngle":    "0.1", 
         }
     };
 

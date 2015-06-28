@@ -95,8 +95,6 @@ function (Parent, Layer, Settings, Nc) {
         this.characterName = "Chuck";
         this.lastFlipDirection = -options.direction || 1;
 
-        console.log(this.lastFlipDirection);
-
         Parent.call(this, physicsEngine, uid, options);
     }
 
@@ -169,6 +167,8 @@ function (Parent, Layer, Settings, Nc) {
     };
 
     RubeDoll.prototype.render = function() {
+        Parent.prototype.render.call(this);
+
         if(this.limbs) {
             for(var name in this.limbMeshes) {
                 if(this.limbs[name]) {

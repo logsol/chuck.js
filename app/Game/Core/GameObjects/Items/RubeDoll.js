@@ -30,6 +30,7 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
         Parent.call(this, physicsEngine, uid, options);
         world.DestroyBody(this.body);
         this.body = this.limbs.chest;
+        delete this.limbs.chest;
 
         this.body.SetUserData(this);
 
@@ -80,7 +81,9 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
     };
 
     RubeDoll.prototype.flip = function(direction) {
+
         Parent.prototype.flip.call(this, direction);
+        /*
 
         for (var i in this.joints) {
             var joint = this.joints[i];
@@ -102,19 +105,28 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
                     joint.SetLimits(a2, a1);
                 }
             }
-        }
+        }*/
     };
 
     RubeDoll.prototype.reposition = function(handPosition, direction) {
 
+        var oldPosition = this.getPosition();
+
         Parent.prototype.reposition.call(this, handPosition, direction);
 
-        var position = new Box2D.Common.Math.b2Vec2(
-            handPosition.x + ((6 / Settings.RATIO) * direction),
-            handPosition.y
-        );
+        //this.body.SetType(Box2D.Dynamics.b2Body.b2_staticBody)
 
-        this.body.SetPosition(position);
+        var newPosition = this.getPosition();
+        var b2Math = Box2D.Common.Math.b2Math;
+        var offset = b2Math.SubtractVV(newPosition, oldPosition);
+
+        for(var limb in this.limbs) {
+            var position = this.limbs[limb].GetPosition().Copy();
+            position.Add(offset);
+            this.limbs[limb].SetPosition(position);
+            //this.limbs[limb].SetType(Box2D.Dynamics.b2Body.b2_staticBody)
+        }
+
     };
 
     RubeDoll.prototype.setVelocities = function(options) {
