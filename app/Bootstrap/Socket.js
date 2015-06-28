@@ -22,10 +22,12 @@ function (io) {
         var self = this;
         this.socket.configure('development', function () {
             this.set('log level', options.logLevel);
+            this.set('transports', ['websocket']);
         });
 
         this.socket.configure('production', function () {
             this.set('log level', options.logLevel);
+            this.set('transports', ['websocket']);
         });
 
         this.socket.on('connection', function (user) {
