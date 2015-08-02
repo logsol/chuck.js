@@ -73,7 +73,7 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, Matrix, RubeDollJson)
                 lower: this.joints[i].GetLowerLimit(),
                 upper: this.joints[i].GetUpperLimit(),
             };
-
+/*
             this.joints[i].EnableLimit(false);
 
             if(count < 4 && this.joints[i] instanceof Box2D.Dynamics.Joints.b2RevoluteJoint) {
@@ -82,6 +82,7 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, Matrix, RubeDollJson)
                 body.GetWorld().DestroyJoint(this.joints[i]);
             }
             count++;
+            */
         }
     };
 
@@ -92,39 +93,46 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, Matrix, RubeDollJson)
     };
 
     RubeDoll.prototype.flip = function(direction) {
+        var oldFlipDirection = this.flipDirection;
 
-        //Parent.prototype.flip.call(this, direction);
-        /*
+        Parent.prototype.flip.call(this, direction);
 
-        for (var i in this.joints) {
-            var joint = this.joints[i];
-            var limits = this.limits[i];
+        if(oldFlipDirection != direction) {
 
-            if (joint instanceof Box2D.Dynamics.Joints.b2RevoluteJoint) {
+            for (var i in this.joints) {
+                var joint = this.joints[i];
+                var limits = this.limits[i];
 
-                if (direction > 0) {
-                    joint.SetLimits(limits.lower, limits.upper);
-                    continue;
-                }
+                if (joint instanceof Box2D.Dynamics.Joints.b2RevoluteJoint) {
 
-                var a1 = limits.lower * -1;
-                var a2 = limits.upper * -1;
+                    if (direction > 0) {
+                        joint.SetLimits(limits.lower, limits.upper);
+                        continue;
+                    }
 
-                if (a2 > a1) {
-                    joint.SetLimits(a1, a2);
-                } else {
-                    joint.SetLimits(a2, a1);
+                    var a1 = limits.lower * -1;
+                    var a2 = limits.upper * -1;
+
+                    if (a2 > a1) {
+                        joint.SetLimits(a1, a2);
+                    } else {
+                        joint.SetLimits(a2, a1);
+                    }
+
+                    // joint.SetAngle(joint.GetAngle() * -1);
                 }
             }
-        }*/
+        }
     };
 
     RubeDoll.prototype.reposition = function(handPosition, direction) {
-        console.log('repo');
-
         var oldPosition = this.getPosition();
         var oldAngle = this.body.GetAngle();
+        var oldDirection = this.flipDirection;
+        
+        // calls flip() at the end of Parent reposition()
         Parent.prototype.reposition.call(this, handPosition, direction);
+
         var differenceAngle = oldAngle - this.body.GetAngle();
 
         //this.body.SetLinearVelocity(new Box2D.Common.Math.b2Vec2(0, 0));
@@ -154,7 +162,8 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, Matrix, RubeDollJson)
             limb.SetPosition(globalPoint);
 
             // relative limb rotating by chest rotation difference
-            limb.SetAngle(limb.GetAngle() - differenceAngle);
+            var d = (oldDirection == direction) ? -1 : 1;
+            limb.SetAngle((limb.GetAngle() - differenceAngle) * d);
             
             //limb.SetType(Box2D.Dynamics.b2Body.b2_staticBody);
             //limb.SetLinearVelocity(new Box2D.Common.Math.b2Vec2(0, 0));

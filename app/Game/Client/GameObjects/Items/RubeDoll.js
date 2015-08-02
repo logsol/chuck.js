@@ -197,9 +197,6 @@ function (Parent, Layer, Settings, Nc) {
     };
 
     RubeDoll.prototype.flip = function(direction) {
-        return;
-
-
         
         Parent.prototype.flip.call(this, direction);
 

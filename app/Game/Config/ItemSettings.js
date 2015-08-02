@@ -417,7 +417,7 @@ function () {
             "image":        "banana.gif",
 
             "weight":       "3",
-            "width":        "5",
+            "width":        "15",
             "height":       "9",
 
             "type":         "rubedoll",

@@ -128,8 +128,8 @@ function (Parent, Box2D, Options, Settings, Exception, Nc, Assert) {
             handPosition.y
         );
         this.body.SetPosition(position);
-        this.flip(direction);
         this.body.SetAngle((this.options.grabAngle || 0.0) * direction);
+        this.flip(direction);
     };
 
     Item.prototype.getGrabPoint = function() {
