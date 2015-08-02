@@ -79,15 +79,14 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Item, Assert)
                 continue;
             }
 
-            gameObject.setUpdateData(updateData[uid]);
+            this.updateGameObject(gameObject, updateData[uid]);
         }
     };
 
-/*
-    GameController.prototype.onWorldUpdateGameObject = function(body, gameObject, update) {
-        FIXME : call gameObject.setUpdateData(updateData[uid]);
-    };
-*/
+
+    GameController.prototype.updateGameObject = function(gameObject, gameObjectUpdate) {
+        gameObject.setUpdateData(gameObjectUpdate);
+    }
 
     GameController.prototype.onResetLevel = function() {
         this.loadLevel(this.level.uid);

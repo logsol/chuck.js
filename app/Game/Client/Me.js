@@ -51,7 +51,8 @@ function (Parent, Settings, Nc, Assert) {
     	this.lastServerPositionState = update;
     };
 
-	Me.prototype.isPositionStateUpdateNeeded = function() {
+    // Checks if client should send out its position to server
+	Me.prototype.isPositionStateOverrideNeeded = function() {
 
 		if(!this.doll) {
             return false;
@@ -73,7 +74,7 @@ function (Parent, Settings, Nc, Assert) {
     	return false;
     };
 
-    Me.prototype.getPositionStateUpdate = function() {
+    Me.prototype.getPositionStateOverride = function() {
     	return {
     		p: this.doll.body.GetPosition().Copy(),
     		lv: this.doll.body.GetLinearVelocity().Copy()
