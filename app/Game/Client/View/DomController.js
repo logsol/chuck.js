@@ -15,18 +15,19 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
         this.stats = null;
         this.ping = null;
         this.nickContainer = null;
-        this.fpsContainer = "";
+        this.fpsContainer = null;
         this.devToolsContainer = null;
+        this.frames = 0;
+
+        this.canvas = document.getElementById("canvas");
 
         this.initDevTools();
     }
 
     DomController.prototype.initDevTools = function() {
-
         var self = this;
         var li, button, label;
 
-        this.canvas = document.getElementById("canvas");
         this.devToolsContainer = document.getElementById("menuBar");
 
         // create back to menu button
@@ -48,6 +49,16 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
         this.devToolsContainer.appendChild(li);
         this.nickContainer = label;
 
+
+        // create fps label with updater
+        li = document.createElement("li");
+        label = document.createElement("label");
+        label.id = "label-fps";
+        li.appendChild(label);
+        this.devToolsContainer.appendChild(li);
+        this.fpsContainer = label;
+
+/*
         // create new fps meter
         li = document.createElement("li");
         var fpsCanvas = document.createElement("canvas");
@@ -58,14 +69,6 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
         this.devToolsContainer.appendChild(li);
 
         this.fpsGraph = new Graph(fpsCanvas.getContext("2d"), true);
-
-        // create fps label with updater
-        li = document.createElement("li");
-        label = document.createElement("label");
-        label.id = "label-fps";
-        li.appendChild(label);
-        this.devToolsContainer.appendChild(li);
-        this.fpsContainer = label;
 
         this.fpsGraph.onUpdate(function(value){
             self.fpsContainer.innerHTML = "FPS:" + value;
@@ -99,6 +102,12 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
             scaleStepWidth: 0, 
             scaleSteps: 0
         });
+*/
+
+        setInterval(function() {
+            self.fpsContainer.innerHTML = "FPS:" + self.frames;
+            self.frames = 0;
+        }, 1000);
 
         // create Ping: container
         li = document.createElement("li");
@@ -147,12 +156,13 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
     };
 
     DomController.prototype.fpsStep = function() {
-        this.fpsGraph.step();
+        this.frames++;
+        // this.fpsGraph.step();
     };
 
     DomController.prototype.setPing = function(ping) {
         this.ping.innerHTML = "Ping:" + ping;
-        this.pingGraph.addValue(ping);
+        // this.pingGraph.addValue(ping);
     };
 
     DomController.prototype.getCanvasContainer = function () {
@@ -180,13 +190,14 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
             document.body.style.backgroundColor = '#aaaaaa';
             this.ping.innerHTML = "Disconnected. ".replace(/ /g, '&nbsp;');
             this.ping.style.color = "#ff0000";
-
+            /*
             self = this;
             setTimeout(function(){self.ping.innerHTML = "Reload Page...".replace(/ /g, '&nbsp;');}, 3000);
             setTimeout(function(){self.ping.innerHTML = "Reload in 3...".replace(/ /g, '&nbsp;');}, 6000);
             setTimeout(function(){self.ping.innerHTML = "Reload in 2...".replace(/ /g, '&nbsp;');}, 7000);
             setTimeout(function(){self.ping.innerHTML = "Reload in 1...".replace(/ /g, '&nbsp;');}, 8000);
             setTimeout(function(){self.ping.innerHTML = "Reload now.   ".replace(/ /g, '&nbsp;'); location.reload(); }, 9000);
+            */
         }
     };
 

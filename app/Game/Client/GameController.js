@@ -52,7 +52,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         
         if(this.me) {
             this.me.update();
-            this.mePositionStateUpdate();
+            this.mePositionStateOverride();
         }
 
         //for (var uid in this.gameObjects.animated) {
@@ -65,9 +65,13 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         DomController.fpsStep();
     };
 
-    GameController.prototype.mePositionStateUpdate = function() {   
-        if(this.me.isPositionStateUpdateNeeded()) {
-            Nc.trigger(Nc.ns.client.to.server.gameCommand.send, "mePositionStateUpdate", this.me.getPositionStateUpdate());
+    GameController.prototype.mePositionStateOverride = function() {   
+        if(this.me.isPositionStateOverrideNeeded()) {
+            Nc.trigger(
+                Nc.ns.client.to.server.gameCommand.send, 
+                "mePositionStateOverride", 
+                this.me.getPositionStateOverride()
+            );
         }
     };
 
@@ -125,6 +129,17 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         Parent.prototype.onWorldUpdateGameObject.call(this, body, gameObject, update);
     };
     */
+
+    GameController.prototype.updateGameObject = function (gameObject, gameObjectUpdate) {
+        if(gameObject === this.me.doll) {
+            this.me.setLastServerPositionState(gameObjectUpdate);
+            if(!this.me.acceptPositionStateUpdateFromServer()) {
+                return; // this is to ignore own doll updates from world update 
+            }
+        } 
+
+        Parent.prototype.updateGameObject.call(this, gameObject, gameObjectUpdate);
+    }
 
     GameController.prototype.createMe = function(user) {
         this.me = new Me(user.id, this.physicsEngine, user);

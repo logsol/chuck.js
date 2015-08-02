@@ -45,7 +45,7 @@ function(Parent, Nc, Parser, Settings) {
         this.player.suicide();
     };
 
-    PlayerController.prototype.mePositionStateUpdate = function(update) {
+    PlayerController.prototype.mePositionStateOverride = function(update) {
 
         if(!this.player.isSpawned()) {
             // if someone still falls but is dead on the server already
@@ -57,7 +57,7 @@ function(Parent, Nc, Parser, Settings) {
             y: Math.abs(update.p.y - this.player.doll.body.GetPosition().y)
         };
 
-        if(true || difference.x < Settings.PUNKBUSTER_DIFFERENCE_METERS &&
+        if(difference.x < Settings.PUNKBUSTER_DIFFERENCE_METERS &&
            difference.y < Settings.PUNKBUSTER_DIFFERENCE_METERS) {
             this.player.doll.updatePositionState(update);
         } else {
