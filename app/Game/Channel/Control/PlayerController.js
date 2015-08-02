@@ -35,9 +35,9 @@ function(Parent, Nc, Parser, Settings) {
     };
 
     PlayerController.prototype.handActionRequest = function(options) {
-        options.x = parseFloat(options.x) || 0;
-        options.y = parseFloat(options.y) || 0;
-        options.av = parseFloat(options.av) || 0;
+        options.x = parseFloat(options.x) || 0.0;
+        options.y = parseFloat(options.y) || 0.0;
+        options.av = parseFloat(options.av) || 0.0;
         if (options) this.player.handActionRequest(options);
     };
 

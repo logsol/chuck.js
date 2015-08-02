@@ -421,7 +421,7 @@ function () {
             "height":       "9",
 
             "type":         "rubedoll",
-            "grabAngle":    "0.1", 
+            "grabAngle":    "0.001",  // seems to be a bug, that 0 does not work!
         }
     };
 

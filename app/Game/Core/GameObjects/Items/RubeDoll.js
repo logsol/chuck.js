@@ -5,10 +5,11 @@ define([
     "Game/Config/Settings",
     "Lib/Utilities/Assert",
     "Lib/Utilities/NotificationCenter",
+    "Lib/Utilities/Matrix",
     "json!Game/Asset/RubeDoll.json" // using requirejs json loader plugin
 ],
 
-function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
+function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, Matrix, RubeDollJson) {
 
 	"use strict";
  
@@ -66,11 +67,21 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
 
         this.joints = scene.joints;
 
+        var count = 0;
         for (var i in this.joints) {
             this.limits[i] = {
                 lower: this.joints[i].GetLowerLimit(),
                 upper: this.joints[i].GetUpperLimit(),
             };
+
+            this.joints[i].EnableLimit(false);
+
+            if(count < 4 && this.joints[i] instanceof Box2D.Dynamics.Joints.b2RevoluteJoint) {
+                console.log(i);
+            } else {
+                body.GetWorld().DestroyJoint(this.joints[i]);
+            }
+            count++;
         }
     };
 
@@ -82,7 +93,7 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
 
     RubeDoll.prototype.flip = function(direction) {
 
-        Parent.prototype.flip.call(this, direction);
+        //Parent.prototype.flip.call(this, direction);
         /*
 
         for (var i in this.joints) {
@@ -109,24 +120,45 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
     };
 
     RubeDoll.prototype.reposition = function(handPosition, direction) {
+        console.log('repo');
 
         var oldPosition = this.getPosition();
-
+        var oldAngle = this.body.GetAngle();
         Parent.prototype.reposition.call(this, handPosition, direction);
+        var differenceAngle = oldAngle - this.body.GetAngle();
 
-        //this.body.SetType(Box2D.Dynamics.b2Body.b2_staticBody)
+        //this.body.SetLinearVelocity(new Box2D.Common.Math.b2Vec2(0, 0));
 
-        var newPosition = this.getPosition();
-        var b2Math = Box2D.Common.Math.b2Math;
-        var offset = b2Math.SubtractVV(newPosition, oldPosition);
+        var offset = Box2D.Common.Math.b2Math.SubtractVV(this.getPosition(), oldPosition);
+        var grabAngle = (this.options.grabAngle || 0.001);
 
-        for(var limb in this.limbs) {
-            var position = this.limbs[limb].GetPosition().Copy();
+        for(var key in this.limbs) {
+            var limb = this.limbs[key];
+
+            // Setting position offset first (floor to hand)
+            var position = limb.GetPosition().Copy();
             position.Add(offset);
-            this.limbs[limb].SetPosition(position);
-            //this.limbs[limb].SetType(Box2D.Dynamics.b2Body.b2_staticBody)
-        }
+            limb.SetPosition(position);
 
+            // grabing local point to "rotate" around (x, y position transform only)
+            var localPoint = this.body.GetLocalPoint(limb.GetPosition().Copy());
+
+            // create rotation matrix from chest rotation difference
+            var mat = Box2D.Common.Math.b2Mat22.FromAngle(differenceAngle);
+
+            // matrix multiplication with local limb position
+            position = Box2D.Common.Math.b2Math.MulTMV(mat, localPoint);
+
+            // translating back to global position
+            var globalPoint = this.body.GetWorldPoint(position);
+            limb.SetPosition(globalPoint);
+
+            // relative limb rotating by chest rotation difference
+            limb.SetAngle(limb.GetAngle() - differenceAngle);
+            
+            //limb.SetType(Box2D.Dynamics.b2Body.b2_staticBody);
+            //limb.SetLinearVelocity(new Box2D.Common.Math.b2Vec2(0, 0));
+        }
     };
 
     RubeDoll.prototype.setVelocities = function(options) {
@@ -152,6 +184,7 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
         
         Parent.prototype.setUpdateData.call(this, update);
 
+/*
         for(var name in update.limbs) {
             Assert.number(update.limbs[name].p.x, update.limbs[name].p.y);
             Assert.number(update.limbs[name].a);
@@ -164,6 +197,7 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, RubeDollJson) {
             this.limbs[name].SetLinearVelocity(update.limbs[name].lv);
             this.limbs[name].SetAngularVelocity(update.limbs[name].av);
         }
+        */
     }
 
     RubeDoll.prototype.destroy = function() {

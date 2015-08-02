@@ -129,7 +129,7 @@ function (Parent, Box2D, Options, Settings, Exception, Nc, Assert) {
         );
         this.body.SetPosition(position);
         this.flip(direction);
-        this.body.SetAngle((this.options.grabAngle || 0) * direction);
+        this.body.SetAngle((this.options.grabAngle || 0.0) * direction);
     };
 
     Item.prototype.getGrabPoint = function() {

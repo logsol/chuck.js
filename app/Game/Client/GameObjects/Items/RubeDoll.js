@@ -167,7 +167,17 @@ function (Parent, Layer, Settings, Nc) {
     };
 
     RubeDoll.prototype.render = function() {
-        Parent.prototype.render.call(this);
+        //Parent.prototype.render.call(this);
+
+        Nc.trigger(Nc.ns.client.view.mesh.update,
+            this.layerId,
+            this.mesh,
+            {
+                x: this.body.GetPosition().x * Settings.RATIO,
+                y: this.body.GetPosition().y * Settings.RATIO,
+                rotation: this.body.GetAngle()
+            }
+        );
 
         if(this.limbs) {
             for(var name in this.limbMeshes) {
@@ -187,6 +197,10 @@ function (Parent, Layer, Settings, Nc) {
     };
 
     RubeDoll.prototype.flip = function(direction) {
+        return;
+
+
+        
         Parent.prototype.flip.call(this, direction);
 
         // flipping depth of right body side arm/leg images with left

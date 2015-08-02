@@ -352,7 +352,7 @@ function (Parent, Box2D, Settings, Nc, Assert, Options, ItemSettings) {
             chestPosition.y + this.options.limbs.head.y / Settings.RATIO
         );
         this.limbs.head.SetPosition(position);
-        this.limbs.head.SetAngle((this.options.grabAngle || 0) * direction);
+        this.limbs.head.SetAngle((this.options.grabAngle || 0.0) * direction);
     };
 
     RagDoll.prototype.throw = function(options, carrierVelocity) {

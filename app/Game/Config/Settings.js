@@ -16,8 +16,8 @@ function () {
         BOX2D_WORLD_AABB_SIZE: 3000,
         BOX2D_ALLOW_SLEEP: true,
         BOX2D_GRAVITY: 26,
-        BOX2D_VELOCITY_ITERATIONS: 200,
-        BOX2D_POSITION_ITERATIONS: 100,
+        BOX2D_VELOCITY_ITERATIONS: 20,
+        BOX2D_POSITION_ITERATIONS: 10, // 200/100 created problems (awful teleporting when repositioning joints)
         BOX2D_TIME_STEP: 1 / 60,
 
         //  PATHS
