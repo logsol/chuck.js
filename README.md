@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/logsol/chuck.js.png?label=ready&title=Ready)](https://waffle.io/logsol/chuck.js)
 chuck.js
 ========
 
