@@ -174,6 +174,11 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter, Nc) {
 
     Layer.prototype.addFilter = function(mesh, filterName, options) {
 
+        // use game container if mesh null
+        if(mesh === null) {
+
+        }
+
         if (!this.getAvailableMeshFilters().hasOwnProperty(filterName)) {
             throw new Exception('Filter ' + filterName + ' is not available');
         }
@@ -228,6 +233,8 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter, Nc) {
             return;
         }
 
+        // FIXME this should throw an error i think since "options" is not defined here
+        // maybe we never actually call this method?
         var MeshFilter = this.getAvailableMeshFilters()[options.filter];
 
         filters = filters.filter(function(filter){

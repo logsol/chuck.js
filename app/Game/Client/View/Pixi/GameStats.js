@@ -9,7 +9,7 @@ function (PIXI, Nc, Settings, ColorConverter) {
 
 	"use strict";
  
-    function GameStats(gameContainer) {
+    function GameStats(view) {
 
 		this.style = {
 			borderWidth: 3,
@@ -27,7 +27,7 @@ function (PIXI, Nc, Settings, ColorConverter) {
             fontSize: 12
 		};
 
-    	this.gameContainer = gameContainer;
+    	this.view = view;
 
         this.container = new PIXI.DisplayObjectContainer();
 
@@ -77,11 +77,12 @@ function (PIXI, Nc, Settings, ColorConverter) {
             this.redraw();
             // show stats with filters
             this.container.visible = true;
-            this.gameContainer.filters = this.filters;
+
+            this.view.addFilters(this.filters);
             this.filters.forEach(function(filter) { filter.dirty = true; });
         } else {
             this.container.visible = false;
-            this.gameContainer.filters = null;
+            this.view.removeFilters(this.filters);
         }
     }
 

@@ -39,7 +39,7 @@ function () {
         VIEW_CONTROLLER: 0 ? "Three" : "Pixi",
         ARROW_GLIDE: 30, // % of the way per frame     
         SHOW_LAYER_INFO: false,
-        ENABLE_POINTER_LOCK_FILTER: false,
+        ENABLE_POINTER_LOCK_FILTER: true,
 
         // GAME PLAY 
         WALK_SPEED: 4,
@@ -88,8 +88,8 @@ function () {
         CHANNEL_MAX_USERS: 20,
         CHANNEL_DESTRUCTION_TIME: 0.5 * 60,
         CHANNEL_END_ROUND_TIME: 20, //10,
-        CHANNEL_DEFAULT_MAX_USERS: 40,
-        CHANNEL_DEFAULT_SCORE_LIMIT: 10,
+        CHANNEL_DEFAULT_MAX_USERS: 10,
+        CHANNEL_DEFAULT_SCORE_LIMIT: 1,
         CHANNEL_DEFAULT_LEVELS: ["debug"],
         CHANNEL_RECORD_SESSION: false,
 

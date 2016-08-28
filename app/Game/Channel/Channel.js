@@ -82,6 +82,7 @@
 
         Channel.prototype.onEndRound = function() {
             var self = this;
+            this.gameController.endRound();
             this.broadcastControlCommand("endRound", true);
 
             console.checkpoint("End Round (" + this.name + ") - Begin Round in " + Settings.CHANNEL_END_ROUND_TIME + " seconds");

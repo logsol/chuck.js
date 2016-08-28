@@ -21,6 +21,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         this.animationTimeout = null;
         this.worldUpdateTimeout = null;
         this.spawnTimeouts = [];
+        this.roundHasEnded = false;
 
         Parent.call(this, options);
 
@@ -212,6 +213,14 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         Nc.trigger(Nc.ns.channel.to.client.user.gameCommand.send + userId, "clientReadyResponse", options);
 
         this.spawnPlayer(player, 0);
+    };
+
+    GameController.prototype.endRound = function() {
+        this.roundHasEnded = true;
+
+        for(var id in this.players) {
+            this.players[id].getPlayerController().setIsInBetweenGames(true);
+        }
     };
 
     // FIXME: remove this method

@@ -82,7 +82,7 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
         this.initPointerLockView();
 
         // Tab Overlay (not using layer manager, cause of filters)
-        this.gameStats = new GameStats(this.container);
+        this.gameStats = new GameStats(this);
         this.stage.addChild(this.gameStats.getInfoContainer());
 
         this.ghostLayer = new Ghost();
@@ -143,7 +143,8 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
         if (!Settings.ENABLE_POINTER_LOCK_FILTER) return;
 
         if(isLocked) {
-            this.container.filters = null;
+            this.removeFilters(this.pointerLockFilters);
+            
             this.clickToEnable.visible = false;
             this.onZoomReset();
         } else {
@@ -159,7 +160,7 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
                 strokeThickness: 6 * this.currentZoom
             });
 
-            this.container.filters = this.pointerLockFilters;
+            this.addFilters(this.pointerLockFilters);
             this.pointerLockFilters.forEach(function(filter) { filter.dirty = true; });
 
             this.clickToEnable.position = new PIXI.Point(Settings.STAGE_WIDTH / 2 - this.clickToEnable.width / 2, Settings.STAGE_HEIGHT / 2 - this.clickToEnable.height / 2)
@@ -167,6 +168,46 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
 
             this.onZoomReset();
             this.currentZoom *= 0.9;
+        }
+    };
+
+    PixiView.prototype.removeFilters = function(filters) {
+
+        if(this.container && this.container.filters && this.container.filters.length) {
+            for (var i = this.container.filters.length - 1; i >= 0; i--) {
+
+                for (var j = filters.length - 1; j >= 0; j--) {
+                    if (filters[j] === this.container.filters[i]) {
+                        this.container.filters.splice(i, 1);
+                    }
+                }
+            }
+
+            // weird bug, filters.length cant be 0, must be set to null
+            if(this.container.filters.length < 1) {
+                this.container.filters = null;
+            }
+        }
+
+    };
+
+    PixiView.prototype.addFilters = function(filters) {
+        if (filters.length < 1) return;
+        if (!this.container) {
+            return;
+        }
+
+        if (!this.container.filters) {
+            /*
+             * slice does a copy, which is important here - 
+             * otherwise this.pointerLockFilters will be manipulated too on remove.
+             */ 
+            this.container.filters = filters.slice(); 
+            return;
+        }
+
+        for (var i = 0; i < filters.length; i++) {
+            this.container.filters.push(filters[i]);
         }
     };
 

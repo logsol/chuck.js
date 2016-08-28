@@ -187,5 +187,9 @@ function (Doll, Settings, Nc, Exception, ColorConverter, SpectatorDoll, RubeDoll
         this.playerController = playerController;
     }
 
+    Player.prototype.getPlayerController = function() {
+        return this.playerController;
+    }
+
     return Player;
 });

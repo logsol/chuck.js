@@ -130,6 +130,10 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
     };
     */
 
+    GameController.prototype.onRemoveGameObject = function(options) {
+
+    };
+
     GameController.prototype.updateGameObject = function (gameObject, gameObjectUpdate) {
         if(gameObject === this.me.doll) {
             this.me.setLastServerPositionState(gameObjectUpdate);
@@ -250,6 +254,17 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
     GameController.prototype.toggleGameStats = function(show) {
         Nc.trigger(Nc.ns.client.view.gameStats.toggle, show);
+    };
+
+    GameController.prototype.beginRound = function() {
+        if (this.me.getPlayerController()) {
+            this.me.getPlayerController().setIsInBetweenGames(false);
+        }
+    };
+
+    GameController.prototype.endRound = function() {
+        this.me.getPlayerController().setIsInBetweenGames(true);
+        this.toggleGameStats(true);
     };
 
     GameController.prototype.destroy = function() {

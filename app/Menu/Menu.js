@@ -1,11 +1,12 @@
 define([
+	"Game/Config/Settings",
 	"Lib/Utilities/ColorConverter",
 	"Lib/Utilities/Exception",
 	"Game/Client/PointerLockManager",
 	"Lib/Utilities/QuerySelector"
 ],
  
-function (ColorConverter, Exception, PointerLockManager, Qs) {
+function (Settings, ColorConverter, Exception, PointerLockManager, Qs) {
 
 	"use strict";
 
@@ -29,6 +30,8 @@ function (ColorConverter, Exception, PointerLockManager, Qs) {
 		if(localStorage["customname"]) {
 			Qs.$("#customname").value = localStorage["customname"];
 		}
+		Qs.$("#scoreLimit").value = Settings.CHANNEL_DEFAULT_SCORE_LIMIT;
+		Qs.$("#userLimit").value = Settings.CHANNEL_DEFAULT_MAX_USERS;
 
 
 		Qs.$("#refresh").onclick = refresh;

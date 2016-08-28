@@ -196,10 +196,12 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
                 this.gameController.createPlayer(this.users[userId]);
             }            
         }
+
+        this.gameController.beginRound();
     };
 
     Networker.prototype.onEndRound = function() {
-        this.gameController.toggleGameStats(true);
+        this.gameController.endRound();
     };
 
     return Networker;

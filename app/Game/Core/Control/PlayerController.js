@@ -10,14 +10,18 @@ function () {
         this._shift;
         this._isJumping;
         this._walkingDirectionStatus = 0;
+
+        this.isInBetweenGames = false;
     }
 
     PlayerController.prototype.moveLeft = function () {
+        if(!this.isPlayerInputAllowed()) return;
         this.player.move(-1);
         this._walkingDirectionStatus = -1;
     }
 
     PlayerController.prototype.moveRight = function () {
+        if(!this.isPlayerInputAllowed()) return;
         this.player.move(1);
         this._walkingDirectionStatus = 1;
     }
@@ -28,6 +32,7 @@ function () {
     }
 
     PlayerController.prototype.jump = function () {
+        if(!this.isPlayerInputAllowed()) return;
         this._isJumping = true;
         this.player.jump();
     }
@@ -37,8 +42,17 @@ function () {
     }
 
     PlayerController.prototype.lookAt = function (options) {
+        if(!this.isPlayerInputAllowed()) return;
         if(options) this.player.lookAt(options.x, options.y);
     }
+
+    PlayerController.prototype.setIsInBetweenGames = function(isInBetweenGames) {
+        this.isInBetweenGames = !!isInBetweenGames;
+    };
+
+    PlayerController.prototype.isPlayerInputAllowed = function() {
+        return !this.isInBetweenGames;
+    };
 
     PlayerController.prototype.update = function () {
         if(this._walkingDirectionStatus != 0) {
