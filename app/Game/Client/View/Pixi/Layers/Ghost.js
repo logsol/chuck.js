@@ -36,10 +36,10 @@ function (Parent, PIXI, Nc, Settings) {
         arrow.visible = false;
         this.container.addChild(arrow);
 
-        var width = 12,
-            height = 12;
+        var width = 10,
+            height = 10;
 
-        arrow.beginFill(0xffffff, 0.1);
+        arrow.beginFill(0xffffff, 0.4);
         arrow.lineStyle(0, 0x000000);
         arrow.moveTo(0, 0);
         arrow.lineTo(width, 0);
@@ -56,7 +56,7 @@ function (Parent, PIXI, Nc, Settings) {
     Ghost.prototype.onUpdatePlayerArrow = function(arrow, options) {
 
         var offsetX = 0,
-            offsetY = -60,
+            offsetY = -55,
             x = offsetX + options.x,
             y = offsetY + options.y;
 
