@@ -13,7 +13,7 @@ function (Doll, PlayerController, Settings, Nc, Exception, ColorConverter, Spect
 
 	"use strict";
 
-    function Player (id, physicsEngine, user) {
+    function Player (id, physicsEngine, user, revealedGameController) {
         this.stats = {
             health: 100,
             deaths: 0,
@@ -27,7 +27,9 @@ function (Doll, PlayerController, Settings, Nc, Exception, ColorConverter, Spect
         this.id = id;
         this.spawned = false;
         this.holdingItem = null;
+        this.inBetweenRounds = true;
         this.spectatorDoll = new SpectatorDoll(this.physicsEngine, "spectatorDoll-" + this.id, this);
+        this.revealedGameController = revealedGameController;
     }
 
     Player.prototype.getNickname = function() {
@@ -185,7 +187,11 @@ function (Doll, PlayerController, Settings, Nc, Exception, ColorConverter, Spect
     }
 
     Player.prototype.setInBetweenRounds = function(inBetweenRounds) {
-        return this.playerController.setInBetweenRounds(inBetweenRounds);
+        this.inBetweenRounds = inBetweenRounds;
+    };
+
+    Player.prototype.isInBetweenRounds = function() {
+        return this.inBetweenRounds;
     };
 
     return Player;

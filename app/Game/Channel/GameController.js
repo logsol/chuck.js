@@ -60,7 +60,11 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, 
     }
 
     GameController.prototype.createPlayer = function(user) {
-        var player = Parent.prototype.createPlayer.call(this, user);
+
+        var revealedGameController = {
+            isInBetweenRounds: this.isInBetweenRounds.bind(this)
+        }; 
+        var player = Parent.prototype.createPlayer.call(this, user, revealedGameController);
         user.setPlayer(player);
     };
 
@@ -230,6 +234,10 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, 
         for(var id in this.players) {
             this.players[id].setInBetweenRounds(true);
         }
+    };
+
+    GameController.prototype.isInBetweenRounds = function() {
+        return this.roundHasEnded;
     };
 
     // FIXME: remove this method

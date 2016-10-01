@@ -10,8 +10,6 @@ function () {
         this._shift;
         this._isJumping;
         this._walkingDirectionStatus = 0;
-
-        this.inBetweenRounds = false;
     }
 
     PlayerController.prototype.moveLeft = function () {
@@ -46,19 +44,16 @@ function () {
         if(options) this.player.lookAt(options.x, options.y);
     }
 
-    PlayerController.prototype.setInBetweenRounds = function(inBetweenRounds) {
-        this.inBetweenRounds = !!inBetweenRounds;
-    };
-
-    PlayerController.prototype.isPlayerInputAllowed = function() {
-        return !this.inBetweenRounds;
-    };
-
     PlayerController.prototype.update = function () {
         if(this._walkingDirectionStatus != 0) {
             this.player.move(this._walkingDirectionStatus);
         }
     }
+
+    // Default behaviour - may be needed later? 
+    PlayerController.prototype.isPlayerInputAllowed = function() {
+        return true;
+    };
 
     PlayerController.prototype.destroy = function() {
         // extend if necessary

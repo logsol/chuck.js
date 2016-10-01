@@ -16,9 +16,9 @@ function (Parent, Nc, Settings) {
     	this.healthBarViewVisible = false;
     	this.initHealthBar();
 
-        this.ncTokens = [
+        this.ncTokens = (this.ncTokens || []).concat([
             Nc.on(Nc.ns.client.game.events.render, this.render, this)
-        ];
+        ]);
     }
 
     Player.prototype = Object.create(Parent.prototype);

@@ -8,8 +8,8 @@ function (Parent, Nc, PlayerController) {
 
 	"use strict";
  
-    function Player(id, physicsEngine, user) {
-    	Parent.call(this, id, physicsEngine, user);
+    function Player(id, physicsEngine, user, revealedGameController) {
+    	Parent.call(this, id, physicsEngine, user, revealedGameController);
 
         this.playerController = new PlayerController(this);
     }
@@ -64,6 +64,12 @@ function (Parent, Nc, PlayerController) {
     };
 
     Player.prototype.addDamage = function(damage, enemy, byItem) {
+
+        // Prevent stats change (kills) after round has ended
+        if (this.revealedGameController.isInBetweenRounds()) {
+            return;
+        }
+
         this.stats.health -= damage;
         
         if(this.stats.health < 0) this.stats.health = 0;
@@ -118,7 +124,6 @@ function (Parent, Nc, PlayerController) {
             });            
         }
     };
-    
  
     return Player;
  

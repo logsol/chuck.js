@@ -23,13 +23,12 @@ function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, Matrix, RubeDollJson)
         this.limits = [];
 
         var chest = null;
-        var world = physicsEngine.getWorld();
-        this.rubeLoader = new RubeLoader(RubeDollJson, world);
+        this.rubeLoader = new RubeLoader(RubeDollJson, physicsEngine.getWorldForRubeLoader());
 
         this.loadRubeDollFromScene(options);
 
         Parent.call(this, physicsEngine, uid, options);
-        world.DestroyBody(this.body);
+        physicsEngine.destroyBody(this.body);
         this.body = this.limbs.chest;
         delete this.limbs.chest;
 

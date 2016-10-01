@@ -111,8 +111,8 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Item, Assert)
         delete this.players[userId];
     };
 
-    GameController.prototype.createPlayer = function(user) {
-        var player = new Player(user.id, this.physicsEngine, user);
+    GameController.prototype.createPlayer = function(user, revealedGameController) {
+        var player = new Player(user.id, this.physicsEngine, user, revealedGameController);
         this.players[user.id] = player;
         return player;
     };
@@ -132,8 +132,6 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Item, Assert)
     };
 
     GameController.prototype.destroy = function () {
-        var i = 0;
-
         for(var player in this.players) {
             this.players[player].destroy();
         }
@@ -150,7 +148,6 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Item, Assert)
         this.worldUpdateObjects = null;
 
         Nc.off(this.ncTokens);
-
     };
 
     return GameController;
