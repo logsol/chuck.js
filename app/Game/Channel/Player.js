@@ -1,14 +1,17 @@
 define([
 	"Game/Core/Player",
-	"Lib/Utilities/NotificationCenter"
+	"Lib/Utilities/NotificationCenter",
+    "Game/Channel/Control/PlayerController"
 ],
  
-function (Parent, Nc) {
+function (Parent, Nc, PlayerController) {
 
 	"use strict";
  
     function Player(id, physicsEngine, user) {
     	Parent.call(this, id, physicsEngine, user);
+
+        this.playerController = new PlayerController(this);
     }
 
     Player.prototype = Object.create(Parent.prototype);

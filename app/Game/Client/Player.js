@@ -8,7 +8,7 @@ function (Parent, Nc, Settings) {
 
 	"use strict";
  
-    function Player(id, physicsEngine, user) {
+    function Player(id, physicsEngine, user, isMe) {
     	Parent.call(this, id, physicsEngine, user);
 
     	this.healthBarView = null;

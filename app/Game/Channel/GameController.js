@@ -2,7 +2,6 @@ define([
     "Game/Core/GameController",
     "Game/Channel/Physics/Engine",
     "Game/Config/Settings", 
-    "Game/Channel/Control/PlayerController",
     "Lib/Utilities/RequestAnimFrame",
     "Lib/Utilities/NotificationCenter",
     "Lib/Vendor/Box2D",
@@ -12,7 +11,7 @@ define([
     "Game/Channel/GameObjects/Items/RubeDoll"
 ],
 
-function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, Nc, Box2D, Player, GameObject, Doll, RubeDoll) {
+function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, GameObject, Doll, RubeDoll) {
 
 	"use strict";
 
@@ -62,7 +61,6 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
 
     GameController.prototype.createPlayer = function(user) {
         var player = Parent.prototype.createPlayer.call(this, user);
-        player.setPlayerController(new PlayerController(player))
         user.setPlayer(player);
     };
 
@@ -219,7 +217,7 @@ function (Parent, PhysicsEngine, Settings, PlayerController, requestAnimFrame, N
         this.roundHasEnded = true;
 
         for(var id in this.players) {
-            this.players[id].getPlayerController().setIsInBetweenGames(true);
+            this.players[id].setInBetweenRounds(true);
         }
     };
 

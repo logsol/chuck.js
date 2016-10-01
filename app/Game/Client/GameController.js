@@ -151,7 +151,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
     };
 
     GameController.prototype.setMe = function() {
-        this.me.setPlayerController(new PlayerController(this.me));
         this.view.setMe(this.me);
     };
 
@@ -257,13 +256,11 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
     };
 
     GameController.prototype.beginRound = function() {
-        if (this.me.getPlayerController()) {
-            this.me.getPlayerController().setIsInBetweenGames(false);
-        }
+        this.me.setInBetweenRounds(false);
     };
 
     GameController.prototype.endRound = function() {
-        this.me.getPlayerController().setIsInBetweenGames(true);
+        this.me.setInBetweenRounds(true);
         this.toggleGameStats(true);
     };
 

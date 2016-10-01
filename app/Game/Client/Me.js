@@ -2,10 +2,11 @@ define([
 	"Game/Client/Player",
 	"Game/Config/Settings",
     "Lib/Utilities/NotificationCenter",
-    "Lib/Utilities/Assert"
+    "Lib/Utilities/Assert",
+    "Game/Client/Control/PlayerController",
 ],
  
-function (Parent, Settings, Nc, Assert) {
+function (Parent, Settings, Nc, Assert, PlayerController) {
 
 	"use strict";
  
@@ -27,6 +28,7 @@ function (Parent, Settings, Nc, Assert) {
 
         this.arrowMesh = null;
         this.createAndAddArrow();
+        this.playerController = new PlayerController(this);
     }
 
     Me.prototype = Object.create(Parent.prototype);

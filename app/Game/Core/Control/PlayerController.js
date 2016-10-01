@@ -11,7 +11,7 @@ function () {
         this._isJumping;
         this._walkingDirectionStatus = 0;
 
-        this.isInBetweenGames = false;
+        this.inBetweenRounds = false;
     }
 
     PlayerController.prototype.moveLeft = function () {
@@ -46,12 +46,12 @@ function () {
         if(options) this.player.lookAt(options.x, options.y);
     }
 
-    PlayerController.prototype.setIsInBetweenGames = function(isInBetweenGames) {
-        this.isInBetweenGames = !!isInBetweenGames;
+    PlayerController.prototype.setInBetweenRounds = function(inBetweenRounds) {
+        this.inBetweenRounds = !!inBetweenRounds;
     };
 
     PlayerController.prototype.isPlayerInputAllowed = function() {
-        return !this.isInBetweenGames;
+        return !this.inBetweenRounds;
     };
 
     PlayerController.prototype.update = function () {

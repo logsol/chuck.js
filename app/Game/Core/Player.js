@@ -1,5 +1,6 @@
 define([
     "Game/" + GLOBALS.context + "/GameObjects/Doll",
+    "Game/" + GLOBALS.context + "/Control/PlayerController",
     "Game/Config/Settings",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Exception",
@@ -8,7 +9,7 @@ define([
     "Game/" + GLOBALS.context + "/GameObjects/Items/RubeDoll"
 ],
 
-function (Doll, Settings, Nc, Exception, ColorConverter, SpectatorDoll, RubeDoll) {
+function (Doll, PlayerController, Settings, Nc, Exception, ColorConverter, SpectatorDoll, RubeDoll) {
 
 	"use strict";
 
@@ -21,7 +22,7 @@ function (Doll, Settings, Nc, Exception, ColorConverter, SpectatorDoll, RubeDoll
 
         this.user = user;
         this.physicsEngine = physicsEngine;
-        this.playerController = null;
+        this.playerController = null; // pre-initialise with null, because client/players don't get one
         this.doll;
         this.id = id;
         this.spawned = false;
@@ -183,13 +184,9 @@ function (Doll, Settings, Nc, Exception, ColorConverter, SpectatorDoll, RubeDoll
         }
     }
 
-    Player.prototype.setPlayerController = function(playerController) {
-        this.playerController = playerController;
-    }
-
-    Player.prototype.getPlayerController = function() {
-        return this.playerController;
-    }
+    Player.prototype.setInBetweenRounds = function(inBetweenRounds) {
+        return this.playerController.setInBetweenRounds(inBetweenRounds);
+    };
 
     return Player;
 });
