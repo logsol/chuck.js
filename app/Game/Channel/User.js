@@ -61,6 +61,16 @@ function(Parent, Nc, ProtocolHelper, ProtocolParser) {
     	var recipient = this.id;
 		var data = ProtocolHelper.encodeCommand(command, options);
 
+        /**
+          * Listen for beginRound control command
+          * to set client to be unready again
+          * so it can load its new level without getting
+          * any gameCommands like worldUpdate
+          */
+        if(command == "beginRound") {
+            this.isReady = false;
+        }
+
     	Nc.trigger(Nc.ns.channel.to.server.controlCommand.send, recipient, data);
     };
 

@@ -191,7 +191,6 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
 
         if(this.gameController) {
             this.gameController.destroy();
-            delete this.gameController;
         }
 
         this.gameController = new GameController(options);
