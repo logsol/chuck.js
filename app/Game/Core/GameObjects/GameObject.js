@@ -14,7 +14,7 @@ function (Box2D, Exception, Assert, Nc) {
 
         var def = this.getBodyDef();
         def.userData = this;
-        this.body = physicsEngine.getWorld().CreateBody(def);
+        this.body = physicsEngine.createBody(def);
 
         this.ncTokens = (this.ncTokens || []).concat([
             Nc.on(Nc.ns.client.game.events.destroy, this.destroy, this)

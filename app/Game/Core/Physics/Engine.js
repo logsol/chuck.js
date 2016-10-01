@@ -15,7 +15,6 @@ function (Settings, Box2D, CollisionDetector, Nc) {
             Settings.BOX2D_ALLOW_SLEEP
         );
         this.world.SetWarmStarting(true);
-        this.ground = null;
         this.lastStep = Date.now();
         this.worldQueue = [];
 
@@ -24,24 +23,22 @@ function (Settings, Box2D, CollisionDetector, Nc) {
         ];
     }
 
-    Engine.prototype.getWorld = function () {
-        return this.world;
-    }
-
-    Engine.prototype.getGround = function () {
-        return this.ground;
-    }
-
     Engine.prototype.setCollisionDetector = function () {
         
         var detector = new CollisionDetector(); 
         this.world.SetContactListener(detector.getListener());
     }
 
+    Engine.prototype.getWorldForRubeLoader = function() {
+        return this.world;
+    };
+
     Engine.prototype.createBody = function (bodyDef) {
-        var body = this.world.CreateBody(bodyDef);
-        if(!this.ground) this.ground = body;
-        return body;
+        return this.world.CreateBody(bodyDef);
+    }
+
+    Engine.prototype.destroyBody = function (body) {
+        return this.world.DestroyBody(body);
     }
 
     Engine.prototype.addToWorldQueue = function(callback) {
@@ -65,8 +62,8 @@ function (Settings, Box2D, CollisionDetector, Nc) {
     }
 
     Engine.prototype.destroy = function() {
-        delete this.world;
         Nc.offAll(this.ncTokens);
+        delete this.world;
     };
 
 

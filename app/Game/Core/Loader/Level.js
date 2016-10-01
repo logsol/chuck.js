@@ -25,6 +25,7 @@ define([
 
     Level.prototype.load = function (uid) {
         var self = this;
+        // FIXME: check if theres a security hazard here (user injected path)
         var path = Settings.MAPS_PATH + uid + ".json";
         this.loadLevelDataFromPath(path, function (levelData) {
             self.setup(levelData);
