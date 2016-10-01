@@ -78,10 +78,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
     GameController.prototype.onClientReadyResponse = function(options) {
         var i;
 
-        if (options.worldUpdate) {
-            this.onWorldUpdate(options.worldUpdate);
-        }
-
         if (options.runtimeItems) {
             for (i = 0; i < options.runtimeItems.length; i++) {
                 
@@ -105,6 +101,10 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
             for(i = 0; i < options.spawnedPlayers.length; i++) {
                 this.onSpawnPlayer(options.spawnedPlayers[i]);
             }
+        }
+
+        if (options.worldUpdate) { // needs to stay after onSpawnPlayer otherwise others doll will not be there
+            this.onWorldUpdate(options.worldUpdate);
         }
 
         //this.audioPlayer = new AudioPlayer(Settings.AUDIO_PATH + "city.mp3");

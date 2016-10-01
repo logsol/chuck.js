@@ -75,7 +75,7 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Item, Assert)
             var gameObject = this.worldUpdateObjects[uid];
 
             if (!(gameObject instanceof GameObject)) {
-                console.warn('Cant find object ' + uid + ' in worldUpdateObjects pool');
+                console.warn('Can\'t find object ' + uid + ' in worldUpdateObjects pool:', Object.keys(this.worldUpdateObjects));
                 continue;
             }
 
