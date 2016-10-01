@@ -13,7 +13,9 @@ function (Parent, Settings, Nc, Layer) {
         this.layerId = Layer.ID.ITEM;
     	Parent.call(this, physicsEngine, uid, options);
 
-        Nc.on(Nc.ns.client.game.events.render, this.render, this);
+        this.ncTokens = this.ncTokens.concat([
+            Nc.on(Nc.ns.client.game.events.render, this.render, this)
+        ]);
     }
 
     Item.prototype = Object.create(Parent.prototype);

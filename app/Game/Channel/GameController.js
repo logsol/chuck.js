@@ -177,25 +177,36 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, 
         return spawnedPlayers;
     };
 
-    GameController.prototype.getRuntimeItems = function() {
-        var objects = [];
+    GameController.prototype._getRuntimeItems = function() {
 
-        // This is using the level.createItem mechanism to 
-        // create the RubeDoll from its ItemSettings
+        var runtimeItems = [];
         for (var uid in this.worldUpdateObjects) {
             if(this.worldUpdateObjects[uid] instanceof RubeDoll) {
                 var object = this.worldUpdateObjects[uid];
-                var options = object.options;
-                options.x = object.getPosition().x;
-                options.y = object.getPosition().y;
-                objects.push({
-                    uid: object.uid,
-                    options: object.options
-                });
+                runtimeItems.push(object);
             }
         }
+        return runtimeItems;
+    };
 
-        return objects;
+    GameController.prototype.gatherRuntimeItemsForWorldUpdate = function() {
+        var infos = [];
+        var runtimeItems = this._getRuntimeItems();
+
+        // On the other side this is using the level.createItem mechanism to 
+        // create the RubeDoll from its ItemSettings
+        for (var i = 0; i < runtimeItems.length; i++) {
+            var object = runtimeItems[i];
+            var options = object.options;
+            options.x = object.getPosition().x;
+            options.y = object.getPosition().y;
+            infos.push({
+                uid: object.uid,
+                options: object.options
+            });
+        }
+
+        return infos;
     };
 
     GameController.prototype.onClientReady = function(userId) {
@@ -204,7 +215,7 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, 
         var options = {
             spawnedPlayers: this.getSpawnedPlayersAndTheirPositions(),
             worldUpdate: this.getWorldUpdateObject(true),
-            runtimeItems: this.getRuntimeItems(),
+            runtimeItems: this.gatherRuntimeItemsForWorldUpdate(),
             userId: userId
         };
 
@@ -240,6 +251,11 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, 
         for (var i = 0; i < this.spawnTimeouts.length; i++) {
             clearTimeout(this.spawnTimeouts[i]);
         };
+
+        var runtimeItems = this._getRuntimeItems();
+        for (var i = 0; i < runtimeItems.length; i++) {
+            runtimeItems[i].destroy();
+        }
 
         Parent.prototype.destroy.call(this);
     };

@@ -16,7 +16,9 @@ function (Parent, Nc, Settings) {
     	this.healthBarViewVisible = false;
     	this.initHealthBar();
 
-        Nc.on(Nc.ns.client.game.events.render, this.render, this);
+        this.ncTokens = [
+            Nc.on(Nc.ns.client.game.events.render, this.render, this)
+        ];
     }
 
     Player.prototype = Object.create(Parent.prototype);
@@ -109,6 +111,7 @@ function (Parent, Nc, Settings) {
     Player.prototype.destroy = function() {
         clearTimeout(this.healthBarViewVisibleTimeout);
     	Nc.trigger(Nc.ns.client.view.healthBar.remove, this.healthBarView);
+        Nc.off(this.ncTokens);
         Parent.prototype.destroy.call(this);
     };
  
