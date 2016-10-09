@@ -23,7 +23,6 @@ function (Exception) {
         this.topics = {};
         this.subUid = -1;
 
-        var i = 0;
         this.ns = {
             client: {
                 pointerLock: {
@@ -195,11 +194,14 @@ function (Exception) {
         };
 
         populate(this.ns);
-        
     }
 
 
     NotificationCenter.prototype.validate = function(topic) {
+        if (topic === undefined) {
+            throw new Exception("Topic not registered in Nc. See stack trace.");
+        }
+
         if (typeof topic === 'object') {
             throw new Exception("Topic bad format " + JSON.stringify(topic));
         }
