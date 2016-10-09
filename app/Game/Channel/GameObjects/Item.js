@@ -1,8 +1,9 @@
 define([
-	"Game/Core/GameObjects/Item"
+	"Game/Core/GameObjects/Item",
+    "Lib/Utilities/NotificationCenter",
 ],
  
-function (Parent) {
+function (Parent, Nc) {
 
 	"use strict";
  
@@ -10,6 +11,10 @@ function (Parent) {
     	Parent.call(this, physicsEngine, uid, options);
     	this.heldByPlayers = [];
         this.lastMoved = null;
+
+        this.ncTokens = (this.ncTokens || []).concat([
+            Nc.on(Nc.ns.channel.events.game.player.clearFingerPrints, this.clearOfPlayerFingerPrints, this)
+        ]);
     }
 
     Item.prototype = Object.create(Parent.prototype);
@@ -56,6 +61,13 @@ function (Parent) {
                 this.heldByPlayers.splice(pos, 1);
                 this.setLastMovedBy(player);
             }            
+        }
+    };
+
+    Item.prototype.clearOfPlayerFingerPrints = function(player) {
+        if (this.getLastMovedBy() && this.getLastMovedBy().player === player) {
+            console.checkpoint('Removing fingerprints from ' + this.options.image);
+            this.setLastMovedBy(null);
         }
     };
 

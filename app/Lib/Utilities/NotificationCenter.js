@@ -138,8 +138,10 @@ function (Exception) {
                     },
                     game: {
                         player: {
-                            killed: null
-                        }
+                            killed: null,
+                            clearFingerPrints: null
+                        },
+
                     }
                 },
                 engine: {

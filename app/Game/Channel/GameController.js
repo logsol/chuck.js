@@ -36,7 +36,6 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, 
         console.checkpoint('starting game controller for channel (' + options.channelName + ')');
     }
 
-
     GameController.prototype = Object.create(Parent.prototype);
 
     GameController.prototype.update  = function () {
@@ -58,6 +57,16 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, 
     GameController.prototype.onUserJoined = function (user) {
         this.createPlayer(user);
     }
+
+    GameController.prototype.onUserLeft = function (userId) {
+        var player = this.players[userId];
+        this.clearItemsOfPlayerFingerPrints(player);
+        Parent.prototype.onUserLeft.call(this, userId);
+    };
+
+    GameController.prototype.clearItemsOfPlayerFingerPrints = function(player) {
+        Nc.trigger(Nc.ns.channel.events.game.player.clearFingerPrints, player);
+    };
 
     GameController.prototype.createPlayer = function(user) {
 

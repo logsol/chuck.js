@@ -92,20 +92,12 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Item, Assert)
         this.loadLevel(this.level.uid);
     };
 
-    /*
-    GameController.prototype.userJoined = function (user) {
-        this.players[user.id] = this.createPlayer(user);
-    }
-    */
-
     GameController.prototype.onUserLeft = function (userId) {
         var player = this.players[userId];
         if(!player) {
             console.warn("User (", userId ,") left who has not joined");
             return;
         }
-
-        this.clearItemsOfPlayerFingerPrints(player);
         
         player.destroy();
         delete this.players[userId];
@@ -117,25 +109,13 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Item, Assert)
         return player;
     };
 
-    GameController.prototype.clearItemsOfPlayerFingerPrints = function(player) {
-        for (var key in this.gameObjects) {
-            for (var i = 0; i < this.gameObjects[key].length; i++) { // to go through animated and fixed.
-                var gameObject = this.gameObjects[key][i];
-                if (gameObject instanceof Item) {
-
-                    if (gameObject.getLastMovedBy() && gameObject.getLastMovedBy().player === player) {
-                        gameObject.setLastMovedBy(null);
-                    }
-                }
-            }
-        }
-    };
 
     GameController.prototype.destroy = function () {
         for(var player in this.players) {
             this.players[player].destroy();
         }
 
+        // FIXME ns.client in core?
         Nc.trigger(Nc.ns.client.game.events.destroy);
 
         // Testing after destroy if worldUpdateObjects is empty

@@ -55,10 +55,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
             this.mePositionStateOverride();
         }
 
-        //for (var uid in this.gameObjects.animated) {
-        //    this.gameObjects.animated[uid].render();
-        //}
-
         Nc.trigger(Nc.ns.client.game.events.render);
 
         this.view.render();
