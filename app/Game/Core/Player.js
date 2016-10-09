@@ -30,6 +30,7 @@ function (Doll, PlayerController, Settings, Nc, Exception, ColorConverter, Spect
         this.inBetweenRounds = true;
         this.spectatorDoll = new SpectatorDoll(this.physicsEngine, "spectatorDoll-" + this.id, this);
         this.revealedGameController = revealedGameController;
+        this.modifierActivated = false;
     }
 
     Player.prototype.getNickname = function() {
@@ -66,7 +67,7 @@ function (Doll, PlayerController, Settings, Nc, Exception, ColorConverter, Spect
 
     Player.prototype.move = function (direction) {
         if(!this.spawned) return false;
-        this.doll.move(direction);
+        this.doll.move(direction, this.modifierActivated);
     }
 
     Player.prototype.stop = function () {
@@ -88,6 +89,16 @@ function (Doll, PlayerController, Settings, Nc, Exception, ColorConverter, Spect
         if(!this.spawned) return false;
         // FIXME implement spectator movement here
         this.doll.lookAt(x, y);
+    }
+
+    Player.prototype.activateModifier = function () {
+        if(!this.spawned) return false;
+        this.modifierActivated = true;
+    }
+
+    Player.prototype.deactivateModifier = function () {
+        if(!this.spawned) return false;
+        this.modifierActivated = false;
     }
 
     Player.prototype.grab = function(item) {

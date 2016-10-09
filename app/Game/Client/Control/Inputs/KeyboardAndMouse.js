@@ -216,6 +216,7 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
 
     KeyboardAndMouse.prototype.activateModifier = function() {
         this.modifier = true;
+        this.playerController.activateModifier();
     };
  
     KeyboardAndMouse.prototype.deactivateModifier = function() {
@@ -223,6 +224,7 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
         this.x = this.lastLookDirection * Settings.VIEWPORT_LOOK_AHEAD;
         this.y = 0;
         this.onXyChange(this.x, this.y);
+        this.playerController.deactivateModifier();
     };
     return KeyboardAndMouse;
  

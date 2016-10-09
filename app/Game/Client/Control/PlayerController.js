@@ -98,6 +98,18 @@ function (Parent, Nc, KeyboardAndMouse, Gamepad, PointerLockManager) {
         Nc.trigger(Nc.ns.client.game.zoomReset, false);
     };
 
+    PlayerController.prototype.activateModifier = function() {
+        if (!this.isPlayerInputAllowed()) return;
+        Parent.prototype.activateModifier.call(this);
+        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, "activateModifier");
+    };
+
+    PlayerController.prototype.deactivateModifier = function() {
+        if (!this.isPlayerInputAllowed()) return;
+        Parent.prototype.deactivateModifier.call(this);
+        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, "deactivateModifier");
+    };
+
     /*
      * Client overwrite - allow player input if PointerLock is locked to canvas
      * and is not in between games

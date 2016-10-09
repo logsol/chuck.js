@@ -4,11 +4,7 @@ define([
 function () {
 
     function PlayerController (player) {
-
         this.player = player;
-
-        this._shift;
-        this._isJumping;
         this._walkingDirectionStatus = 0;
     }
 
@@ -31,7 +27,6 @@ function () {
 
     PlayerController.prototype.jump = function () {
         if(!this.isPlayerInputAllowed()) return;
-        this._isJumping = true;
         this.player.jump();
     }
 
@@ -43,6 +38,16 @@ function () {
         if(!this.isPlayerInputAllowed()) return;
         if(options) this.player.lookAt(options.x, options.y);
     }
+
+    PlayerController.prototype.activateModifier = function() {
+        if (!this.isPlayerInputAllowed()) return;
+        this.player.activateModifier();
+    };
+
+    PlayerController.prototype.deactivateModifier = function() {
+        if (!this.isPlayerInputAllowed()) return;
+        this.player.deactivateModifier();
+    };
 
     PlayerController.prototype.update = function () {
         if(this._walkingDirectionStatus != 0) {

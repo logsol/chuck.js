@@ -228,14 +228,14 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc, Asser
         }
     };
 
-    Doll.prototype.move = function (direction) {
+    Doll.prototype.move = function (direction, modifierActivated) {
 
         this.moveDirection = direction;
         var speed;
         var isHoldingHeavyItem = this.holdingItem && this.holdingItem.options.weight > Settings.MAX_RUNNING_WEIGHT;
         
         switch(true) {
-            case direction == this.lookDirection && this.isStanding() && !isHoldingHeavyItem:
+            case direction == this.lookDirection && this.isStanding() && !isHoldingHeavyItem && !modifierActivated:
                 speed = Settings.RUN_SPEED;
                 break;
 
@@ -264,7 +264,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc, Asser
         if(this.isStanding()) {
             if(this.moveDirection == this.lookDirection) {
 
-                if(isHoldingHeavyItem) {
+                if(isHoldingHeavyItem || modifierActivated) {
                     this.setActionState("walk");
                 } else {
                     this.setActionState("run");
