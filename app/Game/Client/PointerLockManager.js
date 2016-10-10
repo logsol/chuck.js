@@ -3,12 +3,12 @@ define([
     "Lib/Utilities/NotificationCenter"
 ], 
 
-function (Qs, nc) {
+function (qs, nc) {
 
     "use strict";
  
     function PointerLockManager() {
-        this.canvas = Qs.$("#canvas");
+        this.canvas = qs.$("#canvas");
 
         this.listeners = [];
 

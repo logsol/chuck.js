@@ -6,7 +6,7 @@ define([
 	"Lib/Utilities/QuerySelector"
 ],
  
-function (Settings, ColorConverter, Exception, pointerLockManager, Qs) {
+function (Settings, ColorConverter, Exception, pointerLockManager, qs) {
 
 	"use strict";
 
@@ -23,30 +23,30 @@ function (Settings, ColorConverter, Exception, pointerLockManager, Qs) {
     	if(localStorage["player"]) {
 			var player = JSON.parse(localStorage["player"]);
 			if(player.nickname) {
-				Qs.$("#nick").value = player.nickname;
+				qs.$("#nick").value = player.nickname;
 			}
 		}
 
 		if(localStorage["customname"]) {
-			Qs.$("#customname").value = localStorage["customname"];
+			qs.$("#customname").value = localStorage["customname"];
 		}
-		Qs.$("#scoreLimit").value = Settings.CHANNEL_DEFAULT_SCORE_LIMIT;
-		Qs.$("#userLimit").value = Settings.CHANNEL_DEFAULT_MAX_USERS;
+		qs.$("#scoreLimit").value = Settings.CHANNEL_DEFAULT_SCORE_LIMIT;
+		qs.$("#userLimit").value = Settings.CHANNEL_DEFAULT_MAX_USERS;
 
 
-		Qs.$("#refresh").onclick = refresh;
+		qs.$("#refresh").onclick = refresh;
 		refresh();
 		populateMaps();
 		this.channelDestructionTimeout = null;
 		this.refreshInterval = setInterval(refresh, 5000);
 
-		Qs.$("#createbutton").onclick = function() {
+		qs.$("#createbutton").onclick = function() {
 			show('#createform');
 			return false;
 		};
-		Qs.$("#quickstartbutton").onclick = quickstart;
+		qs.$("#quickstartbutton").onclick = quickstart;
 
-		var cancelButtons = Qs.$$(".cancel");
+		var cancelButtons = qs.$$(".cancel");
 		for (var i = 0; i < cancelButtons.length; i++) {
 			cancelButtons[i].onclick = function() {
 				show('#listform');
@@ -55,13 +55,13 @@ function (Settings, ColorConverter, Exception, pointerLockManager, Qs) {
 		};
 
 		this.colorConverter = new ColorConverter();
-		var c = Qs.$("#nick");
+		var c = qs.$("#nick");
 		c.onchange = c.onkeyup = c.onblur = c.onclick = this.updatePrimaryColor.bind(this);
 		this.updatePrimaryColor({target:c});
     };
 
     Menu.prototype.updatePrimaryColor = function(e) {
-    	Qs.$("#primarycolor").style.backgroundColor = "#" + this.colorConverter.getColorByName(e.target.value).toString(16);
+    	qs.$("#primarycolor").style.backgroundColor = "#" + this.colorConverter.getColorByName(e.target.value).toString(16);
     };
 
 	Menu.prototype.onRun = function(channelName, nickname) {
@@ -70,7 +70,7 @@ function (Settings, ColorConverter, Exception, pointerLockManager, Qs) {
 
 	window.onhashchange = function() {
 		if(window.location.hash) {
-			if(Qs.$("#game").style.display == "block") {
+			if(qs.$("#game").style.display == "block") {
 				window.location.reload();
 			}
 			refresh(function(list) {
@@ -128,7 +128,7 @@ function (Settings, ColorConverter, Exception, pointerLockManager, Qs) {
 							errorCallback(xhr.status, xhr.responseText);
 		                } else {
 							console.error("Ajax error: " + xhr.status + " " + xhr.responseText)
-							Qs.$("#list").innerHTML = "";
+							qs.$("#list").innerHTML = "";
 							document.body.className = "offline";				
 						}
 		            }
@@ -166,7 +166,7 @@ function (Settings, ColorConverter, Exception, pointerLockManager, Qs) {
 			html += "<tr><td colspan='3'>No channels found.</td></tr>";
 		}
 
-		Qs.$("#list").innerHTML = html;
+		qs.$("#list").innerHTML = html;
 	}
 
 	function populateMaps() {
@@ -181,15 +181,15 @@ function (Settings, ColorConverter, Exception, pointerLockManager, Qs) {
 				html += "</label></li>";
 			};
 
-			Qs.$("#maps").innerHTML = html;
+			qs.$("#maps").innerHTML = html;
 		}, function(status, responseText) {
 			console.error("getMaps error:", status, responseText);
 		});
 	}
 
-	Qs.$("form#listform").onsubmit = function(e) {
+	qs.$("form#listform").onsubmit = function(e) {
 		try {
-			var nickname = Qs.$("#nick").value;
+			var nickname = qs.$("#nick").value;
 			var channelName = getSelectedChannel();
 			join(nickname, channelName);
 		} catch(e) {
@@ -199,14 +199,14 @@ function (Settings, ColorConverter, Exception, pointerLockManager, Qs) {
 		return false;
 	}
 
-	Qs.$("form#createform").onsubmit = function(e) {
+	qs.$("form#createform").onsubmit = function(e) {
 		try {
 
 			var options = {
-				channelName: Qs.$("#customname").value,
+				channelName: qs.$("#customname").value,
 				levelUids: getSelectedMaps(),
-				maxUsers: parseInt(Qs.$("#userLimit").value, 10),
-				scoreLimit: parseInt(Qs.$("#scoreLimit").value, 10)
+				maxUsers: parseInt(qs.$("#userLimit").value, 10),
+				scoreLimit: parseInt(qs.$("#scoreLimit").value, 10)
 			};
 
 			create(options, onCreateSuccess);
@@ -217,10 +217,10 @@ function (Settings, ColorConverter, Exception, pointerLockManager, Qs) {
 		return false;
 	}
 
-	Qs.$("form#customjoinform").onsubmit = function(e) {
+	qs.$("form#customjoinform").onsubmit = function(e) {
 		try {
-			var nickname = Qs.$("#nick").value;
-			var channelName = Qs.$("#customname").value;
+			var nickname = qs.$("#nick").value;
+			var channelName = qs.$("#customname").value;
 			join(nickname, channelName);
 		} catch(e) {
 			console.error(e);
@@ -235,29 +235,29 @@ function (Settings, ColorConverter, Exception, pointerLockManager, Qs) {
 	}
 
 	function showCustomJoinForm() {
-		Qs.$("#customname").value = unescape(window.location.hash.substr(1));
-		Qs.$("#link").value = window.location.href;
+		qs.$("#customname").value = unescape(window.location.hash.substr(1));
+		qs.$("#link").value = window.location.href;
 		show("#customjoinform");
 	}
 
 	function show(id) {
-		Qs.$("#createform").style.display = "none";
-		Qs.$("#listform").style.display = "none";
-		Qs.$("#customjoinform").style.display = "none";
-		Qs.$("#game").style.display = "none";
+		qs.$("#createform").style.display = "none";
+		qs.$("#listform").style.display = "none";
+		qs.$("#customjoinform").style.display = "none";
+		qs.$("#game").style.display = "none";
 
 		if(id != "#customjoinform") {
 			history.pushState("", document.title, window.location.pathname);
 		}
 
-		Qs.$(id).style.display = "block";
+		qs.$(id).style.display = "block";
 	}
 
 	function quickstart() {
 		refresh(function(list){
 			var defaultChannelName = quickstartChannelName;
 			history.pushState("", document.title, window.location.pathname + "#" + defaultChannelName);
-			var nickname = Qs.$("#nick").value;
+			var nickname = qs.$("#nick").value;
 
 			if(!nickname) {
 				nickname = "Guest" + (Math.floor(Math.random() * 899) + 100)
@@ -268,8 +268,8 @@ function (Settings, ColorConverter, Exception, pointerLockManager, Qs) {
 				var options = {
 					channelName: defaultChannelName,
 					levelUids: getSelectedMaps(),
-					maxUsers: parseInt(Qs.$("#userLimit").value, 10),
-					scoreLimit: parseInt(Qs.$("#scoreLimit").value, 10)
+					maxUsers: parseInt(qs.$("#userLimit").value, 10),
+					scoreLimit: parseInt(qs.$("#scoreLimit").value, 10)
 				};
 
 				create(options, function() {
@@ -292,7 +292,7 @@ function (Settings, ColorConverter, Exception, pointerLockManager, Qs) {
 				alert("Your channel has timed out.");
 				window.location.href = "/";
 			} else {
-				Qs.$("#timeout").innerHTML = " within " + formatDate(diff) + " minutes";
+				qs.$("#timeout").innerHTML = " within " + formatDate(diff) + " minutes";
 			}
 		}, 1000);
 	}
@@ -392,8 +392,8 @@ function (Settings, ColorConverter, Exception, pointerLockManager, Qs) {
 			});
 
 			//window.location.href = "/game.html";
-			Qs.$("#menu").style.display = "none";
-			Qs.$("#game").style.display = "block";
+			qs.$("#menu").style.display = "none";
+			qs.$("#game").style.display = "block";
 			instance.onRun(channelName, nickname); // Dumm und dümmer
 			
 			if(instance.refreshInterval) {
@@ -426,7 +426,7 @@ function (Settings, ColorConverter, Exception, pointerLockManager, Qs) {
 		}
 	}
 
-	Qs.$("#canvas").onclick = function(){
+	qs.$("#canvas").onclick = function(){
 		pointerLockManager.request();
 	};
  
