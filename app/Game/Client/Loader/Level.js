@@ -6,7 +6,7 @@ define([
     "Game/Client/View/Abstract/Layer"
 ],
 
-function (Parent, Settings, Nc, PIXI, AbstractLayer) {
+function (Parent, Settings, nc, PIXI, AbstractLayer) {
 
 	"use strict";
 
@@ -46,7 +46,7 @@ function (Parent, Settings, Nc, PIXI, AbstractLayer) {
         loader.onComplete = function() { callback(levelData); };
         loader.onProgress = function() { 
             var progress = parseInt(100 / numPaths * ++count, 10) + 1;
-            Nc.trigger(Nc.ns.client.view.preloadBar.update, progress);
+            nc.trigger(nc.ns.client.view.preloadBar.update, progress);
         }
         loader.load();
     };
@@ -116,8 +116,8 @@ function (Parent, Settings, Nc, PIXI, AbstractLayer) {
         if (options.properties && options.properties.parallaxSpeed) {
             parallaxSpeed = parseFloat(options.properties.parallaxSpeed);
         } 
-        Nc.trigger(
-            Nc.ns.client.view.layer.createAndInsert,
+        nc.trigger(
+            nc.ns.client.view.layer.createAndInsert,
             options.layerId,
             {
                 parallaxSpeed: parallaxSpeed,

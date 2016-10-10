@@ -4,7 +4,7 @@ define([
 	"Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, Settings, Nc) {
+function (Parent, Settings, nc) {
 
     "use strict";
  
@@ -35,7 +35,7 @@ function (Parent, Settings, Nc) {
         var self = this;
         this.scheduledForDestruction = true;
         this.destructionTimeout = setTimeout(function() {
-            Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, 'removeGameObject', {
+            nc.trigger(nc.ns.channel.to.client.gameCommand.broadcast, 'removeGameObject', {
                 type: 'animated',
                 uid: self.uid
             });

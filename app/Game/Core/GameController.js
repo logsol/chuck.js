@@ -9,7 +9,7 @@ define([
     "Lib/Utilities/Assert",
 ],
 
-function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Item, Assert) {
+function (PhysicsEngine, TiledLevel, Player, nc, Doll, GameObject, Item, Assert) {
 
 	"use strict";
 
@@ -24,8 +24,8 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Item, Assert)
         this.physicsEngine.setCollisionDetector();
 
         this.ncTokens = [
-            Nc.on(Nc.ns.core.game.worldUpdateObjects.add, this.onWorldUpdateObjectAdd, this),
-            Nc.on(Nc.ns.core.game.worldUpdateObjects.remove, this.onWorldUpdateObjectRemove, this)
+            nc.on(nc.ns.core.game.worldUpdateObjects.add, this.onWorldUpdateObjectAdd, this),
+            nc.on(nc.ns.core.game.worldUpdateObjects.remove, this.onWorldUpdateObjectRemove, this)
         ];
 
         this.loadLevel(options.levelUid);
@@ -116,10 +116,10 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Item, Assert)
         }
 
         // FIXME ns.client in core?
-        Nc.trigger(Nc.ns.client.game.events.destroy);
+        nc.trigger(nc.ns.client.game.events.destroy);
 
         // Testing after destroy if worldUpdateObjects is empty
-        // events.game.destroy -> gameobjects.destroy() -> Nc.trigger(worldUpdateObjects.remove)
+        // events.game.destroy -> gameobjects.destroy() -> nc.trigger(worldUpdateObjects.remove)
         if(Object.keys(this.worldUpdateObjects).length > 0) {
             console.warn('Not all worldUpdateObjects have been removed... ', Object.keys(this.worldUpdateObjects));
         }
@@ -127,7 +127,7 @@ function (PhysicsEngine, TiledLevel, Player, Nc, Doll, GameObject, Item, Assert)
         this.physicsEngine.destroy();
         this.worldUpdateObjects = null;
 
-        Nc.off(this.ncTokens);
+        nc.off(this.ncTokens);
     };
 
     return GameController;

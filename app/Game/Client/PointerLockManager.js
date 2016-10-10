@@ -3,7 +3,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ], 
 
-function (Qs, Nc) {
+function (Qs, nc) {
 
     "use strict";
  
@@ -21,7 +21,7 @@ function (Qs, Nc) {
     	document.addEventListener('webkitpointerlockchange', this.update.bind(this), false);
 
         this.ncTokens = [
-            Nc.on(Nc.ns.client.pointerLock.request, this.request, this)
+            nc.on(nc.ns.client.pointerLock.request, this.request, this)
         ];
     }
  
@@ -40,7 +40,7 @@ function (Qs, Nc) {
     // called by the browser event and others
     PointerLockManager.prototype.update = function(e, options) {
         options = options ? options : {};
-        Nc.trigger(Nc.ns.client.pointerLock.change, this.isLocked(), options);
+        nc.trigger(nc.ns.client.pointerLock.change, this.isLocked(), options);
     };
 
     PointerLockManager.prototype.isLocked = function() {

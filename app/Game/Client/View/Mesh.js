@@ -5,7 +5,7 @@ define([
     "Lib/Vendor/Screenfull"
 ],
 
-function (Settings, Nc, Stats, Screenfull) {
+function (Settings, nc, Stats, Screenfull) {
 
 	"use strict";
 

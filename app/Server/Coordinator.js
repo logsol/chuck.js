@@ -5,14 +5,14 @@ define([
     "Game/Config/Settings"
 ], 
 
-function (User, PipeToChannel, Nc, Settings) {
+function (User, PipeToChannel, nc, Settings) {
 
 	"use strict";
 
     function Coordinator() {
     	this.channelPipes = {};
 
-        Nc.on(Nc.ns.server.events.controlCommand.coordinator, this.onMessage, this);
+        nc.on(nc.ns.server.events.controlCommand.coordinator, this.onMessage, this);
 
         console.checkpoint('create Coordinator');
     }

@@ -5,7 +5,7 @@ define([
 	"Game/Config/Settings"
 ],
  
-function (Parent, PIXI, Nc, Settings) {
+function (Parent, PIXI, nc, Settings) {
 
 	"use strict";
  
@@ -13,12 +13,12 @@ function (Parent, PIXI, Nc, Settings) {
     	Parent.call(this, "ghost", {parallaxSpeed: 0});
 
 		this.ncTokens = this.ncTokens.concat([
-            Nc.on(Nc.ns.client.view.layer.levelSizeUpdate, this.onLevelSizeUpdate, this),
-            Nc.on(Nc.ns.client.view.playerArrow.createAndAdd, this.onCreateAndAddPlayerArrow, this),
-            Nc.on(Nc.ns.client.view.playerArrow.update, this.onUpdatePlayerArrow, this),
-            Nc.on(Nc.ns.client.view.healthBar.createAndAdd, this.onCreateAndAddHealthBar, this),
-            Nc.on(Nc.ns.client.view.healthBar.update, this.onUpdateHealthBar, this),
-            Nc.on(Nc.ns.client.view.healthBar.remove, this.onRemoveHealthBar, this),
+            nc.on(nc.ns.client.view.layer.levelSizeUpdate, this.onLevelSizeUpdate, this),
+            nc.on(nc.ns.client.view.playerArrow.createAndAdd, this.onCreateAndAddPlayerArrow, this),
+            nc.on(nc.ns.client.view.playerArrow.update, this.onUpdatePlayerArrow, this),
+            nc.on(nc.ns.client.view.healthBar.createAndAdd, this.onCreateAndAddHealthBar, this),
+            nc.on(nc.ns.client.view.healthBar.update, this.onUpdateHealthBar, this),
+            nc.on(nc.ns.client.view.healthBar.remove, this.onRemoveHealthBar, this),
         ]);
 
     }

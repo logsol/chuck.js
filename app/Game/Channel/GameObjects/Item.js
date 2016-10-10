@@ -3,7 +3,7 @@ define([
     "Lib/Utilities/NotificationCenter",
 ],
  
-function (Parent, Nc) {
+function (Parent, nc) {
 
 	"use strict";
  
@@ -13,7 +13,7 @@ function (Parent, Nc) {
         this.lastMoved = null;
 
         this.ncTokens = (this.ncTokens || []).concat([
-            Nc.on(Nc.ns.channel.events.game.player.clearFingerPrints, this.clearOfPlayerFingerPrints, this)
+            nc.on(nc.ns.channel.events.game.player.clearFingerPrints, this.clearOfPlayerFingerPrints, this)
         ]);
     }
 

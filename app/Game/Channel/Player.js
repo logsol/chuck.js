@@ -4,7 +4,7 @@ define([
     "Game/Channel/Control/PlayerController"
 ],
  
-function (Parent, Nc, PlayerController) {
+function (Parent, nc, PlayerController) {
 
 	"use strict";
  
@@ -44,7 +44,7 @@ function (Parent, Nc, PlayerController) {
                 this.throw(options, item);
 
                 options.action = "throw";
-                Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "handActionResponse", options);
+                nc.trigger(nc.ns.channel.to.client.gameCommand.broadcast, "handActionResponse", options);
             }
         } else {
             // grab
@@ -52,7 +52,7 @@ function (Parent, Nc, PlayerController) {
                 this.grab(item); 
 
                 options.action = "grab";
-                Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "handActionResponse", options);
+                nc.trigger(nc.ns.channel.to.client.gameCommand.broadcast, "handActionResponse", options);
             }
         }
     };
@@ -93,14 +93,14 @@ function (Parent, Nc, PlayerController) {
         var ragDollId = this.stats.deaths;
         Parent.prototype.kill.call(this, killedByPlayer, ragDollId);
 
-        Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "playerKill", {
+        nc.trigger(nc.ns.channel.to.client.gameCommand.broadcast, "playerKill", {
             playerId: this.id,
             killedByPlayerId: killedByPlayer.id,
             ragDollId: ragDollId,
             item: byItem ? byItem.options.name : "Suicide"
         });
 
-        Nc.trigger(Nc.ns.channel.events.game.player.killed, this, killedByPlayer); // sends endround
+        nc.trigger(nc.ns.channel.events.game.player.killed, this, killedByPlayer); // sends endround
 
         if(this.ragDoll) {
             this.ragDoll.delayedDestroy();
@@ -112,13 +112,13 @@ function (Parent, Nc, PlayerController) {
     };
 
     Player.prototype.broadcastStats = function(enemy) {
-        Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "updateStats", {
+        nc.trigger(nc.ns.channel.to.client.gameCommand.broadcast, "updateStats", {
             playerId: this.id,
             stats: this.stats
         });
         
         if(enemy && enemy != this) {
-            Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "updateStats", {
+            nc.trigger(nc.ns.channel.to.client.gameCommand.broadcast, "updateStats", {
                 playerId: enemy.id,
                 stats: enemy.stats
             });            

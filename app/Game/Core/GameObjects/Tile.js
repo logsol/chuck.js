@@ -7,7 +7,7 @@ define([
     "Lib/Utilities/Assert"
 ],
  
-function (Parent, Box2D, Settings, Exception, Nc, Assert) {
+function (Parent, Box2D, Settings, Exception, nc, Assert) {
 
 	"use strict";
  

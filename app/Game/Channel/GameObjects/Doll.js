@@ -6,7 +6,7 @@ define([
     "Lib/Utilities/Assert"
 ],
  
-function (Parent, Item, Box2D, Nc, Assert) {
+function (Parent, Item, Box2D, nc, Assert) {
 
 	"use strict";
  
@@ -80,7 +80,7 @@ function (Parent, Item, Box2D, Nc, Assert) {
                                 self.player.addDamage(damage, lastMovedPlayer, item);
                             };
 
-                            Nc.trigger(Nc.ns.channel.engine.worldQueue.add, callback);
+                            nc.trigger(nc.ns.channel.engine.worldQueue.add, callback);
                         }
                     }
 

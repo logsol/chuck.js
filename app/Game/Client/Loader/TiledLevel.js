@@ -4,7 +4,7 @@ define([
     "Lib/Utilities/NotificationCenter",
 ],
  
-function (Parent, Settings, Nc) {
+function (Parent, Settings, nc) {
 
 	"use strict";
  
@@ -22,7 +22,7 @@ function (Parent, Settings, Nc) {
             height: tilesLayerData.height * Settings.TILE_SIZE
         };
 
-        Nc.trigger(Nc.ns.client.view.layer.levelSizeUpdate, this.levelSize);
+        nc.trigger(nc.ns.client.view.layer.levelSizeUpdate, this.levelSize);
 
         Parent.prototype.setup.call(this, levelData);
     };
@@ -78,8 +78,8 @@ function (Parent, Settings, Nc) {
             var texturePath = Settings.MAPS_PATH + options.image;
 
             var callback = function(mesh) {
-                Nc.trigger(Nc.ns.client.view.mesh.add, options.layerId, mesh);
-                Nc.trigger(Nc.ns.client.view.mesh.update, options.layerId, mesh, {
+                nc.trigger(nc.ns.client.view.mesh.add, options.layerId, mesh);
+                nc.trigger(nc.ns.client.view.mesh.update, options.layerId, mesh, {
                     x: 0,//self.levelData.width * Settings.TILE_SIZE / 2,
                     y: 0,//self.levelData.height * Settings.TILE_SIZE / 2,
                     pivot: {
@@ -91,7 +91,7 @@ function (Parent, Settings, Nc) {
                 });
             }
        
-            Nc.trigger(Nc.ns.client.view.mesh.create,
+            nc.trigger(nc.ns.client.view.mesh.create,
                 options.layerId,
                 texturePath, 
                 callback,
@@ -123,10 +123,10 @@ function (Parent, Settings, Nc) {
             var tileType = parts[parts.length - 1].split(".")[0].split("")
 
             var callback = function(mesh) {
-                Nc.trigger(Nc.ns.client.view.mesh.add, options.layerId, mesh);
+                nc.trigger(nc.ns.client.view.mesh.add, options.layerId, mesh);
             }
        
-            Nc.trigger(Nc.ns.client.view.mesh.create,
+            nc.trigger(nc.ns.client.view.mesh.create,
                 options.layerId,
                 Settings.MAPS_PATH + imagePath,
                 callback,

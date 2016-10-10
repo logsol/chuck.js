@@ -9,7 +9,7 @@ define([
     "Game/" + GLOBALS.context + "/GameObjects/Items/RubeDoll"
 ],
 
-function (Doll, PlayerController, Settings, Nc, Exception, ColorConverter, SpectatorDoll, RubeDoll) {
+function (Doll, PlayerController, Settings, nc, Exception, ColorConverter, SpectatorDoll, RubeDoll) {
 
 	"use strict";
 

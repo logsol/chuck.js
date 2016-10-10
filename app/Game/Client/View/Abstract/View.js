@@ -6,7 +6,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
 
-function (Abstract, domController, Settings, Exception, Nc) {
+function (Abstract, domController, Settings, Exception, nc) {
 
 	"use strict";
     
@@ -16,14 +16,14 @@ function (Abstract, domController, Settings, Exception, Nc) {
         this.debugMode = false;
 
         this.ncTokens = [
-            Nc.on(Nc.ns.client.view.display.change, this.onDisplaySizeChange, this),
-            Nc.on(Nc.ns.client.view.debugMode.toggle, this.onToggleDebugMode, this),
+            nc.on(nc.ns.client.view.display.change, this.onDisplaySizeChange, this),
+            nc.on(nc.ns.client.view.debugMode.toggle, this.onToggleDebugMode, this),
 
-            Nc.on(Nc.ns.client.game.zoomIn, this.onZoomIn, this),
-            Nc.on(Nc.ns.client.game.zoomOut, this.onZoomOut, this),
-            Nc.on(Nc.ns.client.game.zoomReset, this.onZoomReset, this),
+            nc.on(nc.ns.client.game.zoomIn, this.onZoomIn, this),
+            nc.on(nc.ns.client.game.zoomOut, this.onZoomOut, this),
+            nc.on(nc.ns.client.game.zoomReset, this.onZoomReset, this),
 
-            Nc.on(Nc.ns.client.view.preloadBar.update, this.onUpdateLoader, this),
+            nc.on(nc.ns.client.view.preloadBar.update, this.onUpdateLoader, this),
         ];
     }
 
@@ -98,7 +98,7 @@ function (Abstract, domController, Settings, Exception, Nc) {
 
     AbstractView.prototype.destroy = function() {
         for (var i = 0; i < this.ncTokens.length; i++) {
-            Nc.off(this.ncTokens[i]);
+            nc.off(this.ncTokens[i]);
         };
     };
 

@@ -5,7 +5,7 @@ define([
     "Lib/Utilities/Protocol/Parser",
 ],
  
-function(Parent, Nc, ProtocolHelper, ProtocolParser) {
+function(Parent, nc, ProtocolHelper, ProtocolParser) {
  
     function User(id, options) {
     	Parent.call(this, id, options);
@@ -14,15 +14,15 @@ function(Parent, Nc, ProtocolHelper, ProtocolParser) {
         this.isReady = false;
     	var self = this;
 
-    	Nc.on(Nc.ns.channel.to.client.user.controlCommand.joinSuccess + this.id, function(options) {
+    	nc.on(nc.ns.channel.to.client.user.controlCommand.joinSuccess + this.id, function(options) {
     		self.sendControlCommand("joinSuccess", options);
     	});
 
-        Nc.on(Nc.ns.channel.events.controlCommand.user + this.id, function(message) {
+        nc.on(nc.ns.channel.events.controlCommand.user + this.id, function(message) {
             ProtocolHelper.applyCommand(message.data, self);
         });
 
-        Nc.on(Nc.ns.channel.to.client.user.gameCommand.send + this.id, function(command, options) {
+        nc.on(nc.ns.channel.to.client.user.gameCommand.send + this.id, function(command, options) {
             self.sendGameCommand(command, options);
         });
         
@@ -44,10 +44,10 @@ function(Parent, Nc, ProtocolHelper, ProtocolParser) {
         } // FIXME: move this to Protocol helper as a function
 
         if(command.hasOwnProperty("resetLevel")) {
-            Nc.trigger(Nc.ns.channel.events.user.level.reset, this.id);
+            nc.trigger(nc.ns.channel.events.user.level.reset, this.id);
         } else if(command.hasOwnProperty("clientReady")) {
             this.isReady = true;
-            Nc.trigger(Nc.ns.channel.events.user.client.ready, this.id);
+            nc.trigger(nc.ns.channel.events.user.client.ready, this.id);
         } else {
             this.player.playerController.applyCommand(command);
         }
@@ -71,7 +71,7 @@ function(Parent, Nc, ProtocolHelper, ProtocolParser) {
             this.isReady = false;
         }
 
-    	Nc.trigger(Nc.ns.channel.to.server.controlCommand.send, recipient, data);
+    	nc.trigger(nc.ns.channel.to.server.controlCommand.send, recipient, data);
     };
 
     User.prototype.sendGameCommand = function(command, options) {

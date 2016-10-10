@@ -18,7 +18,7 @@ define([
     "Lib/Utilities/Exception"
 ],
 
-function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, domController, ProtocolHelper, Me, AudioPlayer, PointerLockManager, Assert, Exception) {
+function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, nc, requestAnimFrame, Settings, GameObject, Doll, domController, ProtocolHelper, Me, AudioPlayer, PointerLockManager, Assert, Exception) {
 
 	"use strict";
 
@@ -33,7 +33,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         Parent.call(this, options);
 
         this.ncTokens = this.ncTokens.concat([
-            Nc.on(Nc.ns.client.game.gameStats.toggle, this.toggleGameStats, this)
+            nc.on(nc.ns.client.game.gameStats.toggle, this.toggleGameStats, this)
         ]);
     }
 
@@ -55,7 +55,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
             this.mePositionStateOverride();
         }
 
-        Nc.trigger(Nc.ns.client.game.events.render);
+        nc.trigger(nc.ns.client.game.events.render);
 
         this.view.render();
         domController.fpsStep();
@@ -63,8 +63,8 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
 
     GameController.prototype.mePositionStateOverride = function() {   
         if(this.me.isPositionStateOverrideNeeded()) {
-            Nc.trigger(
-                Nc.ns.client.to.server.gameCommand.send, 
+            nc.trigger(
+                nc.ns.client.to.server.gameCommand.send, 
                 "mePositionStateOverride", 
                 this.me.getPositionStateOverride()
             );
@@ -214,7 +214,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
             return 0;
         });
 
-        Nc.trigger(Nc.ns.client.view.gameStats.update, sortedPlayers);
+        nc.trigger(nc.ns.client.view.gameStats.update, sortedPlayers);
     };
 
     GameController.prototype.onPlayerKill = function(options) {
@@ -222,7 +222,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         var killedByPlayer = this.players[options.killedByPlayerId];
         player.kill(killedByPlayer, options.ragDollId);
 
-        Nc.trigger(Nc.ns.client.view.gameStats.kill, {
+        nc.trigger(nc.ns.client.view.gameStats.kill, {
             victim: {
                 name: player.user.options.nickname,
                 isMe: player === this.me
@@ -248,7 +248,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
     };
 
     GameController.prototype.toggleGameStats = function(show) {
-        Nc.trigger(Nc.ns.client.view.gameStats.toggle, show);
+        nc.trigger(nc.ns.client.view.gameStats.toggle, show);
     };
 
     GameController.prototype.beginRound = function() {

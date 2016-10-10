@@ -7,7 +7,7 @@ define([
     "Game/Client/View/DomController"
 ], 
 
-function (ProtocolHelper, GameController, User, Nc, Settings, domController) {
+function (ProtocolHelper, GameController, User, nc, Settings, domController) {
 
 	"use strict";
 
@@ -47,8 +47,8 @@ function (ProtocolHelper, GameController, User, Nc, Settings, domController) {
             ProtocolHelper.applyCommand(message, self);
         });
 
-        Nc.on(Nc.ns.client.to.server.gameCommand.send, this.sendGameCommand, this);
-        Nc.on(Nc.ns.core.game.events.level.loaded, this.onLevelLoaded, this);
+        nc.on(nc.ns.client.to.server.gameCommand.send, this.sendGameCommand, this);
+        nc.on(nc.ns.core.game.events.level.loaded, this.onLevelLoaded, this);
 
         domController.setNick(nickname);
     }

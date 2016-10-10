@@ -7,7 +7,7 @@
         "Game/Config/Settings"
     ], 
 
-    function (GameController, Nc, User, ProtocolHelper, Options, Settings) {
+    function (GameController, nc, User, ProtocolHelper, Options, Settings) {
 
         "use strict";
 
@@ -26,14 +26,14 @@
             });
 
             // Notification Center
-            Nc.on(Nc.ns.channel.events.round.end, this.onEndRound, this);
-            Nc.on(Nc.ns.channel.events.controlCommand.channel, function (message) {
+            nc.on(nc.ns.channel.events.round.end, this.onEndRound, this);
+            nc.on(nc.ns.channel.events.controlCommand.channel, function (message) {
                 ProtocolHelper.applyCommand(message.data, self);
             });
-            Nc.on(Nc.ns.channel.to.client.gameCommand.broadcast, this.broadcastGameCommand, this);
-            Nc.on(Nc.ns.channel.to.client.controlCommand.broadcast, this.broadcastControlCommand, this);
-            //Nc.on(Nc.ns.channel.to.client.gameCommand.broadcastExcept, this.broadcastGameCommandExcept, this);
-            //Nc.on(Nc.ns.channel.to.client.controlCommand.broadcastExcept, this.broadcastControlCommandExcept, this);
+            nc.on(nc.ns.channel.to.client.gameCommand.broadcast, this.broadcastGameCommand, this);
+            nc.on(nc.ns.channel.to.client.controlCommand.broadcast, this.broadcastControlCommand, this);
+            //nc.on(nc.ns.channel.to.client.gameCommand.broadcastExcept, this.broadcastGameCommandExcept, this);
+            //nc.on(nc.ns.channel.to.client.controlCommand.broadcastExcept, this.broadcastControlCommandExcept, this);
 
             this.beginRound();
 
@@ -103,10 +103,10 @@
             };
 
             if(!this.gameController.level || !this.gameController.level.isLoaded) {
-                var token = Nc.on(Nc.ns.core.game.events.level.loaded, function() {
+                var token = nc.on(nc.ns.core.game.events.level.loaded, function() {
                     self.sendJoinSuccess(options);
                     self.users[options.id].sendControlCommand("beginRound", clientGameControllerOptions);
-                    Nc.off(token);
+                    nc.off(token);
                 });
             } else {
                 this.sendJoinSuccess(options);
@@ -135,16 +135,16 @@
                 levelUid: levelUid
             };                 
 
-            //Nc.trigger("user/" + user.id + "/joinSuccess", options);
+            //nc.trigger("user/" + user.id + "/joinSuccess", options);
             user.sendControlCommand("joinSuccess", options);
-            Nc.trigger(Nc.ns.channel.events.user.joined, user);
+            nc.trigger(nc.ns.channel.events.user.joined, user);
 
             this.broadcastControlCommandExcept("userJoined", user.options, user);
         };
 
         Channel.prototype.onReleaseUser = function (userId) {
             var self = this;
-            Nc.trigger(Nc.ns.channel.events.user.left, userId);
+            nc.trigger(nc.ns.channel.events.user.left, userId);
             delete this.users[userId];
 
             this.broadcastControlCommand("userLeft", userId);

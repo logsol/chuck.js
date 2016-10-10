@@ -5,7 +5,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
 
-function (Settings, Box2D, CollisionDetector, Nc) {
+function (Settings, Box2D, CollisionDetector, nc) {
 
 	"use strict";
 
@@ -19,7 +19,7 @@ function (Settings, Box2D, CollisionDetector, Nc) {
         this.worldQueue = [];
 
         this.ncTokens = [
-            Nc.on(Nc.ns.channel.engine.worldQueue.add, this.addToWorldQueue, this)
+            nc.on(nc.ns.channel.engine.worldQueue.add, this.addToWorldQueue, this)
         ];
     }
 
@@ -62,7 +62,7 @@ function (Settings, Box2D, CollisionDetector, Nc) {
     }
 
     Engine.prototype.destroy = function() {
-        Nc.offAll(this.ncTokens);
+        nc.offAll(this.ncTokens);
         delete this.world;
     };
 

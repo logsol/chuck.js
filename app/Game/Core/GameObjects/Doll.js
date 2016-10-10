@@ -9,7 +9,7 @@ define([
     "Lib/Utilities/Assert"
 ], 
 
-function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc, Assert) {
+function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, nc, Assert) {
 
 	"use strict";
 
@@ -45,7 +45,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc, Asser
         this.createFixtures();
         this.body.SetActive(false);
 
-        Nc.trigger(Nc.ns.core.game.worldUpdateObjects.add, this);
+        nc.trigger(nc.ns.core.game.worldUpdateObjects.add, this);
     }
 
     Doll.prototype = Object.create(Parent.prototype);
@@ -481,7 +481,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, Nc, Asser
     };
 
     Doll.prototype.destroy = function() {
-        Nc.trigger(Nc.ns.core.game.worldUpdateObjects.remove, this);
+        nc.trigger(nc.ns.core.game.worldUpdateObjects.remove, this);
         Parent.prototype.destroy.call(this);
     };
 

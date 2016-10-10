@@ -4,7 +4,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
  
-function (Parent, Exception, Nc) {
+function (Parent, Exception, nc) {
 
 	"use strict";
  

@@ -14,7 +14,7 @@ define([
     "Game/Client/View/Pixi/Layers/Messages"
 ], 
 
-function (Parent, domController, PIXI, Settings, Nc, Exception, GameStats, LayerManager, Ghost, Swiper, PointerLockManager, Debug, Messages) {
+function (Parent, domController, PIXI, Settings, nc, Exception, GameStats, LayerManager, Ghost, Swiper, PointerLockManager, Debug, Messages) {
 
 	"use strict";
 
@@ -35,8 +35,8 @@ function (Parent, domController, PIXI, Settings, Nc, Exception, GameStats, Layer
         this.init();
 
         this.ncTokens = this.ncTokens.concat([
-            Nc.on(Nc.ns.client.pointerLock.change, this.onPointerLockChange, this),
-            Nc.on(Nc.ns.core.game.events.level.loaded, this.showDefaultLayers, this)
+            nc.on(nc.ns.client.pointerLock.change, this.onPointerLockChange, this),
+            nc.on(nc.ns.core.game.events.level.loaded, this.showDefaultLayers, this)
         ]);
 
         PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;

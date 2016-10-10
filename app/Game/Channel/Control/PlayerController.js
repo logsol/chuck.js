@@ -5,7 +5,7 @@ define([
     "Game/Config/Settings"
 ],
  
-function(Parent, Nc, Parser, Settings) {
+function(Parent, nc, Parser, Settings) {
 
     "use strict";
  
@@ -71,7 +71,7 @@ function(Parent, Nc, Parser, Settings) {
                 lv: body.GetLinearVelocity()
             };
 
-            Nc.trigger(Nc.ns.channel.to.client.user.gameCommand.send + this.player.id, "positionStateReset", options);
+            nc.trigger(nc.ns.channel.to.client.user.gameCommand.send + this.player.id, "positionStateReset", options);
         }
     };
 

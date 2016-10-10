@@ -3,7 +3,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ], 
 
-function (Abstract, Nc) {
+function (Abstract, nc) {
 
 	"use strict";
 
@@ -59,7 +59,7 @@ function (Abstract, Nc) {
 
     Layer.prototype.destroy = function() {
         for (var i = 0; i < this.ncTokens.length; i++) {
-            Nc.off(this.ncTokens[i]);
+            nc.off(this.ncTokens[i]);
         };
     };
 

@@ -8,7 +8,7 @@ define([
     "Game/Config/ItemSettings",
 ],
  
-function (Parent, Box2D, Settings, Nc, Assert, Options, ItemSettings) {
+function (Parent, Box2D, Settings, nc, Assert, Options, ItemSettings) {
 
 	"use strict";
  

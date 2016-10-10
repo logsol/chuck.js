@@ -5,7 +5,7 @@ define([
     "Game/Client/View/Abstract/Layer"
 ],
  
-function (Parent, Settings, Nc, Layer) {
+function (Parent, Settings, nc, Layer) {
 
 	"use strict";
  
@@ -14,7 +14,7 @@ function (Parent, Settings, Nc, Layer) {
     	Parent.call(this, physicsEngine, uid, options);
 
         this.ncTokens = this.ncTokens.concat([
-            Nc.on(Nc.ns.client.game.events.render, this.render, this)
+            nc.on(nc.ns.client.game.events.render, this.render, this)
         ]);
     }
 
@@ -30,10 +30,10 @@ function (Parent, Settings, Nc, Layer) {
 
     	var callback = function(mesh) {
     		self.mesh = mesh;
-            Nc.trigger(Nc.ns.client.view.mesh.add, self.layerId, mesh);
+            nc.trigger(nc.ns.client.view.mesh.add, self.layerId, mesh);
     	}
    
-        Nc.trigger(Nc.ns.client.view.mesh.create,
+        nc.trigger(nc.ns.client.view.mesh.create,
             this.layerId,
             texturePath, 
             callback,
@@ -49,13 +49,13 @@ function (Parent, Settings, Nc, Layer) {
     };
 
     Item.prototype.destroy = function() {
-        Nc.trigger(Nc.ns.client.view.mesh.remove, this.layerId, this.mesh);
+        nc.trigger(nc.ns.client.view.mesh.remove, this.layerId, this.mesh);
         Parent.prototype.destroy.call(this);
     };
 
     Item.prototype.render = function() {
 
-        Nc.trigger(Nc.ns.client.view.mesh.update,
+        nc.trigger(nc.ns.client.view.mesh.update,
             this.layerId,
             this.mesh,
             {
@@ -72,7 +72,7 @@ function (Parent, Settings, Nc, Layer) {
         Parent.prototype.flip.call(this, direction);
 
         if(oldFlipDirection != direction) {
-            Nc.trigger(Nc.ns.client.view.mesh.update,
+            nc.trigger(nc.ns.client.view.mesh.update,
                 this.layerId,
                 this.mesh,
                 {

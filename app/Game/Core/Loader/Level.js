@@ -10,7 +10,7 @@ define([
     "Game/" + GLOBALS.context + "/GameObjects/Items/RagDoll",
     "Game/" + GLOBALS.context + "/GameObjects/Items/RubeDoll"
 
-], function (Settings, Box2D, Nc, Abstract, CollisionDetector, Tile, Item, Skateboard, RagDoll, RubeDoll) {
+], function (Settings, Box2D, nc, Abstract, CollisionDetector, Tile, Item, Skateboard, RagDoll, RubeDoll) {
     
     "use strict";
     
@@ -34,7 +34,7 @@ define([
 
     Level.prototype.setup = function(levelData) { // jshint unused:false
         this.isLoaded = true;
-        Nc.trigger(Nc.ns.core.game.events.level.loaded);
+        nc.trigger(nc.ns.core.game.events.level.loaded);
     };
 
     Level.prototype.createItems = function(options) {

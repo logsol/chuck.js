@@ -6,7 +6,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ], 
 
-function (Parent, ProtocolHelper, GameController, User, Nc) {
+function (Parent, ProtocolHelper, GameController, User) {
 
     function Worker () {
         //this.socketLink = socketLink;
@@ -40,7 +40,7 @@ function (Parent, ProtocolHelper, GameController, User, Nc) {
 			}
 		}, this);
 
-       Nc.on(Nc.ns.client.to.server.gameCommand.send, this.sendGameCommand, this);
+       nc.on(nc.ns.client.to.server.gameCommand.send, this.sendGameCommand, this);
     }
 
     Worker.prototype.sendCommand = function (command, options) {

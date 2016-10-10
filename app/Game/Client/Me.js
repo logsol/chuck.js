@@ -6,7 +6,7 @@ define([
     "Game/Client/Control/PlayerController",
 ],
  
-function (Parent, Settings, Nc, Assert, PlayerController) {
+function (Parent, Settings, nc, Assert, PlayerController) {
 
 	"use strict";
  
@@ -108,7 +108,7 @@ function (Parent, Settings, Nc, Assert, PlayerController) {
         var callback = function(arrowMesh) {
             self.arrowMesh = arrowMesh;
         };
-        Nc.trigger(Nc.ns.client.view.playerArrow.createAndAdd, callback, options);
+        nc.trigger(nc.ns.client.view.playerArrow.createAndAdd, callback, options);
     };
 
     Me.prototype.render = function() {
@@ -120,7 +120,7 @@ function (Parent, Settings, Nc, Assert, PlayerController) {
             x: position.x * Settings.RATIO,
             y: position.y * Settings.RATIO,
         };
-        Nc.trigger(Nc.ns.client.view.playerArrow.update, this.arrowMesh, options);
+        nc.trigger(nc.ns.client.view.playerArrow.update, this.arrowMesh, options);
     };
 
     return Me;

@@ -7,7 +7,7 @@ define([
     "Game/Client/View/Abstract/Layer",
 ],
  
-function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
+function (Parent, Settings, nc, Exception, ColorConverter, Layer) {
 
 	"use strict";
  
@@ -50,14 +50,14 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
         if(!state) throw new Exception("action state is undefined");
 
         if(this.animatedMeshes[this.actionState]) {
-            Nc.trigger(
-                Nc.ns.client.view.mesh.update,
+            nc.trigger(
+                nc.ns.client.view.mesh.update,
                 this.layerId,
                 this.animatedMeshesContainer.withArms[this.actionState],
                 { visible: false }
             );
-            Nc.trigger(
-                Nc.ns.client.view.mesh.update,
+            nc.trigger(
+                nc.ns.client.view.mesh.update,
                 this.layerId,
                 this.animatedMeshesContainer.withoutArms[this.actionState],
                 { visible: false }
@@ -66,8 +66,8 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
 
         Parent.prototype.setActionState.call(this, state);
 
-        Nc.trigger(
-            Nc.ns.client.view.mesh.update,
+        nc.trigger(
+            nc.ns.client.view.mesh.update,
             this.layerId,
             this.animatedMeshes[this.actionState],
             {
@@ -82,7 +82,7 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
         var self = this;
 
         var setShirtColor = function (mesh) {
-            Nc.trigger(Nc.ns.client.view.mesh.addFilter, self.layerId, mesh, 'colorRangeReplace', {
+            nc.trigger(nc.ns.client.view.mesh.addFilter, self.layerId, mesh, 'colorRangeReplace', {
                 minColor: 0x3b4a31,
                 maxColor: 0x657f54,
                 newColor: self.primaryColor,
@@ -131,12 +131,12 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
 
                 var callback = function(mesh) {
                     self.animatedMeshesContainer[arm][key] = mesh;
-                    Nc.trigger(Nc.ns.client.view.mesh.add, self.layerId, mesh);
+                    nc.trigger(nc.ns.client.view.mesh.add, self.layerId, mesh);
 
                     setShirtColor(mesh);
                 };
 
-                Nc.trigger(Nc.ns.client.view.animatedMesh.create, this.layerId, texturePaths, callback, { 
+                nc.trigger(nc.ns.client.view.animatedMesh.create, this.layerId, texturePaths, callback, { 
                     visible: false, 
                     pivot: {
                         x: 0,
@@ -159,9 +159,9 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
         var texturePath = Settings.GRAPHICS_PATH + "Characters/Chuck/head.png";
         var callback = function (mesh) {
             self.headMesh = mesh;
-            Nc.trigger(Nc.ns.client.view.mesh.add, self.layerId, mesh);
+            nc.trigger(nc.ns.client.view.mesh.add, self.layerId, mesh);
         }
-        Nc.trigger(Nc.ns.client.view.mesh.create, this.layerId, texturePath, callback, {
+        nc.trigger(nc.ns.client.view.mesh.create, this.layerId, texturePath, callback, {
             pivot: {
                 x: 5,
                 y: 12
@@ -179,10 +179,10 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
         texturePath = Settings.GRAPHICS_PATH + "Characters/Chuck/holdingArm.png";
         var callback = function (mesh) {
             self.holdingArmMesh = mesh;
-            Nc.trigger(Nc.ns.client.view.mesh.add, self.layerId, mesh);
+            nc.trigger(nc.ns.client.view.mesh.add, self.layerId, mesh);
             setShirtColor(mesh);
         }
-        Nc.trigger(Nc.ns.client.view.mesh.create, this.layerId, texturePath, callback, {
+        nc.trigger(nc.ns.client.view.mesh.create, this.layerId, texturePath, callback, {
             visible: false,
             pivot: {
                 //x: 35/2 * 4,
@@ -206,7 +206,7 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
 
         if(oldLookDirection != this.lookDirection) {
             for(var key in this.animatedMeshes) {
-                Nc.trigger(Nc.ns.client.view.mesh.update,
+                nc.trigger(nc.ns.client.view.mesh.update,
                     this.layerId,
                     this.animatedMeshes[key],
                     {
@@ -215,7 +215,7 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
                 );                   
             }
 
-            Nc.trigger(Nc.ns.client.view.mesh.update,
+            nc.trigger(nc.ns.client.view.mesh.update,
                 this.layerId,
                 this.holdingArmMesh,
                 {
@@ -226,7 +226,7 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
 
         var angle = Math.atan2(this.lookAtXY.x, this.lookAtXY.y) / 2 - 0.7855 * this.lookDirection; // 0.7855 = 45°
 
-        Nc.trigger(Nc.ns.client.view.mesh.update,
+        nc.trigger(nc.ns.client.view.mesh.update,
             this.layerId,
             this.headMesh,
             {
@@ -240,22 +240,22 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
         Parent.prototype.grab.call(this, item);
         this.animatedMeshes = this.animatedMeshesContainer.withoutArms;
         this.setActionState(this.actionState, true);
-        Nc.trigger(Nc.ns.client.view.mesh.update, this.layerId, this.holdingArmMesh, { visible: true });
+        nc.trigger(nc.ns.client.view.mesh.update, this.layerId, this.holdingArmMesh, { visible: true });
     };
 
     Doll.prototype.throw = function(item, options) {
         Parent.prototype.throw.call(this, item, options);
         this.animatedMeshes = this.animatedMeshesContainer.withArms;
         this.setActionState(this.actionState, true);
-        Nc.trigger(Nc.ns.client.view.mesh.update, this.layerId, this.holdingArmMesh, { visible: false });
+        nc.trigger(nc.ns.client.view.mesh.update, this.layerId, this.holdingArmMesh, { visible: false });
     };
 
     Doll.prototype.destroy = function () {
         for (var key in this.animatedMeshes) {
-            Nc.trigger(Nc.ns.client.view.mesh.remove, this.layerId, this.animatedMeshes[key]);
+            nc.trigger(nc.ns.client.view.mesh.remove, this.layerId, this.animatedMeshes[key]);
         }
 
-        Nc.trigger(Nc.ns.client.view.mesh.remove, this.layerId, this.headMesh);
+        nc.trigger(nc.ns.client.view.mesh.remove, this.layerId, this.headMesh);
 
         Parent.prototype.destroy.call(this);
     }
@@ -272,7 +272,7 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
 
             var factor = stepLength / 30;
 
-            Nc.trigger(Nc.ns.client.view.mesh.update,
+            nc.trigger(nc.ns.client.view.mesh.update,
                 this.layerId,
                 this.animatedMeshes[this.actionState],
                 {
@@ -283,7 +283,7 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
                 }
             );
 
-            Nc.trigger(Nc.ns.client.view.mesh.update,
+            nc.trigger(nc.ns.client.view.mesh.update,
                 this.layerId,
                 this.headMesh,
                 {
@@ -292,7 +292,7 @@ function (Parent, Settings, Nc, Exception, ColorConverter, Layer) {
                 }
             )
 
-            Nc.trigger(Nc.ns.client.view.mesh.update,
+            nc.trigger(nc.ns.client.view.mesh.update,
                 this.layerId,
                 this.holdingArmMesh,
                 {

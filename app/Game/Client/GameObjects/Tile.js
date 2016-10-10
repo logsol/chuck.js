@@ -5,7 +5,7 @@ define([
     "Game/Client/View/Abstract/Layer"
 ],
  
-function (Parent, Settings, Nc, Layer) {
+function (Parent, Settings, nc, Layer) {
 
 	"use strict";
  
@@ -31,10 +31,10 @@ function (Parent, Settings, Nc, Layer) {
 
     	var callback = function(mesh) {
     		self.mesh = mesh;
-            Nc.trigger(Nc.ns.client.view.mesh.add, self.layerId, mesh);
+            nc.trigger(nc.ns.client.view.mesh.add, self.layerId, mesh);
     	}
    
-        Nc.trigger(Nc.ns.client.view.mesh.create,
+        nc.trigger(nc.ns.client.view.mesh.create,
             this.layerId,
             texturePath, 
             callback,
@@ -50,13 +50,13 @@ function (Parent, Settings, Nc, Layer) {
     };
 
     Tile.prototype.destroy = function() {
-        Nc.trigger(Nc.ns.client.view.mesh.remove, this.layerId, this.mesh);
+        nc.trigger(nc.ns.client.view.mesh.remove, this.layerId, this.mesh);
         Parent.prototype.destroy.call(this);
     };
 
     Tile.prototype.render = function() {
 
-        Nc.trigger(Nc.ns.client.view.mesh.update,
+        nc.trigger(nc.ns.client.view.mesh.update,
             this.layerId,
             this.mesh,
             {

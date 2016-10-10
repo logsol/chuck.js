@@ -8,7 +8,7 @@ define([
     "Lib/Utilities/Assert"
 ],
  
-function (Parent, Box2D, Options, Settings, Exception, Nc, Assert) {
+function (Parent, Box2D, Options, Settings, Exception, nc, Assert) {
 
 	"use strict";
  
@@ -41,7 +41,7 @@ function (Parent, Box2D, Options, Settings, Exception, Nc, Assert) {
             this.body.SetBullet(true);
         }
 
-        Nc.trigger(Nc.ns.core.game.worldUpdateObjects.add, this);
+        nc.trigger(nc.ns.core.game.worldUpdateObjects.add, this);
     }
 
     Item.prototype = Object.create(Parent.prototype);
@@ -158,7 +158,7 @@ function (Parent, Box2D, Options, Settings, Exception, Nc, Assert) {
     };
 
     Item.prototype.destroy = function() {
-        Nc.trigger(Nc.ns.core.game.worldUpdateObjects.remove, this);
+        nc.trigger(nc.ns.core.game.worldUpdateObjects.remove, this);
         Parent.prototype.destroy.call(this);
     };
  

@@ -4,7 +4,7 @@ define([
     "Game/Client/View/Pixi/Layer"
 ],
  
-function (Nc, Exception, Layer) {
+function (nc, Exception, Layer) {
 
 	"use strict";
  
@@ -13,16 +13,16 @@ function (Nc, Exception, Layer) {
         this.container = container;
 
         this.ncTokens = [
-            Nc.on(Nc.ns.client.view.layer.createAndInsert, this.createAndInsert, this),
-            Nc.on(Nc.ns.client.view.mesh.create, this.createMesh, this),
-            Nc.on(Nc.ns.client.view.animatedMesh.create, this.createAnimatedMesh, this),
-            Nc.on(Nc.ns.client.view.mesh.add, this.addMesh, this),
-            Nc.on(Nc.ns.client.view.mesh.remove, this.removeMesh, this),
-            Nc.on(Nc.ns.client.view.mesh.update, this.updateMesh, this),
-            Nc.on(Nc.ns.client.view.mesh.addFilter, this.addFilter, this),
-            Nc.on(Nc.ns.client.view.mesh.removeFilter, this.removeFilter, this),
-            Nc.on(Nc.ns.client.view.mesh.swapMeshIndexes, this.swapMeshIndexes, this),
-            Nc.on(Nc.ns.client.view.mesh.swapMeshes, this.swapMeshes, this)
+            nc.on(nc.ns.client.view.layer.createAndInsert, this.createAndInsert, this),
+            nc.on(nc.ns.client.view.mesh.create, this.createMesh, this),
+            nc.on(nc.ns.client.view.animatedMesh.create, this.createAnimatedMesh, this),
+            nc.on(nc.ns.client.view.mesh.add, this.addMesh, this),
+            nc.on(nc.ns.client.view.mesh.remove, this.removeMesh, this),
+            nc.on(nc.ns.client.view.mesh.update, this.updateMesh, this),
+            nc.on(nc.ns.client.view.mesh.addFilter, this.addFilter, this),
+            nc.on(nc.ns.client.view.mesh.removeFilter, this.removeFilter, this),
+            nc.on(nc.ns.client.view.mesh.swapMeshIndexes, this.swapMeshIndexes, this),
+            nc.on(nc.ns.client.view.mesh.swapMeshes, this.swapMeshes, this)
         ];
     }
 
@@ -171,7 +171,7 @@ function (Nc, Exception, Layer) {
 
     LayerManager.prototype.destroy = function() {
         for (var i = 0; i < this.ncTokens.length; i++) {
-            Nc.off(this.ncTokens[i]);
+            nc.off(this.ncTokens[i]);
         };
         for (var i = this.layers.length - 1; i >= 0; i--) { 
             var layer = this.layers[i];

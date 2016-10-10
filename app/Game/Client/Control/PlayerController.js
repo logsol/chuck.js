@@ -6,7 +6,7 @@ define([
     "Game/Client/PointerLockManager"
 ], 
 
-function (Parent, Nc, KeyboardAndMouse, Gamepad, PointerLockManager) {
+function (Parent, nc, KeyboardAndMouse, Gamepad, PointerLockManager) {
 
 	"use strict";
 
@@ -29,85 +29,85 @@ function (Parent, Nc, KeyboardAndMouse, Gamepad, PointerLockManager) {
     PlayerController.prototype.moveLeft = function () {
         if (!this.isPlayerInputAllowed()) return;
         Parent.prototype.moveLeft.call(this);
-        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, 'moveLeft');
+        nc.trigger(nc.ns.client.to.server.gameCommand.send, 'moveLeft');
     }
 
     PlayerController.prototype.moveRight = function () {
         if (!this.isPlayerInputAllowed()) return;
         Parent.prototype.moveRight.call(this);
-        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, 'moveRight');
+        nc.trigger(nc.ns.client.to.server.gameCommand.send, 'moveRight');
     }
 
     // always allow to stop, to prevent endless running
     PlayerController.prototype.stop = function () {
         Parent.prototype.stop.call(this);
-        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, 'stop');
+        nc.trigger(nc.ns.client.to.server.gameCommand.send, 'stop');
     }
 
     PlayerController.prototype.jump = function () {
         if (!this.isPlayerInputAllowed()) return;
         Parent.prototype.jump.call(this);
-        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, 'jump');
+        nc.trigger(nc.ns.client.to.server.gameCommand.send, 'jump');
     }
 
     // always allow to stop.
     PlayerController.prototype.jumpStop = function () {
         Parent.prototype.jumpStop.call(this);
-        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, 'jumpStop');
+        nc.trigger(nc.ns.client.to.server.gameCommand.send, 'jumpStop');
     }
 
     PlayerController.prototype.setXY = function(x, y) {
         if (!this.isPlayerInputAllowed()) return;
         var options = {x:x, y:y};
         Parent.prototype.lookAt.call(this, options);
-        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, 'lookAt', options);
+        nc.trigger(nc.ns.client.to.server.gameCommand.send, 'lookAt', options);
     };
 
     PlayerController.prototype.suicide = function() {
         if (!this.isPlayerInputAllowed()) return;
-        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, "suicide");
+        nc.trigger(nc.ns.client.to.server.gameCommand.send, "suicide");
     };
 
     PlayerController.prototype.handActionRequest = function(options) {
         if (!this.isPlayerInputAllowed()) return;
-        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, "handActionRequest", options);
+        nc.trigger(nc.ns.client.to.server.gameCommand.send, "handActionRequest", options);
     };
 
     PlayerController.prototype.showInfo = function() {
         if (!this.isPlayerInputAllowed()) return;
-        Nc.trigger(Nc.ns.client.game.gameStats.toggle, true);
+        nc.trigger(nc.ns.client.game.gameStats.toggle, true);
     };
 
     PlayerController.prototype.hideInfo = function() {
         if (!this.isPlayerInputAllowed()) return;
-        Nc.trigger(Nc.ns.client.game.gameStats.toggle, false);
+        nc.trigger(nc.ns.client.game.gameStats.toggle, false);
     };
 
     PlayerController.prototype.zoomIn = function() {
         if (!this.isPlayerInputAllowed()) return;
-        Nc.trigger(Nc.ns.client.game.zoomIn, true);
+        nc.trigger(nc.ns.client.game.zoomIn, true);
     };
 
     PlayerController.prototype.zoomOut = function() {
         if (!this.isPlayerInputAllowed()) return;
-        Nc.trigger(Nc.ns.client.game.zoomOut, false);
+        nc.trigger(nc.ns.client.game.zoomOut, false);
     };
 
     PlayerController.prototype.zoomReset = function() {
         if (!this.isPlayerInputAllowed()) return;
-        Nc.trigger(Nc.ns.client.game.zoomReset, false);
+        nc.trigger(nc.ns.client.game.zoomReset, false);
     };
 
     PlayerController.prototype.activateModifier = function() {
         if (!this.isPlayerInputAllowed()) return;
         Parent.prototype.activateModifier.call(this);
-        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, "activateModifier");
+        nc.trigger(nc.ns.client.to.server.gameCommand.send, "activateModifier");
     };
 
     PlayerController.prototype.deactivateModifier = function() {
         if (!this.isPlayerInputAllowed()) return;
         Parent.prototype.deactivateModifier.call(this);
-        Nc.trigger(Nc.ns.client.to.server.gameCommand.send, "deactivateModifier");
+        nc.trigger(nc.ns.client.to.server.gameCommand.send, "deactivateModifier");
     };
 
     /*

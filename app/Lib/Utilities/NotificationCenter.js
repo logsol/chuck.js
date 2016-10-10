@@ -7,7 +7,7 @@ function (Exception) {
 	"use strict";
 
     function populate(obj, path) {
-        path = path || "Nc.ns";
+        path = path || "nc.ns";
         for(var key in obj) {
             if(!obj.hasOwnProperty(key)) continue;
             if(obj[key] === null) {
@@ -199,15 +199,15 @@ function (Exception) {
 
     NotificationCenter.prototype.validate = function(topic) {
         if (topic === undefined) {
-            throw new Exception("Topic not registered in Nc. See stack trace.");
+            throw new Exception("Topic not registered in nc. See stack trace.");
         }
 
         if (typeof topic === 'object') {
             throw new Exception("Topic bad format " + JSON.stringify(topic));
         }
 
-        if (topic.indexOf("Nc.ns") !== 0) {
-             throw new Exception("Topic bad format, does not begin with Nc.ns. : " + topic);
+        if (topic.indexOf("nc.ns") !== 0) {
+             throw new Exception("Topic bad format, does not begin with nc.ns. : " + topic);
         }
     };
 
@@ -266,7 +266,7 @@ function (Exception) {
         }
     }
 
-    // should be treated as a private function - use Nc.off(Array);
+    // should be treated as a private function - use nc.off(Array);
     NotificationCenter.prototype.offAll = function (tokens) {
         for (var i = 0; i < tokens.length; i++) {
             this.off(tokens[i]);

@@ -6,7 +6,7 @@ define([
     "Game/Client/PointerLockManager"
 ], 
 
-function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
+function (Settings, nc, Screenfull, Graph, PointerLockManager) {
 
 	"use strict";
 
@@ -122,7 +122,7 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.onclick = function(e) {
-            Nc.trigger(Nc.ns.client.view.debugMode.toggle, e.target.checked);
+            nc.trigger(nc.ns.client.view.debugMode.toggle, e.target.checked);
         };
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode("Debug"));
@@ -147,7 +147,7 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
 
         // FIXME : isn't this a weird place for this?
         window.onresize = function() {
-            Nc.trigger(Nc.ns.client.view.display.change);
+            nc.trigger(nc.ns.client.view.display.change);
         };
     };
 
@@ -180,7 +180,7 @@ function (Settings, Nc, Screenfull, Graph, PointerLockManager) {
     };
 
     DomController.prototype.initCanvas = function (canvas) {
-        Nc.trigger(Nc.ns.client.view.display.change, Screenfull.isFullscreen);
+        nc.trigger(nc.ns.client.view.display.change, Screenfull.isFullscreen);
     };
 
     DomController.prototype.setConnected = function(connected) {

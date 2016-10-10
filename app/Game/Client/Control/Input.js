@@ -2,7 +2,7 @@ define([
 	"Lib/Utilities/NotificationCenter"
 ],
  
-function (Nc) {
+function (nc) {
  
     function Input(playerController) {
         this.playerController = playerController;

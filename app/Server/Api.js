@@ -7,7 +7,7 @@ define([
 	"fs"
 ],
  
-function (Nc, ProtocolHelper, validate, Options, Settings, FileSystem) {
+function (nc, ProtocolHelper, validate, Options, Settings, FileSystem) {
 
 	"use strict";
 

@@ -4,7 +4,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
 
-function (Parent, ProtocolHelper, Nc) {
+function (Parent, ProtocolHelper, nc) {
 
 	"use strict";
 
@@ -19,7 +19,7 @@ function (Parent, ProtocolHelper, Nc) {
         socketLink.on('message', this.onMessage.bind(this));
         socketLink.on('disconnect', this.onDisconnect.bind(this));
 
-        Nc.on(Nc.ns.server.events.controlCommand.user + this.id, this.socketLink.send, this.socketLink);
+        nc.on(nc.ns.server.events.controlCommand.user + this.id, this.socketLink.send, this.socketLink);
     }
 
     User.prototype = Object.create(Parent.prototype);
@@ -97,7 +97,7 @@ function (Parent, ProtocolHelper, Nc) {
 
     User.prototype.onPing = function(timestamp) {
         var message = ProtocolHelper.encodeCommand("pong", timestamp);
-        Nc.trigger(Nc.ns.server.events.controlCommand.user + this.id, message);
+        nc.trigger(nc.ns.server.events.controlCommand.user + this.id, message);
     };
 
     return User;

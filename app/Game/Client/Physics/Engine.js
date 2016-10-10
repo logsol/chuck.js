@@ -8,7 +8,7 @@ define([
     "Game/Client/View/Pixi/Layers/Debug"
 ],
 
-function (Parent, Settings, domController, Box2D, Nc, DebugDraw, debugLayer) {
+function (Parent, Settings, domController, Box2D, nc, DebugDraw, debugLayer) {
 
 	"use strict";
 
@@ -17,7 +17,7 @@ function (Parent, Settings, domController, Box2D, Nc, DebugDraw, debugLayer) {
 
         this.debugMode = false;
 
-        Nc.on(Nc.ns.client.view.debugMode.toggle, this.onToggleDebugMode, this);
+        nc.on(nc.ns.client.view.debugMode.toggle, this.onToggleDebugMode, this);
     }
 
     Engine.prototype = Object.create(Parent.prototype);

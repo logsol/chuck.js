@@ -7,7 +7,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
 
-function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter, Nc) {
+function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter, nc) {
 
 	"use strict";
     
@@ -23,7 +23,7 @@ function (Parent, PIXI, ColorRangeReplaceFilter, Settings, ColorConverter, Nc) {
         }
 
         this.ncTokens = this.ncTokens.concat([
-            Nc.on(Nc.ns.client.view.layer.levelSizeUpdate, this.onLevelSizeUpdate, this)
+            nc.on(nc.ns.client.view.layer.levelSizeUpdate, this.onLevelSizeUpdate, this)
         ]);
 
         if (Settings.SHOW_LAYER_INFO) {

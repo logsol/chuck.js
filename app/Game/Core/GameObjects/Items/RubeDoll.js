@@ -9,7 +9,7 @@ define([
     "json!Game/Asset/RubeDoll.json" // using requirejs json loader plugin
 ],
 
-function (Parent, RubeLoader, Box2D, Settings, Assert, Nc, Matrix, RubeDollJson) {
+function (Parent, RubeLoader, Box2D, Settings, Assert, nc, Matrix, RubeDollJson) {
 
 	"use strict";
  

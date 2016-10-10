@@ -5,7 +5,7 @@ define([
 	"Lib/Utilities/ColorConverter"
 ],
  
-function (PIXI, Nc, Settings, ColorConverter) {
+function (PIXI, nc, Settings, ColorConverter) {
 
 	"use strict";
  
@@ -63,8 +63,8 @@ function (PIXI, Nc, Settings, ColorConverter) {
         this.sortedPlayers = [];
 
         this.ncTokens = [
-            Nc.on(Nc.ns.client.view.gameStats.toggle, this.toggle, this),
-            Nc.on(Nc.ns.client.view.gameStats.update, this.update, this)
+            nc.on(nc.ns.client.view.gameStats.toggle, this.toggle, this),
+            nc.on(nc.ns.client.view.gameStats.update, this.update, this)
         ];
     }
 
@@ -197,7 +197,7 @@ function (PIXI, Nc, Settings, ColorConverter) {
 
     GameStats.prototype.destroy = function() {
         for (var i = 0; i < this.ncTokens.length; i++) {
-            Nc.off(this.ncTokens[i]);
+            nc.off(this.ncTokens[i]);
         };
     };
  

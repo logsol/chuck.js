@@ -7,7 +7,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
  
-function (Settings, Exception, AbstractView, PixiView, Nc) {
+function (Settings, Exception, AbstractView, PixiView, nc) {
 
 	"use strict";
  

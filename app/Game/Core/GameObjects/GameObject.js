@@ -5,7 +5,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
  
-function (Box2D, Exception, Assert, Nc) {
+function (Box2D, Exception, Assert, nc) {
 
 	"use strict";
  
@@ -17,7 +17,7 @@ function (Box2D, Exception, Assert, Nc) {
         this.body = physicsEngine.createBody(def);
 
         this.ncTokens = (this.ncTokens || []).concat([
-            Nc.on(Nc.ns.client.game.events.destroy, this.destroy, this)
+            nc.on(nc.ns.client.game.events.destroy, this.destroy, this)
         ]);
     }
 
@@ -33,7 +33,7 @@ function (Box2D, Exception, Assert, Nc) {
             throw new Exception("can not destroy body");
         }
 
-        Nc.off(this.ncTokens);
+        nc.off(this.ncTokens);
     };
 
     GameObject.prototype.getBody = function() {

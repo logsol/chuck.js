@@ -5,7 +5,7 @@ define([
 	"Game/Config/Settings"
 ],
  
-function (Parent, PIXI, Nc, Settings) {
+function (Parent, PIXI, nc, Settings) {
  
     function Swiper() {
     	Parent.call(this, "swiper", {parallaxSpeed:0});
@@ -13,8 +13,8 @@ function (Parent, PIXI, Nc, Settings) {
         this.static = true;
 
     	this.ncTokens = this.ncTokens.concat([
-            Nc.on(Nc.ns.client.view.swiper.swipe, this.swipe, this),
-            Nc.on(Nc.ns.client.view.swiper.end, this.end, this)
+            nc.on(nc.ns.client.view.swiper.swipe, this.swipe, this),
+            nc.on(nc.ns.client.view.swiper.end, this.end, this)
         ]);
 
         this.sprite = new PIXI.Graphics();

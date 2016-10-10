@@ -3,7 +3,7 @@ define([
 	"child_process"
 ],
 
-function (Nc, childProcess) {
+function (nc, childProcess) {
 
 	"use strict";
 
@@ -57,10 +57,10 @@ function (Nc, childProcess) {
 	PipeToChannel.prototype.onMessage = function (message) {
 		switch(message.recipient) {
 			case 'coordinator':
-				Nc.trigger(Nc.ns.server.events.controlCommand.coordinator, message.data);
+				nc.trigger(nc.ns.server.events.controlCommand.coordinator, message.data);
 				break;
 			default:
-				Nc.trigger(Nc.ns.server.events.controlCommand.user + message.recipient, message.data);
+				nc.trigger(nc.ns.server.events.controlCommand.user + message.recipient, message.data);
 				break;
 		}
 		

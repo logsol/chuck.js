@@ -11,7 +11,7 @@ define([
     "Game/Channel/GameObjects/Items/RubeDoll"
 ],
 
-function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, GameObject, Doll, RubeDoll) {
+function (Parent, PhysicsEngine, Settings, requestAnimFrame, nc, Box2D, Player, GameObject, Doll, RubeDoll) {
 
 	"use strict";
 
@@ -25,12 +25,12 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, 
         Parent.call(this, options);
 
         this.ncTokens = this.ncTokens.concat([
-            Nc.on(Nc.ns.channel.events.user.joined, this.onUserJoined, this),
-            Nc.on(Nc.ns.channel.events.user.left, this.onUserLeft, this),
-            Nc.on(Nc.ns.channel.events.user.level.reset, this.onResetLevel, this),
-            Nc.on(Nc.ns.channel.events.user.client.ready, this.onClientReady, this),
-            Nc.on(Nc.ns.core.game.events.level.loaded, this.onLevelLoaded, this), 
-            Nc.on(Nc.ns.channel.events.game.player.killed, this.onPlayerKilled, this),
+            nc.on(nc.ns.channel.events.user.joined, this.onUserJoined, this),
+            nc.on(nc.ns.channel.events.user.left, this.onUserLeft, this),
+            nc.on(nc.ns.channel.events.user.level.reset, this.onResetLevel, this),
+            nc.on(nc.ns.channel.events.user.client.ready, this.onClientReady, this),
+            nc.on(nc.ns.core.game.events.level.loaded, this.onLevelLoaded, this), 
+            nc.on(nc.ns.channel.events.game.player.killed, this.onPlayerKilled, this),
         ]);
 
         console.checkpoint('starting game controller for channel (' + options.channelName + ')');
@@ -65,7 +65,7 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, 
     };
 
     GameController.prototype.clearItemsOfPlayerFingerPrints = function(player) {
-        Nc.trigger(Nc.ns.channel.events.game.player.clearFingerPrints, player);
+        nc.trigger(nc.ns.channel.events.game.player.clearFingerPrints, player);
     };
 
     GameController.prototype.createPlayer = function(user) {
@@ -79,7 +79,7 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, 
 
     GameController.prototype.onPlayerKilled = function(player, killedByPlayer) {
         if(killedByPlayer.stats.score >= this.options.scoreLimit) {
-            Nc.trigger(Nc.ns.channel.events.round.end);
+            nc.trigger(nc.ns.channel.events.round.end);
         } else {
             this.spawnPlayer(player, Settings.RESPAWN_TIME);
         }
@@ -102,7 +102,7 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, 
                 y: spawnPoint.y
             };
 
-            Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "spawnPlayer", options);
+            nc.trigger(nc.ns.channel.to.client.gameCommand.broadcast, "spawnPlayer", options);
             
             var i = self.spawnTimeouts.indexOf(spawnTimeout);
             self.spawnTimeouts.splice(i, 1);
@@ -117,7 +117,7 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, 
         var update = this.getWorldUpdateObject(false);
 
         if(Object.getOwnPropertyNames(update).length > 0) {
-            Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "worldUpdate", update);
+            nc.trigger(nc.ns.channel.to.client.gameCommand.broadcast, "worldUpdate", update);
         }
 
         this.worldUpdateTimeout = setTimeout(this.updateWorld.bind(this), Settings.NETWORK_UPDATE_INTERVAL);
@@ -232,7 +232,7 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, 
             userId: userId
         };
 
-        Nc.trigger(Nc.ns.channel.to.client.user.gameCommand.send + userId, "clientReadyResponse", options);
+        nc.trigger(nc.ns.channel.to.client.user.gameCommand.send + userId, "clientReadyResponse", options);
 
         this.spawnPlayer(player, 0);
     };
@@ -255,7 +255,7 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, Nc, Box2D, Player, 
         console.log('OH NO!!! ON RESET LEVEL IS CALLED AND RESPAWNES PLAYERS');
 
         Parent.prototype.onResetLevel.call(this);
-        Nc.trigger(Nc.ns.channel.to.client.gameCommand.broadcast, "resetLevel", true);
+        nc.trigger(nc.ns.channel.to.client.gameCommand.broadcast, "resetLevel", true);
         for (var key in this.players) {
             this.spawnPlayer(this.players[key]);
         }

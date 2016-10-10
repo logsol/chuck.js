@@ -5,7 +5,7 @@ define([
     "fs"
 ],
 
-function (Nc, Channel, Settings, fs) {
+function (nc, Channel, Settings, fs) {
 
 	"use strict";
 
@@ -14,7 +14,7 @@ function (Nc, Channel, Settings, fs) {
         this.process = process;
         this.recordingFileName = null;
 
-        Nc.on(Nc.ns.channel.to.server.controlCommand.send, this.send, this);
+        nc.on(nc.ns.channel.to.server.controlCommand.send, this.send, this);
 
         process.on("message", this.onProcessMessage.bind(this));   
     }
@@ -82,10 +82,10 @@ function (Nc, Channel, Settings, fs) {
     PipeToServer.prototype.onMessage = function (message) {
         switch(message.recipient) {
             case "channel":
-                Nc.trigger(Nc.ns.channel.events.controlCommand.channel, message);    
+                nc.trigger(nc.ns.channel.events.controlCommand.channel, message);    
                 break;
             default: 
-                Nc.trigger(Nc.ns.channel.events.controlCommand.user + message.recipient, message);    
+                nc.trigger(nc.ns.channel.events.controlCommand.user + message.recipient, message);    
                 break;
         }
         

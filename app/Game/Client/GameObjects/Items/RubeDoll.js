@@ -5,7 +5,7 @@ define([
     "Lib/Utilities/NotificationCenter",
 ],
  
-function (Parent, Layer, Settings, Nc) {
+function (Parent, Layer, Settings, nc) {
 
 	"use strict";
  
@@ -131,10 +131,10 @@ function (Parent, Layer, Settings, Nc) {
         
             self.limbMeshes[name] = mesh;
                 
-            Nc.trigger(Nc.ns.client.view.mesh.add, self.layerId, mesh);
+            nc.trigger(nc.ns.client.view.mesh.add, self.layerId, mesh);
 
             // setting shirt color
-            Nc.trigger(Nc.ns.client.view.mesh.addFilter, self.layerId, mesh, "colorRangeReplace", {
+            nc.trigger(nc.ns.client.view.mesh.addFilter, self.layerId, mesh, "colorRangeReplace", {
                 minColor: 0x3b4a31,
                 maxColor: 0x6d855d,
                 newColor: self.primaryColor,
@@ -142,7 +142,7 @@ function (Parent, Layer, Settings, Nc) {
             });
         };
    
-        Nc.trigger(Nc.ns.client.view.mesh.create,
+        nc.trigger(nc.ns.client.view.mesh.create,
             this.layerId,
             texturePath + name + ".png", 
             callback,
@@ -160,7 +160,7 @@ function (Parent, Layer, Settings, Nc) {
     RubeDoll.prototype.destroy = function() {
         
         for (var name in this.limbMeshes) {
-            Nc.trigger(Nc.ns.client.view.mesh.remove, this.layerId, this.limbMeshes[name]);
+            nc.trigger(nc.ns.client.view.mesh.remove, this.layerId, this.limbMeshes[name]);
         };
 
         Parent.prototype.destroy.call(this);
@@ -169,7 +169,7 @@ function (Parent, Layer, Settings, Nc) {
     RubeDoll.prototype.render = function() {
         //Parent.prototype.render.call(this);
 
-        Nc.trigger(Nc.ns.client.view.mesh.update,
+        nc.trigger(nc.ns.client.view.mesh.update,
             this.layerId,
             this.mesh,
             {
@@ -182,7 +182,7 @@ function (Parent, Layer, Settings, Nc) {
         if(this.limbs) {
             for(var name in this.limbMeshes) {
                 if(this.limbs[name]) {
-                    Nc.trigger(Nc.ns.client.view.mesh.update,
+                    nc.trigger(nc.ns.client.view.mesh.update,
                         this.layerId,
                         this.limbMeshes[name],
                         {
@@ -205,29 +205,29 @@ function (Parent, Layer, Settings, Nc) {
 
             this.lastFlipDirection = direction;
 
-            Nc.trigger(Nc.ns.client.view.mesh.swapMeshIndexes,
+            nc.trigger(nc.ns.client.view.mesh.swapMeshIndexes,
                 this.layerId,
                 this.limbMeshes["lowerRightLeg"], 
                 this.limbMeshes["lowerLeftLeg"]
             );
-            Nc.trigger(Nc.ns.client.view.mesh.swapMeshIndexes,
+            nc.trigger(nc.ns.client.view.mesh.swapMeshIndexes,
                 this.layerId,
                 this.limbMeshes["upperRightLeg"], 
                 this.limbMeshes["upperLeftLeg"]
             );
-            Nc.trigger(Nc.ns.client.view.mesh.swapMeshIndexes,
+            nc.trigger(nc.ns.client.view.mesh.swapMeshIndexes,
                 this.layerId,
                 this.limbMeshes["lowerRightArm"], 
                 this.limbMeshes["lowerLeftArm"]
             );
-            Nc.trigger(Nc.ns.client.view.mesh.swapMeshIndexes,
+            nc.trigger(nc.ns.client.view.mesh.swapMeshIndexes,
                 this.layerId,
                 this.limbMeshes["upperRightArm"], 
                 this.limbMeshes["upperLeftArm"]
             );
 
             // swap short images
-            Nc.trigger(Nc.ns.client.view.mesh.swapMeshes,
+            nc.trigger(nc.ns.client.view.mesh.swapMeshes,
                 this.layerId,
                 this.limbMeshes["upperRightLeg"],
                 this.limbMeshes["upperLeftLeg"]
@@ -238,7 +238,7 @@ function (Parent, Layer, Settings, Nc) {
         if(this.limbs) {
             for(var name in this.limbMeshes) {
                 if(this.limbs[name]) {
-                    Nc.trigger(Nc.ns.client.view.mesh.update,
+                    nc.trigger(nc.ns.client.view.mesh.update,
                         this.layerId,
                         this.limbMeshes[name],
                         {

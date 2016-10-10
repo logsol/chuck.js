@@ -4,7 +4,7 @@ define([
 	"Game/Config/Settings"
 ],
  
-function (Parent, Nc, Settings) {
+function (Parent, nc, Settings) {
 
 	"use strict";
  
@@ -17,7 +17,7 @@ function (Parent, Nc, Settings) {
     	this.initHealthBar();
 
         this.ncTokens = (this.ncTokens || []).concat([
-            Nc.on(Nc.ns.client.game.events.render, this.render, this)
+            nc.on(nc.ns.client.game.events.render, this.render, this)
         ]);
     }
 
@@ -47,7 +47,7 @@ function (Parent, Nc, Settings) {
     	var callback = function(healthBarView) {
     		self.healthBarView = healthBarView;
     	}
-    	Nc.trigger(Nc.ns.client.view.healthBar.createAndAdd, callback, options);
+    	nc.trigger(nc.ns.client.view.healthBar.createAndAdd, callback, options);
     };
 
     Player.prototype.onHealthChange = function() {
@@ -75,15 +75,15 @@ function (Parent, Nc, Settings) {
 	    		healthFactor: this.stats.health / 100,
 	    		visible: this.healthBarViewVisible
 	    	};
-	    	Nc.trigger(Nc.ns.client.view.healthBar.update, this.healthBarView, options);
+	    	nc.trigger(nc.ns.client.view.healthBar.update, this.healthBarView, options);
 
 	    	this.healthBarViewVisibleTimeout = setTimeout(function() {
 	    		self.healthBarViewVisible = false;
-	    		Nc.trigger(Nc.ns.client.view.healthBar.update, self.healthBarView, {visible: self.healthBarViewVisible});
+	    		nc.trigger(nc.ns.client.view.healthBar.update, self.healthBarView, {visible: self.healthBarViewVisible});
 	    	}, Settings.HEALTH_DISPLAY_TIME * 1000);
 
     	} else {
-    		Nc.trigger(Nc.ns.client.view.healthBar.update, this.healthBarView, {visible: this.healthBarViewVisible});
+    		nc.trigger(nc.ns.client.view.healthBar.update, this.healthBarView, {visible: this.healthBarViewVisible});
     	}
     };
 
@@ -100,7 +100,7 @@ function (Parent, Nc, Settings) {
 				x: position.x * Settings.RATIO,
 	    		y: position.y * Settings.RATIO,
 	    	}
-	    	Nc.trigger(Nc.ns.client.view.healthBar.update, this.healthBarView, options);
+	    	nc.trigger(nc.ns.client.view.healthBar.update, this.healthBarView, options);
     	}
     };
 
@@ -110,8 +110,8 @@ function (Parent, Nc, Settings) {
 
     Player.prototype.destroy = function() {
         clearTimeout(this.healthBarViewVisibleTimeout);
-    	Nc.trigger(Nc.ns.client.view.healthBar.remove, this.healthBarView);
-        Nc.off(this.ncTokens);
+    	nc.trigger(nc.ns.client.view.healthBar.remove, this.healthBarView);
+        nc.off(this.ncTokens);
         Parent.prototype.destroy.call(this);
     };
  

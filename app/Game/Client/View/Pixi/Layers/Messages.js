@@ -5,7 +5,7 @@ define([
     "Game/Config/Settings"
 ],
  
-function (Parent, PIXI, Nc, Settings) {
+function (Parent, PIXI, nc, Settings) {
 
     "use strict";
  
@@ -13,7 +13,7 @@ function (Parent, PIXI, Nc, Settings) {
     	Parent.call(this, "messages", {parallaxSpeed:-1});
 
 		this.ncTokens = this.ncTokens.concat([
-            Nc.on(Nc.ns.client.view.gameStats.kill, this.onKill, this)
+            nc.on(nc.ns.client.view.gameStats.kill, this.onKill, this)
         ]);
 
         this.mainTextOptions = {

@@ -2,7 +2,7 @@ define([
 	"Lib/Utilities/NotificationCenter",
 ],
  
-function (Nc) {
+function (nc) {
 
 	var MAX_LENGTH = 200;
 	var MIN_LENGTH = 5;
@@ -42,7 +42,7 @@ function (Nc) {
 		}
 
 		var i = points.length - 1;
-		Nc.trigger(Nc.ns.client.view.swiper.swipe, points[i].x, points[i].y);
+		nc.trigger(nc.ns.client.view.swiper.swipe, points[i].x, points[i].y);
 	}
 
 	Swiper.prototype.updateLengthSum = function(currentLength) {
@@ -135,7 +135,7 @@ function (Nc) {
 		var sumx = 0;
 		var sumy = 0;
 
-		Nc.trigger(Nc.ns.client.view.swiper.end);
+		nc.trigger(nc.ns.client.view.swiper.end);
 		
 		for(var i=0, count = this.points.length; i < count; i++) {
 			var p = this.points[i];
@@ -166,7 +166,7 @@ function (Nc) {
 
 	Swiper.prototype.destroy = function() {
 		for (var i = 0; i < this.ncTokens.length; i++) {
-			Nc.off(this.ncTokens[i]);
+			nc.off(this.ncTokens[i]);
 		};
 	};
  
