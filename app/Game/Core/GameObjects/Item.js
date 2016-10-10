@@ -1,14 +1,14 @@
 define([
 	"Game/" + GLOBALS.context + "/GameObjects/GameObject",
 	"Lib/Vendor/Box2D",
-    "Lib/Utilities/Options",
+    "Lib/Utilities/OptionsHelper",
 	"Game/Config/Settings",
     "Lib/Utilities/Exception",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Assert"
 ],
  
-function (Parent, Box2D, Options, Settings, Exception, nc, Assert) {
+function (Parent, Box2D, OptionsHelper, Settings, Exception, nc, Assert) {
 
 	"use strict";
  
@@ -26,7 +26,7 @@ function (Parent, Box2D, Options, Settings, Exception, nc, Assert) {
             y: parseFloat(options.y)
         };
 
-        this.options = Options.merge(floatOptions, options);
+        this.options = OptionsHelper.merge(floatOptions, options);
 
         if(!this.options.category) {
             // FIXME add more validation

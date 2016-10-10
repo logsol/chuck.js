@@ -2,12 +2,12 @@ define([
 	"Lib/Utilities/NotificationCenter",
 	"Lib/Utilities/Protocol/Helper",
 	"Lib/Utilities/Validate",
-	"Lib/Utilities/Options",
+	"Lib/Utilities/OptionsHelper",
 	"Game/Config/Settings",
 	"fs"
 ],
  
-function (nc, ProtocolHelper, validate, Options, Settings, FileSystem) {
+function (nc, ProtocolHelper, validate, OptionsHelper, Settings, FileSystem) {
 
 	"use strict";
 
@@ -121,7 +121,7 @@ function (nc, ProtocolHelper, validate, Options, Settings, FileSystem) {
 				scoreLimit: Settings.CHANNEL_DEFAULT_SCORE_LIMIT
 			};
 
-			options = Options.merge(options, defaultOptions);
+			options = OptionsHelper.merge(options, defaultOptions);
 
 			var result = this.coordinator.createChannel(options);
 			if(result !== false) {

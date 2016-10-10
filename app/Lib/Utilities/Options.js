@@ -6,18 +6,18 @@ function (Exception) {
 
 	"use strict";
  
-    function Options() {
+    function OptionsHelper() {
 
     }
  
-    Options.prototype.merge = function(options, preset) {
+    OptionsHelper.prototype.merge = function(options, preset) {
 
     	if(!preset && !options) {
-    		throw new Exception("Options requires objects");
+    		throw new Exception("OptionsHelper requires objects");
     	}
 
     	if(preset.constructor !== Object && options.constructor !== Object) {
-    		throw new Exception("Options requires objects");
+    		throw new Exception("OptionsHelper requires objects");
     	}
 
 		if(!preset || preset.constructor !== Object) {
@@ -43,7 +43,7 @@ function (Exception) {
 				if(options[key].constructor !== Object) {
 					preset[key] = options[key];
 				} else {
-					preset[key] = Options.prototype.merge.call(this, options[key], preset[key]);
+					preset[key] = OptionsHelper.prototype.merge.call(this, options[key], preset[key]);
 				}
 			}
 		}
@@ -51,6 +51,6 @@ function (Exception) {
 		return preset;
 	}
  
-    return new Options();
- 
+    return new OptionsHelper();
+
 });

@@ -4,11 +4,11 @@ define([
 	"Game/Config/Settings",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Assert",
-    "Lib/Utilities/Options",
+    "Lib/Utilities/OptionsHelper",
     "Game/Config/ItemSettings",
 ],
  
-function (Parent, Box2D, Settings, nc, Assert, Options, ItemSettings) {
+function (Parent, Box2D, Settings, nc, Assert, OptionsHelper, ItemSettings) {
 
 	"use strict";
  
@@ -96,8 +96,8 @@ function (Parent, Box2D, Settings, nc, Assert, Options, ItemSettings) {
 
 
         // FIXME
-        var ragdollOptions = Options.merge(ItemSettings.RagDoll, ItemSettings.Default);
-        options = Options.merge(options, ragdollOptions);
+        var ragdollOptions = OptionsHelper.merge(ItemSettings.RagDoll, ItemSettings.Default);
+        options = OptionsHelper.merge(options, ragdollOptions);
         Parent.call(this, physicsEngine, uid, options);
         //this.createSensor();
 
