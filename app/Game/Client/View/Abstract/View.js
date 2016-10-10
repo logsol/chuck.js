@@ -6,7 +6,7 @@ define([
     "Lib/Utilities/NotificationCenter"
 ],
 
-function (Abstract, DomController, Settings, Exception, Nc) {
+function (Abstract, domController, Settings, Exception, Nc) {
 
 	"use strict";
     
@@ -47,7 +47,7 @@ function (Abstract, DomController, Settings, Exception, Nc) {
 
     AbstractView.prototype.initCanvas = function (canvas) {
     	this.canvas = canvas;
-        DomController.initCanvas(canvas);
+        domController.initCanvas(canvas);
     }
 
     AbstractView.prototype.setMe = function(player) {

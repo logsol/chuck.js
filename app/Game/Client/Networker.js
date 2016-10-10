@@ -7,7 +7,7 @@ define([
     "Game/Client/View/DomController"
 ], 
 
-function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
+function (ProtocolHelper, GameController, User, Nc, Settings, domController) {
 
 	"use strict";
 
@@ -50,7 +50,7 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
         Nc.on(Nc.ns.client.to.server.gameCommand.send, this.sendGameCommand, this);
         Nc.on(Nc.ns.core.game.events.level.loaded, this.onLevelLoaded, this);
 
-        DomController.setNick(nickname);
+        domController.setNick(nickname);
     }
 
     // Socket callbacks
@@ -63,7 +63,7 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
                 nickname: this.nickname
             }
             this.sendCommand('join', options);
-            DomController.setConnected(true);
+            domController.setConnected(true);
         } else {
             alert("Error: no channel name");
             window.location.href = "/";
@@ -74,7 +74,7 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
         //if(this.gameController) this.gameController.destruct();
         //this.gameController = null;
         console.log('disconnected. game destroyed. no auto-reconnect');
-        DomController.setConnected(false);
+        domController.setConnected(false);
     }
 
     Networker.prototype.onJoinSuccess = function (options) {
@@ -183,7 +183,7 @@ function (ProtocolHelper, GameController, User, Nc, Settings, DomController) {
 
     Networker.prototype.onPong = function(timestamp) {
         var ping = (Date.now() - parseInt(timestamp, 10));
-        DomController.setPing(ping);
+        domController.setPing(ping);
         setTimeout(this.ping.bind(this), 1000);
     };
 

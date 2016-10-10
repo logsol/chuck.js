@@ -18,7 +18,7 @@ define([
     "Lib/Utilities/Exception"
 ],
 
-function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, DomController, ProtocolHelper, Me, AudioPlayer, PointerLockManager, Assert, Exception) {
+function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, requestAnimFrame, Settings, GameObject, Doll, domController, ProtocolHelper, Me, AudioPlayer, PointerLockManager, Assert, Exception) {
 
 	"use strict";
 
@@ -58,7 +58,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, Nc, reque
         Nc.trigger(Nc.ns.client.game.events.render);
 
         this.view.render();
-        DomController.fpsStep();
+        domController.fpsStep();
     };
 
     GameController.prototype.mePositionStateOverride = function() {   

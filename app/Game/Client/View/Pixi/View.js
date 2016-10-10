@@ -14,7 +14,7 @@ define([
     "Game/Client/View/Pixi/Layers/Messages"
 ], 
 
-function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, LayerManager, Ghost, Swiper, PointerLockManager, Debug, Messages) {
+function (Parent, domController, PIXI, Settings, Nc, Exception, GameStats, LayerManager, Ghost, Swiper, PointerLockManager, Debug, Messages) {
 
 	"use strict";
 
@@ -47,7 +47,7 @@ function (Parent, DomController, PIXI, Settings, Nc, Exception, GameStats, Layer
     PixiView.prototype.init = function () {
 
         var rendererOptions = {
-            view: DomController.getCanvas(),
+            view: domController.getCanvas(),
             antialiasing: false,
             transparent: false,
             resolution: 1

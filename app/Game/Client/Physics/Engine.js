@@ -8,7 +8,7 @@ define([
     "Game/Client/View/Pixi/Layers/Debug"
 ],
 
-function (Parent, Settings, DomController, Box2D, Nc, DebugDraw, debugLayer) {
+function (Parent, Settings, domController, Box2D, Nc, DebugDraw, debugLayer) {
 
 	"use strict";
 

@@ -1,11 +1,10 @@
 define([
     "Game/Client/View/Abstract/View",
-    "Game/Client/View/DomController", 
     "Lib/Vendor/Three", 
     "Game/Config/Settings"
 ], 
 
-function (Parent, DomController, Three, Settings) {
+function (Parent, Three, Settings) {
 
 	"use strict";
     

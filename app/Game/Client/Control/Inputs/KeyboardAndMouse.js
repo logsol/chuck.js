@@ -6,7 +6,7 @@ define([
     "Game/Client/Control/Swiper"
 ],
  
-function (Parent, KeyboardInput, DomController, Settings, Swiper) {
+function (Parent, KeyboardInput, domController, Settings, Swiper) {
 
     "use strict";
  
@@ -122,7 +122,7 @@ function (Parent, KeyboardInput, DomController, Settings, Swiper) {
     };
 
     KeyboardAndMouse.prototype.mouseInit = function() {
-    	var canvas = DomController.getCanvas();
+    	var canvas = domController.getCanvas();
     	var self = this;
 
         canvas.onmousedown = function(e) {
