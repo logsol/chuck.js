@@ -14,7 +14,7 @@ define([
     "Game/Client/View/Pixi/Layers/Messages"
 ], 
 
-function (Parent, domController, PIXI, Settings, nc, Exception, GameStats, LayerManager, Ghost, Swiper, PointerLockManager, Debug, Messages) {
+function (Parent, domController, PIXI, Settings, nc, Exception, GameStats, LayerManager, Ghost, Swiper, pointerLockManager, Debug, Messages) {
 
 	"use strict";
 
@@ -231,7 +231,7 @@ function (Parent, domController, PIXI, Settings, nc, Exception, GameStats, Layer
         this.renderer.resize(window.innerWidth, window.innerHeight);
         this.currentZoom = window.innerWidth / 600;
 
-        PointerLockManager.update(null, {}); // only to reposition clickToEnable text
+        pointerLockManager.update(null, {}); // only to reposition clickToEnable text
     };
 
     PixiView.prototype.initLoader = function() {

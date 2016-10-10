@@ -6,7 +6,7 @@ define([
 	"Lib/Utilities/QuerySelector"
 ],
  
-function (Settings, ColorConverter, Exception, PointerLockManager, Qs) {
+function (Settings, ColorConverter, Exception, pointerLockManager, Qs) {
 
 	"use strict";
 
@@ -404,7 +404,7 @@ function (Settings, ColorConverter, Exception, PointerLockManager, Qs) {
 				clearInterval(instance.channelDestructionTimeout);
 			}
 
-			PointerLockManager.request();
+			pointerLockManager.request();
 		}
 	}
 
@@ -427,7 +427,7 @@ function (Settings, ColorConverter, Exception, PointerLockManager, Qs) {
 	}
 
 	Qs.$("#canvas").onclick = function(){
-		PointerLockManager.request();
+		pointerLockManager.request();
 	};
  
     return Menu;

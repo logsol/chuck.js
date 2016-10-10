@@ -6,7 +6,7 @@ define([
     "Game/Client/PointerLockManager"
 ], 
 
-function (Settings, nc, Screenfull, Graph, PointerLockManager) {
+function (Settings, nc, Screenfull, Graph, pointerLockManager) {
 
 	"use strict";
 
@@ -137,7 +137,7 @@ function (Settings, nc, Screenfull, Graph, PointerLockManager) {
         button.innerHTML = "Fullscreen";
         button.onclick = function() {
             if(Screenfull.enabled) {
-                PointerLockManager.request();
+                pointerLockManager.request();
                 Screenfull.request(self.canvas);
             }
         };

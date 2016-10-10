@@ -6,7 +6,7 @@ define([
     "Game/Client/PointerLockManager"
 ], 
 
-function (Parent, nc, KeyboardAndMouse, Gamepad, PointerLockManager) {
+function (Parent, nc, KeyboardAndMouse, Gamepad, pointerLockManager) {
 
 	"use strict";
 
@@ -115,7 +115,7 @@ function (Parent, nc, KeyboardAndMouse, Gamepad, PointerLockManager) {
      * and is not in between games
      */
     PlayerController.prototype.isPlayerInputAllowed = function() {
-        return PointerLockManager.isLocked() 
+        return pointerLockManager.isLocked() 
             && Parent.prototype.isPlayerInputAllowed.call(this);
     };
 

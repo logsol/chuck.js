@@ -18,7 +18,7 @@ define([
     "Lib/Utilities/Exception"
 ],
 
-function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, nc, requestAnimFrame, Settings, GameObject, Doll, domController, ProtocolHelper, Me, AudioPlayer, PointerLockManager, Assert, Exception) {
+function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, nc, requestAnimFrame, Settings, GameObject, Doll, domController, ProtocolHelper, Me, AudioPlayer, pointerLockManager, Assert, Exception) {
 
 	"use strict";
 
@@ -244,7 +244,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, nc, reque
     };
 
     GameController.prototype.onLevelLoaded = function () {
-        PointerLockManager.update(null, {start:true});
+        pointerLockManager.update(null, {start:true});
     };
 
     GameController.prototype.toggleGameStats = function(show) {
