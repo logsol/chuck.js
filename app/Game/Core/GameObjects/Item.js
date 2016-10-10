@@ -8,7 +8,7 @@ define([
     "Lib/Utilities/Assert"
 ],
  
-function (Parent, Box2D, OptionsHelper, Settings, Exception, nc, Assert) {
+function (Parent, Box2D, optionsHelper, Settings, Exception, nc, Assert) {
 
 	"use strict";
  
@@ -26,7 +26,7 @@ function (Parent, Box2D, OptionsHelper, Settings, Exception, nc, Assert) {
             y: parseFloat(options.y)
         };
 
-        this.options = OptionsHelper.merge(floatOptions, options);
+        this.options = optionsHelper.merge(floatOptions, options);
 
         if(!this.options.category) {
             // FIXME add more validation

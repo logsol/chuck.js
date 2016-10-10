@@ -10,7 +10,7 @@ function (Exception) {
 
     }
  
-    OptionsHelper.prototype.merge = function(options, preset) {
+    optionsHelper.prototype.merge = function(options, preset) {
 
     	if(!preset && !options) {
     		throw new Exception("OptionsHelper requires objects");
@@ -43,7 +43,7 @@ function (Exception) {
 				if(options[key].constructor !== Object) {
 					preset[key] = options[key];
 				} else {
-					preset[key] = OptionsHelper.prototype.merge.call(this, options[key], preset[key]);
+					preset[key] = optionsHelper.prototype.merge.call(this, options[key], preset[key]);
 				}
 			}
 		}

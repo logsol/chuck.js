@@ -13,7 +13,7 @@ define([
     "Game/" + GLOBALS.context + "/GameObjects/Item",
     "Game/" + GLOBALS.context + "/GameObjects/Items/Skateboard",
 
-], function (Parent, Settings, ItemSettings, Box2D, OptionsHelper, Exception, nc, Assert, AbstractLayer, CollisionDetector, Tile, Item, Skateboard) {
+], function (Parent, Settings, ItemSettings, Box2D, optionsHelper, Exception, nc, Assert, AbstractLayer, CollisionDetector, Tile, Item, Skateboard) {
     
     "use strict";
 
@@ -187,7 +187,7 @@ define([
             throw new Exception("Item name (" + name + ") cannot be found in item list");
         }
 
-        return OptionsHelper.merge(ItemSettings[name], ItemSettings.Default);
+        return optionsHelper.merge(ItemSettings[name], ItemSettings.Default);
     };
 
     TiledLevel.prototype.getTileImagePath = function(gid) {

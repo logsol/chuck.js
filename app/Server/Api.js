@@ -7,7 +7,7 @@ define([
 	"fs"
 ],
  
-function (nc, ProtocolHelper, validate, OptionsHelper, Settings, FileSystem) {
+function (nc, ProtocolHelper, validate, optionsHelper, Settings, FileSystem) {
 
 	"use strict";
 
@@ -121,7 +121,7 @@ function (nc, ProtocolHelper, validate, OptionsHelper, Settings, FileSystem) {
 				scoreLimit: Settings.CHANNEL_DEFAULT_SCORE_LIMIT
 			};
 
-			options = OptionsHelper.merge(options, defaultOptions);
+			options = optionsHelper.merge(options, defaultOptions);
 
 			var result = this.coordinator.createChannel(options);
 			if(result !== false) {

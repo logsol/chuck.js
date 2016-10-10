@@ -7,7 +7,7 @@
         "Game/Config/Settings"
     ], 
 
-    function (GameController, nc, User, ProtocolHelper, OptionsHelper, Settings) {
+    function (GameController, nc, User, ProtocolHelper, optionsHelper, Settings) {
 
         "use strict";
 
@@ -21,7 +21,7 @@
             this.levelListIndex = -1;
             this.gameController = null;
 
-            this.options = options = OptionsHelper.merge(options, {
+            this.options = options = optionsHelper.merge(options, {
                 levelUids: Settings.CHANNEL_DEFAULT_LEVELS
             });
 
