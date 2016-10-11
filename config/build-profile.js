@@ -10,7 +10,7 @@
     name: "../client",
     out: "../build/client.min.js",
     onBuildRead: function (moduleName, path, contents) {
-        var contents = contents.replace(/\" \+ GLOBALS.context \+ \"/g, "Client");
+        var contents = contents.replace(/\" \+ App.context \+ \"/g, "Client");
         return contents;
     }
 })

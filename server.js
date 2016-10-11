@@ -1,10 +1,13 @@
 "use strict"
 
-var GLOBALS = { context: "Channel" };
+Error.stackTraceLimit = Infinity;
+
 var requirejs = require('requirejs');
 var fs = require('fs');
 
-var inspector;
+var App = App || {};
+App.inspector = {};
+App.context = "Channel";
 
 requirejs.config({
     nodeRequire: require,
@@ -41,11 +44,11 @@ function (HttpServer, Socket, Coordinator, Settings) {
     var httpServer = new HttpServer(options, coordinator);
     var socket = new Socket(httpServer.getServer(), options, coordinator);
 
-    inspector = {
+    App.inspector = {
         coordinator: coordinator,
         httpServer: httpServer,
         socket: socket
     }
 });
 
-exports = module.exports = inspector;
+exports = module.exports = App;

@@ -1,11 +1,11 @@
 define([
-    "Game/" + GLOBALS.context + "/Physics/Engine",
-    "Game/" + GLOBALS.context + "/Loader/TiledLevel",
-    "Game/" + GLOBALS.context + "/Player",
+    "Game/" + App.context + "/Physics/Engine",
+    "Game/" + App.context + "/Loader/TiledLevel",
+    "Game/" + App.context + "/Player",
     "Lib/Utilities/NotificationCenter",
-    "Game/" + GLOBALS.context + "/GameObjects/Doll",
-    "Game/" + GLOBALS.context + "/GameObjects/GameObject",
-    "Game/" + GLOBALS.context + "/GameObjects/Item",
+    "Game/" + App.context + "/GameObjects/Doll",
+    "Game/" + App.context + "/GameObjects/GameObject",
+    "Game/" + App.context + "/GameObjects/Item",
     "Lib/Utilities/Assert",
 ],
 
