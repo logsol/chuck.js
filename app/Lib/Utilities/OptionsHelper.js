@@ -10,6 +10,7 @@ function (Exception) {
 
     }
  
+    // FIXME we could actually use Object.assign() for merging here
     OptionsHelper.prototype.merge = function(options, preset) {
 
     	if(!preset && !options) {
