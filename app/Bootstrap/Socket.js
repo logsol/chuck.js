@@ -12,7 +12,10 @@ function (io) {
             : 0;
         
         this.coordinator = coordinator;
-        this.socket = io.listen(server);
+        this.socket = io(server, {
+            'log level': options.logLevel,
+            //'transports': ['websockets']
+        });
 
         this.init(options);
     }
@@ -20,16 +23,6 @@ function (io) {
     Socket.prototype.init = function (options) {
 
         var self = this;
-        this.socket.configure('development', function () {
-            this.set('log level', options.logLevel);
-            this.set('transports', ['websocket']);
-        });
-
-        this.socket.configure('production', function () {
-            this.set('log level', options.logLevel);
-            this.set('transports', ['websocket']);
-        });
-
         this.socket.on('connection', function (user) {
             console.checkpoint('socket receiving connection');
             self.onConnection(user);

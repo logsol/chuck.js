@@ -1,7 +1,9 @@
 {
   "name": "chuck.js",
   "author": "logsol <fartman@gmx.de>",
-  "contributors": ["Jeena Paradies <spam@jeenaparadies.net> (https://jeena.net)"],
+  "contributors": [
+    "Jeena Paradies <spam@jeenaparadies.net> (https://jeena.net)"
+  ],
   "description": "Multiplayer browser jump and run game",
   "version": "0.1.0",
   "homepage": "http://chuck-game.tumblr.com/",
@@ -15,17 +17,19 @@
   },
   "main": "",
   "dependencies": {
-    "socket.io": "= 0.9.6",
+    "socket.io": "= 2.0.3",
     "node-static": ">= 0.6.0",
     "requirejs": "= 2.0.4",
     "node-fork": ">= 0.4.2",
     "screenfull": ">= 1.0.4",
-    "chart.js": ">= 1.0.1"
+    "chart.js": "= 1.0.1"
   },
   "devDependencies": {},
   "optionalDependencies": {},
   "engine": "node >= 0.8.4",
-  "config": { "port": "1234" },
+  "config": {
+    "port": "1234"
+  },
   "private": true,
   "scripts": {
     "prestart": "scripts/build.sh"

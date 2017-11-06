@@ -27,7 +27,7 @@ requirejs([
     "Menu/Menu"
 ], 
 
-function (Networker, SocketIO, Settings, Exception, nc, Menu) {
+function (Networker, io, Settings, Exception, nc, Menu) {
 
     var menu = new Menu();
     menu.onRun = function(channelName, nickname) {
@@ -40,7 +40,7 @@ function (Networker, SocketIO, Settings, Exception, nc, Menu) {
                 "flashsocket"
             ]
         };
-        var socket = SocketIO.connect("/", options);
+        var socket = io("/", options);
         var networker = new Networker(socket, channelName, nickname);
         Chuck.inspector.networker = networker;
         Chuck.inspector.settings = Settings;
