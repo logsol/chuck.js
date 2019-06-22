@@ -1,5 +1,5 @@
 define([
-    "Game/" + GLOBALS.context + "/Loader/Level",
+    "Game/" + App.context + "/Loader/Level",
     "Game/Config/Settings", 
     "Game/Config/ItemSettings",
     "Lib/Vendor/Box2D", 
@@ -8,10 +8,10 @@ define([
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Assert",
     "Game/Client/View/Abstract/Layer", 
-    "Game/" + GLOBALS.context + "/Collision/Detector",
-    "Game/" + GLOBALS.context + "/GameObjects/Tile",
-    "Game/" + GLOBALS.context + "/GameObjects/Item",
-    "Game/" + GLOBALS.context + "/GameObjects/Items/Skateboard",
+    "Game/" + App.context + "/Collision/Detector",
+    "Game/" + App.context + "/GameObjects/Tile",
+    "Game/" + App.context + "/GameObjects/Item",
+    "Game/" + App.context + "/GameObjects/Items/Skateboard",
 
 ], function (Parent, Settings, ItemSettings, Box2D, optionsHelper, Exception, nc, Assert, AbstractLayer, CollisionDetector, Tile, Item, Skateboard) {
     

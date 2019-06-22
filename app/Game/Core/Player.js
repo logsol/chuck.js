@@ -1,12 +1,12 @@
 define([
-    "Game/" + GLOBALS.context + "/GameObjects/Doll",
-    "Game/" + GLOBALS.context + "/Control/PlayerController",
+    "Game/" + App.context + "/GameObjects/Doll",
+    "Game/" + App.context + "/Control/PlayerController",
     "Game/Config/Settings",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Exception",
     "Lib/Utilities/ColorConverter",
-    "Game/" + GLOBALS.context + "/GameObjects/SpectatorDoll",
-    "Game/" + GLOBALS.context + "/GameObjects/Items/RubeDoll"
+    "Game/" + App.context + "/GameObjects/SpectatorDoll",
+    "Game/" + App.context + "/GameObjects/Items/RubeDoll"
 ],
 
 function (Doll, PlayerController, Settings, nc, Exception, ColorConverter, SpectatorDoll, RubeDoll) {

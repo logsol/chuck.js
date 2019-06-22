@@ -1,5 +1,5 @@
 define([
-	"Game/" + GLOBALS.context + "/GameObjects/Item",
+	"Game/" + App.context + "/GameObjects/Item",
 	"Lib/Vendor/Box2D",
 	"Game/Config/Settings",
     "Lib/Utilities/Assert"
@@ -89,7 +89,7 @@ function (Parent, Box2D, Settings, Assert) {
 
 /*
 define([
-    "Game/" + GLOBALS.context + "/GameObjects/Item",
+    "Game/" + App.context + "/GameObjects/Item",
     "Lib/Vendor/Box2D",
     "Game/Config/Settings",
     "Lib/Utilities/Assert"

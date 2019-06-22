@@ -1,5 +1,5 @@
 define([
-	"Game/" + GLOBALS.context + "/GameObjects/GameObject",
+	"Game/" + App.context + "/GameObjects/GameObject",
 	"Lib/Vendor/Box2D",
     "Lib/Utilities/OptionsHelper",
 	"Game/Config/Settings",

@@ -1,6 +1,6 @@
 "use strict";
 
-var GLOBALS = { context: "Client" };
+Error.stackTraceLimit = Infinity;
 
 requirejs.config({
     baseUrl: 'app',
@@ -15,8 +15,9 @@ requirejs.config({
     },
 });
 
-if(!Chuck) var Chuck = {};
-Chuck.inspector = {};
+var App = App || {};
+App.inspector = {};
+App.context = "Client";
 
 requirejs([
     "Game/Client/Networker", 
@@ -42,10 +43,10 @@ function (Networker, io, Settings, Exception, nc, Menu) {
         };
         var socket = io("/", options);
         var networker = new Networker(socket, channelName, nickname);
-        Chuck.inspector.networker = networker;
-        Chuck.inspector.settings = Settings;
-        Chuck.inspector.nc = nc;
-        Chuck.inspector.resetLevel = function() { networker.sendGameCommand("resetLevel"); } 
+        App.inspector.networker = networker;
+        App.inspector.settings = Settings;
+        App.inspector.nc = nc;
+        App.inspector.resetLevel = function() { networker.sendGameCommand("resetLevel"); } 
     }
     menu.init();
 });
