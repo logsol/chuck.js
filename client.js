@@ -32,13 +32,7 @@ function (Networker, io, Settings, Exception, nc, Menu) {
     var menu = new Menu();
     menu.onRun = function(channelName, nickname) {
         var options = {
-            "reconnect": false,
-            "reconnection delay": 500,
-            "max reconnection attempts": 10,
-            "transports": [
-                "websocket", 
-                "flashsocket"
-            ]
+            transports: ["websocket"] // v4: only use websocket, flashsocket is gone
         };
         var socket = io("/", options);
         var networker = new Networker(socket, channelName, nickname);

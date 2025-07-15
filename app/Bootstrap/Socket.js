@@ -4,30 +4,23 @@ define([
 
 function (io) {
 
-	"use strict";
+    "use strict";
 
     function Socket (server, options, coordinator) {
-        options.logLevel = typeof options.logLevel != 'undefined'
-            ? options.logLevel
-            : 0;
-        
         this.coordinator = coordinator;
-        this.socket = io(server, {
-            'log level': options.logLevel,
-            //'transports': ['websockets']
+        this.io = io(server, {
+            // No more 'log level' or 'transports' in v4
+            // Add any v4-compatible options here if needed
         });
-
         this.init(options);
     }
 
     Socket.prototype.init = function (options) {
-
         var self = this;
-        this.socket.on('connection', function (user) {
+        this.io.on('connection', function (socket) {
             console.checkpoint('socket receiving connection');
-            self.onConnection(user);
+            self.onConnection(socket);
         });
-
         console.checkpoint('start Socket Listener');
     }
 

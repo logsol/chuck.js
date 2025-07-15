@@ -15,23 +15,28 @@
     "url": "https://github.com/logsol/chuck.js/issues",
     "email": "fartman@gmx.de"
   },
-  "main": "",
+  "main": "server.js",
   "dependencies": {
-    "socket.io": "= 2.0.3",
-    "node-static": ">= 0.6.0",
-    "requirejs": "= 2.0.4",
-    "node-fork": ">= 0.4.2",
-    "screenfull": ">= 1.0.4",
-    "chart.js": "= 1.0.1"
+    "socket.io": "^4.7.4",
+    "express": "^4.18.2",
+    "requirejs": "^2.3.6",
+    "screenfull": "^6.0.2",
+    "chart.js": "^4.4.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
   "optionalDependencies": {},
-  "engine": "node >= 0.8.4",
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "config": {
     "port": "1234"
   },
   "private": true,
   "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
     "prestart": "scripts/build.sh"
   }
 }
