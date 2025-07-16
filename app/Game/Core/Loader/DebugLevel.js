@@ -30,29 +30,29 @@ define([
     DebugLevel.prototype.createSimplePlatform = function() {
         // Create a simple horizontal platform with grass on top, soil underneath
         var platformTiles = [
-            // Top layer - grass tiles at y=8
+            // Top layer - grass tiles at y=8 (extended to the left)
+            {s: 1, r: 0, t: "../../img/Tiles/GrassSoil/10.gif", x: 6, y: 8},
+            {s: 1, r: 0, t: "../../img/Tiles/GrassSoil/10.gif", x: 7, y: 8},
+            {s: 1, r: 0, t: "../../img/Tiles/GrassSoil/10.gif", x: 8, y: 8},
+            {s: 1, r: 0, t: "../../img/Tiles/GrassSoil/10.gif", x: 9, y: 8},
             {s: 1, r: 0, t: "../../img/Tiles/GrassSoil/10.gif", x: 10, y: 8},
             {s: 1, r: 0, t: "../../img/Tiles/GrassSoil/10.gif", x: 11, y: 8},
             {s: 1, r: 0, t: "../../img/Tiles/GrassSoil/10.gif", x: 12, y: 8},
             {s: 1, r: 0, t: "../../img/Tiles/GrassSoil/10.gif", x: 13, y: 8},
             {s: 1, r: 0, t: "../../img/Tiles/GrassSoil/10.gif", x: 14, y: 8},
             {s: 1, r: 0, t: "../../img/Tiles/GrassSoil/10.gif", x: 15, y: 8},
-            {s: 1, r: 0, t: "../../img/Tiles/GrassSoil/10.gif", x: 16, y: 8},
-            {s: 1, r: 0, t: "../../img/Tiles/GrassSoil/10.gif", x: 17, y: 8},
-            {s: 1, r: 0, t: "../../img/Tiles/GrassSoil/10.gif", x: 18, y: 8},
-            {s: 1, r: 0, t: "../../img/Tiles/GrassSoil/10.gif", x: 19, y: 8},
             
-            // Bottom layer - soil tiles at y=9
+            // Bottom layer - soil tiles at y=9 (extended to the left)
+            {s: 1, r: 0, t: "../../img/Tiles/Soil/10.gif", x: 6, y: 9},
+            {s: 1, r: 0, t: "../../img/Tiles/Soil/10.gif", x: 7, y: 9},
+            {s: 1, r: 0, t: "../../img/Tiles/Soil/10.gif", x: 8, y: 9},
+            {s: 1, r: 0, t: "../../img/Tiles/Soil/10.gif", x: 9, y: 9},
             {s: 1, r: 0, t: "../../img/Tiles/Soil/10.gif", x: 10, y: 9},
             {s: 1, r: 0, t: "../../img/Tiles/Soil/10.gif", x: 11, y: 9},
             {s: 1, r: 0, t: "../../img/Tiles/Soil/10.gif", x: 12, y: 9},
             {s: 1, r: 0, t: "../../img/Tiles/Soil/10.gif", x: 13, y: 9},
             {s: 1, r: 0, t: "../../img/Tiles/Soil/10.gif", x: 14, y: 9},
-            {s: 1, r: 0, t: "../../img/Tiles/Soil/10.gif", x: 15, y: 9},
-            {s: 1, r: 0, t: "../../img/Tiles/Soil/10.gif", x: 16, y: 9},
-            {s: 1, r: 0, t: "../../img/Tiles/Soil/10.gif", x: 17, y: 9},
-            {s: 1, r: 0, t: "../../img/Tiles/Soil/10.gif", x: 18, y: 9},
-            {s: 1, r: 0, t: "../../img/Tiles/Soil/10.gif", x: 19, y: 9}
+            {s: 1, r: 0, t: "../../img/Tiles/Soil/10.gif", x: 15, y: 9}
         ];
 
         console.log("Creating " + platformTiles.length + " debug tiles (grass + soil)");
