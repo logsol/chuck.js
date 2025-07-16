@@ -1,6 +1,6 @@
 define([
 	"Game/" + GLOBALS.context + "/GameObjects/GameObject",
-	"Lib/Vendor/Box2D",
+	"Lib/Vendor/Planck",
     "Lib/Utilities/OptionsHelper",
 	"Game/Config/Settings",
     "Lib/Utilities/Exception",
@@ -37,7 +37,7 @@ function (Parent, Box2D, optionsHelper, Settings, Exception, nc, Assert) {
         this.createFixture();
         this.body.ResetMassData();
         this.flipDirection = 1;
-        if (this.body.GetMass() < 1) {
+        if (this.body.getMass() < 1) {
             this.body.SetBullet(true);
         }
 
@@ -48,11 +48,11 @@ function (Parent, Box2D, optionsHelper, Settings, Exception, nc, Assert) {
  
     Item.prototype.getBodyDef = function() {
         Assert.number(this.options.x, this.options.y);
-        var bodyDef = new Box2D.Dynamics.b2BodyDef();
-        bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
-        bodyDef.position.x = this.options.x / Settings.RATIO;
-        bodyDef.position.y = this.options.y / Settings.RATIO;
-        bodyDef.angle = 0;
+        var bodyDef = { 
+            type: 'dynamic',
+            position: planck.Vec2(this.options.x / Settings.RATIO, this.options.y / Settings.RATIO),
+            angle: 0
+        };
 
         return bodyDef;
     };
@@ -68,15 +68,12 @@ function (Parent, Box2D, optionsHelper, Settings, Exception, nc, Assert) {
 
         if(this.options.type == "circle") {
             var r = (w + h) / 4 ;
-            itemShape = new Box2D.Collision.Shapes.b2CircleShape();
-            itemShape.SetRadius(r);
-            itemShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0, -r));
+            itemShape = planck.Circle(r, planck.Vec2(0, -r));
         } else {
-            itemShape = new Box2D.Collision.Shapes.b2PolygonShape();
-            itemShape.SetAsOrientedBox(w / 2, h / 2, new Box2D.Common.Math.b2Vec2(0, -(h/2)));
+            itemShape = planck.Box(w / 2, h / 2, planck.Vec2(0, -(h/2)));
         }
         
-        var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
+        var fixtureDef = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
         fixtureDef.shape = itemShape;
 
         fixtureDef.density = this.options.weight;
@@ -95,7 +92,7 @@ function (Parent, Box2D, optionsHelper, Settings, Exception, nc, Assert) {
 
     Item.prototype.createFixture = function () {
         var fixtureDef = this.getFixtureDef();
-        this.body.CreateFixture(fixtureDef);
+        this.body.createFixture(fixtureDef);
     };
 
     Item.prototype.flip = function(direction) {
@@ -122,8 +119,8 @@ function (Parent, Box2D, optionsHelper, Settings, Exception, nc, Assert) {
         Assert.number(this.options.width);
         Assert.number(this.options.grabAngle);
 
-        this.body.SetAwake(true);
-        var position = new Box2D.Common.Math.b2Vec2(
+        this.body.setAwake(true);
+        var position = planck.Vec2(
             handPosition.x + ((this.options.width / Settings.RATIO / 2) * direction),
             handPosition.y
         );
@@ -133,7 +130,7 @@ function (Parent, Box2D, optionsHelper, Settings, Exception, nc, Assert) {
     };
 
     Item.prototype.getGrabPoint = function() {
-        return this.body.GetWorldCenter();
+        return this.body.getWorldCenter();
     };
 
     Item.prototype.throw = function(options, carrierVelocity) {
@@ -146,15 +143,15 @@ function (Parent, Box2D, optionsHelper, Settings, Exception, nc, Assert) {
         Assert.number(options.x, options.y);
         Assert.number(options.av);
 
-        body.SetAwake(true);
+        body.setAwake(true);
 
         var x = options.x * Settings.MAX_THROW_FORCE / this.options.weight + carrierVelocity.x;
         var y = -options.y * Settings.MAX_THROW_FORCE / this.options.weight + carrierVelocity.y;
-        var vector = new Box2D.Common.Math.b2Vec2(x, y);
+        var vector = planck.Vec2(x, y);
         body.SetLinearVelocity(vector);
 
         var av = -options.av * Settings.MAX_THROW_ANGULAR_VELOCITY;
-        body.SetAngularVelocity(av);
+        body.setAngularVelocity(av);
     };
 
     Item.prototype.destroy = function() {

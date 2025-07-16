@@ -2,13 +2,13 @@ define([
     "Game/Core/Physics/Engine",
     "Game/Config/Settings",
     "Game/Client/View/DomController",
-    "Lib/Vendor/Box2D",
+    "Lib/Vendor/Planck",
     "Lib/Utilities/NotificationCenter",
-    "Game/Client/View/Pixi/DebugDraw",
+    "Game/Client/View/Pixi/PlanckDebugDraw",
     "Game/Client/View/Pixi/Layers/Debug"
 ],
 
-function (Parent, Settings, domController, Box2D, nc, DebugDraw, debugLayer) {
+function (Parent, Settings, domController, Box2D, nc, PlanckDebugDraw, debugLayer) {
 
 	"use strict";
 
@@ -34,25 +34,26 @@ function (Parent, Settings, domController, Box2D, nc, DebugDraw, debugLayer) {
 
     Engine.prototype.setupDebugDraw = function () {
 
-        // set debug draw
-        this.debugDraw = new DebugDraw();
+        // set debug draw for Planck.js
+        var canvas = document.createElement('canvas');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        canvas.style.position = 'absolute';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.pointerEvents = 'none';
+        canvas.style.zIndex = '1000';
+        document.body.appendChild(canvas);
+        
+        this.debugDraw = new PlanckDebugDraw(canvas);
+        this.debugCanvas = canvas;
+    };
 
-        this.debugDraw.SetSprite(debugLayer.graphics);
-        this.debugDraw.SetDrawScale(Settings.RATIO);
-        this.debugDraw.SetFillAlpha(0.5);
-        this.debugDraw.SetLineThickness(1.0);
-
-        this.debugDraw.SetFlags(null
-            | Box2D.Dynamics.b2DebugDraw.e_shapeBit 
-            | Box2D.Dynamics.b2DebugDraw.e_jointBit 
-            //| Box2D.Dynamics.b2DebugDraw.e_coreShapeBit
-            //| Box2D.Dynamics.b2DebugDraw.e_aabbBit
-            //| Box2D.Dynamics.b2DebugDraw.e_centerOfMassBit
-            //| Box2D.Dynamics.b2DebugDraw.e_obbBit
-            //| Box2D.Dynamics.b2DebugDraw.e_pairBit
-        );
-
-        this.world.SetDebugDraw(this.debugDraw);
+    Engine.prototype.renderDebug = function () {
+        if (this.debugDraw) {
+            this.debugDraw.clear();
+            this.debugDraw.drawWorld(this.world);
+        }
     };
 
     Engine.prototype.update = function () {

@@ -1,5 +1,5 @@
 define([
-    "Lib/Vendor/Box2D"
+    "Lib/Vendor/Planck"
 ],
  
 function (Box2D) {

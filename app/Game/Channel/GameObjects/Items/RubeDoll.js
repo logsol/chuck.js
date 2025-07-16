@@ -56,10 +56,10 @@ function (Parent, Settings, nc) {
 
         for(var name in this.limbs) {
             limbUpdateData[name] = {
-                p: this.limbs[name].GetPosition(),
-                a: this.limbs[name].GetAngle(),
-                lv: this.limbs[name].GetLinearVelocity(),
-                av: this.limbs[name].GetAngularVelocity()
+                p: this.limbs[name].getPosition(),
+                a: this.limbs[name].getAngle(),
+                lv: this.limbs[name].getLinearVelocity(),
+                av: this.limbs[name].getAngularVelocity()
             };
         }
         updateData['limbs'] = limbUpdateData;

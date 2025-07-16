@@ -43,7 +43,7 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
         this.ragDoll = {head: null, body: null}; // FIXME: wtf is this? can we remove it?
         
         this.createFixtures();
-        this.body.SetActive(false);
+        this.body.setActive(false);
 
         nc.trigger(nc.ns.core.game.worldUpdateObjects.add, this);
     }
@@ -67,16 +67,16 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
 
         var self = this;
 
-        var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
+        var fixtureDef = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
         fixtureDef.density = Settings.PLAYER_DENSITY;
         fixtureDef.friction = 0;
         fixtureDef.restitution = Settings.PLAYER_RESTITUTION;
 
-        var headShape = new Box2D.Collision.Shapes.b2CircleShape();
         var radius = this.width / 2 / Settings.RATIO;
-        headShape.SetRadius(radius);
-
-        headShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0, -(this.height - (this.width / 2)) / Settings.RATIO));
+        var headShape = planck.Circle(
+            radius,
+            planck.Vec2(0, -(this.height - (this.width / 2)) / Settings.RATIO)
+        );
         fixtureDef.shape = headShape;
         fixtureDef.isSensor = false;
         fixtureDef.userData = {
@@ -85,19 +85,20 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
 
         this.body.createFixture(fixtureDef);
 
-        var bodyShape = new Box2D.Collision.Shapes.b2PolygonShape();
-        bodyShape.SetAsOrientedBox(
+        var bodyShape = planck.Box(
             this.width / 2 / Settings.RATIO, 
             (this.height - this.width) / 2 / Settings.RATIO, 
-            new Box2D.Common.Math.b2Vec2(0, -this.height / 2 / Settings.RATIO)
+            planck.Vec2(0, -this.height / 2 / Settings.RATIO),
+            0
         );
         fixtureDef.shape = bodyShape;
         fixtureDef.isSensor = false;
         this.body.createFixture(fixtureDef);
 
-        var legsShape = new Box2D.Collision.Shapes.b2CircleShape();
-        legsShape.SetRadius(this.width / 2 / Settings.RATIO);
-        legsShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0, -this.width / 2 / Settings.RATIO));
+        var legsShape = planck.Circle(
+            this.width / 2 / Settings.RATIO,
+            planck.Vec2(0, -this.width / 2 / Settings.RATIO)
+        );
         fixtureDef.shape = legsShape;
         fixtureDef.friction = Settings.PLAYER_FRICTION;
         fixtureDef.isSensor = false;
@@ -106,9 +107,10 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
 
         fixtureDef.density = 0;
 
-        var feetShape = new Box2D.Collision.Shapes.b2CircleShape();
-        feetShape.SetRadius((this.width - 1) / 2 / Settings.RATIO); // the -1 one prevents collisions with walls
-        feetShape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0, 2 / Settings.RATIO)); // 2 is offset into ground
+        var feetShape = planck.Circle(
+            (this.width - 1) / 2 / Settings.RATIO, // the -1 one prevents collisions with walls
+            planck.Vec2(0, 2 / Settings.RATIO) // 2 is offset into ground
+        );
         fixtureDef.shape = feetShape;
         fixtureDef.isSensor = true;
 
@@ -118,11 +120,10 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
 
         this.footSensor = this.body.createFixture(fixtureDef);
 
-        var grabSensorLeftShape = new Box2D.Collision.Shapes.b2PolygonShape();
-        grabSensorLeftShape.SetAsOrientedBox(
+        var grabSensorLeftShape = planck.Box(
             this.reachDistance / 2 / Settings.RATIO,
             ((this.height / 2) + this.reachDistance / 4) / Settings.RATIO, 
-            new Box2D.Common.Math.b2Vec2(
+            planck.Vec2(
                 -this.reachDistance / 2 / Settings.RATIO, 
                 -this.height / 2 / Settings.RATIO
             )
@@ -136,11 +137,10 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
         };
         this.body.createFixture(fixtureDef);
 
-        var grabSensorRightShape = new Box2D.Collision.Shapes.b2PolygonShape();
-        grabSensorRightShape.SetAsOrientedBox(
+        var grabSensorRightShape = planck.Box(
             this.reachDistance / 2 / Settings.RATIO,
             ((this.height / 2) + this.reachDistance / 4) / Settings.RATIO, 
-            new Box2D.Common.Math.b2Vec2(
+            planck.Vec2(
                 this.reachDistance / 2 / Settings.RATIO, 
                 -this.height / 2 / Settings.RATIO
             )
@@ -157,11 +157,10 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
         this.body.createFixture(fixtureDef);
 
         // Area Sensor
-        var areaSensorShape = new Box2D.Collision.Shapes.b2PolygonShape();
-        areaSensorShape.SetAsOrientedBox(
+        var areaSensorShape = planck.Box(
             (this.width + this.areaSize) / 2 / Settings.RATIO,
             (this.height + this.areaSize) / 2 / Settings.RATIO, 
-            new Box2D.Common.Math.b2Vec2(
+            planck.Vec2(
                 0, 
                 -this.height / 2 / Settings.RATIO
             )
@@ -171,7 +170,7 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
         
         fixtureDef.userData = {
             onCollisionChange: function(isColliding, fixture) {
-                var userData = fixture.GetBody().GetUserData();
+                var userData = fixture.getBody().getUserData();
                 if(userData instanceof Doll) {
                     var doll = userData;
                     var i = self.nearbyDolls.indexOf(doll);
@@ -205,13 +204,13 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
 
     Doll.prototype.spawn = function (x, y) {
         Assert.number(x, y);
-        this.body.SetPosition(new Box2D.Common.Math.b2Vec2(x / Settings.RATIO, y / Settings.RATIO));
-        this.body.SetActive(true);
+        this.body.setPosition(planck.Vec2(x / Settings.RATIO, y / Settings.RATIO));
+        this.body.setActive(true);
         this.setActionState("fall");
     };
 
     Doll.prototype.getHeadPosition = function() {
-        var pos = this.body.GetPosition();
+        var pos = this.body.getPosition();
         return {
             x: pos.x,
             y: pos.y - (this.height - this.headHeight / 2) / Settings.RATIO
@@ -255,11 +254,11 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
         }
 
         this.setFriction(Settings.PLAYER_MOTION_FRICTION);
-        this.body.SetAwake(true);
+        this.body.setAwake(true);
 
         Assert.number(speed, direction);
-        var vector = new Box2D.Common.Math.b2Vec2(speed * direction, this.body.GetLinearVelocity().y);
-        this.body.SetLinearVelocity(vector);
+        var vector = planck.Vec2(speed * direction, this.body.getLinearVelocity().y);
+        this.body.setLinearVelocity(vector);
 
         if(this.isStanding()) {
             if(this.moveDirection == this.lookDirection) {
@@ -282,19 +281,19 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
         if(this.isStanding()) {
             this.setActionState("stand");
         } else {
-            var vector = this.body.GetLinearVelocity().Copy();
+            var vector = this.body.getLinearVelocity().clone();
             vector.x *= Settings.JUMP_STOP_DAMPING_FACTOR;
-            this.body.SetLinearVelocity(vector);
+            this.body.setLinearVelocity(vector);
         }
     };
 
     Doll.prototype.jump = function () {
         if (this.isStanding()) {
             
-            this.body.SetAwake(true);
+            this.body.setAwake(true);
 
-            var vector = new Box2D.Common.Math.b2Vec2(0, -Settings.JUMP_SPEED);
-            this.body.SetLinearVelocity(vector);
+            var vector = planck.Vec2(0, -Settings.JUMP_SPEED);
+            this.body.setLinearVelocity(vector);
             
             this.setStanding(false);
             this.setActionState("jump");
@@ -303,11 +302,11 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
 
     Doll.prototype.jumpStop = function () {
         if (!this.isStanding() ) {
-            this.body.SetAwake(true);
-            var vector = this.body.GetLinearVelocity().Copy();
+            this.body.setAwake(true);
+            var vector = this.body.getLinearVelocity().clone();
             if(vector.y < 0) {
                 vector.y *= Settings.JUMP_STOP_DAMPING_FACTOR;
-                this.body.SetLinearVelocity(vector);
+                this.body.setLinearVelocity(vector);
             }
         }
     };
@@ -325,7 +324,7 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
     Doll.prototype.lookAt = function(x, y) {
         var oldLookDirection = this.lookDirection;
 
-        this.body.SetAwake(true);
+        this.body.setAwake(true);
         if(x < 0) {
             this.lookDirection = -1;
         } else {
@@ -353,11 +352,11 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
                 this.holdingJoint = null;
             }
 
-            var bodyPosition = this.body.GetPosition();
+            var bodyPosition = this.body.getPosition();
 
             Assert.number(this.width, this.height);
             Assert.number(this.lookDirection);
-            var handPosition = new Box2D.Common.Math.b2Vec2(
+            var handPosition = planck.Vec2(
                 bodyPosition.x + ((this.width / 2 / Settings.RATIO) * this.lookDirection),
                 bodyPosition.y - this.height / 4 * 2 / Settings.RATIO // 2/3 of the body height
             );
@@ -384,8 +383,8 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
         this.holdingItem = null;
 
         var dollVelocity = {
-            x: this.body.GetLinearVelocity().x,
-            y: this.body.GetLinearVelocity().y
+            x: this.body.getLinearVelocity().x,
+            y: this.body.getLinearVelocity().y
         };
 
         item.throw(options, dollVelocity);
@@ -399,7 +398,7 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
 
         var self = this;
 
-        var hasJumpStartVelocity = this.body.GetLinearVelocity().y < -Settings.JUMP_SPEED;
+        var hasJumpStartVelocity = this.body.getLinearVelocity().y < -Settings.JUMP_SPEED;
 
         if(isColliding) {
             if(!hasJumpStartVelocity) {
@@ -417,11 +416,11 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
                     continue;
                 }
                
-                if(contact.GetFixtureA() === self.footSensor) {
+                if(contact.getFixtureA() === self.footSensor) {
                     contactCount++;
                 }
                 
-                if(contact.GetFixtureB() === self.footSensor) {
+                if(contact.getFixtureB() === self.footSensor) {
                     contactCount++;
                 }
 
@@ -439,7 +438,7 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
     };
 
     Doll.prototype.onFixtureWithinReach = function(isColliding, side, fixture) {
-        var item = fixture.GetBody().GetUserData();
+                        var item = fixture.getBody().getUserData();
         if (!(item instanceof Item)) return;
 
         if(isColliding) {
@@ -456,18 +455,18 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
 
     Doll.prototype.getVelocities = function() {
         return {
-            linearVelocity: this.body.GetLinearVelocity(),
-            angularVelocity: this.body.GetAngularVelocity()
+            linearVelocity: this.body.getLinearVelocity(),
+            angularVelocity: this.body.getAngularVelocity()
         };
     };
 
     Doll.prototype.update = function() {
      
-        if (this.body.GetLinearVelocity().x === 0 && this.isWalking()) {
+        if (this.body.getLinearVelocity().x === 0 && this.isWalking()) {
             this.stop();
         }
 
-        if (!this.body.IsAwake() && !this.isStanding()) {
+        if (!this.body.isAwake() && !this.isStanding()) {
             this.setStanding(true);
         }
     };

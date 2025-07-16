@@ -2,7 +2,7 @@ define([
     "Game/" + GLOBALS.context + "/Loader/Level",
     "Game/Config/Settings", 
     "Game/Config/ItemSettings",
-    "Lib/Vendor/Box2D", 
+    "Lib/Vendor/Planck", 
     "Lib/Utilities/OptionsHelper",
     "Lib/Utilities/Exception",
     "Lib/Utilities/NotificationCenter",

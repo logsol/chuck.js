@@ -276,8 +276,8 @@ function (Parent, Settings, nc, Exception, ColorConverter, Layer) {
                 this.layerId,
                 this.animatedMeshes[this.actionState],
                 {
-                    x: this.body.GetPosition().x * Settings.RATIO,
-                    y: this.body.GetPosition().y * Settings.RATIO,
+                                x: this.body.getPosition().x * Settings.RATIO,
+            y: this.body.getPosition().y * Settings.RATIO,
                     animationSpeed: factor
                     //rotation: this.body.GetAngle()
                 }
@@ -287,8 +287,8 @@ function (Parent, Settings, nc, Exception, ColorConverter, Layer) {
                 this.layerId,
                 this.headMesh,
                 {
-                    x: this.body.GetPosition().x * Settings.RATIO,
-                    y: this.body.GetPosition().y * Settings.RATIO - this.height + this.headHeight
+                                x: this.body.getPosition().x * Settings.RATIO,
+            y: this.body.getPosition().y * Settings.RATIO - this.height + this.headHeight
                 }
             )
 
@@ -296,8 +296,8 @@ function (Parent, Settings, nc, Exception, ColorConverter, Layer) {
                 this.layerId,
                 this.holdingArmMesh,
                 {
-                    x: this.body.GetPosition().x * Settings.RATIO,
-                    y: this.body.GetPosition().y * Settings.RATIO
+                                    x: this.body.getPosition().x * Settings.RATIO,
+                y: this.body.getPosition().y * Settings.RATIO
                 }
             )
         }

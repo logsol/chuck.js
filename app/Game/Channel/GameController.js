@@ -4,7 +4,7 @@ define([
     "Game/Config/Settings", 
     "Lib/Utilities/RequestAnimFrame",
     "Lib/Utilities/NotificationCenter",
-    "Lib/Vendor/Box2D",
+    "Lib/Vendor/Planck",
     "Game/Channel/Player",
     "Game/Channel/GameObjects/GameObject",
     "Game/Channel/GameObjects/Doll",
@@ -131,8 +131,8 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, nc, Box2D, Player, 
 /*
         var body = this.physicsEngine.world.GetBodyList();
         do {
-            if((getSleeping || body.IsAwake()) && body.GetType() === Box2D.Dynamics.b2Body.b2_dynamicBody) {
-                var userData = body.GetUserData();
+            if((getSleeping || body.isAwake()) && body.getType() === 'dynamic') {
+                var userData = body.getUserData();
 
                 if (userData instanceof GameObject) {
                     var gameObject = userData;

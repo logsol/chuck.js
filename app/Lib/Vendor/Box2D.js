@@ -1413,7 +1413,7 @@ Box2D.postDefs = [];
    };
    b2DistanceProxy.b2DistanceProxy = function () {};
    b2DistanceProxy.prototype.Set = function (shape) {
-      switch (shape.GetType()) {
+      switch (shape.getType()) {
       case b2Shape.e_circleShape:
          {
             var circle = (shape instanceof b2CircleShape ? shape : null);
@@ -4447,7 +4447,7 @@ Box2D.postDefs = [];
       var def = new b2FixtureDef();
       def.shape = shape;
       def.density = density;
-      return this.CreateFixture(def);
+      return this.createFixture(def);
    }
    b2Body.prototype.DestroyFixture = function (fixture) {
       if (this.m_world.IsLocked() == true) {
@@ -4556,7 +4556,7 @@ Box2D.postDefs = [];
    }
    b2Body.prototype.GetDefinition = function () {
       var bd = new b2BodyDef();
-      bd.type = this.GetType();
+      bd.type = this.getType();
       bd.allowSleep = (this.m_flags & b2Body.e_allowSleepFlag) == b2Body.e_allowSleepFlag;
       bd.angle = this.GetAngle();
       bd.angularDamping = this.m_angularDamping;
@@ -4574,8 +4574,8 @@ Box2D.postDefs = [];
       if (this.m_type != b2Body.b2_dynamicBody) {
          return;
       }
-      if (this.IsAwake() == false) {
-         this.SetAwake(true);
+      if (this.isAwake() == false) {
+         this.setAwake(true);
       }
       this.m_force.x += force.x;
       this.m_force.y += force.y;
@@ -4586,8 +4586,8 @@ Box2D.postDefs = [];
       if (this.m_type != b2Body.b2_dynamicBody) {
          return;
       }
-      if (this.IsAwake() == false) {
-         this.SetAwake(true);
+      if (this.isAwake() == false) {
+         this.setAwake(true);
       }
       this.m_torque += torque;
    }
@@ -4595,17 +4595,17 @@ Box2D.postDefs = [];
       if (this.m_type != b2Body.b2_dynamicBody) {
          return;
       }
-      if (this.IsAwake() == false) {
-         this.SetAwake(true);
+      if (this.isAwake() == false) {
+         this.setAwake(true);
       }
       this.m_linearVelocity.x += this.m_invMass * impulse.x;
       this.m_linearVelocity.y += this.m_invMass * impulse.y;
       this.m_angularVelocity += this.m_invI * ((point.x - this.m_sweep.c.x) * impulse.y - (point.y - this.m_sweep.c.y) * impulse.x);
    }
    b2Body.prototype.Split = function (callback) {
-      var linearVelocity = this.GetLinearVelocity().Copy();
-      var angularVelocity = this.GetAngularVelocity();
-      var center = this.GetWorldCenter();
+      var linearVelocity = this.GetLinearVelocity().clone();
+      var angularVelocity = this.getAngularVelocity();
+      var center = this.getWorldCenter();
       var body1 = this;
       var body2 = this.m_world.CreateBody(this.GetDefinition());
       var prev;
@@ -4632,14 +4632,14 @@ Box2D.postDefs = [];
       }
       body1.ResetMassData();
       body2.ResetMassData();
-      var center1 = body1.GetWorldCenter();
-      var center2 = body2.GetWorldCenter();
+      var center1 = body1.getWorldCenter();
+      var center2 = body2.getWorldCenter();
       var velocity1 = b2Math.AddVV(linearVelocity, b2Math.CrossFV(angularVelocity, b2Math.SubtractVV(center1, center)));
       var velocity2 = b2Math.AddVV(linearVelocity, b2Math.CrossFV(angularVelocity, b2Math.SubtractVV(center2, center)));
       body1.SetLinearVelocity(velocity1);
       body2.SetLinearVelocity(velocity2);
-      body1.SetAngularVelocity(angularVelocity);
-      body2.SetAngularVelocity(angularVelocity);
+      body1.setAngularVelocity(angularVelocity);
+      body2.setAngularVelocity(angularVelocity);
       body1.SynchronizeFixtures();
       body2.SynchronizeFixtures();
       return body2;
@@ -4660,12 +4660,12 @@ Box2D.postDefs = [];
       var body1 = this;
 
       var body2 = other;
-      var center1 = body1.GetWorldCenter();
-      var center2 = body2.GetWorldCenter();
-      var velocity1 = body1.GetLinearVelocity().Copy();
-      var velocity2 = body2.GetLinearVelocity().Copy();
-      var angular1 = body1.GetAngularVelocity();
-      var angular = body2.GetAngularVelocity();
+      var center1 = body1.getWorldCenter();
+      var center2 = body2.getWorldCenter();
+      var velocity1 = body1.GetLinearVelocity().clone();
+      var velocity2 = body2.GetLinearVelocity().clone();
+      var angular1 = body1.getAngularVelocity();
+      var angular = body2.getAngularVelocity();
       body1.ResetMassData();
       this.SynchronizeFixtures();
    }
@@ -4700,7 +4700,7 @@ Box2D.postDefs = [];
          this.m_I = massData.I - this.m_mass * (massData.center.x * massData.center.x + massData.center.y * massData.center.y);
          this.m_invI = 1.0 / this.m_I;
       }
-      var oldCenter = this.m_sweep.c.Copy();
+      var oldCenter = this.m_sweep.c.clone();
       this.m_sweep.localCenter.SetV(massData.center);
       this.m_sweep.c0.SetV(b2Math.MulX(this.m_xf, this.m_sweep.localCenter));
       this.m_sweep.c.SetV(this.m_sweep.c0);
@@ -4746,7 +4746,7 @@ Box2D.postDefs = [];
          this.m_I = 0.0;
          this.m_invI = 0.0;
       }
-      var oldCenter = this.m_sweep.c.Copy();
+      var oldCenter = this.m_sweep.c.clone();
       this.m_sweep.localCenter.SetV(center);
       this.m_sweep.c0.SetV(b2Math.MulX(this.m_xf, this.m_sweep.localCenter));
       this.m_sweep.c.SetV(this.m_sweep.c0);
@@ -4804,7 +4804,7 @@ Box2D.postDefs = [];
          this.m_linearVelocity.SetZero();
          this.m_angularVelocity = 0.0;
       }
-      this.SetAwake(true);
+      this.setAwake(true);
       this.m_force.SetZero();
       this.m_torque = 0.0;
       for (var ce = this.m_contactList; ce; ce = ce.next) {
@@ -4831,7 +4831,7 @@ Box2D.postDefs = [];
       }
       else {
          this.m_flags &= ~b2Body.e_allowSleepFlag;
-         this.SetAwake(true);
+         this.setAwake(true);
       }
    }
    b2Body.prototype.SetAwake = function (flag) {
@@ -5029,9 +5029,9 @@ Box2D.postDefs = [];
       Box2D.Dynamics.b2Body.e_bulletFlag = 0x0008;
       Box2D.Dynamics.b2Body.e_fixedRotationFlag = 0x0010;
       Box2D.Dynamics.b2Body.e_activeFlag = 0x0020;
-      Box2D.Dynamics.b2Body.b2_staticBody = 0;
-      Box2D.Dynamics.b2Body.b2_kinematicBody = 1;
-      Box2D.Dynamics.b2Body.b2_dynamicBody = 2;
+      'static' = 0;
+      'kinematic' = 1;
+      'dynamic' = 2;
    });
    b2BodyDef.b2BodyDef = function () {
       this.position = new b2Vec2();
@@ -5191,7 +5191,7 @@ Box2D.postDefs = [];
          var fixtureB = c.GetFixtureB();
          var bodyA = fixtureA.GetBody();
          var bodyB = fixtureB.GetBody();
-         if (bodyA.IsAwake() == false && bodyB.IsAwake() == false) {
+         if (bodyA.isAwake() == false && bodyB.isAwake() == false) {
             c = c.GetNext();
             continue;
          }
@@ -5301,7 +5301,7 @@ Box2D.postDefs = [];
       this.m_filter = new b2FilterData();
    };
    b2Fixture.prototype.GetType = function () {
-      return this.m_shape.GetType();
+      return this.m_shape.getType();
    }
    b2Fixture.prototype.GetShape = function () {
       return this.m_shape;
@@ -5323,7 +5323,7 @@ Box2D.postDefs = [];
       return this.m_isSensor;
    }
    b2Fixture.prototype.SetFilterData = function (filter) {
-      this.m_filter = filter.Copy();
+      this.m_filter = filter.clone();
       if (this.m_body) return;
       var edge = this.m_body.GetContactList();
       while (edge) {
@@ -5335,7 +5335,7 @@ Box2D.postDefs = [];
       }
    }
    b2Fixture.prototype.GetFilterData = function () {
-      return this.m_filter.Copy();
+      return this.m_filter.clone();
    }
    b2Fixture.prototype.GetBody = function () {
       return this.m_body;
@@ -5403,9 +5403,9 @@ Box2D.postDefs = [];
       this.m_restitution = def.restitution;
       this.m_body = body;
       this.m_next = null;
-      this.m_filter = def.filter.Copy();
+      this.m_filter = def.filter.clone();
       this.m_isSensor = def.isSensor;
-      this.m_shape = def.shape.Copy();
+      this.m_shape = def.shape.clone();
       this.m_density = def.density;
    }
    b2Fixture.prototype.Destroy = function () {
@@ -5489,7 +5489,7 @@ Box2D.postDefs = [];
       for (i = 0;
       i < this.m_bodyCount; ++i) {
          b = this.m_bodies[i];
-         if (b.GetType() != b2Body.b2_dynamicBody) continue;
+         if (b.getType() != b2Body.b2_dynamicBody) continue;
          b.m_linearVelocity.x += step.dt * (gravity.x + b.m_invMass * b.m_force.x);
          b.m_linearVelocity.y += step.dt * (gravity.y + b.m_invMass * b.m_force.y);
          b.m_angularVelocity += step.dt * b.m_invI * b.m_torque;
@@ -5522,7 +5522,7 @@ Box2D.postDefs = [];
       for (i = 0;
       i < this.m_bodyCount; ++i) {
          b = this.m_bodies[i];
-         if (b.GetType() == b2Body.b2_staticBody) continue;
+         if (b.getType() == b2Body.b2_staticBody) continue;
          var translationX = step.dt * b.m_linearVelocity.x;
          var translationY = step.dt * b.m_linearVelocity.y;
          if ((translationX * translationX + translationY * translationY) > b2Settings.b2_maxTranslationSquared) {
@@ -5568,7 +5568,7 @@ Box2D.postDefs = [];
          for (i = 0;
          i < this.m_bodyCount; ++i) {
             b = this.m_bodies[i];
-            if (b.GetType() == b2Body.b2_staticBody) {
+            if (b.getType() == b2Body.b2_staticBody) {
                continue;
             }
             if ((b.m_flags & b2Body.e_allowSleepFlag) == 0) {
@@ -5588,7 +5588,7 @@ Box2D.postDefs = [];
             for (i = 0;
             i < this.m_bodyCount; ++i) {
                b = this.m_bodies[i];
-               b.SetAwake(false);
+               b.setAwake(false);
             }
          }
       }
@@ -5613,7 +5613,7 @@ Box2D.postDefs = [];
       for (i = 0;
       i < this.m_bodyCount; ++i) {
          var b = this.m_bodies[i];
-         if (b.GetType() == b2Body.b2_staticBody) continue;
+         if (b.getType() == b2Body.b2_staticBody) continue;
          var translationX = subStep.dt * b.m_linearVelocity.x;
          var translationY = subStep.dt * b.m_linearVelocity.y;
          if ((translationX * translationX + translationY * translationY) > b2Settings.b2_maxTranslationSquared) {
@@ -5850,8 +5850,8 @@ Box2D.postDefs = [];
       }
       var bodyA = j.m_bodyA;
       var bodyB = j.m_bodyB;
-      bodyA.SetAwake(true);
-      bodyB.SetAwake(true);
+      bodyA.setAwake(true);
+      bodyB.setAwake(true);
       if (j.m_edgeA.prev) {
          j.m_edgeA.prev.next = j.m_edgeA.next;
       }
@@ -6015,15 +6015,15 @@ Box2D.postDefs = [];
                   color.Set(0.5, 0.5, 0.3);
                   this.DrawShape(s, xf, color);
                }
-               else if (b.GetType() == b2Body.b2_staticBody) {
+               else if (b.getType() == b2Body.b2_staticBody) {
                   color.Set(0.5, 0.9, 0.5);
                   this.DrawShape(s, xf, color);
                }
-               else if (b.GetType() == b2Body.b2_kinematicBody) {
+               else if (b.getType() == b2Body.b2_kinematicBody) {
                   color.Set(0.5, 0.5, 0.9);
                   this.DrawShape(s, xf, color);
                }
-               else if (b.IsAwake() == false) {
+               else if (b.isAwake() == false) {
                   color.Set(0.6, 0.6, 0.6);
                   this.DrawShape(s, xf, color);
                }
@@ -6079,7 +6079,7 @@ Box2D.postDefs = [];
          b; b = b.m_next) {
             xf = b2World.s_xf;
             xf.R = b.m_xf.R;
-            xf.position = b.GetWorldCenter();
+            xf.position = b.getWorldCenter();
             this.m_debugDraw.DrawTransform(xf);
          }
       }
@@ -6203,10 +6203,10 @@ Box2D.postDefs = [];
          if (seed.m_flags & b2Body.e_islandFlag) {
             continue;
          }
-         if (seed.IsAwake() == false || seed.IsActive() == false) {
+         if (seed.isAwake() == false || seed.IsActive() == false) {
             continue;
          }
-         if (seed.GetType() == b2Body.b2_staticBody) {
+         if (seed.getType() == b2Body.b2_staticBody) {
             continue;
          }
          island.Clear();
@@ -6216,10 +6216,10 @@ Box2D.postDefs = [];
          while (stackCount > 0) {
             b = stack[--stackCount];
             island.AddBody(b);
-            if (b.IsAwake() == false) {
-               b.SetAwake(true);
+            if (b.isAwake() == false) {
+               b.setAwake(true);
             }
-            if (b.GetType() == b2Body.b2_staticBody) {
+            if (b.getType() == b2Body.b2_staticBody) {
                continue;
             }
             var other;
@@ -6259,7 +6259,7 @@ Box2D.postDefs = [];
          island.Solve(step, this.m_gravity, this.m_allowSleep);
          for (var i = 0; i < island.m_bodyCount; ++i) {
             b = island.m_bodies[i];
-            if (b.GetType() == b2Body.b2_staticBody) {
+            if (b.getType() == b2Body.b2_staticBody) {
                b.m_flags &= ~b2Body.e_islandFlag;
             }
          }
@@ -6271,10 +6271,10 @@ Box2D.postDefs = [];
       }
       for (b = this.m_bodyList;
       b; b = b.m_next) {
-         if (b.IsAwake() == false || b.IsActive() == false) {
+         if (b.isAwake() == false || b.IsActive() == false) {
             continue;
          }
-         if (b.GetType() == b2Body.b2_staticBody) {
+         if (b.getType() == b2Body.b2_staticBody) {
             continue;
          }
          b.SynchronizeFixtures();
@@ -6323,7 +6323,7 @@ Box2D.postDefs = [];
                fB = c.m_fixtureB;
                bA = fA.m_body;
                bB = fB.m_body;
-               if ((bA.GetType() != b2Body.b2_dynamicBody || bA.IsAwake() == false) && (bB.GetType() != b2Body.b2_dynamicBody || bB.IsAwake() == false)) {
+               if ((bA.getType() != b2Body.b2_dynamicBody || bA.isAwake() == false) && (bB.getType() != b2Body.b2_dynamicBody || bB.isAwake() == false)) {
                   continue;
                }
                var t0 = bA.m_sweep.t0;
@@ -6373,7 +6373,7 @@ Box2D.postDefs = [];
             continue;
          }
          var seed = bA;
-         if (seed.GetType() != b2Body.b2_dynamicBody) {
+         if (seed.getType() != b2Body.b2_dynamicBody) {
             seed = bB;
          }
          island.Clear();
@@ -6385,10 +6385,10 @@ Box2D.postDefs = [];
             b = queue[queueStart++];
             --queueSize;
             island.AddBody(b);
-            if (b.IsAwake() == false) {
-               b.SetAwake(true);
+            if (b.isAwake() == false) {
+               b.setAwake(true);
             }
-            if (b.GetType() != b2Body.b2_dynamicBody) {
+            if (b.getType() != b2Body.b2_dynamicBody) {
                continue;
             }
             for (cEdge = b.m_contactList;
@@ -6408,9 +6408,9 @@ Box2D.postDefs = [];
                if (other.m_flags & b2Body.e_islandFlag) {
                   continue;
                }
-               if (other.GetType() != b2Body.b2_staticBody) {
+               if (other.getType() != b2Body.b2_staticBody) {
                   other.Advance(minTOI);
-                  other.SetAwake(true);
+                  other.setAwake(true);
                }
                queue[queueStart + queueSize] = other;
                ++queueSize;
@@ -6426,9 +6426,9 @@ Box2D.postDefs = [];
                island.AddJoint(jEdge.joint);
                jEdge.joint.m_islandFlag = true;
                if (other.m_flags & b2Body.e_islandFlag) continue;
-               if (other.GetType() != b2Body.b2_staticBody) {
+               if (other.getType() != b2Body.b2_staticBody) {
                   other.Advance(minTOI);
-                  other.SetAwake(true);
+                  other.setAwake(true);
                }
                queue[queueStart + queueSize] = other;
                ++queueSize;
@@ -6448,10 +6448,10 @@ Box2D.postDefs = [];
          i < island.m_bodyCount; ++i) {
             b = island.m_bodies[i];
             b.m_flags &= ~b2Body.e_islandFlag;
-            if (b.IsAwake() == false) {
+            if (b.isAwake() == false) {
                continue;
             }
-            if (b.GetType() != b2Body.b2_dynamicBody) {
+            if (b.getType() != b2Body.b2_dynamicBody) {
                continue;
             }
             b.SynchronizeFixtures();
@@ -6716,7 +6716,7 @@ Box2D.postDefs = [];
       }
       var bodyA = fixtureA.GetBody();
       var bodyB = fixtureB.GetBody();
-      if (bodyA.GetType() != b2Body.b2_dynamicBody || bodyA.IsBullet() || bodyB.GetType() != b2Body.b2_dynamicBody || bodyB.IsBullet()) {
+      if (bodyA.getType() != b2Body.b2_dynamicBody || bodyA.IsBullet() || bodyB.getType() != b2Body.b2_dynamicBody || bodyB.IsBullet()) {
          this.m_flags |= b2Contact.e_continuousFlag;
       }
       this.m_fixtureA = fixtureA;
@@ -6754,7 +6754,7 @@ Box2D.postDefs = [];
          this.m_manifold.m_pointCount = 0;
       }
       else {
-         if (bodyA.GetType() != b2Body.b2_dynamicBody || bodyA.IsBullet() || bodyB.GetType() != b2Body.b2_dynamicBody || bodyB.IsBullet()) {
+         if (bodyA.getType() != b2Body.b2_dynamicBody || bodyA.IsBullet() || bodyB.getType() != b2Body.b2_dynamicBody || bodyB.IsBullet()) {
             this.m_flags |= b2Contact.e_continuousFlag;
          }
          else {
@@ -6782,8 +6782,8 @@ Box2D.postDefs = [];
             this.m_manifold.m_pointCount = 0;
          }
          if (touching != wasTouching) {
-            bodyA.SetAwake(true);
-            bodyB.SetAwake(true);
+            bodyA.setAwake(true);
+            bodyB.setAwake(true);
          }
       }
       if (touching) {
@@ -6872,8 +6872,8 @@ Box2D.postDefs = [];
       this.AddType(b2PolyAndEdgeContact.Create, b2PolyAndEdgeContact.Destroy, b2Shape.e_polygonShape, b2Shape.e_edgeShape);
    }
    b2ContactFactory.prototype.Create = function (fixtureA, fixtureB) {
-      var type1 = parseInt(fixtureA.GetType());
-      var type2 = parseInt(fixtureB.GetType());
+      var type1 = parseInt(fixtureA.getType());
+      var type2 = parseInt(fixtureB.getType());
       var reg = this.m_registers[type1][type2];
       var c;
       if (reg.pool) {
@@ -6902,11 +6902,11 @@ Box2D.postDefs = [];
    }
    b2ContactFactory.prototype.Destroy = function (contact) {
       if (contact.m_manifold.m_pointCount > 0) {
-         contact.m_fixtureA.m_body.SetAwake(true);
-         contact.m_fixtureB.m_body.SetAwake(true);
+         contact.m_fixtureA.m_body.setAwake(true);
+         contact.m_fixtureB.m_body.setAwake(true);
       }
-      var type1 = parseInt(contact.m_fixtureA.GetType());
-      var type2 = parseInt(contact.m_fixtureB.GetType());
+      var type1 = parseInt(contact.m_fixtureA.getType());
+      var type2 = parseInt(contact.m_fixtureB.getType());
       var reg = this.m_registers[type1][type2];
       if (true) {
          reg.poolCount++;
@@ -7367,8 +7367,8 @@ Box2D.postDefs = [];
    b2PolyAndCircleContact.Destroy = function (contact, allocator) {}
    b2PolyAndCircleContact.prototype.Reset = function (fixtureA, fixtureB) {
       this.__super.Reset.call(this, fixtureA, fixtureB);
-      b2Settings.b2Assert(fixtureA.GetType() == b2Shape.e_polygonShape);
-      b2Settings.b2Assert(fixtureB.GetType() == b2Shape.e_circleShape);
+      b2Settings.b2Assert(fixtureA.getType() == b2Shape.e_polygonShape);
+      b2Settings.b2Assert(fixtureB.getType() == b2Shape.e_circleShape);
    }
    b2PolyAndCircleContact.prototype.Evaluate = function () {
       var bA = this.m_fixtureA.m_body;
@@ -7386,8 +7386,8 @@ Box2D.postDefs = [];
    b2PolyAndEdgeContact.Destroy = function (contact, allocator) {}
    b2PolyAndEdgeContact.prototype.Reset = function (fixtureA, fixtureB) {
       this.__super.Reset.call(this, fixtureA, fixtureB);
-      b2Settings.b2Assert(fixtureA.GetType() == b2Shape.e_polygonShape);
-      b2Settings.b2Assert(fixtureB.GetType() == b2Shape.e_edgeShape);
+      b2Settings.b2Assert(fixtureA.getType() == b2Shape.e_polygonShape);
+      b2Settings.b2Assert(fixtureB.getType() == b2Shape.e_edgeShape);
    }
    b2PolyAndEdgeContact.prototype.Evaluate = function () {
       var bA = this.m_fixtureA.GetBody();
@@ -7566,11 +7566,11 @@ Box2D.postDefs = [];
    b2BuoyancyController.prototype.Step = function (step) {
       if (!this.m_bodyList) return;
       if (this.useWorldGravity) {
-         this.gravity = this.GetWorld().GetGravity().Copy();
+         this.gravity = this.GetWorld().GetGravity().clone();
       }
       for (var i = this.m_bodyList; i; i = i.nextBody) {
          var body = i.body;
-         if (body.IsAwake() == false) {
+         if (body.isAwake() == false) {
             continue;
          }
          var areac = new b2Vec2();
@@ -7601,12 +7601,12 @@ Box2D.postDefs = [];
          if (area < Number.MIN_VALUE) continue;
          var buoyancyForce = this.gravity.GetNegative();
          buoyancyForce.Multiply(this.density * area);
-         body.ApplyForce(buoyancyForce, massc);
+         body.applyForce(buoyancyForce, massc);
          var dragForce = body.GetLinearVelocityFromWorldPoint(areac);
          dragForce.Subtract(this.velocity);
          dragForce.Multiply((-this.linearDrag * area));
-         body.ApplyForce(dragForce, areac);
-         body.ApplyTorque((-body.GetInertia() / body.GetMass() * area * body.GetAngularVelocity() * this.angularDrag));
+         body.applyForce(dragForce, areac);
+         body.applyTorque((-body.getInertia() / body.getMass() * area * body.getAngularVelocity() * this.angularDrag));
       }
    }
    b2BuoyancyController.prototype.Draw = function (debugDraw) {
@@ -7630,7 +7630,7 @@ Box2D.postDefs = [];
       var smallA = new b2Vec2(this.A.x * step.dt, this.A.y * step.dt);
       for (var i = this.m_bodyList; i; i = i.nextBody) {
          var body = i.body;
-         if (!body.IsAwake()) continue;
+         if (!body.isAwake()) continue;
          body.SetLinearVelocity(new b2Vec2(body.GetLinearVelocity().x + smallA.x, body.GetLinearVelocity().y + smallA.y));
       }
    }
@@ -7643,8 +7643,8 @@ Box2D.postDefs = [];
    b2ConstantForceController.prototype.Step = function (step) {
       for (var i = this.m_bodyList; i; i = i.nextBody) {
          var body = i.body;
-         if (!body.IsAwake()) continue;
-         body.ApplyForce(this.F, body.GetWorldCenter());
+         if (!body.isAwake()) continue;
+         body.applyForce(this.F, body.getWorldCenter());
       }
    }
    b2Controller.b2Controller = function () {};
@@ -7715,21 +7715,21 @@ Box2D.postDefs = [];
          for (i = this.m_bodyList;
          i; i = i.nextBody) {
             body1 = i.body;
-            p1 = body1.GetWorldCenter();
-            mass1 = body1.GetMass();
+            p1 = body1.getWorldCenter();
+            mass1 = body1.getMass();
             for (j = this.m_bodyList;
             j != i; j = j.nextBody) {
                body2 = j.body;
-               p2 = body2.GetWorldCenter();
+               p2 = body2.getWorldCenter();
                dx = p2.x - p1.x;
                dy = p2.y - p1.y;
                r2 = dx * dx + dy * dy;
                if (r2 < Number.MIN_VALUE) continue;
                f = new b2Vec2(dx, dy);
-               f.Multiply(this.G / r2 / Math.sqrt(r2) * mass1 * body2.GetMass());
-               if (body1.IsAwake()) body1.ApplyForce(f, p1);
+               f.Multiply(this.G / r2 / Math.sqrt(r2) * mass1 * body2.getMass());
+               if (body1.isAwake()) body1.applyForce(f, p1);
                f.Multiply((-1));
-               if (body2.IsAwake()) body2.ApplyForce(f, p2);
+               if (body2.isAwake()) body2.applyForce(f, p2);
             }
          }
       }
@@ -7737,21 +7737,21 @@ Box2D.postDefs = [];
          for (i = this.m_bodyList;
          i; i = i.nextBody) {
             body1 = i.body;
-            p1 = body1.GetWorldCenter();
-            mass1 = body1.GetMass();
+            p1 = body1.getWorldCenter();
+            mass1 = body1.getMass();
             for (j = this.m_bodyList;
             j != i; j = j.nextBody) {
                body2 = j.body;
-               p2 = body2.GetWorldCenter();
+               p2 = body2.getWorldCenter();
                dx = p2.x - p1.x;
                dy = p2.y - p1.y;
                r2 = dx * dx + dy * dy;
                if (r2 < Number.MIN_VALUE) continue;
                f = new b2Vec2(dx, dy);
-               f.Multiply(this.G / r2 * mass1 * body2.GetMass());
-               if (body1.IsAwake()) body1.ApplyForce(f, p1);
+               f.Multiply(this.G / r2 * mass1 * body2.getMass());
+               if (body1.isAwake()) body1.applyForce(f, p1);
                f.Multiply((-1));
-               if (body2.IsAwake()) body2.ApplyForce(f, p2);
+               if (body2.isAwake()) body2.applyForce(f, p2);
             }
          }
       }
@@ -7783,7 +7783,7 @@ Box2D.postDefs = [];
       if (timestep > this.maxTimestep && this.maxTimestep > 0) timestep = this.maxTimestep;
       for (var i = this.m_bodyList; i; i = i.nextBody) {
          var body = i.body;
-         if (!body.IsAwake()) {
+         if (!body.isAwake()) {
             continue;
          }
          var damping = body.GetWorldVector(b2Math.MulMV(this.T, body.GetLocalVector(body.GetLinearVelocity())));
@@ -7848,10 +7848,10 @@ Box2D.postDefs = [];
       this.m_u = new b2Vec2();
    };
    b2DistanceJoint.prototype.GetAnchorA = function () {
-      return this.m_bodyA.GetWorldPoint(this.m_localAnchor1);
+      return this.m_bodyA.getWorldPoint(this.m_localAnchor1);
    }
    b2DistanceJoint.prototype.GetAnchorB = function () {
-      return this.m_bodyB.GetWorldPoint(this.m_localAnchor2);
+      return this.m_bodyB.getWorldPoint(this.m_localAnchor2);
    }
    b2DistanceJoint.prototype.GetReactionForce = function (inv_dt) {
       if (inv_dt === undefined) inv_dt = 0;
@@ -8042,8 +8042,8 @@ Box2D.postDefs = [];
    b2DistanceJointDef.prototype.Initialize = function (bA, bB, anchorA, anchorB) {
       this.bodyA = bA;
       this.bodyB = bB;
-      this.localAnchorA.SetV(this.bodyA.GetLocalPoint(anchorA));
-      this.localAnchorB.SetV(this.bodyB.GetLocalPoint(anchorB));
+      this.localAnchorA.SetV(this.bodyA.getLocalPoint(anchorA));
+      this.localAnchorB.SetV(this.bodyB.getLocalPoint(anchorB));
       var dX = anchorB.x - anchorA.x;
       var dY = anchorB.y - anchorA.y;
       this.length = Math.sqrt(dX * dX + dY * dY);
@@ -8060,10 +8060,10 @@ Box2D.postDefs = [];
       this.m_linearImpulse = new b2Vec2();
    };
    b2FrictionJoint.prototype.GetAnchorA = function () {
-      return this.m_bodyA.GetWorldPoint(this.m_localAnchorA);
+      return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
    }
    b2FrictionJoint.prototype.GetAnchorB = function () {
-      return this.m_bodyB.GetWorldPoint(this.m_localAnchorB);
+      return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
    }
    b2FrictionJoint.prototype.GetReactionForce = function (inv_dt) {
       if (inv_dt === undefined) inv_dt = 0;
@@ -8192,7 +8192,7 @@ Box2D.postDefs = [];
          var CdotX = vB.x - wB * rBY - vA.x + wA * rAY;
          var CdotY = vB.y + wB * rBX - vA.y - wA * rAX;
          var impulseV = b2Math.MulMV(this.m_linearMass, new b2Vec2((-CdotX), (-CdotY)));
-         var oldImpulseV = this.m_linearImpulse.Copy();
+         var oldImpulseV = this.m_linearImpulse.clone();
          this.m_linearImpulse.Add(impulseV);
          maxImpulse = step.dt * this.m_maxForce;
          if (this.m_linearImpulse.LengthSquared() > maxImpulse * maxImpulse) {
@@ -8230,8 +8230,8 @@ Box2D.postDefs = [];
    b2FrictionJointDef.prototype.Initialize = function (bA, bB, anchor) {
       this.bodyA = bA;
       this.bodyB = bB;
-      this.localAnchorA.SetV(this.bodyA.GetLocalPoint(anchor));
-      this.localAnchorB.SetV(this.bodyB.GetLocalPoint(anchor));
+      this.localAnchorA.SetV(this.bodyA.getLocalPoint(anchor));
+      this.localAnchorB.SetV(this.bodyB.getLocalPoint(anchor));
    }
    Box2D.inherit(b2GearJoint, Box2D.Dynamics.Joints.b2Joint);
    b2GearJoint.prototype.__super = Box2D.Dynamics.Joints.b2Joint.prototype;
@@ -8244,10 +8244,10 @@ Box2D.postDefs = [];
       this.m_J = new b2Jacobian();
    };
    b2GearJoint.prototype.GetAnchorA = function () {
-      return this.m_bodyA.GetWorldPoint(this.m_localAnchor1);
+      return this.m_bodyA.getWorldPoint(this.m_localAnchor1);
    }
    b2GearJoint.prototype.GetAnchorB = function () {
-      return this.m_bodyB.GetWorldPoint(this.m_localAnchor2);
+      return this.m_bodyB.getWorldPoint(this.m_localAnchor2);
    }
    b2GearJoint.prototype.GetReactionForce = function (inv_dt) {
       if (inv_dt === undefined) inv_dt = 0;
@@ -8613,10 +8613,10 @@ Box2D.postDefs = [];
       this.m_impulse = new b2Vec2();
    };
    b2LineJoint.prototype.GetAnchorA = function () {
-      return this.m_bodyA.GetWorldPoint(this.m_localAnchor1);
+      return this.m_bodyA.getWorldPoint(this.m_localAnchor1);
    }
    b2LineJoint.prototype.GetAnchorB = function () {
-      return this.m_bodyB.GetWorldPoint(this.m_localAnchor2);
+      return this.m_bodyB.getWorldPoint(this.m_localAnchor2);
    }
    b2LineJoint.prototype.GetReactionForce = function (inv_dt) {
       if (inv_dt === undefined) inv_dt = 0;
@@ -8630,8 +8630,8 @@ Box2D.postDefs = [];
       var bA = this.m_bodyA;
       var bB = this.m_bodyB;
       var tMat;
-      var p1 = bA.GetWorldPoint(this.m_localAnchor1);
-      var p2 = bB.GetWorldPoint(this.m_localAnchor2);
+      var p1 = bA.getWorldPoint(this.m_localAnchor1);
+      var p2 = bB.getWorldPoint(this.m_localAnchor2);
       var dX = p2.x - p1.x;
       var dY = p2.y - p1.y;
       var axis = bA.GetWorldVector(this.m_localXAxis1);
@@ -8672,8 +8672,8 @@ Box2D.postDefs = [];
       return this.m_enableLimit;
    }
    b2LineJoint.prototype.EnableLimit = function (flag) {
-      this.m_bodyA.SetAwake(true);
-      this.m_bodyB.SetAwake(true);
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
       this.m_enableLimit = flag;
    }
    b2LineJoint.prototype.GetLowerLimit = function () {
@@ -8685,8 +8685,8 @@ Box2D.postDefs = [];
    b2LineJoint.prototype.SetLimits = function (lower, upper) {
       if (lower === undefined) lower = 0;
       if (upper === undefined) upper = 0;
-      this.m_bodyA.SetAwake(true);
-      this.m_bodyB.SetAwake(true);
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
       this.m_lowerTranslation = lower;
       this.m_upperTranslation = upper;
    }
@@ -8694,14 +8694,14 @@ Box2D.postDefs = [];
       return this.m_enableMotor;
    }
    b2LineJoint.prototype.EnableMotor = function (flag) {
-      this.m_bodyA.SetAwake(true);
-      this.m_bodyB.SetAwake(true);
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
       this.m_enableMotor = flag;
    }
    b2LineJoint.prototype.SetMotorSpeed = function (speed) {
       if (speed === undefined) speed = 0;
-      this.m_bodyA.SetAwake(true);
-      this.m_bodyB.SetAwake(true);
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
       this.m_motorSpeed = speed;
    }
    b2LineJoint.prototype.GetMotorSpeed = function () {
@@ -8709,8 +8709,8 @@ Box2D.postDefs = [];
    }
    b2LineJoint.prototype.SetMaxMotorForce = function (force) {
       if (force === undefined) force = 0;
-      this.m_bodyA.SetAwake(true);
-      this.m_bodyB.SetAwake(true);
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
       this.m_maxMotorForce = force;
    }
    b2LineJoint.prototype.GetMaxMotorForce = function () {
@@ -8867,7 +8867,7 @@ Box2D.postDefs = [];
       var Cdot1 = this.m_perp.x * (v2.x - v1.x) + this.m_perp.y * (v2.y - v1.y) + this.m_s2 * w2 - this.m_s1 * w1;
       if (this.m_enableLimit && this.m_limitState != b2Joint.e_inactiveLimit) {
          var Cdot2 = this.m_axis.x * (v2.x - v1.x) + this.m_axis.y * (v2.y - v1.y) + this.m_a2 * w2 - this.m_a1 * w1;
-         var f1 = this.m_impulse.Copy();
+         var f1 = this.m_impulse.clone();
          var df = this.m_K.Solve(new b2Vec2(), (-Cdot1), (-Cdot2));
          this.m_impulse.Add(df);
          if (this.m_limitState == b2Joint.e_atLowerLimit) {
@@ -9053,8 +9053,8 @@ Box2D.postDefs = [];
    b2LineJointDef.prototype.Initialize = function (bA, bB, anchor, axis) {
       this.bodyA = bA;
       this.bodyB = bB;
-      this.localAnchorA = this.bodyA.GetLocalPoint(anchor);
-      this.localAnchorB = this.bodyB.GetLocalPoint(anchor);
+      this.localAnchorA = this.bodyA.getLocalPoint(anchor);
+      this.localAnchorB = this.bodyB.getLocalPoint(anchor);
       this.localAxisA = this.bodyA.GetLocalVector(axis);
    }
    Box2D.inherit(b2MouseJoint, Box2D.Dynamics.Joints.b2Joint);
@@ -9074,7 +9074,7 @@ Box2D.postDefs = [];
       return this.m_target;
    }
    b2MouseJoint.prototype.GetAnchorB = function () {
-      return this.m_bodyB.GetWorldPoint(this.m_localAnchor);
+      return this.m_bodyB.getWorldPoint(this.m_localAnchor);
    }
    b2MouseJoint.prototype.GetReactionForce = function (inv_dt) {
       if (inv_dt === undefined) inv_dt = 0;
@@ -9088,8 +9088,8 @@ Box2D.postDefs = [];
       return this.m_target;
    }
    b2MouseJoint.prototype.SetTarget = function (target) {
-      if (this.m_bodyB.IsAwake() == false) {
-         this.m_bodyB.SetAwake(true);
+      if (this.m_bodyB.isAwake() == false) {
+         this.m_bodyB.setAwake(true);
       }
       this.m_target = target;
    }
@@ -9131,7 +9131,7 @@ Box2D.postDefs = [];
    }
    b2MouseJoint.prototype.InitVelocityConstraints = function (step) {
       var b = this.m_bodyB;
-      var mass = b.GetMass();
+      var mass = b.getMass();
       var omega = 2.0 * Math.PI * this.m_frequencyHz;
       var d = 2.0 * mass * this.m_dampingRatio * omega;
       var k = mass * omega * omega;
@@ -9229,10 +9229,10 @@ Box2D.postDefs = [];
       this.m_impulse = new b2Vec3();
    };
    b2PrismaticJoint.prototype.GetAnchorA = function () {
-      return this.m_bodyA.GetWorldPoint(this.m_localAnchor1);
+      return this.m_bodyA.getWorldPoint(this.m_localAnchor1);
    }
    b2PrismaticJoint.prototype.GetAnchorB = function () {
-      return this.m_bodyB.GetWorldPoint(this.m_localAnchor2);
+      return this.m_bodyB.getWorldPoint(this.m_localAnchor2);
    }
    b2PrismaticJoint.prototype.GetReactionForce = function (inv_dt) {
       if (inv_dt === undefined) inv_dt = 0;
@@ -9246,8 +9246,8 @@ Box2D.postDefs = [];
       var bA = this.m_bodyA;
       var bB = this.m_bodyB;
       var tMat;
-      var p1 = bA.GetWorldPoint(this.m_localAnchor1);
-      var p2 = bB.GetWorldPoint(this.m_localAnchor2);
+      var p1 = bA.getWorldPoint(this.m_localAnchor1);
+      var p2 = bB.getWorldPoint(this.m_localAnchor2);
       var dX = p2.x - p1.x;
       var dY = p2.y - p1.y;
       var axis = bA.GetWorldVector(this.m_localXAxis1);
@@ -9288,8 +9288,8 @@ Box2D.postDefs = [];
       return this.m_enableLimit;
    }
    b2PrismaticJoint.prototype.EnableLimit = function (flag) {
-      this.m_bodyA.SetAwake(true);
-      this.m_bodyB.SetAwake(true);
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
       this.m_enableLimit = flag;
    }
    b2PrismaticJoint.prototype.GetLowerLimit = function () {
@@ -9301,8 +9301,8 @@ Box2D.postDefs = [];
    b2PrismaticJoint.prototype.SetLimits = function (lower, upper) {
       if (lower === undefined) lower = 0;
       if (upper === undefined) upper = 0;
-      this.m_bodyA.SetAwake(true);
-      this.m_bodyB.SetAwake(true);
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
       this.m_lowerTranslation = lower;
       this.m_upperTranslation = upper;
    }
@@ -9310,14 +9310,14 @@ Box2D.postDefs = [];
       return this.m_enableMotor;
    }
    b2PrismaticJoint.prototype.EnableMotor = function (flag) {
-      this.m_bodyA.SetAwake(true);
-      this.m_bodyB.SetAwake(true);
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
       this.m_enableMotor = flag;
    }
    b2PrismaticJoint.prototype.SetMotorSpeed = function (speed) {
       if (speed === undefined) speed = 0;
-      this.m_bodyA.SetAwake(true);
-      this.m_bodyB.SetAwake(true);
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
       this.m_motorSpeed = speed;
    }
    b2PrismaticJoint.prototype.GetMotorSpeed = function () {
@@ -9325,8 +9325,8 @@ Box2D.postDefs = [];
    }
    b2PrismaticJoint.prototype.SetMaxMotorForce = function (force) {
       if (force === undefined) force = 0;
-      this.m_bodyA.SetAwake(true);
-      this.m_bodyB.SetAwake(true);
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
       this.m_maxMotorForce = force;
    }
    b2PrismaticJoint.prototype.GetMotorForce = function () {
@@ -9487,7 +9487,7 @@ Box2D.postDefs = [];
       var Cdot1Y = w2 - w1;
       if (this.m_enableLimit && this.m_limitState != b2Joint.e_inactiveLimit) {
          var Cdot2 = this.m_axis.x * (v2.x - v1.x) + this.m_axis.y * (v2.y - v1.y) + this.m_a2 * w2 - this.m_a1 * w1;
-         var f1 = this.m_impulse.Copy();
+         var f1 = this.m_impulse.clone();
          var df = this.m_K.Solve33(new b2Vec3(), (-Cdot1X), (-Cdot1Y), (-Cdot2));
          this.m_impulse.Add(df);
          if (this.m_limitState == b2Joint.e_atLowerLimit) {
@@ -9672,8 +9672,8 @@ Box2D.postDefs = [];
    b2PrismaticJointDef.prototype.Initialize = function (bA, bB, anchor, axis) {
       this.bodyA = bA;
       this.bodyB = bB;
-      this.localAnchorA = this.bodyA.GetLocalPoint(anchor);
-      this.localAnchorB = this.bodyB.GetLocalPoint(anchor);
+      this.localAnchorA = this.bodyA.getLocalPoint(anchor);
+      this.localAnchorB = this.bodyB.getLocalPoint(anchor);
       this.localAxisA = this.bodyA.GetLocalVector(axis);
       this.referenceAngle = this.bodyB.GetAngle() - this.bodyA.GetAngle();
    }
@@ -9689,10 +9689,10 @@ Box2D.postDefs = [];
       this.m_u2 = new b2Vec2();
    };
    b2PulleyJoint.prototype.GetAnchorA = function () {
-      return this.m_bodyA.GetWorldPoint(this.m_localAnchor1);
+      return this.m_bodyA.getWorldPoint(this.m_localAnchor1);
    }
    b2PulleyJoint.prototype.GetAnchorB = function () {
-      return this.m_bodyB.GetWorldPoint(this.m_localAnchor2);
+      return this.m_bodyB.getWorldPoint(this.m_localAnchor2);
    }
    b2PulleyJoint.prototype.GetReactionForce = function (inv_dt) {
       if (inv_dt === undefined) inv_dt = 0;
@@ -9703,17 +9703,17 @@ Box2D.postDefs = [];
       return 0.0;
    }
    b2PulleyJoint.prototype.GetGroundAnchorA = function () {
-      var a = this.m_ground.m_xf.position.Copy();
+      var a = this.m_ground.m_xf.position.clone();
       a.Add(this.m_groundAnchor1);
       return a;
    }
    b2PulleyJoint.prototype.GetGroundAnchorB = function () {
-      var a = this.m_ground.m_xf.position.Copy();
+      var a = this.m_ground.m_xf.position.clone();
       a.Add(this.m_groundAnchor2);
       return a;
    }
    b2PulleyJoint.prototype.GetLength1 = function () {
-      var p = this.m_bodyA.GetWorldPoint(this.m_localAnchor1);
+      var p = this.m_bodyA.getWorldPoint(this.m_localAnchor1);
       var sX = this.m_ground.m_xf.position.x + this.m_groundAnchor1.x;
       var sY = this.m_ground.m_xf.position.y + this.m_groundAnchor1.y;
       var dX = p.x - sX;
@@ -9721,7 +9721,7 @@ Box2D.postDefs = [];
       return Math.sqrt(dX * dX + dY * dY);
    }
    b2PulleyJoint.prototype.GetLength2 = function () {
-      var p = this.m_bodyB.GetWorldPoint(this.m_localAnchor2);
+      var p = this.m_bodyB.getWorldPoint(this.m_localAnchor2);
       var sX = this.m_ground.m_xf.position.x + this.m_groundAnchor2.x;
       var sY = this.m_ground.m_xf.position.y + this.m_groundAnchor2.y;
       var dX = p.x - sX;
@@ -10086,8 +10086,8 @@ Box2D.postDefs = [];
       this.bodyB = bB;
       this.groundAnchorA.SetV(gaA);
       this.groundAnchorB.SetV(gaB);
-      this.localAnchorA = this.bodyA.GetLocalPoint(anchorA);
-      this.localAnchorB = this.bodyB.GetLocalPoint(anchorB);
+      this.localAnchorA = this.bodyA.getLocalPoint(anchorA);
+      this.localAnchorB = this.bodyB.getLocalPoint(anchorB);
       var d1X = anchorA.x - gaA.x;
       var d1Y = anchorA.y - gaA.y;
       this.lengthA = Math.sqrt(d1X * d1X + d1Y * d1Y);
@@ -10116,10 +10116,10 @@ Box2D.postDefs = [];
       this.m_mass = new b2Mat33();
    };
    b2RevoluteJoint.prototype.GetAnchorA = function () {
-      return this.m_bodyA.GetWorldPoint(this.m_localAnchor1);
+      return this.m_bodyA.getWorldPoint(this.m_localAnchor1);
    }
    b2RevoluteJoint.prototype.GetAnchorB = function () {
-      return this.m_bodyB.GetWorldPoint(this.m_localAnchor2);
+      return this.m_bodyB.getWorldPoint(this.m_localAnchor2);
    }
    b2RevoluteJoint.prototype.GetReactionForce = function (inv_dt) {
       if (inv_dt === undefined) inv_dt = 0;
@@ -10155,8 +10155,8 @@ Box2D.postDefs = [];
       this.m_upperAngle = upper;
    }
    b2RevoluteJoint.prototype.IsMotorEnabled = function () {
-      this.m_bodyA.SetAwake(true);
-      this.m_bodyB.SetAwake(true);
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
       return this.m_enableMotor;
    }
    b2RevoluteJoint.prototype.EnableMotor = function (flag) {
@@ -10164,8 +10164,8 @@ Box2D.postDefs = [];
    }
    b2RevoluteJoint.prototype.SetMotorSpeed = function (speed) {
       if (speed === undefined) speed = 0;
-      this.m_bodyA.SetAwake(true);
-      this.m_bodyB.SetAwake(true);
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
       this.m_motorSpeed = speed;
    }
    b2RevoluteJoint.prototype.GetMotorSpeed = function () {
@@ -10509,8 +10509,8 @@ Box2D.postDefs = [];
    b2RevoluteJointDef.prototype.Initialize = function (bA, bB, anchor) {
       this.bodyA = bA;
       this.bodyB = bB;
-      this.localAnchorA = this.bodyA.GetLocalPoint(anchor);
-      this.localAnchorB = this.bodyB.GetLocalPoint(anchor);
+      this.localAnchorA = this.bodyA.getLocalPoint(anchor);
+      this.localAnchorB = this.bodyB.getLocalPoint(anchor);
       this.referenceAngle = this.bodyB.GetAngle() - this.bodyA.GetAngle();
    }
    Box2D.inherit(b2WeldJoint, Box2D.Dynamics.Joints.b2Joint);
@@ -10523,10 +10523,10 @@ Box2D.postDefs = [];
       this.m_mass = new b2Mat33();
    };
    b2WeldJoint.prototype.GetAnchorA = function () {
-      return this.m_bodyA.GetWorldPoint(this.m_localAnchorA);
+      return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
    }
    b2WeldJoint.prototype.GetAnchorB = function () {
-      return this.m_bodyB.GetWorldPoint(this.m_localAnchorB);
+      return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
    }
    b2WeldJoint.prototype.GetReactionForce = function (inv_dt) {
       if (inv_dt === undefined) inv_dt = 0;
@@ -10697,8 +10697,8 @@ Box2D.postDefs = [];
    b2WeldJointDef.prototype.Initialize = function (bA, bB, anchor) {
       this.bodyA = bA;
       this.bodyB = bB;
-      this.localAnchorA.SetV(this.bodyA.GetLocalPoint(anchor));
-      this.localAnchorB.SetV(this.bodyB.GetLocalPoint(anchor));
+      this.localAnchorA.SetV(this.bodyA.getLocalPoint(anchor));
+      this.localAnchorB.SetV(this.bodyB.getLocalPoint(anchor));
       this.referenceAngle = this.bodyB.GetAngle() - this.bodyA.GetAngle();
    }
 })();

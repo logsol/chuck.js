@@ -1,6 +1,6 @@
 define([
     "Game/Core/GameObjects/GameObject",
-    "Lib/Vendor/Box2D"
+    "Lib/Vendor/Planck"
 ],
  
 function (Parent, Box2D) {
@@ -19,19 +19,19 @@ function (Parent, Box2D) {
             return null;
         }
 
-        if (this.body.GetType() === Box2D.Dynamics.b2Body.b2_staticBody) {
+        if (this.body.getType() === 'static') {
             return null;
         }
 
-        if (!getSleeping && !this.body.IsAwake()) {
+        if (!getSleeping && !this.body.isAwake()) {
             return null;
         }
         
         return {
-            p: this.body.GetPosition(),
-            a: this.body.GetAngle(),
-            lv: this.body.GetLinearVelocity(),
-            av: this.body.GetAngularVelocity()
+                            p: this.body.getPosition(),
+                            a: this.body.getAngle(),
+                            lv: this.body.getLinearVelocity(),
+            av: this.body.getAngularVelocity()
         };
     }
  

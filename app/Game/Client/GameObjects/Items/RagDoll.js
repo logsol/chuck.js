@@ -68,9 +68,9 @@ function (Parent, CoreItem, Settings, nc, Layer) {
                         this.layerId,
 			            this.limbMeshes[name],
 			            {
-			                x: this.limbs[name].GetPosition().x * Settings.RATIO,
-			                y: this.limbs[name].GetPosition().y * Settings.RATIO,
-			                rotation: this.limbs[name].GetAngle()
+			                                x: this.limbs[name].getPosition().x * Settings.RATIO,
+                y: this.limbs[name].getPosition().y * Settings.RATIO,
+			                rotation: this.limbs[name].getAngle()
 			            }
 			        );    			
 	    		}

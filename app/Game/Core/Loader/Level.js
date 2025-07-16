@@ -1,6 +1,6 @@
 define([
     "Game/Config/Settings", 
-    "Lib/Vendor/Box2D",
+    "Lib/Vendor/Planck",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Abstract",
     "Game/" + GLOBALS.context + "/Collision/Detector",

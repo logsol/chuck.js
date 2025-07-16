@@ -68,7 +68,7 @@ function loadFixtureFromRUBE(body, fixtureJso) {
         fd.shape.m_radius = fixtureJso.circle.radius;
         if ( fixtureJso.circle.center )
             fd.shape.m_p.SetV(fixtureJso.circle.center);
-        var fixture = body.CreateFixture(fd);        
+        var fixture = body.createFixture(fd);        
         if ( fixtureJso.name )
             fixture.name = fixtureJso.name;
     }
@@ -78,7 +78,7 @@ function loadFixtureFromRUBE(body, fixtureJso) {
         for (v = 0; v < fixtureJso.polygon.vertices.x.length; v++) 
            verts.push( new b2Vec2( fixtureJso.polygon.vertices.x[v], fixtureJso.polygon.vertices.y[v] ) );
         fd.shape.SetAsArray(verts, verts.length);
-        var fixture = body.CreateFixture(fd);        
+        var fixture = body.createFixture(fd);        
         if ( fixture && fixtureJso.name )
             fixture.name = fixtureJso.name;
     }
@@ -89,7 +89,7 @@ function loadFixtureFromRUBE(body, fixtureJso) {
             var thisVertex = new b2Vec2( fixtureJso.chain.vertices.x[v], fixtureJso.chain.vertices.y[v] );
             if ( v > 0 ) {
                 fd.shape.SetAsEdge( lastVertex, thisVertex );
-                var fixture = body.CreateFixture(fd);        
+                var fixture = body.createFixture(fd);        
                 if ( fixtureJso.name )
                     fixture.name = fixtureJso.name;
             }

@@ -74,9 +74,9 @@ function (Parent, nc) {
 	Item.prototype.onCollisionChange = function(isColliding, fixture) {
 
 		if(isColliding) {
-			var otherBody = fixture.GetBody();
+			                var otherBody = fixture.getBody();
 			if(otherBody) {
-				var otherItem = otherBody.GetUserData();
+				                var otherItem = otherBody.getUserData();
 				if(otherItem instanceof Item) {
 					if(!this.lastMoved && !otherItem.lastMoved) return;
 

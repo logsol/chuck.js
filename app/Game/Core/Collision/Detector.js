@@ -1,56 +1,52 @@
 define([
-    "Lib/Vendor/Box2D"
+    "Lib/Vendor/Planck"
 ],
 
-function (Box2D) {
+function (Planck) {
 
 	"use strict";
 
     function Detector () {
-        this.listener = new Box2D.Dynamics.b2ContactListener();
-        this.listener.BeginContact = this.beginContact.bind(this);
-        //this.listener.PostSolve = this.postSolve.bind(this);
-        this.listener.EndContact = this.endContact.bind(this);
+        // In Planck.js, contact listeners are handled via world events
+        // We'll store the world reference when getListener is called
+        this.world = null;
     }
 
     Detector.prototype.getListener = function () {
-        return this.listener;
+        // Instead of returning a listener object, we return a function
+        // that will set up the event listeners on the world
+        return this.setupWorldEvents.bind(this);
     }
 
-    Detector.prototype.onCollisionChange = function (point, isColliding) {
-        var userDataA = point.GetFixtureA().GetUserData();
-        var userDataB = point.GetFixtureB().GetUserData();
+    Detector.prototype.setupWorldEvents = function (world) {
+        this.world = world;
+        
+        // Set up Planck.js event listeners
+        world.on('begin-contact', this.beginContact.bind(this));
+        world.on('end-contact', this.endContact.bind(this));
+        
+        return this;
+    }
+
+    Detector.prototype.onCollisionChange = function (contact, isColliding) {
+        var userDataA = contact.getFixtureA().getUserData();
+        var userDataB = contact.getFixtureB().getUserData();
 
         if (userDataA && userDataA.onCollisionChange) {
-            userDataA.onCollisionChange(isColliding, point.GetFixtureB());
+            userDataA.onCollisionChange(isColliding, contact.getFixtureB());
         } 
 
         if (userDataB && userDataB.onCollisionChange) {
-            userDataB.onCollisionChange(isColliding, point.GetFixtureA());
+            userDataB.onCollisionChange(isColliding, contact.getFixtureA());
         }
     }
 
-    /** Extension **/
-
-    Detector.prototype.beginContact = function (point) {
-        this.onCollisionChange(point, true);
+    Detector.prototype.beginContact = function (contact) {
+        this.onCollisionChange(contact, true);
     }
 
-/*
-    Detector.prototype.postSolve = function (point, impulse) {
-        var userDataA = point.GetFixtureA().GetUserData();
-        var userDataB = point.GetFixtureB().GetUserData();
-
-        if (userDataA && userDataA.onImpulse) {
-            userDataA.onImpulse(impulse, point.GetFixtureB());
-        } else if (userDataB && userDataB.onImpulse) {
-            userDataB.onImpulse(impulse, point.GetFixtureA());
-        }
-    }
-*/
-
-    Detector.prototype.endContact = function (point) {
-        this.onCollisionChange(point, false);
+    Detector.prototype.endContact = function (contact) {
+        this.onCollisionChange(contact, false);
     }
 
     return Detector;

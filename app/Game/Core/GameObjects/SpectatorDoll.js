@@ -1,6 +1,6 @@
 define([
     "Game/" + GLOBALS.context + "/GameObjects/GameObject",
-    "Lib/Vendor/Box2D"
+    "Lib/Vendor/Planck"
 ], 
  
 function (Parent, Box2D) {
@@ -14,8 +14,8 @@ function (Parent, Box2D) {
     SpectatorDoll.prototype = Object.create(Parent.prototype);
 
     SpectatorDoll.prototype.getBodyDef = function() {
-        var bodyDef = new Box2D.Dynamics.b2BodyDef();
-        bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+        var bodyDef = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
+        bodyDef.type = 'dynamic';
         bodyDef.position.x = this.getPosition().x;
         bodyDef.position.y = this.getPosition().y;
         bodyDef.angle = 0;

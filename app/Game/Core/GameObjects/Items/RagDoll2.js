@@ -1,6 +1,6 @@
 define([
 	"Game/" + GLOBALS.context + "/GameObjects/Item",
-	"Lib/Vendor/Box2D",
+	"Lib/Vendor/Planck",
 	"Game/Config/Settings"
 ],
  
@@ -24,13 +24,13 @@ function (Parent, Box2D, Settings) {
 		var bodies = [];
 		var joints = [];
 		{
-			var bd = new Box2D.Dynamics.b2BodyDef();
-			bd.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
+			bd.type = 'dynamic';
 			bd.position.Set(-1.917114257812500e-01, 1.433728694915771e+00);
 			bodies[0] = world.CreateBody(bd);
 
 			{
-				var fd = new Box2D.Dynamics.b2FixtureDef();
+				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
 				fd.friction = Settings.PLAYER_FRICTION;
 				fd.restitution = Settings.PLAYER_RESTITUTION;
 				fd.density = Settings.PLAYER_DENSITY;
@@ -38,45 +38,45 @@ function (Parent, Box2D, Settings) {
 				fd.filter.groupIndex = -1;
 				var shape = new Box2D.Collision.Shapes.b2PolygonShape();
 				var vs = [];
-				vs[0] = new Box2D.Common.Math.b2Vec2(6.299880146980286e-02, -2.545155882835388e-01);
-				vs[1] = new Box2D.Common.Math.b2Vec2(6.299880146980286e-02, 2.545149326324463e-01);
-				vs[2] = new Box2D.Common.Math.b2Vec2(-6.299890577793121e-02, 2.545149326324463e-01);
-				vs[3] = new Box2D.Common.Math.b2Vec2(-6.299890577793121e-02, -2.545155882835388e-01);
+				vs[0] = planck.Vec2(6.299880146980286e-02, -2.545155882835388e-01);
+				vs[1] = planck.Vec2(6.299880146980286e-02, 2.545149326324463e-01);
+				vs[2] = planck.Vec2(-6.299890577793121e-02, 2.545149326324463e-01);
+				vs[3] = planck.Vec2(-6.299890577793121e-02, -2.545155882835388e-01);
 				shape.SetAsArray(vs, 4);
 
 				fd.shape = shape;
 
-				bodies[0].CreateFixture(fd);
+				bodies[0].createFixture(fd);
 			}
 		}
 		{
-			var bd = new Box2D.Dynamics.b2BodyDef();
-			bd.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
+			bd.type = 'dynamic';
 			bd.position.Set(-6.397294998168945e-02, 1.267420768737793e+00);
 			bodies[1] = world.CreateBody(bd);
 
 			{
-				var fd = new Box2D.Dynamics.b2FixtureDef();
+				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
 				fd.friction = Settings.PLAYER_FRICTION;
 				fd.restitution = Settings.PLAYER_RESTITUTION;
 				fd.density = Settings.PLAYER_DENSITY;
 				fd.filter.groupIndex = -1;
 				var shape = new Box2D.Collision.Shapes.b2PolygonShape();
 				var vs = [];
-				vs[0] = new Box2D.Common.Math.b2Vec2(1.883362084627151e-01, -4.305148720741272e-01);
-				vs[1] = new Box2D.Common.Math.b2Vec2(1.846363544464111e-01, 5.393795371055603e-01);
-				vs[2] = new Box2D.Common.Math.b2Vec2(1.850083470344543e-03, 5.393795371055603e-01);
-				vs[3] = new Box2D.Common.Math.b2Vec2(-1.883361339569092e-01, 4.209862351417542e-01);
-				vs[4] = new Box2D.Common.Math.b2Vec2(-1.883361339569092e-01, -4.607573151588440e-01);
-				vs[5] = new Box2D.Common.Math.b2Vec2(1.600667834281921e-03, -4.952520132064819e-01);
+				vs[0] = planck.Vec2(1.883362084627151e-01, -4.305148720741272e-01);
+				vs[1] = planck.Vec2(1.846363544464111e-01, 5.393795371055603e-01);
+				vs[2] = planck.Vec2(1.850083470344543e-03, 5.393795371055603e-01);
+				vs[3] = planck.Vec2(-1.883361339569092e-01, 4.209862351417542e-01);
+				vs[4] = planck.Vec2(-1.883361339569092e-01, -4.607573151588440e-01);
+				vs[5] = planck.Vec2(1.600667834281921e-03, -4.952520132064819e-01);
 				shape.SetAsArray(vs, 6);
 
 				fd.shape = shape;
 
-				bodies[1].CreateFixture(fd);
+				bodies[1].createFixture(fd);
 			}
 			{
-				var fd = new Box2D.Dynamics.b2FixtureDef();
+				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
 				fd.friction = Settings.PLAYER_FRICTION;
 				fd.restitution = Settings.PLAYER_RESTITUTION;
 				fd.density = Settings.PLAYER_DENSITY;
@@ -84,25 +84,25 @@ function (Parent, Box2D, Settings) {
 				fd.filter.groupIndex = -1;
 				var shape = new Box2D.Collision.Shapes.b2PolygonShape();
 				var vs = [];
-				vs[0] = new Box2D.Common.Math.b2Vec2(1.840525716543198e-01, 4.875739216804504e-01);
-				vs[1] = new Box2D.Common.Math.b2Vec2(1.840525716543198e-01, 6.762337088584900e-01);
-				vs[2] = new Box2D.Common.Math.b2Vec2(-4.607129842042923e-03, 6.762337088584900e-01);
-				vs[3] = new Box2D.Common.Math.b2Vec2(-4.607129842042923e-03, 4.875739216804504e-01);
+				vs[0] = planck.Vec2(1.840525716543198e-01, 4.875739216804504e-01);
+				vs[1] = planck.Vec2(1.840525716543198e-01, 6.762337088584900e-01);
+				vs[2] = planck.Vec2(-4.607129842042923e-03, 6.762337088584900e-01);
+				vs[3] = planck.Vec2(-4.607129842042923e-03, 4.875739216804504e-01);
 				shape.SetAsArray(vs, 4);
 
 				fd.shape = shape;
 
-				bodies[1].CreateFixture(fd);
+				bodies[1].createFixture(fd);
 			}
 		}
 		{
-			var bd = new Box2D.Dynamics.b2BodyDef();
-			bd.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
+			bd.type = 'dynamic';
 			bd.position.Set(4.118728637695312e-02, 2.199305295944214e+00);
 			bodies[2] = world.CreateBody(bd);
 
 			{
-				var fd = new Box2D.Dynamics.b2FixtureDef();
+				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
 				fd.friction = 2.000000029802322e-01;
 				fd.restitution = 0.000000000000000e+00;
 				fd.density = 2.204959988594055e-01;
@@ -114,10 +114,10 @@ function (Parent, Box2D, Settings) {
 
 				fd.shape = shape;
 
-				bodies[2].CreateFixture(fd);
+				bodies[2].createFixture(fd);
 			}
 			{
-				var fd = new Box2D.Dynamics.b2FixtureDef();
+				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
 				fd.friction = 2.000000029802322e-01;
 				fd.restitution = 0.000000000000000e+00;
 				fd.density = 2.204959988594055e-01;
@@ -129,17 +129,17 @@ function (Parent, Box2D, Settings) {
 
 				fd.shape = shape;
 
-				bodies[2].CreateFixture(fd);
+				bodies[2].createFixture(fd);
 			}
 		}
 		{
-			var bd = new Box2D.Dynamics.b2BodyDef();
-			bd.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
+			bd.type = 'dynamic';
 			bd.position.Set(1.235442161560059e-01, 1.142371892929077e+00);
 			bodies[3] = world.CreateBody(bd);
 
 			{
-				var fd = new Box2D.Dynamics.b2FixtureDef();
+				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
 				fd.friction = Settings.PLAYER_FRICTION;
 				fd.restitution = Settings.PLAYER_RESTITUTION;
 				fd.density = Settings.PLAYER_DENSITY;
@@ -147,26 +147,26 @@ function (Parent, Box2D, Settings) {
 				fd.filter.groupIndex = -1;
 				var shape = new Box2D.Collision.Shapes.b2PolygonShape();
 				var vs = [];
-				vs[0] = new Box2D.Common.Math.b2Vec2(6.299892067909241e-02, -1.556134223937988e-01);
-				vs[1] = new Box2D.Common.Math.b2Vec2(6.299892067909241e-02, 1.556134223937988e-01);
-				vs[2] = new Box2D.Common.Math.b2Vec2(-6.299898028373718e-02, 1.556134223937988e-01);
-				vs[3] = new Box2D.Common.Math.b2Vec2(-6.299898028373718e-02, -1.556134223937988e-01);
+				vs[0] = planck.Vec2(6.299892067909241e-02, -1.556134223937988e-01);
+				vs[1] = planck.Vec2(6.299892067909241e-02, 1.556134223937988e-01);
+				vs[2] = planck.Vec2(-6.299898028373718e-02, 1.556134223937988e-01);
+				vs[3] = planck.Vec2(-6.299898028373718e-02, -1.556134223937988e-01);
 				shape.SetAsArray(vs, 4);
 
 				fd.shape = shape;
 
-				bodies[3].CreateFixture(fd);
+				bodies[3].createFixture(fd);
 			}
 		}
 		{
-			var bd = new Box2D.Dynamics.b2BodyDef();
-			bd.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
+			bd.type = 'dynamic';
 			bd.position.Set(-9.663248062133789e-02, 3.554300665855408e-01);
 
 			bodies[4] = world.CreateBody(bd);
 
 			{
-				var fd = new Box2D.Dynamics.b2FixtureDef();
+				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
 				fd.friction = Settings.PLAYER_FRICTION;
 				fd.restitution = Settings.PLAYER_RESTITUTION;
 				fd.density = Settings.PLAYER_DENSITY;
@@ -174,18 +174,18 @@ function (Parent, Box2D, Settings) {
 				fd.filter.groupIndex = -1;
 				var shape = new Box2D.Collision.Shapes.b2PolygonShape();
 				var vs = [];
-				vs[0] = new Box2D.Common.Math.b2Vec2(1.550966501235962e-01, -1.253567039966583e-01);
-				vs[1] = new Box2D.Common.Math.b2Vec2(1.550966501235962e-01, -6.225190684199333e-02);
-				vs[2] = new Box2D.Common.Math.b2Vec2(-9.268096834421158e-02, -6.225190684199333e-02);
-				vs[3] = new Box2D.Common.Math.b2Vec2(-9.268096834421158e-02, -1.253567039966583e-01);
+				vs[0] = planck.Vec2(1.550966501235962e-01, -1.253567039966583e-01);
+				vs[1] = planck.Vec2(1.550966501235962e-01, -6.225190684199333e-02);
+				vs[2] = planck.Vec2(-9.268096834421158e-02, -6.225190684199333e-02);
+				vs[3] = planck.Vec2(-9.268096834421158e-02, -1.253567039966583e-01);
 				shape.SetAsArray(vs, 4);
 
 				fd.shape = shape;
 
-				bodies[4].CreateFixture(fd);
+				bodies[4].createFixture(fd);
 			}
 			{
-				var fd = new Box2D.Dynamics.b2FixtureDef();
+				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
 				fd.friction = Settings.PLAYER_FRICTION;
 				fd.restitution = Settings.PLAYER_RESTITUTION;
 				fd.density = Settings.PLAYER_DENSITY;
@@ -193,26 +193,26 @@ function (Parent, Box2D, Settings) {
 				fd.filter.groupIndex = -1;
 				var shape = new Box2D.Collision.Shapes.b2PolygonShape();
 				var vs = [];
-				vs[0] = new Box2D.Common.Math.b2Vec2(9.449840337038040e-02, -1.247676759958267e-01);
-				vs[1] = new Box2D.Common.Math.b2Vec2(9.449840337038040e-02, 1.715210527181625e-01);
-				vs[2] = new Box2D.Common.Math.b2Vec2(-9.449829906225204e-02, 1.715210527181625e-01);
-				vs[3] = new Box2D.Common.Math.b2Vec2(-9.449829906225204e-02, -1.247676759958267e-01);
+				vs[0] = planck.Vec2(9.449840337038040e-02, -1.247676759958267e-01);
+				vs[1] = planck.Vec2(9.449840337038040e-02, 1.715210527181625e-01);
+				vs[2] = planck.Vec2(-9.449829906225204e-02, 1.715210527181625e-01);
+				vs[3] = planck.Vec2(-9.449829906225204e-02, -1.247676759958267e-01);
 				shape.SetAsArray(vs, 4);
 
 				fd.shape = shape;
 
-				bodies[4].CreateFixture(fd);
+				bodies[4].createFixture(fd);
 			}
 		}
 		{
-			var bd = new Box2D.Dynamics.b2BodyDef();
-			bd.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
+			bd.type = 'dynamic';
 			bd.position.Set(-1.917138099670410e-01, 1.142371892929077e+00);
 
 			bodies[5] = world.CreateBody(bd);
 
 			{
-				var fd = new Box2D.Dynamics.b2FixtureDef();
+				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
 				fd.friction = Settings.PLAYER_FRICTION;
 				fd.restitution = Settings.PLAYER_RESTITUTION;
 				fd.density = Settings.PLAYER_DENSITY;
@@ -220,26 +220,26 @@ function (Parent, Box2D, Settings) {
 				fd.filter.groupIndex = -1;
 				var shape = new Box2D.Collision.Shapes.b2PolygonShape();
 				var vs = [];
-				vs[0] = new Box2D.Common.Math.b2Vec2(6.299891322851181e-02, -1.556134223937988e-01);
-				vs[1] = new Box2D.Common.Math.b2Vec2(6.299891322851181e-02, 1.556134223937988e-01);
-				vs[2] = new Box2D.Common.Math.b2Vec2(-6.299878656864166e-02, 1.556134223937988e-01);
-				vs[3] = new Box2D.Common.Math.b2Vec2(-6.299878656864166e-02, -1.556134223937988e-01);
+				vs[0] = planck.Vec2(6.299891322851181e-02, -1.556134223937988e-01);
+				vs[1] = planck.Vec2(6.299891322851181e-02, 1.556134223937988e-01);
+				vs[2] = planck.Vec2(-6.299878656864166e-02, 1.556134223937988e-01);
+				vs[3] = planck.Vec2(-6.299878656864166e-02, -1.556134223937988e-01);
 				shape.SetAsArray(vs, 4);
 
 				fd.shape = shape;
 
-				bodies[5].CreateFixture(fd);
+				bodies[5].createFixture(fd);
 			}
 		}
 		{
-			var bd = new Box2D.Dynamics.b2BodyDef();
-			bd.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
+			bd.type = 'dynamic';
 			bd.position.Set(1.235442161560059e-01, 1.433728694915771e+00);
 
 			bodies[6] = world.CreateBody(bd);
 
 			{
-				var fd = new Box2D.Dynamics.b2FixtureDef();
+				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
 				fd.friction = Settings.PLAYER_FRICTION;
 				fd.restitution = Settings.PLAYER_RESTITUTION;
 				fd.density = Settings.PLAYER_DENSITY;
@@ -247,25 +247,25 @@ function (Parent, Box2D, Settings) {
 				fd.filter.groupIndex = -1;
 				var shape = new Box2D.Collision.Shapes.b2PolygonShape();
 				var vs = [];
-				vs[0] = new Box2D.Common.Math.b2Vec2(6.299892067909241e-02, -2.545155882835388e-01);
-				vs[1] = new Box2D.Common.Math.b2Vec2(6.299892067909241e-02, 2.545149326324463e-01);
-				vs[2] = new Box2D.Common.Math.b2Vec2(-6.299898028373718e-02, 2.545149326324463e-01);
-				vs[3] = new Box2D.Common.Math.b2Vec2(-6.299898028373718e-02, -2.545155882835388e-01);
+				vs[0] = planck.Vec2(6.299892067909241e-02, -2.545155882835388e-01);
+				vs[1] = planck.Vec2(6.299892067909241e-02, 2.545149326324463e-01);
+				vs[2] = planck.Vec2(-6.299898028373718e-02, 2.545149326324463e-01);
+				vs[3] = planck.Vec2(-6.299898028373718e-02, -2.545155882835388e-01);
 				shape.SetAsArray(vs, 4);
 
 				fd.shape = shape;
 
-				bodies[6].CreateFixture(fd);
+				bodies[6].createFixture(fd);
 			}
 		}
 		{
-			var bd = new Box2D.Dynamics.b2BodyDef();
-			bd.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
+			bd.type = 'dynamic';
 			bd.position.Set(2.897095680236816e-02, 6.702435612678528e-01);
 			bodies[7] = world.CreateBody(bd);
 
 			{
-				var fd = new Box2D.Dynamics.b2FixtureDef();
+				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
 				fd.friction = Settings.PLAYER_FRICTION;
 				fd.restitution = Settings.PLAYER_RESTITUTION;
 				fd.density = Settings.PLAYER_DENSITY;
@@ -273,26 +273,26 @@ function (Parent, Box2D, Settings) {
 				fd.filter.groupIndex = -1;
 				var shape = new Box2D.Collision.Shapes.b2PolygonShape();
 				var vs = [];
-				vs[0] = new Box2D.Common.Math.b2Vec2(9.449830651283264e-02, -2.537839412689209e-01);
-				vs[1] = new Box2D.Common.Math.b2Vec2(9.449830651283264e-02, 2.537844777107239e-01);
-				vs[2] = new Box2D.Common.Math.b2Vec2(-9.449817240238190e-02, 2.537844777107239e-01);
-				vs[3] = new Box2D.Common.Math.b2Vec2(-9.449817240238190e-02, -2.537839412689209e-01);
+				vs[0] = planck.Vec2(9.449830651283264e-02, -2.537839412689209e-01);
+				vs[1] = planck.Vec2(9.449830651283264e-02, 2.537844777107239e-01);
+				vs[2] = planck.Vec2(-9.449817240238190e-02, 2.537844777107239e-01);
+				vs[3] = planck.Vec2(-9.449817240238190e-02, -2.537839412689209e-01);
 				shape.SetAsArray(vs, 4);
 
 				fd.shape = shape;
 
-				bodies[7].CreateFixture(fd);
+				bodies[7].createFixture(fd);
 			}
 		}
 		{
-			var bd = new Box2D.Dynamics.b2BodyDef();
-			bd.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
+			bd.type = 'dynamic';
 			bd.position.Set(-9.663248062133789e-02, 6.702435612678528e-01);
 
 			bodies[8] = world.CreateBody(bd);
 
 			{
-				var fd = new Box2D.Dynamics.b2FixtureDef();
+				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
 				fd.friction = Settings.PLAYER_FRICTION;
 				fd.restitution = Settings.PLAYER_RESTITUTION;
 				fd.density = Settings.PLAYER_DENSITY;
@@ -300,26 +300,26 @@ function (Parent, Box2D, Settings) {
 				fd.filter.groupIndex = -1;
 				var shape = new Box2D.Collision.Shapes.b2PolygonShape();
 				var vs = [];
-				vs[0] = new Box2D.Common.Math.b2Vec2(9.449842572212219e-02, -2.537839412689209e-01);
-				vs[1] = new Box2D.Common.Math.b2Vec2(9.449842572212219e-02, 2.537844777107239e-01);
-				vs[2] = new Box2D.Common.Math.b2Vec2(-9.449826925992966e-02, 2.537844777107239e-01);
-				vs[3] = new Box2D.Common.Math.b2Vec2(-9.449826925992966e-02, -2.537839412689209e-01);
+				vs[0] = planck.Vec2(9.449842572212219e-02, -2.537839412689209e-01);
+				vs[1] = planck.Vec2(9.449842572212219e-02, 2.537844777107239e-01);
+				vs[2] = planck.Vec2(-9.449826925992966e-02, 2.537844777107239e-01);
+				vs[3] = planck.Vec2(-9.449826925992966e-02, -2.537839412689209e-01);
 				shape.SetAsArray(vs, 4);
 
 				fd.shape = shape;
 
-				bodies[8].CreateFixture(fd);
+				bodies[8].createFixture(fd);
 			}
 		}
 		{
-			var bd = new Box2D.Dynamics.b2BodyDef();
-			bd.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
+			bd.type = 'dynamic';
 			bd.position.Set(2.897095680236816e-02, 3.554300665855408e-01);
 
 			bodies[9] = world.CreateBody(bd);
 
 			{
-				var fd = new Box2D.Dynamics.b2FixtureDef();
+				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
 				fd.friction = Settings.PLAYER_FRICTION;
 				fd.restitution = Settings.PLAYER_RESTITUTION;
 				fd.density = Settings.PLAYER_DENSITY;
@@ -327,18 +327,18 @@ function (Parent, Box2D, Settings) {
 				fd.filter.groupIndex = -1;
 				var shape = new Box2D.Collision.Shapes.b2PolygonShape();
 				var vs = [];
-				vs[0] = new Box2D.Common.Math.b2Vec2(1.550965905189514e-01, -1.253567039966583e-01);
-				vs[1] = new Box2D.Common.Math.b2Vec2(1.550965905189514e-01, -6.225190684199333e-02);
-				vs[2] = new Box2D.Common.Math.b2Vec2(-9.268099069595337e-02, -6.225190684199333e-02);
-				vs[3] = new Box2D.Common.Math.b2Vec2(-9.268099069595337e-02, -1.253567039966583e-01);
+				vs[0] = planck.Vec2(1.550965905189514e-01, -1.253567039966583e-01);
+				vs[1] = planck.Vec2(1.550965905189514e-01, -6.225190684199333e-02);
+				vs[2] = planck.Vec2(-9.268099069595337e-02, -6.225190684199333e-02);
+				vs[3] = planck.Vec2(-9.268099069595337e-02, -1.253567039966583e-01);
 				shape.SetAsArray(vs, 4);
 
 				fd.shape = shape;
 
-				bodies[9].CreateFixture(fd);
+				bodies[9].createFixture(fd);
 			}
 			{
-				var fd = new Box2D.Dynamics.b2FixtureDef();
+				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
 				fd.friction = Settings.PLAYER_FRICTION;
 				fd.restitution = Settings.PLAYER_RESTITUTION;
 				fd.density = Settings.PLAYER_DENSITY;
@@ -346,29 +346,29 @@ function (Parent, Box2D, Settings) {
 				fd.filter.groupIndex = -1;
 				var shape = new Box2D.Collision.Shapes.b2PolygonShape();
 				var vs = [];
-				vs[0] = new Box2D.Common.Math.b2Vec2(9.449830651283264e-02, -1.247680261731148e-01);
-				vs[1] = new Box2D.Common.Math.b2Vec2(9.449830651283264e-02, 1.713046580553055e-01);
-				vs[2] = new Box2D.Common.Math.b2Vec2(-9.449817240238190e-02, 1.713046580553055e-01);
-				vs[3] = new Box2D.Common.Math.b2Vec2(-9.449817240238190e-02, -1.247680261731148e-01);
+				vs[0] = planck.Vec2(9.449830651283264e-02, -1.247680261731148e-01);
+				vs[1] = planck.Vec2(9.449830651283264e-02, 1.713046580553055e-01);
+				vs[2] = planck.Vec2(-9.449817240238190e-02, 1.713046580553055e-01);
+				vs[3] = planck.Vec2(-9.449817240238190e-02, -1.247680261731148e-01);
 				shape.SetAsArray(vs, 4);
 
 				fd.shape = shape;
 
-				bodies[9].CreateFixture(fd);
+				bodies[9].createFixture(fd);
 			}
 		}
 		/*{
 
 			ground body
 
-			var bd = new Box2D.Dynamics.b2BodyDef();
+			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
 			bd.type = b2BodyType(0);
 			bd.position.Set(3.118395805358887e-03, -6.553649902343750e-03);
 
 			bodies[10] = world.CreateBody(bd);
 
 			{
-				var fd = new Box2D.Dynamics.b2FixtureDef();
+				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
 				fd.friction = Settings.PLAYER_FRICTION;
 				fd.restitution = Settings.PLAYER_RESTITUTION;
 				fd.density = Settings.PLAYER_DENSITY;
@@ -376,8 +376,8 @@ function (Parent, Box2D, Settings) {
 				fd.filter.groupIndex = int16(0);
 				b2ChainShape shape;
 				b2Vec2 vs[2];
-				vs[0] = new Box2D.Common.Math.b2Vec2(-4.179394245147705e+00, 0.000000000000000e+00);
-				vs[1] = new Box2D.Common.Math.b2Vec2(4.179394245147705e+00, 0.000000000000000e+00);
+				vs[0] = planck.Vec2(-4.179394245147705e+00, 0.000000000000000e+00);
+				vs[1] = planck.Vec2(4.179394245147705e+00, 0.000000000000000e+00);
 				shape.CreateChain(vs, 2);
 				shape.m_prevVertex.Set(-1.998532295227051e+00, -2.391039296991059e-23);
 				shape.m_nextVertex.Set(4.949933242915726e-38, 3.363116314379561e-44);
@@ -386,7 +386,7 @@ function (Parent, Box2D, Settings) {
 
 				fd.shape = shape;
 
-				bodies[10].CreateFixture(fd);
+				bodies[10].createFixture(fd);
 			}
 		}*/
 		{
@@ -548,7 +548,7 @@ function (Parent, Box2D, Settings) {
 			lowerRightLeg: bodies[9]
 		};
 
-		this.body.SetPosition(new Box2D.Common.Math.b2Vec2(20,0));
+		this.body.SetPosition(planck.Vec2(20,0));
 	};
 
 	RagDoll.prototype.destroy = function() {

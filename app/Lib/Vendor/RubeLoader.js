@@ -1,5 +1,5 @@
 define([
-	"Lib/Vendor/Box2D",
+    "Lib/Vendor/Planck",
 ], 
 
 /*
@@ -72,7 +72,7 @@ function (Box2D) {
 		ClipVertex = Box2D.Collision.ClipVertex,
 		Features = Box2D.Collision.Features,
 		IBroadPhase = Box2D.Collision.IBroadPhase;
-		b2_dynamicBody = Box2D.Dynamics.b2Body.b2_dynamicBody;
+		b2_dynamicBody = 'dynamic';
 		b2ControllerEdge = Box2D.Dynamics.Controllers.b2ControllerEdge,
 		IBroadPhase = Box2D.Collision.IBroadPhase,
 		b2CircleContact = Box2D.Dynamics.Contacts.b2CircleContact,
@@ -194,7 +194,7 @@ function (Box2D) {
 	        fd.shape.m_radius = fixtureJson.circle.radius;
 	        if ( fixtureJson.circle.center )
 	            fd.shape.m_p.SetV(fixtureJson.circle.center);
-	        var fixture = body.CreateFixture(fd);        
+	        var fixture = body.createFixture(fd);        
 	        if ( fixtureJson.name )
 	            fixture.name = fixtureJson.name;
 	    }
@@ -206,7 +206,7 @@ function (Box2D) {
 	        for (v = fixtureJson.polygon.vertices.x.length - 1; v >= 0 ; v--) 
 	           verts.push( new b2Vec2( fixtureJson.polygon.vertices.x[v], -fixtureJson.polygon.vertices.y[v] ) );
 	        fd.shape.SetAsArray(verts, verts.length);
-	        var fixture = body.CreateFixture(fd);        
+	        var fixture = body.createFixture(fd);        
 	        if ( fixture && fixtureJson.name )
 	            fixture.name = fixtureJson.name;
 	    }
@@ -217,7 +217,7 @@ function (Box2D) {
 	            var thisVertex = new b2Vec2( fixtureJson.chain.vertices.x[v], -fixtureJson.chain.vertices.y[v] );
 	            if ( v < fixtureJson.chain.vertices.x.length - 1 ) {
 	                fd.shape.SetAsEdge( lastVertex, thisVertex );
-	                var fixture = body.CreateFixture(fd);        
+	                var fixture = body.createFixture(fd);        
 	                if ( fixtureJson.name )
 	                    fixture.name = fixtureJson.name;
 	            }

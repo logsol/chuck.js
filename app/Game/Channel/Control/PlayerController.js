@@ -53,8 +53,8 @@ function(Parent, nc, Parser, Settings) {
         }
 
         var difference = {
-            x: Math.abs(update.p.x - this.player.doll.body.GetPosition().x),
-            y: Math.abs(update.p.y - this.player.doll.body.GetPosition().y)
+            x: Math.abs(update.p.x - this.player.doll.body.getPosition().x),
+            y: Math.abs(update.p.y - this.player.doll.body.getPosition().y)
         };
 
         if(difference.x < Settings.PUNKBUSTER_DIFFERENCE_METERS &&
@@ -67,8 +67,8 @@ function(Parent, nc, Parser, Settings) {
             var body = this.player.doll.body;
 
             var options = {
-                p: body.GetPosition(),
-                lv: body.GetLinearVelocity()
+                p: body.getPosition(),
+                lv: body.getLinearVelocity()
             };
 
             nc.trigger(nc.ns.channel.to.client.user.gameCommand.send + this.player.id, "positionStateReset", options);

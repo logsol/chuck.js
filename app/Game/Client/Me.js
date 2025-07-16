@@ -65,8 +65,8 @@ function (Parent, Settings, nc, Assert, PlayerController) {
         }
 
 		var difference = {
-			x: Math.abs(this.lastServerPositionState.p.x - this.doll.body.GetPosition().x),
-			y: Math.abs(this.lastServerPositionState.p.y - this.doll.body.GetPosition().y)
+			x: Math.abs(this.lastServerPositionState.p.x - this.doll.body.getPosition().x),
+			y: Math.abs(this.lastServerPositionState.p.y - this.doll.body.getPosition().y)
 		};
 
 		if(difference.x > Settings.ME_STATE_MAX_DIFFERENCE_METERS ||
@@ -78,8 +78,8 @@ function (Parent, Settings, nc, Assert, PlayerController) {
 
     Me.prototype.getPositionStateOverride = function() {
     	return {
-    		p: this.doll.body.GetPosition().Copy(),
-    		lv: this.doll.body.GetLinearVelocity().Copy()
+    		p: this.doll.body.getPosition().clone(),
+    		lv: this.doll.body.getLinearVelocity().clone()
     	};
     };
 
@@ -91,8 +91,8 @@ function (Parent, Settings, nc, Assert, PlayerController) {
     Me.prototype.resetPositionState = function(options) {
         Assert.number(options.p.x, options.p.y);
         Assert.number(options.lv.x, options.lv.y);
-        this.doll.body.SetPosition(options.p);
-        this.doll.body.SetLinearVelocity(options.lv);
+        this.doll.body.setPosition(options.p);
+        this.doll.body.setLinearVelocity(options.lv);
     };
 
     Me.prototype.createAndAddArrow = function() {

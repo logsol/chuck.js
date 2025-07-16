@@ -1,7 +1,7 @@
 define([
 	"Game/Core/GameObjects/Doll",
     "Game/Channel/GameObjects/Item",
-    "Lib/Vendor/Box2D",
+    "Lib/Vendor/Planck",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Assert"
 ],
@@ -42,14 +42,14 @@ function (Parent, Item, Box2D, nc, Assert) {
         Parent.prototype.onImpact.call(this, isColliding, fixture);
 
         if(isColliding) {
-            var otherBody = fixture.GetBody();
+                            var otherBody = fixture.getBody();
             if(otherBody) {
-                var item = otherBody.GetUserData();
+                var item = otherBody.getUserData();
                 if(item instanceof Item) {
-                    var itemVelocity = item.body.GetLinearVelocity();
-                    //var itemMass = item.body.GetMass();
+                    var itemVelocity = item.body.getLinearVelocity();
+                    //var itemMass = item.body.getMass();
 
-                    var ownVelocity = this.body.GetLinearVelocity();
+                    var ownVelocity = this.body.getLinearVelocity();
 
                     var b2Math = Box2D.Common.Math.b2Math;
                     var absItemVelocity = b2Math.AbsV(itemVelocity);
@@ -97,9 +97,9 @@ function (Parent, Item, Box2D, nc, Assert) {
         if(!this.isAnotherPlayerNearby()) {
             Assert.number(update.p.x, update.p.y);
             Assert.number(update.lv.x, update.lv.y);
-            this.body.SetAwake(true);
-            this.body.SetPosition(update.p);
-            this.body.SetLinearVelocity(update.lv);
+            this.body.setAwake(true);
+            this.body.setPosition(update.p);
+            this.body.setLinearVelocity(update.lv);
         }
     };
 

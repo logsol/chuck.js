@@ -59,9 +59,9 @@ function (Parent, Settings, nc, Layer) {
             this.layerId,
             this.mesh,
             {
-                x: this.body.GetPosition().x * Settings.RATIO,
-                y: this.body.GetPosition().y * Settings.RATIO,
-                rotation: this.body.GetAngle()
+                            x: this.body.getPosition().x * Settings.RATIO,
+            y: this.body.getPosition().y * Settings.RATIO,
+                rotation: this.body.getAngle()
             }
         );
     }

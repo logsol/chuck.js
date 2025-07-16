@@ -1,6 +1,6 @@
 define([
     "Game/Core/GameController",
-    "Lib/Vendor/Box2D",
+    "Lib/Vendor/Planck",
     "Game/Client/Physics/Engine", 
     "Game/Client/View/ViewManager", 
     "Game/Client/Control/PlayerController", 
@@ -49,6 +49,7 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, nc, reque
 
         this.animationRequestId = requestAnimFrame(this.update.bind(this));
         this.physicsEngine.update();
+        this.physicsEngine.renderDebug(); // Render Planck.js debug draw
         
         if(this.me) {
             this.me.update();

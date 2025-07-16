@@ -173,9 +173,9 @@ function (Parent, Layer, Settings, nc) {
             this.layerId,
             this.mesh,
             {
-                x: this.body.GetPosition().x * Settings.RATIO,
-                y: this.body.GetPosition().y * Settings.RATIO,
-                rotation: this.body.GetAngle()
+                x: this.body.getPosition().x * Settings.RATIO,
+                y: this.body.getPosition().y * Settings.RATIO,
+                rotation: this.body.getAngle()
             }
         );
 
@@ -186,9 +186,9 @@ function (Parent, Layer, Settings, nc) {
                         this.layerId,
                         this.limbMeshes[name],
                         {
-                            x: this.limbs[name].GetPosition().x * Settings.RATIO,
-                            y: this.limbs[name].GetPosition().y * Settings.RATIO,
-                            rotation: this.limbs[name].GetAngle()
+                                                x: this.limbs[name].getPosition().x * Settings.RATIO,
+                    y: this.limbs[name].getPosition().y * Settings.RATIO,
+                            rotation: this.limbs[name].getAngle()
                         }
                     );
                 }

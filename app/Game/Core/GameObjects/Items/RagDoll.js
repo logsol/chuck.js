@@ -1,6 +1,6 @@
 define([
 	"Game/" + GLOBALS.context + "/GameObjects/Item",
-	"Lib/Vendor/Box2D",
+	"Lib/Vendor/Planck",
 	"Game/Config/Settings",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Assert",
@@ -174,17 +174,17 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
     };
 
     RagDoll.prototype.getPosition = function() {
-        return this.body.GetPosition().Copy();
+        return this.body.GetPosition().clone();
     };
 
     RagDoll.prototype.getHeadPosition = function() {
-        return this.limbs.head.GetPosition().Copy();
+        return this.limbs.head.GetPosition().clone();
     };
 
     RagDoll.prototype.getBodyDef = function() {
         var bodyDef = Parent.prototype.getBodyDef.call(this);
         bodyDef.linearDamping = Settings.PLAYER_LINEAR_DAMPING;
-        bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+        bodyDef.type = 'dynamic';
         bodyDef.position.y -= this.options.height / 2 / Settings.RATIO; // position it on top of ground
 
         return bodyDef;
@@ -199,11 +199,10 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
         fixtureDef.restitution = Settings.PLAYER_RESTITUTION;
         fixtureDef.filter.groupIndex = -this.getId();
 
-        var shape = new Box2D.Collision.Shapes.b2PolygonShape();
-        shape.SetAsOrientedBox(
+        var shape = planck.Box(
             this.options.limbs.chest.width / 2 / Settings.RATIO,
             this.options.limbs.chest.height / 2 / Settings.RATIO,
-            new Box2D.Common.Math.b2Vec2(0, 0)
+            planck.Vec2(0, 0)
         );
 
         fixtureDef.shape = shape;
@@ -217,10 +216,9 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
         var w = this.options.width / Settings.RATIO;
         var h = this.options.height / Settings.RATIO;
 
-        var itemShape = new Box2D.Collision.Shapes.b2PolygonShape();
-        itemShape.SetAsOrientedBox(w / 2, h / 2, new Box2D.Common.Math.b2Vec2(0, 0));
+        var itemShape = planck.Box(w / 2, h / 2, planck.Vec2(0, 0));
 
-        var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
+        var fixtureDef = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
         fixtureDef.shape = itemShape;
         fixtureDef.isSensor = true;
 
@@ -228,7 +226,7 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
             onCollisionChange: this.onCollisionChange.bind(this)
         };
 
-        this.body.CreateFixture(fixtureDef);
+        this.body.createFixture(fixtureDef);
     };
 
     RagDoll.prototype.addHead = function() {
@@ -239,17 +237,15 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
         var x = this.options.x + this.options.limbs.head.x,
             y = this.options.y + this.options.limbs.head.y - this.options.height / 2; // position it on top of ground;
 
-        var bodyDef = new Box2D.Dynamics.b2BodyDef();
-        bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
-        bodyDef.position.x = x / Settings.RATIO;
-        bodyDef.position.y = y / Settings.RATIO;
-        bodyDef.angle = 0;
+        var bodyDef = { 
+            type: 'dynamic',
+            position: planck.Vec2(x / Settings.RATIO, y / Settings.RATIO),
+            angle: 0
+        };
 
-        var shape = new Box2D.Collision.Shapes.b2CircleShape();
-        shape.SetRadius(this.options.limbs.head.width / 2 / Settings.RATIO);
-        shape.SetLocalPosition(new Box2D.Common.Math.b2Vec2(0, 0));
+        var shape = planck.Circle(this.options.limbs.head.width / 2 / Settings.RATIO, planck.Vec2(0, 0));
 
-        var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
+        var fixtureDef = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
         fixtureDef.density = Settings.PLAYER_DENSITY;
         fixtureDef.friction = Settings.PLAYER_FRICTION;
         fixtureDef.restitution = Settings.PLAYER_RESTITUTION;
@@ -258,7 +254,7 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
         fixtureDef.filter.groupIndex = -this.getId();
 
         var head = this.body.GetWorld().CreateBody(bodyDef);
-        head.CreateFixture(fixtureDef);
+        head.createFixture(fixtureDef);
         
         this.limbs.head = head;
 
@@ -271,7 +267,7 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
         var jointDef = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
         jointDef.enableMotor = false;
 
-        var pos = this.body.GetWorldCenter().Copy();
+        var pos = this.body.getWorldCenter().clone();
         pos.y -= this.options.limbs.chest.height / 2 / Settings.RATIO;
         jointDef.Initialize(this.body, head, pos);
         jointDef.lowerAngle = -0.25 * Box2D.Common.b2Settings.b2_pi; // -45 degrees
@@ -290,21 +286,20 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
         var x = this.options.x + this.options.limbs[name].x,
             y = this.options.y + this.options.limbs[name].y - this.options.height / 2; // position it on top of ground;;
 
-        var bodyDef = new Box2D.Dynamics.b2BodyDef();
-        bodyDef.linearDamping = Settings.PLAYER_LINEAR_DAMPING;
-        bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
-        bodyDef.position.x = x / Settings.RATIO;
-        bodyDef.position.y = y / Settings.RATIO;
-        bodyDef.angle = 0;
+        var bodyDef = { 
+            type: 'dynamic',
+            position: planck.Vec2(x / Settings.RATIO, y / Settings.RATIO),
+            angle: 0,
+            linearDamping: Settings.PLAYER_LINEAR_DAMPING
+        };
 
-        var shape = new Box2D.Collision.Shapes.b2PolygonShape();
-        shape.SetAsOrientedBox(
+        var shape = planck.Box(
             this.options.limbs[name].width / 2 / Settings.RATIO,
             this.options.limbs[name].height / 2 / Settings.RATIO,
-            new Box2D.Common.Math.b2Vec2(0, this.options.limbs[name].height / 2 / Settings.RATIO)
+            planck.Vec2(0, this.options.limbs[name].height / 2 / Settings.RATIO)
         );
 
-        var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
+        var fixtureDef = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
         fixtureDef.density = Settings.PLAYER_DENSITY;
         fixtureDef.friction = Settings.PLAYER_FRICTION;
         fixtureDef.restitution = Settings.PLAYER_RESTITUTION;
@@ -313,14 +308,14 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
         fixtureDef.filter.groupIndex = -this.getId();
 
         var limb = this.body.GetWorld().CreateBody(bodyDef);
-        limb.CreateFixture(fixtureDef);
+        limb.createFixture(fixtureDef);
         
         this.limbs[name] = limb;
 
         var jointDef = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
         jointDef.enableMotor = false;
 
-        var pos = connectTo.GetWorldCenter().Copy();
+        var pos = connectTo.getWorldCenter().clone();
         pos.x += (xOffset / Settings.RATIO);
         pos.y += (yOffset / Settings.RATIO);
         jointDef.Initialize(connectTo, limb, pos);
@@ -347,7 +342,7 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
 
         var chestPosition = this.body.GetPosition();
 
-        var position = new Box2D.Common.Math.b2Vec2(
+        var position = planck.Vec2(
             chestPosition.x + this.options.limbs.head.x / Settings.RATIO,
             chestPosition.y + this.options.limbs.head.y / Settings.RATIO
         );
@@ -370,7 +365,7 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
         Assert.number(options.angularVelocity);
 
         this.body.SetLinearVelocity(options.linearVelocity);
-        this.body.SetAngularVelocity(options.angularVelocity);
+        this.body.setAngularVelocity(options.angularVelocity);
         for(var name in this.limbs) {
             this.limbs[name].SetLinearVelocity(options.linearVelocity);
         }

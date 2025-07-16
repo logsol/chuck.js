@@ -24,7 +24,7 @@ function (Settings, planck, CollisionDetector, nc) {
     Engine.prototype.setCollisionDetector = function () {
         
         var detector = new CollisionDetector(); 
-        this.world.on('begin-contact', detector.getListener());
+        detector.setupWorldEvents(this.world);
     }
 
     Engine.prototype.getWorldForRubeLoader = function() {

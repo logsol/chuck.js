@@ -51,11 +51,11 @@ function (planck, Exception, Assert, nc) {
         Assert.number(update.lv.x, update.lv.y);
         Assert.number(update.av);
 
-        this.body.SetAwake(true);
-        this.body.SetPosition(update.p);
-        this.body.SetAngle(update.a);
-        this.body.SetLinearVelocity(update.lv);
-        this.body.SetAngularVelocity(update.av);
+        this.body.setAwake(true);
+        this.body.setPosition(update.p);
+        this.body.setAngle(update.a);
+        this.body.setLinearVelocity(update.lv);
+        this.body.setAngularVelocity(update.av);
     };
  
     return GameObject;
