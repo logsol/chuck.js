@@ -110,45 +110,45 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
             }
         });
 
-        // // Grab sensors (left/right)
-        // ["left", "right"].forEach(side => {
-        //     const sign = side === "left" ? -1 : 1;
-        //     addFixture({
-        //         shape: planck.Box(
-        //             r / 2 / R,
-        //             (h / 2 + r / 4) / R,
-        //             planck.Vec2(sign * r / 2 / R, h / 2 / R)
-        //         ),
-        //         density: 0,
-        //         friction: 0,
-        //         restitution: 0,
-        //         isSensor: true,
-        //         userData: {
-        //             onCollisionChange: function(isColliding, fixture) {
-        //                 self.onFixtureWithinReach(isColliding, side, fixture);
-        //             }
-        //         }
-        //     });
-        // });
+        // Grab sensors (left/right)
+        ["left", "right"].forEach(side => {
+            const sign = side === "left" ? -1 : 1;
+            addFixture({
+                shape: planck.Box(
+                    r / 2 / R,
+                    (h / 2 + r / 4) / R,
+                    planck.Vec2(sign * r / 2 / R, h / 2 / R)
+                ),
+                density: 0,
+                friction: 0,
+                restitution: 0,
+                isSensor: true,
+                userData: {
+                    onCollisionChange: function(isColliding, fixture) {
+                        self.onFixtureWithinReach(isColliding, side, fixture);
+                    }
+                }
+            });
+        });
 
-        // // Area sensor
-        // addFixture({
-        //     shape: planck.Box((w + a) / 2 / R, (h + a) / 2 / R, planck.Vec2(0, h / 2 / R)),
-        //     density: 0,
-        //     friction: 0,
-        //     restitution: 0,
-        //     isSensor: true,
-        //     userData: {
-        //         onCollisionChange: function(isColliding, fixture) {
-        //             var userData = fixture.getBody().getUserData();
-        //             if (userData instanceof Doll) {
-        //                 var i = self.nearbyDolls.indexOf(userData);
-        //                 if (isColliding && i === -1) self.nearbyDolls.push(userData);
-        //                 else if (!isColliding && i !== -1) self.nearbyDolls.splice(i, 1);
-        //             }
-        //         }
-        //     }
-        // });
+        // Area sensor
+        addFixture({
+            shape: planck.Box((w + a) / 2 / R, (h + a) / 2 / R, planck.Vec2(0, h / 2 / R)),
+            density: 0,
+            friction: 0,
+            restitution: 0,
+            isSensor: true,
+            userData: {
+                onCollisionChange: function(isColliding, fixture) {
+                    var userData = fixture.getBody().getUserData();
+                    if (userData instanceof Doll) {
+                        var i = self.nearbyDolls.indexOf(userData);
+                        if (isColliding && i === -1) self.nearbyDolls.push(userData);
+                        else if (!isColliding && i !== -1) self.nearbyDolls.splice(i, 1);
+                    }
+                }
+            }
+        });
     };
 
     Doll.prototype.setActionState = function(state) {
