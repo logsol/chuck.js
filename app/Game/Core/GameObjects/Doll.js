@@ -411,7 +411,7 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
             var edge = self.body.getContactList();
             while (edge) {
                 var contact = edge.contact;
-                if(!contact.IsTouching()) {
+                if(!contact.isTouching()) {
                     edge = edge.next;
                     continue;
                 }
