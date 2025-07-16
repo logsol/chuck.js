@@ -1,20 +1,18 @@
 define([
     "Game/Config/Settings",
-    "Lib/Vendor/Box2D",
+    "Lib/Vendor/Planck",
     "Game/" + GLOBALS.context + "/Collision/Detector",
     "Lib/Utilities/NotificationCenter"
 ],
 
-function (Settings, Box2D, CollisionDetector, nc) {
+function (Settings, planck, CollisionDetector, nc) {
 
 	"use strict";
 
     function Engine () {
-        this.world = new Box2D.Dynamics.b2World(
-            new Box2D.Common.Math.b2Vec2(0, Settings.BOX2D_GRAVITY),
-            Settings.BOX2D_ALLOW_SLEEP
-        );
-        this.world.SetWarmStarting(true);
+        this.world = planck.World({
+            gravity: planck.Vec2(0, Settings.BOX2D_GRAVITY)
+        });
         this.lastStep = Date.now();
         this.worldQueue = [];
 
@@ -26,7 +24,7 @@ function (Settings, Box2D, CollisionDetector, nc) {
     Engine.prototype.setCollisionDetector = function () {
         
         var detector = new CollisionDetector(); 
-        this.world.SetContactListener(detector.getListener());
+        this.world.on('begin-contact', detector.getListener());
     }
 
     Engine.prototype.getWorldForRubeLoader = function() {
@@ -34,11 +32,11 @@ function (Settings, Box2D, CollisionDetector, nc) {
     };
 
     Engine.prototype.createBody = function (bodyDef) {
-        return this.world.CreateBody(bodyDef);
+        return this.world.createBody(bodyDef);
     }
 
     Engine.prototype.destroyBody = function (body) {
-        return this.world.DestroyBody(body);
+        return this.world.destroyBody(body);
     }
 
     Engine.prototype.addToWorldQueue = function(callback) {
@@ -55,9 +53,9 @@ function (Settings, Box2D, CollisionDetector, nc) {
 
     Engine.prototype.update = function () {
         var stepLength = (Date.now() - this.lastStep) / 1000;
-        this.world.Step(stepLength, Settings.BOX2D_VELOCITY_ITERATIONS, Settings.BOX2D_POSITION_ITERATIONS);
+        this.world.step(stepLength, Settings.BOX2D_VELOCITY_ITERATIONS, Settings.BOX2D_POSITION_ITERATIONS);
         this.lastStep = Date.now();
-        this.world.ClearForces();
+        this.world.clearForces();
         this.processWorldQueue();
     }
 

@@ -1,13 +1,13 @@
 define([
 	"Game/" + GLOBALS.context + "/GameObjects/GameObject",
-	"Lib/Vendor/Box2D",
+	"Lib/Vendor/Planck",
 	"Game/Config/Settings",
     "Lib/Utilities/Exception",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Assert"
 ],
  
-function (Parent, Box2D, Settings, Exception, nc, Assert) {
+function (Parent, planck, Settings, Exception, nc, Assert) {
 
 	"use strict";
  
@@ -23,27 +23,30 @@ function (Parent, Box2D, Settings, Exception, nc, Assert) {
         Assert.number(this.options.x, this.options.y);
         Assert.number(this.options.r);
 
-    	var bodyDef = new Box2D.Dynamics.b2BodyDef();
-        bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
-        bodyDef.position.x = (this.options.x * Settings.TILE_SIZE + Settings.TILE_SIZE / 2) / Settings.RATIO;
-        bodyDef.position.y = (this.options.y * Settings.TILE_SIZE + Settings.TILE_SIZE / 2) / Settings.RATIO;
-        bodyDef.angle = (this.options.r || 0) * 90 * Math.PI / 180;
+    	var bodyDef = {
+            type: 'static',
+            position: planck.Vec2(
+                (this.options.x * Settings.TILE_SIZE + Settings.TILE_SIZE / 2) / Settings.RATIO,
+                (this.options.y * Settings.TILE_SIZE + Settings.TILE_SIZE / 2) / Settings.RATIO
+            ),
+            angle: (this.options.r || 0) * 90 * Math.PI / 180
+        };
 
         return bodyDef;
     };
 
     Tile.prototype.createPhysicTile = function (tile) {
         var vertices = this.createVertices(tile);
-        var tileShape = new Box2D.Collision.Shapes.b2PolygonShape();
-        tileShape.SetAsArray(vertices, vertices.length);
+        var tileShape = planck.Polygon(vertices);
 
-        var fixtureDef = new Box2D.Dynamics.b2FixtureDef();
-        fixtureDef.shape = tileShape;
-        fixtureDef.density = 0;
-        fixtureDef.friction = Settings.TILE_FRICTION;
-        fixtureDef.restitution = Settings.TILE_RESTITUTION;
-        fixtureDef.isSensor = false;
-        this.body.CreateFixture(fixtureDef);
+        var fixtureDef = {
+            shape: tileShape,
+            density: 0,
+            friction: Settings.TILE_FRICTION,
+            restitution: Settings.TILE_RESTITUTION,
+            isSensor: false
+        };
+        this.body.createFixture(fixtureDef);
     };
 
     Tile.prototype.createVertices = function (tile) {
@@ -115,7 +118,7 @@ function (Parent, Box2D, Settings, Exception, nc, Assert) {
     };
 
     Tile.prototype.addVec = function (vs, m1, m2) {
-        return vs.push(new Box2D.Common.Math.b2Vec2(this.mkArg(m1), this.mkArg(m2)));
+        return vs.push(planck.Vec2(this.mkArg(m1), this.mkArg(m2)));
     };
  
     return Tile;

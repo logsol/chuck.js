@@ -1,7 +1,7 @@
 define([
     "Game/" + GLOBALS.context + "/GameObjects/GameObject",
     "Lib/Utilities/Exception",
-    "Lib/Vendor/Box2D", 
+    "Lib/Vendor/Planck", 
     "Game/Config/Settings", 
     "Game/" + GLOBALS.context + "/Collision/Detector",
     "Game/" + GLOBALS.context + "/GameObjects/Item",
@@ -9,7 +9,7 @@ define([
     "Lib/Utilities/Assert"
 ], 
 
-function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, nc, Assert) {
+function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Assert) {
 
 	"use strict";
 
@@ -51,12 +51,12 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, nc, Asser
     Doll.prototype = Object.create(Parent.prototype);
 
     Doll.prototype.getBodyDef = function() {
-        var bodyDef = new Box2D.Dynamics.b2BodyDef();
-        bodyDef.position.x = 0;
-        bodyDef.position.y = 0;
-        bodyDef.fixedRotation = true;
-        bodyDef.linearDamping = Settings.PLAYER_LINEAR_DAMPING;
-        bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+        var bodyDef = {
+            position: planck.Vec2(0, 0),
+            fixedRotation: true,
+            linearDamping: Settings.PLAYER_LINEAR_DAMPING,
+            type: 'dynamic'
+        };
         return bodyDef;
     };
 
@@ -83,7 +83,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, nc, Asser
             onCollisionChange: this.onImpact.bind(this)
         };
 
-        this.body.CreateFixture(fixtureDef);
+        this.body.createFixture(fixtureDef);
 
         var bodyShape = new Box2D.Collision.Shapes.b2PolygonShape();
         bodyShape.SetAsOrientedBox(
@@ -93,7 +93,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, nc, Asser
         );
         fixtureDef.shape = bodyShape;
         fixtureDef.isSensor = false;
-        this.body.CreateFixture(fixtureDef);
+        this.body.createFixture(fixtureDef);
 
         var legsShape = new Box2D.Collision.Shapes.b2CircleShape();
         legsShape.SetRadius(this.width / 2 / Settings.RATIO);
@@ -102,7 +102,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, nc, Asser
         fixtureDef.friction = Settings.PLAYER_FRICTION;
         fixtureDef.isSensor = false;
 
-        this.legs = this.body.CreateFixture(fixtureDef);
+        this.legs = this.body.createFixture(fixtureDef);
 
         fixtureDef.density = 0;
 
@@ -116,7 +116,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, nc, Asser
             onCollisionChange: this.onFootSensorDetection.bind(this)
         };
 
-        this.footSensor = this.body.CreateFixture(fixtureDef);
+        this.footSensor = this.body.createFixture(fixtureDef);
 
         var grabSensorLeftShape = new Box2D.Collision.Shapes.b2PolygonShape();
         grabSensorLeftShape.SetAsOrientedBox(
@@ -134,7 +134,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, nc, Asser
                 self.onFixtureWithinReach(isColliding, "left", fixture);
             }
         };
-        this.body.CreateFixture(fixtureDef);
+        this.body.createFixture(fixtureDef);
 
         var grabSensorRightShape = new Box2D.Collision.Shapes.b2PolygonShape();
         grabSensorRightShape.SetAsOrientedBox(
@@ -154,7 +154,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, nc, Asser
             }
         };
 
-        this.body.CreateFixture(fixtureDef);
+        this.body.createFixture(fixtureDef);
 
         // Area Sensor
         var areaSensorShape = new Box2D.Collision.Shapes.b2PolygonShape();
@@ -188,7 +188,7 @@ function (Parent, Exception, Box2D, Settings, CollisionDetector, Item, nc, Asser
             }
         };
 
-        this.body.CreateFixture(fixtureDef);
+        this.body.createFixture(fixtureDef);
     };
 
     Doll.prototype.setActionState = function(state) {

@@ -1,11 +1,11 @@
 define([
-    "Lib/Vendor/Box2D",
+    "Lib/Vendor/Planck",
     "Lib/Utilities/Exception",
     "Lib/Utilities/Assert",
     "Lib/Utilities/NotificationCenter"
 ],
  
-function (Box2D, Exception, Assert, nc) {
+function (planck, Exception, Assert, nc) {
 
 	"use strict";
  
@@ -27,8 +27,8 @@ function (Box2D, Exception, Assert, nc) {
 
     GameObject.prototype.destroy = function() {
         
-        if(this.body instanceof Box2D.Dynamics.b2Body) {
-            this.body.GetWorld().DestroyBody(this.body);   
+        if(this.body) {
+            this.body.getWorld().destroyBody(this.body);   
         } else {
             throw new Exception("can not destroy body");
         }
@@ -40,8 +40,8 @@ function (Box2D, Exception, Assert, nc) {
     	return this.body;
     };
 
-    GameObject.prototype.getPosition = function() {
-        return this.body.GetPosition().Copy();
+        GameObject.prototype.getPosition = function() {
+    	return this.body.getPosition().clone();
     };
 
     GameObject.prototype.setUpdateData = function(update) {
