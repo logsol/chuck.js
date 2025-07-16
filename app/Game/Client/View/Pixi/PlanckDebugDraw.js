@@ -10,6 +10,8 @@ function (Settings) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.scale = Settings.RATIO;
+        this.cameraPos = { x: 0, y: 0 };
+        this.cameraZoom = 1;
         this.flags = {
             shapes: true,
             joints: false,
@@ -23,12 +25,23 @@ function (Settings) {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     };
 
+    PlanckDebugDraw.prototype.setTransform = function(cameraPos, zoom) {
+        this.cameraPos = cameraPos;
+        this.cameraZoom = zoom || 1;
+    };
+
     PlanckDebugDraw.prototype.drawWorld = function(world) {
         if (!this.flags.shapes) return;
 
         this.ctx.save();
-        this.ctx.scale(this.scale, this.scale);
-        this.ctx.lineWidth = 1 / this.scale;
+        
+        // Apply camera transformations like the game layers do
+        var transformedX = this.cameraPos.x * this.cameraZoom + Settings.STAGE_WIDTH / 2;
+        var transformedY = this.cameraPos.y * this.cameraZoom + Settings.STAGE_HEIGHT / 2;
+        
+        this.ctx.translate(transformedX, transformedY);
+        this.ctx.scale(this.scale * this.cameraZoom, this.scale * this.cameraZoom);
+        this.ctx.lineWidth = 0.5 / this.scale;
 
         // Iterate through all bodies
         for (var body = world.getBodyList(); body; body = body.getNext()) {
@@ -37,6 +50,11 @@ function (Settings) {
             // Iterate through all fixtures
             for (var fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
                 var shape = fixture.getShape();
+                
+                // Skip sensor fixtures to match old Box2D behavior
+                if (fixture.isSensor()) {
+                    continue;
+                }
                 
                 if (body.isDynamic()) {
                     this.ctx.strokeStyle = '#ff0000'; // Red for dynamic bodies

@@ -32,6 +32,11 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, nc, reque
 
         Parent.call(this, options);
 
+        // Set reference to this GameController in the physics engine for camera access
+        if (this.physicsEngine && this.physicsEngine.setGameController) {
+            this.physicsEngine.setGameController(this);
+        }
+
         this.ncTokens = this.ncTokens.concat([
             nc.on(nc.ns.client.game.gameStats.toggle, this.toggleGameStats, this)
         ]);

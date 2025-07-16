@@ -32,6 +32,20 @@ function (Planck) {
         var userDataA = contact.getFixtureA().getUserData();
         var userDataB = contact.getFixtureB().getUserData();
 
+        // Check if this is a foot sensor collision
+        var isFootSensorCollision = false;
+        var footSensorUserData = null;
+        
+        if (userDataA && userDataA.isFootSensor) {
+            isFootSensorCollision = true;
+            footSensorUserData = userDataA;
+        }
+        
+        if (userDataB && userDataB.isFootSensor) {
+            isFootSensorCollision = true;
+            footSensorUserData = userDataB;
+        }
+
         if (userDataA && userDataA.onCollisionChange) {
             userDataA.onCollisionChange(isColliding, contact.getFixtureB());
         } 

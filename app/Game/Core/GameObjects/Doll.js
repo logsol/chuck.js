@@ -105,20 +105,26 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
 
         this.legs = this.body.createFixture(fixtureDef);
 
-        fixtureDef.density = 0;
+        // Create a fresh fixture definition for the foot sensor
+        var footSensorDef = {
+            shape: null,
+            density: 0,
+            friction: 0,
+            restitution: 0,
+            isSensor: true,
+            userData: {
+                onCollisionChange: this.onFootSensorDetection.bind(this),
+                isFootSensor: true
+            }
+        };
 
         var feetShape = planck.Circle(
             (this.width - 1) / 2 / Settings.RATIO, // the -1 one prevents collisions with walls
-            planck.Vec2(0, 2 / Settings.RATIO) // 2 is offset into ground
+            planck.Vec2(0, -20 / Settings.RATIO) // 20 pixels down from center (dramatic test)
         );
-        fixtureDef.shape = feetShape;
-        fixtureDef.isSensor = true;
+        footSensorDef.shape = feetShape;
 
-        fixtureDef.userData = {
-            onCollisionChange: this.onFootSensorDetection.bind(this)
-        };
-
-        this.footSensor = this.body.createFixture(fixtureDef);
+        this.footSensor = this.body.createFixture(footSensorDef);
 
         var grabSensorLeftShape = planck.Box(
             this.reachDistance / 2 / Settings.RATIO,
@@ -312,7 +318,11 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
     };
 
     Doll.prototype.setStanding = function (isStanding) {
-        if (this.standing == isStanding) return;
+        if (this.standing == isStanding) {
+            console.log('setStanding called but no change needed, already:', isStanding);
+            return;
+        }
+        console.log('*** STANDING STATE CHANGE: ', this.standing, '->', isStanding, '***');
         this.standing = isStanding;
         if(isStanding) this.setActionState("stand");
     };
@@ -394,23 +404,23 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
         return this.nearbyDolls.length > 0;
     };
 
-    Doll.prototype.onFootSensorDetection = function(isColliding, fixture) { // jshint unused:false
-
+    Doll.prototype.onFootSensorDetection = function(isColliding, fixture) {
         var self = this;
 
         var hasJumpStartVelocity = this.body.getLinearVelocity().y < -Settings.JUMP_SPEED;
+        var currentVelocity = this.body.getLinearVelocity();
 
         if(isColliding) {
             if(!hasJumpStartVelocity) {
                 this.setStanding(true);
             }
         } else {
-
             var contactCount = 0;
 
             var edge = self.body.getContactList();
             while (edge) {
                 var contact = edge.contact;
+                
                 if(!contact.isTouching()) {
                     edge = edge.next;
                     continue;
