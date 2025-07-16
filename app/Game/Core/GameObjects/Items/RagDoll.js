@@ -253,7 +253,7 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
         fixtureDef.isSensor = false;
         fixtureDef.filter.groupIndex = -this.getId();
 
-        var head = this.body.GetWorld().CreateBody(bodyDef);
+        var head = this.body.getWorld().createBody(bodyDef);
         head.createFixture(fixtureDef);
         
         this.limbs.head = head;
@@ -269,12 +269,12 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
 
         var pos = this.body.getWorldCenter().clone();
         pos.y -= this.options.limbs.chest.height / 2 / Settings.RATIO;
-        jointDef.Initialize(this.body, head, pos);
+        jointDef.initialize(this.body, head, pos);
         jointDef.lowerAngle = -0.25 * Box2D.Common.b2Settings.b2_pi; // -45 degrees
         jointDef.upperAngle = 0.25 * Box2D.Common.b2Settings.b2_pi; // 45 degrees
         jointDef.enableLimit = true;
 
-        this.body.GetWorld().CreateJoint(jointDef);
+        this.body.getWorld().createJoint(jointDef);
     };
 
     RagDoll.prototype.addLimb = function(name, connectTo, xOffset, yOffset) {
@@ -307,7 +307,7 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
         fixtureDef.isSensor = false;
         fixtureDef.filter.groupIndex = -this.getId();
 
-        var limb = this.body.GetWorld().CreateBody(bodyDef);
+        var limb = this.body.getWorld().createBody(bodyDef);
         limb.createFixture(fixtureDef);
         
         this.limbs[name] = limb;
@@ -318,18 +318,18 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
         var pos = connectTo.getWorldCenter().clone();
         pos.x += (xOffset / Settings.RATIO);
         pos.y += (yOffset / Settings.RATIO);
-        jointDef.Initialize(connectTo, limb, pos);
+        jointDef.initialize(connectTo, limb, pos);
         jointDef.lowerAngle = -0.15 * Box2D.Common.b2Settings.b2_pi; // -45 degrees
         jointDef.upperAngle = 0.15 * Box2D.Common.b2Settings.b2_pi; // 45 degrees
         jointDef.enableLimit = true;
 
-        this.body.GetWorld().CreateJoint(jointDef);
+        this.body.getWorld().createJoint(jointDef);
     };
 
     RagDoll.prototype.detachHead = function() {
         var joint = this.limbs.head.GetJointList().joint;
         if(joint) {
-            this.body.GetWorld().DestroyJoint(joint);
+            this.body.getWorld().destroyJoint(joint);
         }
     };
 
@@ -373,10 +373,10 @@ function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
 
     RagDoll.prototype.destroy = function() {
 
-        var world = this.body.GetWorld();
+        var world = this.body.getWorld();
         
         for (var name in this.limbs) {
-            world.DestroyBody(this.limbs[name]);
+            world.destroyBody(this.limbs[name]);
         }
 
         Parent.prototype.destroy.call(this);

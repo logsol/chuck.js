@@ -10,7 +10,7 @@ function (Parent, Box2D, Settings) {
  
 	function RagDoll(physicsEngine, uid, options) {
 		Parent.call(this, physicsEngine, uid, options);
-		this.body.GetWorld().DestroyBody(this.body);
+		this.body.getWorld().destroyBody(this.body);
 		this.limbs = {};
 		this.initBodies();
 	}
@@ -19,7 +19,7 @@ function (Parent, Box2D, Settings) {
 
 	RagDoll.prototype.initBodies = function() {
 		
-		var world = this.body.GetWorld();
+		var world = this.body.getWorld();
 
 		var bodies = [];
 		var joints = [];
@@ -27,7 +27,7 @@ function (Parent, Box2D, Settings) {
 			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
 			bd.type = 'dynamic';
 			bd.position.Set(-1.917114257812500e-01, 1.433728694915771e+00);
-			bodies[0] = world.CreateBody(bd);
+			bodies[0] = world.createBody(bd);
 
 			{
 				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
@@ -53,7 +53,7 @@ function (Parent, Box2D, Settings) {
 			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
 			bd.type = 'dynamic';
 			bd.position.Set(-6.397294998168945e-02, 1.267420768737793e+00);
-			bodies[1] = world.CreateBody(bd);
+			bodies[1] = world.createBody(bd);
 
 			{
 				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
@@ -99,7 +99,7 @@ function (Parent, Box2D, Settings) {
 			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
 			bd.type = 'dynamic';
 			bd.position.Set(4.118728637695312e-02, 2.199305295944214e+00);
-			bodies[2] = world.CreateBody(bd);
+			bodies[2] = world.createBody(bd);
 
 			{
 				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
@@ -136,7 +136,7 @@ function (Parent, Box2D, Settings) {
 			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
 			bd.type = 'dynamic';
 			bd.position.Set(1.235442161560059e-01, 1.142371892929077e+00);
-			bodies[3] = world.CreateBody(bd);
+			bodies[3] = world.createBody(bd);
 
 			{
 				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
@@ -163,7 +163,7 @@ function (Parent, Box2D, Settings) {
 			bd.type = 'dynamic';
 			bd.position.Set(-9.663248062133789e-02, 3.554300665855408e-01);
 
-			bodies[4] = world.CreateBody(bd);
+			bodies[4] = world.createBody(bd);
 
 			{
 				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
@@ -209,7 +209,7 @@ function (Parent, Box2D, Settings) {
 			bd.type = 'dynamic';
 			bd.position.Set(-1.917138099670410e-01, 1.142371892929077e+00);
 
-			bodies[5] = world.CreateBody(bd);
+			bodies[5] = world.createBody(bd);
 
 			{
 				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
@@ -236,7 +236,7 @@ function (Parent, Box2D, Settings) {
 			bd.type = 'dynamic';
 			bd.position.Set(1.235442161560059e-01, 1.433728694915771e+00);
 
-			bodies[6] = world.CreateBody(bd);
+			bodies[6] = world.createBody(bd);
 
 			{
 				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
@@ -262,7 +262,7 @@ function (Parent, Box2D, Settings) {
 			var bd = { type: 'static', position: planck.Vec2(0, 0), angle: 0 };
 			bd.type = 'dynamic';
 			bd.position.Set(2.897095680236816e-02, 6.702435612678528e-01);
-			bodies[7] = world.CreateBody(bd);
+			bodies[7] = world.createBody(bd);
 
 			{
 				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
@@ -289,7 +289,7 @@ function (Parent, Box2D, Settings) {
 			bd.type = 'dynamic';
 			bd.position.Set(-9.663248062133789e-02, 6.702435612678528e-01);
 
-			bodies[8] = world.CreateBody(bd);
+			bodies[8] = world.createBody(bd);
 
 			{
 				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
@@ -316,7 +316,7 @@ function (Parent, Box2D, Settings) {
 			bd.type = 'dynamic';
 			bd.position.Set(2.897095680236816e-02, 3.554300665855408e-01);
 
-			bodies[9] = world.CreateBody(bd);
+			bodies[9] = world.createBody(bd);
 
 			{
 				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
@@ -365,7 +365,7 @@ function (Parent, Box2D, Settings) {
 			bd.type = b2BodyType(0);
 			bd.position.Set(3.118395805358887e-03, -6.553649902343750e-03);
 
-			bodies[10] = world.CreateBody(bd);
+			bodies[10] = world.createBody(bd);
 
 			{
 				var fd = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
@@ -403,7 +403,7 @@ function (Parent, Box2D, Settings) {
 			jd.enableMotor = false;
 			jd.motorSpeed = 0.000000000000000e+00;
 			jd.maxMotorTorque = 1.000000000000000e+00;
-			joints[0] = world.CreateJoint(jd);
+			joints[0] = world.createJoint(jd);
 		}
 		{
 			var jd = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
@@ -419,7 +419,7 @@ function (Parent, Box2D, Settings) {
 			jd.enableMotor = false;
 			jd.motorSpeed = 0.000000000000000e+00;
 			jd.maxMotorTorque = 1.000000000000000e+00;
-			joints[1] = world.CreateJoint(jd);
+			joints[1] = world.createJoint(jd);
 		}
 		{
 			var jd = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
@@ -435,7 +435,7 @@ function (Parent, Box2D, Settings) {
 			jd.enableMotor = false;
 			jd.motorSpeed = 0.000000000000000e+00;
 			jd.maxMotorTorque = 1.000000000000000e+00;
-			joints[2] = world.CreateJoint(jd);
+			joints[2] = world.createJoint(jd);
 		}
 		{
 			var jd = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
@@ -451,7 +451,7 @@ function (Parent, Box2D, Settings) {
 			jd.enableMotor = false;
 			jd.motorSpeed = 0.000000000000000e+00;
 			jd.maxMotorTorque = 1.000000000000000e+00;
-			joints[3] = world.CreateJoint(jd);
+			joints[3] = world.createJoint(jd);
 		}
 		{
 			var jd = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
@@ -467,7 +467,7 @@ function (Parent, Box2D, Settings) {
 			jd.enableMotor = false;
 			jd.motorSpeed = 0.000000000000000e+00;
 			jd.maxMotorTorque = 1.000000000000000e+00;
-			joints[4] = world.CreateJoint(jd);
+			joints[4] = world.createJoint(jd);
 		}
 		{
 			var jd = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
@@ -483,7 +483,7 @@ function (Parent, Box2D, Settings) {
 			jd.enableMotor = false;
 			jd.motorSpeed = 0.000000000000000e+00;
 			jd.maxMotorTorque = 1.000000000000000e+00;
-			joints[5] = world.CreateJoint(jd);
+			joints[5] = world.createJoint(jd);
 		}
 		{
 			var jd = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
@@ -499,7 +499,7 @@ function (Parent, Box2D, Settings) {
 			jd.enableMotor = false;
 			jd.motorSpeed = 0.000000000000000e+00;
 			jd.maxMotorTorque = 1.000000000000000e+00;
-			joints[6] = world.CreateJoint(jd);
+			joints[6] = world.createJoint(jd);
 		}
 		{
 			var jd = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
@@ -515,7 +515,7 @@ function (Parent, Box2D, Settings) {
 			jd.enableMotor = false;
 			jd.motorSpeed = 0.000000000000000e+00;
 			jd.maxMotorTorque = 1.000000000000000e+00;
-			joints[7] = world.CreateJoint(jd);
+			joints[7] = world.createJoint(jd);
 		}
 		{
 			var jd = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
@@ -531,7 +531,7 @@ function (Parent, Box2D, Settings) {
 			jd.enableMotor = false;
 			jd.motorSpeed = 0.000000000000000e+00;
 			jd.maxMotorTorque = 1.000000000000000e+00;
-			joints[8] = world.CreateJoint(jd);
+			joints[8] = world.createJoint(jd);
 		}
 
 		this.body = bodies[1];
@@ -553,12 +553,12 @@ function (Parent, Box2D, Settings) {
 
 	RagDoll.prototype.destroy = function() {
 		
-		var world = this.body.GetWorld();
+		var world = this.body.getWorld();
 		
 		Parent.prototype.destroy.call(this); // chest destruction 
 
 		for(var key in this.limbs) {
-			world.DestroyBody(this.limbs[key]);
+			world.destroyBody(this.limbs[key]);
 		}
 	};
 

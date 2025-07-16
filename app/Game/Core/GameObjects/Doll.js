@@ -222,8 +222,8 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
 
         Assert.number(friction);
 
-        if (this.legs.GetFriction() != friction) {
-            this.legs.SetFriction(friction);
+        if (this.legs.getFriction() != friction) {
+            this.legs.setFriction(friction);
         }
     };
 
@@ -348,7 +348,7 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
         if(this.holdingItem) {
 
             if(this.holdingJoint) {
-                this.body.GetWorld().DestroyJoint(this.holdingJoint);
+                this.body.getWorld().destroyJoint(this.holdingJoint);
                 this.holdingJoint = null;
             }
 
@@ -364,15 +364,15 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
             this.holdingItem.reposition(handPosition, this.lookDirection);
 
             var jointDef = new Box2D.Dynamics.Joints.b2WeldJointDef();
-            jointDef.Initialize(this.body, this.holdingItem.body, this.holdingItem.getGrabPoint());
+            jointDef.initialize(this.body, this.holdingItem.body, this.holdingItem.getGrabPoint());
 
-            this.holdingJoint = this.body.GetWorld().CreateJoint(jointDef);
+            this.holdingJoint = this.body.getWorld().createJoint(jointDef);
         }
     };
 
     Doll.prototype.throw = function(item, options) {
         if(this.holdingJoint) {
-            this.body.GetWorld().DestroyJoint(this.holdingJoint);
+            this.body.getWorld().destroyJoint(this.holdingJoint);
         } else {
             // log stack if we called throw without a holdingJoint
             var w = new Error("Throwing without a holdingJoint");
@@ -408,7 +408,7 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
 
             var contactCount = 0;
 
-            var edge = self.body.GetContactList();
+            var edge = self.body.getContactList();
             while (edge) {
                 var contact = edge.contact;
                 if(!contact.IsTouching()) {

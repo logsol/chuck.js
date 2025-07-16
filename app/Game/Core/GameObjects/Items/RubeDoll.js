@@ -61,7 +61,7 @@ function (Parent, /* RubeLoader, */ Box2D, Settings, Assert, nc, Matrix /* , Rub
             //var filterData = new Box2D.Dynamics.b2FilterData();
             //filterData.groupIndex = -66;
             //if(body.name != "head" && body.name != "chest") {
-            //    for (var fixture = body.GetFixtureList(); fixture; fixture = fixture.GetNext()) {
+            //    for (var fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
             //        fixture.SetFilterData(filterData);
             //    }
             //}
@@ -81,7 +81,7 @@ function (Parent, /* RubeLoader, */ Box2D, Settings, Assert, nc, Matrix /* , Rub
             if(count < 4 && this.joints[i] instanceof Box2D.Dynamics.Joints.b2RevoluteJoint) {
                 console.log(i);
             } else {
-                body.GetWorld().DestroyJoint(this.joints[i]);
+                body.getWorld().destroyJoint(this.joints[i]);
             }
             count++;
             */
@@ -213,10 +213,10 @@ function (Parent, /* RubeLoader, */ Box2D, Settings, Assert, nc, Matrix /* , Rub
 
     RubeDoll.prototype.destroy = function() {
 
-        var world = this.body.GetWorld();
+        var world = this.body.getWorld();
         
         for (var name in this.limbs) {
-            world.DestroyBody(this.limbs[name]);
+            world.destroyBody(this.limbs[name]);
         }
 
         Parent.prototype.destroy.call(this);

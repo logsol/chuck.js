@@ -129,7 +129,7 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, nc, Box2D, Player, 
         var update = {};
 
 /*
-        var body = this.physicsEngine.world.GetBodyList();
+        var body = this.physicsEngine.world.getBodyList();
         do {
             if((getSleeping || body.isAwake()) && body.getType() === 'dynamic') {
                 var userData = body.getUserData();
@@ -144,7 +144,7 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, nc, Box2D, Player, 
                 }
             }
 
-        } while (body = body.GetNext());
+        } while (body = body.getNext());
 */
 
         for (var uid in this.worldUpdateObjects) {

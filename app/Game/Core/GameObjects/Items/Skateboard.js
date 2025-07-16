@@ -156,7 +156,7 @@ function (Parent, Box2D, Settings, Assert) {
         fixtureDef.isSensor = false;
         fixtureDef.friction = 0;
 
-        var wheelBody = this.body.GetWorld().CreateBody(bodyDef);
+        var wheelBody = this.body.getWorld().createBody(bodyDef);
         wheelBody.createFixture(fixtureDef);
             
         //var revoluteJointDef = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
@@ -165,8 +165,8 @@ function (Parent, Box2D, Settings, Assert) {
 
 
 
-        revoluteJointDef.Initialize(this.body, wheelBody, wheelBody.getWorldCenter());
-        var j = this.body.GetWorld().CreateJoint(revoluteJointDef);
+        revoluteJointDef.initialize(this.body, wheelBody, wheelBody.getWorldCenter());
+        var j = this.body.getWorld().createJoint(revoluteJointDef);
 
 
         // FIXME this means, that we will have bodies in the world, which must not be
@@ -192,7 +192,7 @@ function (Parent, Box2D, Settings, Assert) {
 
     Skateboard.prototype.destroy = function() {
         for (var i = 0; i < this.wheels.length; i++) {
-            this.body.GetWorld().DestroyBody(this.wheels[i]);
+            this.body.getWorld().destroyBody(this.wheels[i]);
         }
 
         Parent.prototype.destroy.call(this);
