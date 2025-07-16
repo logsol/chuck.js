@@ -140,7 +140,7 @@ function (Parent, Settings, nc, Exception, ColorConverter, Layer) {
                     visible: false, 
                     pivot: {
                         x: 0,
-                        y: 40 * 4
+                        y: 21 * 4
                     },
                     xScale: 0.25,
                     yScale: 0.25,
@@ -187,7 +187,7 @@ function (Parent, Settings, nc, Exception, ColorConverter, Layer) {
             pivot: {
                 //x: 35/2 * 4,
                 x: 0,
-                y: 40 * 4
+                y: 21 * 4  // Reduced from 40 to 20 to match body pivot
             },
             width: 35,
             height: 40,
@@ -288,7 +288,7 @@ function (Parent, Settings, nc, Exception, ColorConverter, Layer) {
                 this.headMesh,
                 {
                                 x: this.body.getPosition().x * Settings.RATIO,
-            y: this.body.getPosition().y * Settings.RATIO - this.height + this.headHeight
+            y: this.body.getPosition().y * Settings.RATIO - this.height/2 + this.headHeight +1
                 }
             )
 

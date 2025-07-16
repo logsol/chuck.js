@@ -61,53 +61,45 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
     };
 
     Doll.prototype.createFixtures = function () {
-        Assert.number(this.width, this.height);
-        Assert.number(this.reachDistance);
-        Assert.number(this.areaSize);
+        Assert.number(this.width, this.height, this.reachDistance, this.areaSize);
 
-        var self = this;
+        const R = Settings.RATIO, w = this.width, h = this.height, r = this.reachDistance, a = this.areaSize;
+        const self = this;
 
-        var fixtureDef = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
-        fixtureDef.density = Settings.PLAYER_DENSITY;
-        fixtureDef.friction = 0;
-        fixtureDef.restitution = Settings.PLAYER_RESTITUTION;
+        // Helper to create and attach fixture
+        const addFixture = (def) => this.body.createFixture(def);
 
-        var radius = this.width / 2 / Settings.RATIO;
-        var headShape = planck.Circle(
-            radius,
-            planck.Vec2(0, -(this.height - (this.width / 2)) / Settings.RATIO)
-        );
-        fixtureDef.shape = headShape;
-        fixtureDef.isSensor = false;
-        fixtureDef.userData = {
-            onCollisionChange: this.onImpact.bind(this)
-        };
+        // Head (positioned at top of body box)
+        addFixture({
+            shape: planck.Circle(planck.Vec2(0, -(h - w) / 2 / R), w / 2 / R),
+            density: Settings.PLAYER_DENSITY,
+            friction: 0,
+            restitution: Settings.PLAYER_RESTITUTION,
+            isSensor: false,
+            userData: { onCollisionChange: this.onImpact.bind(this) }
+        });
 
-        this.body.createFixture(fixtureDef);
+        // Body (simplified positioning)
+        addFixture({
+            shape: planck.Box(w / 2 / R, (h - w) / 2 / R, planck.Vec2(0, 0), 0),
+            density: Settings.PLAYER_DENSITY,
+            friction: 0,
+            restitution: Settings.PLAYER_RESTITUTION,
+            isSensor: false
+        });
 
-        var bodyShape = planck.Box(
-            this.width / 2 / Settings.RATIO, 
-            (this.height - this.width) / 2 / Settings.RATIO, 
-            planck.Vec2(0, -this.height / 2 / Settings.RATIO),
-            0
-        );
-        fixtureDef.shape = bodyShape;
-        fixtureDef.isSensor = false;
-        this.body.createFixture(fixtureDef);
+        // Legs (positioned at bottom of body box)
+        this.legs = addFixture({
+            shape: planck.Circle(planck.Vec2(0, (h - w) / 2 / R), w / 2 / R),
+            density: Settings.PLAYER_DENSITY,
+            friction: Settings.PLAYER_FRICTION,
+            restitution: Settings.PLAYER_RESTITUTION,
+            isSensor: false
+        });
 
-        var legsShape = planck.Circle(
-            this.width / 2 / Settings.RATIO,
-            planck.Vec2(0, -this.width / 2 / Settings.RATIO)
-        );
-        fixtureDef.shape = legsShape;
-        fixtureDef.friction = Settings.PLAYER_FRICTION;
-        fixtureDef.isSensor = false;
-
-        this.legs = this.body.createFixture(fixtureDef);
-
-        // Create a fresh fixture definition for the foot sensor
-        var footSensorDef = {
-            shape: null,
+        // Foot sensor (positioned below legs)
+        this.footSensor = addFixture({
+            shape: planck.Circle(planck.Vec2(0, (h - w) / 2 / R + 2 / R), (w - 1) / 2 / R),
             density: 0,
             friction: 0,
             restitution: 0,
@@ -116,84 +108,47 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
                 onCollisionChange: this.onFootSensorDetection.bind(this),
                 isFootSensor: true
             }
-        };
+        });
 
-        var feetShape = planck.Circle(
-            (this.width - 1) / 2 / Settings.RATIO, // the -1 one prevents collisions with walls
-            planck.Vec2(0, -20 / Settings.RATIO) // 20 pixels down from center (dramatic test)
-        );
-        footSensorDef.shape = feetShape;
+        // // Grab sensors (left/right)
+        // ["left", "right"].forEach(side => {
+        //     const sign = side === "left" ? -1 : 1;
+        //     addFixture({
+        //         shape: planck.Box(
+        //             r / 2 / R,
+        //             (h / 2 + r / 4) / R,
+        //             planck.Vec2(sign * r / 2 / R, h / 2 / R)
+        //         ),
+        //         density: 0,
+        //         friction: 0,
+        //         restitution: 0,
+        //         isSensor: true,
+        //         userData: {
+        //             onCollisionChange: function(isColliding, fixture) {
+        //                 self.onFixtureWithinReach(isColliding, side, fixture);
+        //             }
+        //         }
+        //     });
+        // });
 
-        this.footSensor = this.body.createFixture(footSensorDef);
-
-        var grabSensorLeftShape = planck.Box(
-            this.reachDistance / 2 / Settings.RATIO,
-            ((this.height / 2) + this.reachDistance / 4) / Settings.RATIO, 
-            planck.Vec2(
-                -this.reachDistance / 2 / Settings.RATIO, 
-                -this.height / 2 / Settings.RATIO
-            )
-        );
-        fixtureDef.shape = grabSensorLeftShape;
-        fixtureDef.isSensor = true;
-        fixtureDef.userData = {
-            onCollisionChange: function(isColliding, fixture) {
-                self.onFixtureWithinReach(isColliding, "left", fixture);
-            }
-        };
-        this.body.createFixture(fixtureDef);
-
-        var grabSensorRightShape = planck.Box(
-            this.reachDistance / 2 / Settings.RATIO,
-            ((this.height / 2) + this.reachDistance / 4) / Settings.RATIO, 
-            planck.Vec2(
-                this.reachDistance / 2 / Settings.RATIO, 
-                -this.height / 2 / Settings.RATIO
-            )
-        );
-        fixtureDef.shape = grabSensorRightShape;
-        fixtureDef.isSensor = true;
-        
-        fixtureDef.userData = {
-            onCollisionChange: function(isColliding, fixture) {
-                self.onFixtureWithinReach(isColliding, "right", fixture);
-            }
-        };
-
-        this.body.createFixture(fixtureDef);
-
-        // Area Sensor
-        var areaSensorShape = planck.Box(
-            (this.width + this.areaSize) / 2 / Settings.RATIO,
-            (this.height + this.areaSize) / 2 / Settings.RATIO, 
-            planck.Vec2(
-                0, 
-                -this.height / 2 / Settings.RATIO
-            )
-        );
-        fixtureDef.shape = areaSensorShape;
-        fixtureDef.isSensor = true;
-        
-        fixtureDef.userData = {
-            onCollisionChange: function(isColliding, fixture) {
-                var userData = fixture.getBody().getUserData();
-                if(userData instanceof Doll) {
-                    var doll = userData;
-                    var i = self.nearbyDolls.indexOf(doll);
-                    if(isColliding) {
-                        if(i === -1) {
-                            self.nearbyDolls.push(doll);
-                        }
-                    } else {
-                        if(i !== -1) {
-                            self.nearbyDolls.splice(i, 1);
-                        }
-                    }
-                } 
-            }
-        };
-
-        this.body.createFixture(fixtureDef);
+        // // Area sensor
+        // addFixture({
+        //     shape: planck.Box((w + a) / 2 / R, (h + a) / 2 / R, planck.Vec2(0, h / 2 / R)),
+        //     density: 0,
+        //     friction: 0,
+        //     restitution: 0,
+        //     isSensor: true,
+        //     userData: {
+        //         onCollisionChange: function(isColliding, fixture) {
+        //             var userData = fixture.getBody().getUserData();
+        //             if (userData instanceof Doll) {
+        //                 var i = self.nearbyDolls.indexOf(userData);
+        //                 if (isColliding && i === -1) self.nearbyDolls.push(userData);
+        //                 else if (!isColliding && i !== -1) self.nearbyDolls.splice(i, 1);
+        //             }
+        //         }
+        //     }
+        // });
     };
 
     Doll.prototype.setActionState = function(state) {
@@ -219,7 +174,7 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
         var pos = this.body.getPosition();
         return {
             x: pos.x,
-            y: pos.y - (this.height - this.headHeight / 2) / Settings.RATIO
+            y: pos.y + (this.height - this.headHeight / 2) / Settings.RATIO
         };
     };
 
@@ -318,11 +273,7 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
     };
 
     Doll.prototype.setStanding = function (isStanding) {
-        if (this.standing == isStanding) {
-            console.log('setStanding called but no change needed, already:', isStanding);
-            return;
-        }
-        console.log('*** STANDING STATE CHANGE: ', this.standing, '->', isStanding, '***');
+        if (this.standing == isStanding) return;
         this.standing = isStanding;
         if(isStanding) this.setActionState("stand");
     };
