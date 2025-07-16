@@ -1,6 +1,7 @@
 define([
     "Game/" + GLOBALS.context + "/Physics/Engine",
     "Game/" + GLOBALS.context + "/Loader/TiledLevel",
+    "Game/" + GLOBALS.context + "/Loader/DebugLevel",
     "Game/" + GLOBALS.context + "/Player",
     "Lib/Utilities/NotificationCenter",
     "Game/" + GLOBALS.context + "/GameObjects/Doll",
@@ -9,7 +10,7 @@ define([
     "Lib/Utilities/Assert",
 ],
 
-function (PhysicsEngine, TiledLevel, Player, nc, Doll, GameObject, Item, Assert) {
+function (PhysicsEngine, TiledLevel, DebugLevel, Player, nc, Doll, GameObject, Item, Assert) {
 
 	"use strict";
 
@@ -61,7 +62,14 @@ function (PhysicsEngine, TiledLevel, Player, nc, Doll, GameObject, Item, Assert)
             this.worldUpdateObjects = {};
         }
 
-        this.level = new TiledLevel(levelUid, this.physicsEngine);
+        // Use DebugLevel for debug mode, otherwise use TiledLevel
+        if (levelUid === "debug") {
+            console.log("Loading debug level (simple platform)");
+            this.level = new DebugLevel(levelUid, this.physicsEngine);
+        } else {
+            console.log("Loading tiled level: " + levelUid);
+            this.level = new TiledLevel(levelUid, this.physicsEngine);
+        }
     };
 
     /*

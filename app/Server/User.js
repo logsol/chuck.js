@@ -92,7 +92,13 @@ function (Parent, ProtocolHelper, nc) {
     User.prototype.onGameCommand = function(options) {
         // repacking for transport via pipe
         var message = ProtocolHelper.encodeCommand("gameCommand", options);
-        this.channelPipe.sendToUser(this.id, message);
+        
+        // Check if channelPipe exists before trying to send
+        if (this.channelPipe) {
+            this.channelPipe.sendToUser(this.id, message);
+        } else {
+            console.warn("User " + this.id + " tried to send game command but channelPipe is null");
+        }
     };
 
     User.prototype.onPing = function(timestamp) {
