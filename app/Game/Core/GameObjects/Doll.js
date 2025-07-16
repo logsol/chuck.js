@@ -1,10 +1,10 @@
 define([
-    "Game/" + GLOBALS.context + "/GameObjects/GameObject",
+    "Game/" + App.context + "/GameObjects/GameObject",
     "Lib/Utilities/Exception",
     "Lib/Vendor/Box2D", 
     "Game/Config/Settings", 
-    "Game/" + GLOBALS.context + "/Collision/Detector",
-    "Game/" + GLOBALS.context + "/GameObjects/Item",
+    "Game/" + App.context + "/Collision/Detector",
+    "Game/" + App.context + "/GameObjects/Item",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Assert"
 ], 

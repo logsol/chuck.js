@@ -1,4 +1,7 @@
-GLOBALS = { context: "Channel" };
+// "use strict"; intentionally omitted as App scope workaround
+
+Error.stackTraceLimit = Infinity;
+
 var requirejs = require('requirejs');
 
 requirejs.config({
@@ -11,14 +14,17 @@ requirejs.config({
     },
 });
 
-var inspector = {};
+
+App = {};
+App.inspector = {};
+App.context = "Channel";
 
 requirejs([
     "Game/Channel/PipeToServer"
-], 
+],
 
 function (PipeToServer) {
 	var PipeToServer = new PipeToServer(process);
     
-    inspector.PipeToServer = PipeToServer;
+    App.inspector.PipeToServer = PipeToServer;
 });

@@ -1,7 +1,7 @@
 define([
     "Game/Config/Settings",
     "Lib/Vendor/Box2D",
-    "Game/" + GLOBALS.context + "/Collision/Detector",
+    "Game/" + App.context + "/Collision/Detector",
     "Lib/Utilities/NotificationCenter"
 ],
 

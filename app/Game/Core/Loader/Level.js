@@ -3,12 +3,12 @@ define([
     "Lib/Vendor/Box2D",
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Abstract",
-    "Game/" + GLOBALS.context + "/Collision/Detector",
-    "Game/" + GLOBALS.context + "/GameObjects/Tile",
-    "Game/" + GLOBALS.context + "/GameObjects/Item",
-    "Game/" + GLOBALS.context + "/GameObjects/Items/Skateboard",
-    "Game/" + GLOBALS.context + "/GameObjects/Items/RagDoll",
-    "Game/" + GLOBALS.context + "/GameObjects/Items/RubeDoll"
+    "Game/" + App.context + "/Collision/Detector",
+    "Game/" + App.context + "/GameObjects/Tile",
+    "Game/" + App.context + "/GameObjects/Item",
+    "Game/" + App.context + "/GameObjects/Items/Skateboard",
+    "Game/" + App.context + "/GameObjects/Items/RagDoll",
+    "Game/" + App.context + "/GameObjects/Items/RubeDoll"
 
 ], function (Settings, Box2D, nc, Abstract, CollisionDetector, Tile, Item, Skateboard, RagDoll, RubeDoll) {
     
