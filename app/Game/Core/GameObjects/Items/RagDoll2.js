@@ -4,7 +4,7 @@ define([
 	"Game/Config/Settings"
 ],
  
-function (Parent, Box2D, Settings) {
+function (Parent, planck, Settings) {
 
 	"use strict";
  

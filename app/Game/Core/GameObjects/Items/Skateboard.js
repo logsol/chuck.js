@@ -5,7 +5,7 @@ define([
     "Lib/Utilities/Assert"
 ],
  
-function (Parent, Box2D, Settings, Assert) {
+function (Parent, planck, Settings, Assert) {
 
 	"use strict";
  
@@ -159,15 +159,7 @@ function (Parent, Box2D, Settings, Assert) {
         var wheelBody = this.body.getWorld().createBody(bodyDef);
         wheelBody.createFixture(fixtureDef);
             
-        //var revoluteJointDef = new Box2D.Dynamics.Joints.b2RevoluteJointDef();
-        var revoluteJointDef = new Box2D.Dynamics.Joints.b2WeldJointDef();
-        //revoluteJointDef.enableMotor = false;
-
-
-
-        revoluteJointDef.initialize(this.body, wheelBody, wheelBody.getWorldCenter());
-        var j = this.body.getWorld().createJoint(revoluteJointDef);
-
+        // See top of file for Planck.js joint creation reference.
 
         // FIXME this means, that we will have bodies in the world, which must not be
         // updated (wheels) because they are always connected to a body which will be updated.

@@ -13,7 +13,7 @@ define([
     "Game/" + GLOBALS.context + "/GameObjects/Item",
     "Game/" + GLOBALS.context + "/GameObjects/Items/Skateboard",
 
-], function (Parent, Settings, ItemSettings, Box2D, optionsHelper, Exception, nc, Assert, AbstractLayer, CollisionDetector, Tile, Item, Skateboard) {
+], function (Parent, Settings, ItemSettings, planck, optionsHelper, Exception, nc, Assert, AbstractLayer, CollisionDetector, Tile, Item, Skateboard) {
     
     "use strict";
 

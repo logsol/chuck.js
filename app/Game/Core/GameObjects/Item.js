@@ -8,7 +8,7 @@ define([
     "Lib/Utilities/Assert"
 ],
  
-function (Parent, Box2D, optionsHelper, Settings, Exception, nc, Assert) {
+function (Parent, planck, optionsHelper, Settings, Exception, nc, Assert) {
 
 	"use strict";
  
@@ -35,10 +35,10 @@ function (Parent, Box2D, optionsHelper, Settings, Exception, nc, Assert) {
 
     	Parent.call(this, physicsEngine, uid);
         this.createFixture();
-        this.body.ResetMassData();
+        this.body.resetMassData();
         this.flipDirection = 1;
         if (this.body.getMass() < 1) {
-            this.body.SetBullet(true);
+            this.body.setBullet(true);
         }
 
         nc.trigger(nc.ns.core.game.worldUpdateObjects.add, this);
@@ -124,8 +124,8 @@ function (Parent, Box2D, optionsHelper, Settings, Exception, nc, Assert) {
             handPosition.x + ((this.options.width / Settings.RATIO / 2) * direction),
             handPosition.y
         );
-        this.body.SetPosition(position);
-        this.body.SetAngle((this.options.grabAngle || 0.0) * direction);
+        this.body.setPosition(position);
+        this.body.setAngle((this.options.grabAngle || 0.0) * direction);
         this.flip(direction);
     };
 
@@ -148,7 +148,7 @@ function (Parent, Box2D, optionsHelper, Settings, Exception, nc, Assert) {
         var x = options.x * Settings.MAX_THROW_FORCE / this.options.weight + carrierVelocity.x;
         var y = -options.y * Settings.MAX_THROW_FORCE / this.options.weight + carrierVelocity.y;
         var vector = planck.Vec2(x, y);
-        body.SetLinearVelocity(vector);
+        body.setLinearVelocity(vector);
 
         var av = -options.av * Settings.MAX_THROW_ANGULAR_VELOCITY;
         body.setAngularVelocity(av);

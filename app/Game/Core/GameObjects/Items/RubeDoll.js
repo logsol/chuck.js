@@ -9,7 +9,7 @@ define([
     // "json!Game/Asset/RubeDoll.json" // Temporarily disabled during Planck.js migration
 ],
 
-function (Parent, /* RubeLoader, */ Box2D, Settings, Assert, nc, Matrix /* , RubeDollJson */) {
+function (Parent, /* RubeLoader, */ planck, Settings, Assert, nc, Matrix /* , RubeDollJson */) {
 
 	"use strict";
  

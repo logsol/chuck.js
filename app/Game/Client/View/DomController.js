@@ -115,6 +115,13 @@ function (Settings, nc, Screenfull, Graph, pointerLockManager) {
         li.appendChild(this.ping);
         this.devToolsContainer.appendChild(li);
 
+        // Add 'planck' label in its own li next to fullscreen
+        li = document.createElement("li");
+        var planckLabel = document.createElement("label");
+        planckLabel.style.fontWeight = "bold";
+        planckLabel.textContent = "planck";
+        li.appendChild(planckLabel);
+        this.devToolsContainer.appendChild(li);
 
         // create debug mode
         li = document.createElement("li");
@@ -128,7 +135,6 @@ function (Settings, nc, Screenfull, Graph, pointerLockManager) {
         label.appendChild(document.createTextNode("Debug"));
         li.appendChild(label);
         this.devToolsContainer.appendChild(li);
-
 
         // create Fullscreen
         li = document.createElement("li");

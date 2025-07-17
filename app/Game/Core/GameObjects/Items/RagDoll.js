@@ -8,7 +8,7 @@ define([
     "Game/Config/ItemSettings",
 ],
  
-function (Parent, Box2D, Settings, nc, Assert, optionsHelper, ItemSettings) {
+function (Parent, planck, Settings, nc, Assert, optionsHelper, ItemSettings) {
 
 	"use strict";
  

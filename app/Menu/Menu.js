@@ -172,6 +172,14 @@ function (Settings, ColorConverter, Exception, pointerLockManager, qs) {
 	function populateMaps() {
 		ajax("getMaps", {}, function(responseText) {
 			var maps = JSON.parse(responseText).success;
+			
+			// Sort maps to put debug at the end
+			maps.sort(function(a, b) {
+				if (a === "debug") return 1;
+				if (b === "debug") return -1;
+				return a.localeCompare(b);
+			});
+			
 			var html = "";
 			for (var i = 0; i < maps.length; i++) {
 				var map = maps[i];

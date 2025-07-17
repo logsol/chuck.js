@@ -117,7 +117,7 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
                 shape: planck.Box(
                     r / 2 / R,
                     (h / 2 + r / 4) / R,
-                    planck.Vec2(sign * r / 2 / R, h / 2 / R)
+                    planck.Vec2(sign * r / 2 / R, 0)
                 ),
                 density: 0,
                 friction: 0,
@@ -133,7 +133,7 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
 
         // Area sensor
         addFixture({
-            shape: planck.Box((w + a) / 2 / R, (h + a) / 2 / R, planck.Vec2(0, h / 2 / R)),
+            shape: planck.Box((w + a) / 2 / R, (h + a) / 2 / R, planck.Vec2(0, 0)),
             density: 0,
             friction: 0,
             restitution: 0,
@@ -319,15 +319,20 @@ function (Parent, Exception, planck, Settings, CollisionDetector, Item, nc, Asse
             Assert.number(this.lookDirection);
             var handPosition = planck.Vec2(
                 bodyPosition.x + ((this.width / 2 / Settings.RATIO) * this.lookDirection),
-                bodyPosition.y - this.height / 4 * 2 / Settings.RATIO // 2/3 of the body height
+                bodyPosition.y - 0 / Settings.RATIO // 2/3 of the body height
             );
 
             this.holdingItem.reposition(handPosition, this.lookDirection);
 
-            var jointDef = new Box2D.Dynamics.Joints.b2WeldJointDef();
-            jointDef.initialize(this.body, this.holdingItem.body, this.holdingItem.getGrabPoint());
-
-            this.holdingJoint = this.body.getWorld().createJoint(jointDef);
+            // Planck.js WeldJoint
+            var jointDef = {
+                bodyA: this.body,
+                bodyB: this.holdingItem.body,
+                localAnchorA: this.body.getLocalPoint(this.holdingItem.getGrabPoint()),
+                localAnchorB: this.holdingItem.body.getLocalPoint(this.holdingItem.getGrabPoint()),
+                referenceAngle: 0
+            };
+            this.holdingJoint = this.body.getWorld().createJoint(planck.WeldJoint(jointDef));
         }
     };
 

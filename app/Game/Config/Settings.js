@@ -91,7 +91,7 @@ function () {
         CHANNEL_END_ROUND_TIME: 20, //10,
         CHANNEL_DEFAULT_MAX_USERS: 10,
         CHANNEL_DEFAULT_SCORE_LIMIT: 5,
-        CHANNEL_DEFAULT_LEVELS: ["debug"],
+        CHANNEL_DEFAULT_LEVELS: ["stones", "gangsta", "residence"],
         CHANNEL_RECORD_SESSION: false,
 
         // ME STATE

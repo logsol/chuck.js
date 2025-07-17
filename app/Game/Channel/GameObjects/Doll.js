@@ -51,18 +51,17 @@ function (Parent, Item, Box2D, nc, Assert) {
 
                     var ownVelocity = this.body.getLinearVelocity();
 
-                    var b2Math = Box2D.Common.Math.b2Math;
-                    var absItemVelocity = b2Math.AbsV(itemVelocity);
+                    var absItemVelocity = { x: Math.abs(itemVelocity.x), y: Math.abs(itemVelocity.y) };
                     var min = 1;
                     var damage = 0;
                     
                     if(absItemVelocity.x > min || absItemVelocity.y > min) {
                         if(item.lastMoved && item.lastMoved.player != this.player) {
 
-                            var collision = b2Math.SubtractVV(itemVelocity, ownVelocity);
+                            var collision = planck.Vec2(itemVelocity).sub(planck.Vec2(ownVelocity));
 
                             // Tested max velocity banana: 50
-                            var velocityDamage = collision.Length() / 50;
+                            var velocityDamage = collision.length() / 50;
 
                             // Max weight of piano: 15
                             var weightDamage = item.options.weight / 15;

@@ -10,7 +10,7 @@ define([
     "Game/" + GLOBALS.context + "/GameObjects/Items/RagDoll",
     "Game/" + GLOBALS.context + "/GameObjects/Items/RubeDoll"
 
-], function (Settings, Box2D, nc, Abstract, CollisionDetector, Tile, Item, Skateboard, RagDoll, RubeDoll) {
+], function (Settings, planck, nc, Abstract, CollisionDetector, Tile, Item, Skateboard, RagDoll, RubeDoll) {
     
     "use strict";
     

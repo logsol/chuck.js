@@ -3,7 +3,7 @@ define([
     "Lib/Vendor/Planck"
 ], 
  
-function (Parent, Box2D) {
+function (Parent, planck) {
 
 	"use strict";
  
