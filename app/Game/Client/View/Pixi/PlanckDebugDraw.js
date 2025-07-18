@@ -1,17 +1,15 @@
 define([
-    "Game/Config/Settings"
+    "Game/Config/Settings",
+    "Lib/Vendor/Pixi"
 ],
 
-function (Settings) {
+function (Settings, PIXI) {
 
     "use strict";
 
-    function PlanckDebugDraw(canvas) {
-        this.canvas = canvas;
-        this.ctx = canvas.getContext('2d');
+    function PlanckDebugDraw(graphics) {
+        this.graphics = graphics;
         this.scale = Settings.RATIO;
-        this.cameraPos = { x: 0, y: 0 };
-        this.cameraZoom = 1;
         this.flags = {
             shapes: true,
             joints: false,
@@ -22,26 +20,15 @@ function (Settings) {
     }
 
     PlanckDebugDraw.prototype.clear = function() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.graphics.clear();
     };
 
     PlanckDebugDraw.prototype.setTransform = function(cameraPos, zoom) {
-        this.cameraPos = cameraPos;
-        this.cameraZoom = zoom || 1;
+        // Not needed for PIXI - transformations are handled by the layer system
     };
 
     PlanckDebugDraw.prototype.drawWorld = function(world) {
         if (!this.flags.shapes) return;
-
-        this.ctx.save();
-        
-        // Apply camera transformations like the game layers do
-        var transformedX = this.cameraPos.x * this.cameraZoom + Settings.STAGE_WIDTH / 2;
-        var transformedY = this.cameraPos.y * this.cameraZoom + Settings.STAGE_HEIGHT / 2;
-        
-        this.ctx.translate(transformedX, transformedY);
-        this.ctx.scale(this.scale * this.cameraZoom, this.scale * this.cameraZoom);
-        this.ctx.lineWidth = 0.3 / this.scale; // Made thinner (was 0.5)
 
         // Iterate through all bodies
         for (var body = world.getBodyList(); body; body = body.getNext()) {
@@ -60,25 +47,28 @@ function (Settings) {
                 }
                 
                 // Set colors based on sensor status and body type
+                var fillColor, lineColor, lineWidth;
                 if (isSensor) {
                     // Sensors: orange with more visibility, no stroke
-                    this.ctx.strokeStyle = 'rgba(0, 0, 0, 0)'; // No stroke
-                    this.ctx.fillStyle = 'rgba(255, 165, 0, 0.3)'; // Orange with higher alpha
+                    fillColor = 0xFFA500; // Orange
+                    lineColor = 0x000000; // Black (transparent)
+                    lineWidth = 0;
                 } else {
                     // Regular fixtures: colored by body type
                     if (body.isDynamic()) {
-                        this.ctx.strokeStyle = '#ff0000'; // Red for dynamic bodies
-                        this.ctx.fillStyle = 'rgba(255, 0, 0, 0.1)';
+                        fillColor = 0xFF0000; // Red for dynamic bodies
+                        lineColor = 0xFF0000; // Red stroke
                     } else if (body.isStatic()) {
-                        this.ctx.strokeStyle = '#00ff00'; // Green for static bodies
-                        this.ctx.fillStyle = 'rgba(0, 255, 0, 0.1)';
+                        fillColor = 0x00FF00; // Green for static bodies
+                        lineColor = 0x00FF00; // Green stroke
                     } else {
-                        this.ctx.strokeStyle = '#0000ff'; // Blue for kinematic bodies
-                        this.ctx.fillStyle = 'rgba(0, 0, 255, 0.1)';
+                        fillColor = 0x0000FF; // Blue for kinematic bodies
+                        lineColor = 0x0000FF; // Blue stroke
                     }
+                    lineWidth = 1;
                 }
 
-                this.drawShape(shape, transform, isSensor);
+                this.drawShape(shape, transform, isSensor, fillColor, lineColor, lineWidth);
             }
         }
 
@@ -89,25 +79,23 @@ function (Settings) {
                 this.drawCenterOfMass(transform);
             }
         }
-
-        this.ctx.restore();
     };
 
-    PlanckDebugDraw.prototype.drawShape = function(shape, transform, isSensor) {
+    PlanckDebugDraw.prototype.drawShape = function(shape, transform, isSensor, fillColor, lineColor, lineWidth) {
         var type = shape.getType();
         
         if (type === 'circle') {
-            this.drawCircle(shape, transform, isSensor);
+            this.drawCircle(shape, transform, isSensor, fillColor, lineColor, lineWidth);
         } else if (type === 'polygon') {
-            this.drawPolygon(shape, transform, isSensor);
+            this.drawPolygon(shape, transform, isSensor, fillColor, lineColor, lineWidth);
         } else if (type === 'edge') {
-            this.drawEdge(shape, transform, isSensor);
+            this.drawEdge(shape, transform, isSensor, fillColor, lineColor, lineWidth);
         } else if (type === 'chain') {
-            this.drawChain(shape, transform, isSensor);
+            this.drawChain(shape, transform, isSensor, fillColor, lineColor, lineWidth);
         }
     };
 
-    PlanckDebugDraw.prototype.drawCircle = function(shape, transform, isSensor) {
+    PlanckDebugDraw.prototype.drawCircle = function(shape, transform, isSensor, fillColor, lineColor, lineWidth) {
         var radius = shape.getRadius();
         
         // Get the circle's local position (center relative to body)
@@ -116,44 +104,42 @@ function (Settings) {
         // Transform the local position to world coordinates
         var worldCenter = this.transformVertex(localCenter, transform);
         
-        this.ctx.beginPath();
-        this.ctx.arc(worldCenter.x, worldCenter.y, radius, 0, 2 * Math.PI);
-        this.ctx.fill();
+        // Draw filled circle
+        this.graphics.beginFill(fillColor, 0.3);
+        this.graphics.drawCircle(worldCenter.x * this.scale, worldCenter.y * this.scale, radius * this.scale);
+        this.graphics.endFill();
         
         // Only draw stroke for non-sensors
-        if (!isSensor) {
-            this.ctx.stroke();
+        if (!isSensor && lineWidth > 0) {
+            this.graphics.lineStyle(lineWidth, lineColor);
+            this.graphics.drawCircle(worldCenter.x * this.scale, worldCenter.y * this.scale, radius * this.scale);
             
-            // Draw radius line to show rotation (only for non-sensors)
-            this.ctx.beginPath();
-            this.ctx.moveTo(worldCenter.x, worldCenter.y);
-            this.ctx.lineTo(worldCenter.x + radius, worldCenter.y);
-            this.ctx.stroke();
+            // Draw radius line to show rotation
+            this.graphics.moveTo(worldCenter.x * this.scale, worldCenter.y * this.scale);
+            this.graphics.lineTo((worldCenter.x + radius) * this.scale, worldCenter.y * this.scale);
         }
     };
 
-    PlanckDebugDraw.prototype.drawPolygon = function(shape, transform, isSensor) {
+    PlanckDebugDraw.prototype.drawPolygon = function(shape, transform, isSensor, fillColor, lineColor, lineWidth) {
         var vertices = shape.m_vertices;
         if (!vertices || vertices.length < 3) return;
 
-        this.ctx.beginPath();
-        
-        // Transform first vertex
-        var v = this.transformVertex(vertices[0], transform);
-        this.ctx.moveTo(v.x, v.y);
-        
-        // Transform and draw remaining vertices
-        for (var i = 1; i < vertices.length; i++) {
-            v = this.transformVertex(vertices[i], transform);
-            this.ctx.lineTo(v.x, v.y);
+        // Transform all vertices
+        var transformedVertices = [];
+        for (var i = 0; i < vertices.length; i++) {
+            var v = this.transformVertex(vertices[i], transform);
+            transformedVertices.push(v.x * this.scale, v.y * this.scale);
         }
         
-        this.ctx.closePath();
-        this.ctx.fill();
+        // Draw filled polygon
+        this.graphics.beginFill(fillColor, 0.3);
+        this.graphics.drawPolygon(transformedVertices);
+        this.graphics.endFill();
         
         // Only draw stroke for non-sensors
-        if (!isSensor) {
-            this.ctx.stroke();
+        if (!isSensor && lineWidth > 0) {
+            this.graphics.lineStyle(lineWidth, lineColor);
+            this.graphics.drawPolygon(transformedVertices);
         }
     };
 
@@ -169,23 +155,21 @@ function (Settings) {
         }
     };
 
-    PlanckDebugDraw.prototype.drawChain = function(shape, transform, isSensor) {
+    PlanckDebugDraw.prototype.drawChain = function(shape, transform, isSensor, fillColor, lineColor, lineWidth) {
         var vertices = shape.m_vertices;
         if (!vertices || vertices.length < 2) return;
 
-        this.ctx.beginPath();
-        
-        var v = this.transformVertex(vertices[0], transform);
-        this.ctx.moveTo(v.x, v.y);
-        
-        for (var i = 1; i < vertices.length; i++) {
-            v = this.transformVertex(vertices[i], transform);
-            this.ctx.lineTo(v.x, v.y);
-        }
-        
         // Only draw stroke for non-sensors
-        if (!isSensor) {
-            this.ctx.stroke();
+        if (!isSensor && lineWidth > 0) {
+            this.graphics.lineStyle(lineWidth, lineColor);
+            
+            var v = this.transformVertex(vertices[0], transform);
+            this.graphics.moveTo(v.x * this.scale, v.y * this.scale);
+            
+            for (var i = 1; i < vertices.length; i++) {
+                v = this.transformVertex(vertices[i], transform);
+                this.graphics.lineTo(v.x * this.scale, v.y * this.scale);
+            }
         }
     };
 
@@ -205,18 +189,16 @@ function (Settings) {
         var centerY = transform.p.y;
         var size = 0.05; // Made much smaller (was 0.2)
         
-        this.ctx.strokeStyle = '#ffff00'; // Yellow color for center of mass
-        this.ctx.lineWidth = 1 / this.scale; // Made thinner (was 2)
-        
         // Draw a cross at the center of mass
-        this.ctx.beginPath();
+        this.graphics.lineStyle(1, 0xFFFF00); // Yellow color for center of mass
+        
         // Horizontal line
-        this.ctx.moveTo(centerX - size, centerY);
-        this.ctx.lineTo(centerX + size, centerY);
+        this.graphics.moveTo((centerX - size) * this.scale, centerY * this.scale);
+        this.graphics.lineTo((centerX + size) * this.scale, centerY * this.scale);
+        
         // Vertical line
-        this.ctx.moveTo(centerX, centerY - size);
-        this.ctx.lineTo(centerX, centerY + size);
-        this.ctx.stroke();
+        this.graphics.moveTo(centerX * this.scale, (centerY - size) * this.scale);
+        this.graphics.lineTo(centerX * this.scale, (centerY + size) * this.scale);
     };
 
     PlanckDebugDraw.prototype.setFlags = function(flags) {
