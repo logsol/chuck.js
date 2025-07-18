@@ -21,6 +21,8 @@ function (Parent, RubeLoader, planck, Settings, Assert, nc, Matrix, RubeDollJson
         this.limbs = {};
         this.joints = null;
         this.limits = [];
+        this.holdingPlayer = null; // Track which player is holding this RubeDoll
+        this.originalFilterData = {}; // Store original filter data for restoration
 
         var chest = null;
         this.rubeLoader = new RubeLoader(RubeDollJson, physicsEngine.getWorldForRubeLoader());
@@ -93,6 +95,8 @@ function (Parent, RubeLoader, planck, Settings, Assert, nc, Matrix, RubeDollJson
 
         Parent.prototype.flip.call(this, direction);
 
+        // TEMPORARILY DISABLED: Joint limits
+        /*
         if(oldFlipDirection != direction) {
 
             for (var i in this.joints) {
@@ -119,6 +123,7 @@ function (Parent, RubeLoader, planck, Settings, Assert, nc, Matrix, RubeDollJson
                 }
             }
         }
+        */
     };
 
     RubeDoll.prototype.reposition = function(handPosition, direction) {
@@ -203,7 +208,79 @@ function (Parent, RubeLoader, planck, Settings, Assert, nc, Matrix, RubeDollJson
         }
     }
 
+    RubeDoll.prototype.preventCollisionWithPlayer = function(player) {
+        this.holdingPlayer = player;
+        
+        // Generate a unique negative group index for this held RubeDoll
+        var uniqueGroupIndex = -(1000 + this.uid);
+        
+        // Store original filter data and set new collision filter for RubeDoll limbs
+        for (var name in this.limbs) {
+            var limb = this.limbs[name];
+            var fixtureList = limb.getFixtureList();
+            
+            for (var fixture = fixtureList; fixture; fixture = fixture.getNext()) {
+                // Store original filter data
+                this.originalFilterData[fixture] = {
+                    groupIndex: fixture.getFilterGroupIndex()
+                };
+                
+                // Set new filter to prevent collision with holding player
+                fixture.setFilterGroupIndex(uniqueGroupIndex);
+            }
+        }
+        
+        // Also set the holding player's doll body to the same group index
+        if (player && player.doll && player.doll.body) {
+            var dollBody = player.doll.body;
+            var fixtureList = dollBody.getFixtureList();
+            
+            for (var fixture = fixtureList; fixture; fixture = fixture.getNext()) {
+                // Store original filter data for doll
+                this.originalFilterData[fixture] = {
+                    groupIndex: fixture.getFilterGroupIndex()
+                };
+                
+                // Set new filter to prevent collision with held RubeDoll
+                fixture.setFilterGroupIndex(uniqueGroupIndex);
+            }
+        }
+    };
+
+    RubeDoll.prototype.restoreCollisionWithPlayer = function() {
+        if (!this.holdingPlayer) return;
+        
+        // Restore original filter data for RubeDoll limbs
+        for (var name in this.limbs) {
+            var limb = this.limbs[name];
+            var fixtureList = limb.getFixtureList();
+            
+            for (var fixture = fixtureList; fixture; fixture = fixture.getNext()) {
+                if (this.originalFilterData[fixture]) {
+                    fixture.setFilterGroupIndex(this.originalFilterData[fixture].groupIndex);
+                }
+            }
+        }
+        
+        // Also restore the holding player's doll body collision filters
+        if (this.holdingPlayer && this.holdingPlayer.doll && this.holdingPlayer.doll.body) {
+            var dollBody = this.holdingPlayer.doll.body;
+            var fixtureList = dollBody.getFixtureList();
+            
+            for (var fixture = fixtureList; fixture; fixture = fixture.getNext()) {
+                if (this.originalFilterData[fixture]) {
+                    fixture.setFilterGroupIndex(this.originalFilterData[fixture].groupIndex);
+                }
+            }
+        }
+        
+        this.holdingPlayer = null;
+        this.originalFilterData = {};
+    };
+
     RubeDoll.prototype.destroy = function() {
+        // Restore collision before destroying
+        this.restoreCollisionWithPlayer();
 
         var world = this.body.getWorld();
         

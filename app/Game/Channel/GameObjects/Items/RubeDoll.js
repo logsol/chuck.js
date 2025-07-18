@@ -19,6 +19,10 @@ function (Parent, Settings, nc) {
 
     RubeDoll.prototype.beingGrabbed = function(player) {
         Parent.prototype.beingGrabbed.call(this, player);
+        
+        // Prevent collision with the player holding this RubeDoll
+        this.preventCollisionWithPlayer(player);
+        
         if(this.scheduledForDestruction) {
             clearTimeout(this.destructionTimeout);
         }
@@ -26,6 +30,10 @@ function (Parent, Settings, nc) {
  
     RubeDoll.prototype.beingReleased = function(player) {
         Parent.prototype.beingReleased.call(this, player);
+        
+        // Restore collision with the player
+        this.restoreCollisionWithPlayer();
+        
         if(this.scheduledForDestruction) {
             this.delayedDestroy();
         }
@@ -71,6 +79,10 @@ function (Parent, Settings, nc) {
         if(this.scheduledForDestruction) {
             clearTimeout(this.destructionTimeout);
         }
+        
+        // Restore collision before destroying
+        this.restoreCollisionWithPlayer();
+        
     	Parent.prototype.destroy.call(this);
     };
  
