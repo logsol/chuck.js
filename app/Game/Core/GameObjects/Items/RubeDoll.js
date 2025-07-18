@@ -147,14 +147,14 @@ function (Parent, RubeLoader, planck, Settings, Assert, nc, Matrix, RubeDollJson
             // grabing local point to "rotate" around (x, y position transform only)
             var localPoint = this.body.getLocalPoint(limb.getPosition().clone());
 
-            // create rotation matrix from chest rotation difference
-            var mat = planck.Mat22.fromAngle(differenceAngle);
+            // create rotation from chest rotation difference
+            var rot = planck.Rot(differenceAngle);
 
-            // matrix multiplication with local limb position
-            position = mat.mulTV(localPoint);
+            // rotate the local point using static method
+            var rotatedPoint = planck.Rot.mul(rot, localPoint);
 
             // translating back to global position
-            var globalPoint = this.body.getWorldPoint(position);
+            var globalPoint = this.body.getWorldPoint(rotatedPoint);
             limb.setPosition(globalPoint);
 
             // relative limb rotating by chest rotation difference
