@@ -222,7 +222,7 @@ function (Parent, KeyboardInput, domController, Settings, Swiper) {
     KeyboardAndMouse.prototype.deactivateModifier = function() {
         this.modifier = false;
         this.x = this.lastLookDirection * Settings.VIEWPORT_LOOK_AHEAD;
-        this.y = 0;
+        this.y = this.y;
         this.onXyChange(this.x, this.y);
         this.playerController.deactivateModifier();
     };

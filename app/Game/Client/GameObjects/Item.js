@@ -33,6 +33,16 @@ function (Parent, Settings, nc, Layer) {
             nc.trigger(nc.ns.client.view.mesh.add, self.layerId, mesh);
     	}
    
+        // Determine pivot point based on item type
+        var pivotY;
+        if (this.options.type === "circle") {
+            // For circular items, center the pivot
+            pivotY = this.options.height / 2;
+        } else {
+            // For rectangular items, pivot at bottom center
+            pivotY = this.options.height;
+        }
+
         nc.trigger(nc.ns.client.view.mesh.create,
             this.layerId,
             texturePath, 
@@ -42,7 +52,7 @@ function (Parent, Settings, nc, Layer) {
                 height: this.options.height, 
                 pivot: {
                     x: this.options.width / 2,
-                    y: this.options.height
+                    y: pivotY
                 }
             }
         );
