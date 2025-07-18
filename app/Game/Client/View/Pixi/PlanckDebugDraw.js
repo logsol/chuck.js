@@ -59,11 +59,6 @@ function (Settings) {
                     continue;
                 }
                 
-                // Skip non-sensor fixtures if they were sensors in the old logic
-                if (!isSensor && !Settings.DEBUG_DRAW_SENSORS) {
-                    // This was the old logic - skip sensors, but we're keeping non-sensors
-                }
-                
                 // Set colors based on sensor status and body type
                 if (isSensor) {
                     // Sensors: orange with more visibility, no stroke
@@ -92,7 +87,6 @@ function (Settings) {
             for (var body = world.getBodyList(); body; body = body.getNext()) {
                 var transform = body.getTransform();
                 this.drawCenterOfMass(transform);
-                // Removed drawBodyOrigin call since origin and center of mass are the same in Planck.js
             }
         }
 
@@ -163,17 +157,15 @@ function (Settings) {
         }
     };
 
-    PlanckDebugDraw.prototype.drawEdge = function(shape, transform, isSensor) {
+    PlanckDebugDraw.prototype.drawEdge = function(shape, transform, isSensor, fillColor, lineColor, lineWidth) {
         var v1 = this.transformVertex(shape.m_vertex1, transform);
         var v2 = this.transformVertex(shape.m_vertex2, transform);
         
-        this.ctx.beginPath();
-        this.ctx.moveTo(v1.x, v1.y);
-        this.ctx.lineTo(v2.x, v2.y);
-        
         // Only draw stroke for non-sensors
-        if (!isSensor) {
-            this.ctx.stroke();
+        if (!isSensor && lineWidth > 0) {
+            this.graphics.lineStyle(lineWidth, lineColor);
+            this.graphics.moveTo(v1.x * this.scale, v1.y * this.scale);
+            this.graphics.lineTo(v2.x * this.scale, v2.y * this.scale);
         }
     };
 

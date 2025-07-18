@@ -29,6 +29,11 @@ function (Parent, Settings, domController, Box2D, nc, PlanckDebugDraw, debugLaye
             this.setupDebugDraw();
         }
 
+        // Show/hide the debug canvas overlay
+        if (this.debugCanvas) {
+            this.debugCanvas.style.display = this.debugMode ? 'block' : 'none';
+        }
+
         debugLayer.container.visible = this.debugMode;
     };
 
