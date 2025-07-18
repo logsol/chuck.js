@@ -142,6 +142,9 @@ function (Parent, domController, PIXI, Settings, nc, Exception, GameStats, Layer
     PixiView.prototype.onPointerLockChange = function(isLocked, options) {
         if (!Settings.ENABLE_POINTER_LOCK_FILTER) return;
 
+        // Disable pointer lock filters when debug mode is on
+        if (this.debugMode) return;
+
         if(isLocked) {
             this.removeFilters(this.pointerLockFilters);
             
@@ -295,6 +298,19 @@ function (Parent, domController, PIXI, Settings, nc, Exception, GameStats, Layer
         };
 
         return textures;
+    };
+
+    PixiView.prototype.onToggleDebugMode = function(debugMode) {
+        // Call parent method first
+        Parent.prototype.onToggleDebugMode.call(this, debugMode);
+        
+        // Remove pointer lock filters when debug mode is enabled
+        if (debugMode && this.pointerLockFilters) {
+            this.removeFilters(this.pointerLockFilters);
+            if (this.clickToEnable) {
+                this.clickToEnable.visible = false;
+            }
+        }
     };
 
     PixiView.prototype.destroy = function() {

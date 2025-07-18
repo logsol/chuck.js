@@ -65,7 +65,7 @@ function (Settings, PIXI) {
                         fillColor = 0x0000FF; // Blue for kinematic bodies
                         lineColor = 0x0000FF; // Blue stroke
                     }
-                    lineWidth = 1;
+                    lineWidth = 0.25;
                 }
 
                 this.drawShape(shape, transform, isSensor, fillColor, lineColor, lineWidth);
@@ -190,7 +190,7 @@ function (Settings, PIXI) {
         var size = 0.05; // Made much smaller (was 0.2)
         
         // Draw a cross at the center of mass
-        this.graphics.lineStyle(1, 0xFFFF00); // Yellow color for center of mass
+        this.graphics.lineStyle(0.25, 0xFFFF00); // Yellow color for center of mass
         
         // Horizontal line
         this.graphics.moveTo((centerX - size) * this.scale, centerY * this.scale);
