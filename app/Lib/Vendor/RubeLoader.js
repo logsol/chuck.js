@@ -5,114 +5,27 @@ define([
 /*
 List of what has been done here
 - enclose in require.js style class
-- added box2d var names
+- added planck var names
 - inversed y coordinates with body positions, polygon coordinates and in getVectorValue for joints
+- migrated from Box2D to Planck.js
 
 */
 
-function (Box2D) {
+function (planck) {
 
-	var b2Color = Box2D.Common.b2Color,
-		b2internal = Box2D.Common.b2internal,
-		b2Settings = Box2D.Common.b2Settings,
-		b2CircleShape = Box2D.Collision.Shapes.b2CircleShape,
-		b2EdgeChainDef = Box2D.Collision.Shapes.b2EdgeChainDef,
-		b2EdgeShape = Box2D.Collision.Shapes.b2EdgeShape,
-		b2MassData = Box2D.Collision.Shapes.b2MassData,
-		b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape,
-		b2Shape = Box2D.Collision.Shapes.b2Shape,
-		b2Mat22 = Box2D.Common.Math.b2Mat22,
-		b2Mat33 = Box2D.Common.Math.b2Mat33,
-		b2Math = Box2D.Common.Math.b2Math,
-		b2Sweep = Box2D.Common.Math.b2Sweep,
-		b2Transform = Box2D.Common.Math.b2Transform,
-		b2Vec2 = Box2D.Common.Math.b2Vec2,
-		b2Vec3 = Box2D.Common.Math.b2Vec3,
-		b2Body = Box2D.Dynamics.b2Body,
-		b2BodyDef = Box2D.Dynamics.b2BodyDef,
-		b2ContactFilter = Box2D.Dynamics.b2ContactFilter,
-		b2ContactImpulse = Box2D.Dynamics.b2ContactImpulse,
-		b2ContactListener = Box2D.Dynamics.b2ContactListener,
-		b2ContactManager = Box2D.Dynamics.b2ContactManager,
-		b2DebugDraw = Box2D.Dynamics.b2DebugDraw,
-		b2DestructionListener = Box2D.Dynamics.b2DestructionListener,
-		b2FilterData = Box2D.Dynamics.b2FilterData,
-		b2Fixture = Box2D.Dynamics.b2Fixture,
-		b2FixtureDef = Box2D.Dynamics.b2FixtureDef,
-		b2Island = Box2D.Dynamics.b2Island,
-		b2TimeStep = Box2D.Dynamics.b2TimeStep,
-		b2World = Box2D.Dynamics.b2World,
-		b2AABB = Box2D.Collision.b2AABB,
-		b2Bound = Box2D.Collision.b2Bound,
-		b2BoundValues = Box2D.Collision.b2BoundValues,
-		b2Collision = Box2D.Collision.b2Collision,
-		b2ContactID = Box2D.Collision.b2ContactID,
-		b2ContactPoint = Box2D.Collision.b2ContactPoint,
-		b2Distance = Box2D.Collision.b2Distance,
-		b2DistanceInput = Box2D.Collision.b2DistanceInput,
-		b2DistanceOutput = Box2D.Collision.b2DistanceOutput,
-		b2DistanceProxy = Box2D.Collision.b2DistanceProxy,
-		b2DynamicTree = Box2D.Collision.b2DynamicTree,
-		b2DynamicTreeBroadPhase = Box2D.Collision.b2DynamicTreeBroadPhase,
-		b2DynamicTreeNode = Box2D.Collision.b2DynamicTreeNode,
-		b2DynamicTreePair = Box2D.Collision.b2DynamicTreePair,
-		b2Manifold = Box2D.Collision.b2Manifold,
-		b2ManifoldPoint = Box2D.Collision.b2ManifoldPoint,
-		b2Point = Box2D.Collision.b2Point,
-		b2RayCastInput = Box2D.Collision.b2RayCastInput,
-		b2RayCastOutput = Box2D.Collision.b2RayCastOutput,
-		b2Segment = Box2D.Collision.b2Segment,
-		b2SeparationFunction = Box2D.Collision.b2SeparationFunction,
-		b2Simplex = Box2D.Collision.b2Simplex,
-		b2SimplexCache = Box2D.Collision.b2SimplexCache,
-		b2SimplexVertex = Box2D.Collision.b2SimplexVertex,
-		b2TimeOfImpact = Box2D.Collision.b2TimeOfImpact,
-		b2TOIInput = Box2D.Collision.b2TOIInput,
-		b2WorldManifold = Box2D.Collision.b2WorldManifold,
-		ClipVertex = Box2D.Collision.ClipVertex,
-		Features = Box2D.Collision.Features,
-		IBroadPhase = Box2D.Collision.IBroadPhase;
-		b2_dynamicBody = 'dynamic';
-		b2ControllerEdge = Box2D.Dynamics.Controllers.b2ControllerEdge,
-		IBroadPhase = Box2D.Collision.IBroadPhase,
-		b2CircleContact = Box2D.Dynamics.Contacts.b2CircleContact,
-		b2Contact = Box2D.Dynamics.Contacts.b2Contact,
-		b2ContactConstraint = Box2D.Dynamics.Contacts.b2ContactConstraint,
-		b2ContactConstraintPoint = Box2D.Dynamics.Contacts.b2ContactConstraintPoint,
-		b2ContactEdge = Box2D.Dynamics.Contacts.b2ContactEdge,
-		b2ContactFactory = Box2D.Dynamics.Contacts.b2ContactFactory,
-		b2ContactRegister = Box2D.Dynamics.Contacts.b2ContactRegister,
-		b2ContactResult = Box2D.Dynamics.Contacts.b2ContactResult,
-		b2ContactSolver = Box2D.Dynamics.Contacts.b2ContactSolver,
-		b2EdgeAndCircleContact = Box2D.Dynamics.Contacts.b2EdgeAndCircleContact,
-		b2NullContact = Box2D.Dynamics.Contacts.b2NullContact,
-		b2PolyAndCircleContact = Box2D.Dynamics.Contacts.b2PolyAndCircleContact,
-		b2PolyAndEdgeContact = Box2D.Dynamics.Contacts.b2PolyAndEdgeContact,
-		b2PolygonContact = Box2D.Dynamics.Contacts.b2PolygonContact,
-		b2PositionSolverManifold = Box2D.Dynamics.Contacts.b2PositionSolverManifold,
-		b2Controller = Box2D.Dynamics.Controllers.b2Controller,
-		b2DistanceJoint = Box2D.Dynamics.Joints.b2DistanceJoint,
-		b2DistanceJointDef = Box2D.Dynamics.Joints.b2DistanceJointDef,
-		b2FrictionJoint = Box2D.Dynamics.Joints.b2FrictionJoint,
-		b2FrictionJointDef = Box2D.Dynamics.Joints.b2FrictionJointDef,
-		b2GearJoint = Box2D.Dynamics.Joints.b2GearJoint,
-		b2GearJointDef = Box2D.Dynamics.Joints.b2GearJointDef,
-		b2Jacobian = Box2D.Dynamics.Joints.b2Jacobian,
-		b2Joint = Box2D.Dynamics.Joints.b2Joint,
-		b2JointDef = Box2D.Dynamics.Joints.b2JointDef,
-		b2JointEdge = Box2D.Dynamics.Joints.b2JointEdge,
-		b2LineJoint = Box2D.Dynamics.Joints.b2LineJoint,
-		b2LineJointDef = Box2D.Dynamics.Joints.b2LineJointDef,
-		b2MouseJoint = Box2D.Dynamics.Joints.b2MouseJoint,
-		b2MouseJointDef = Box2D.Dynamics.Joints.b2MouseJointDef,
-		b2PrismaticJoint = Box2D.Dynamics.Joints.b2PrismaticJoint,
-		b2PrismaticJointDef = Box2D.Dynamics.Joints.b2PrismaticJointDef,
-		b2PulleyJoint = Box2D.Dynamics.Joints.b2PulleyJoint,
-		b2PulleyJointDef = Box2D.Dynamics.Joints.b2PulleyJointDef,
-		b2RevoluteJoint = Box2D.Dynamics.Joints.b2RevoluteJoint,
-		b2RevoluteJointDef = Box2D.Dynamics.Joints.b2RevoluteJointDef,
-		b2WeldJoint = Box2D.Dynamics.Joints.b2WeldJoint,
-		b2WeldJointDef = Box2D.Dynamics.Joints.b2WeldJointDef;
+    // Planck.js equivalents for Box2D classes
+    var Vec2 = planck.Vec2,
+        Body = planck.Body,
+        Fixture = planck.Fixture,
+        Circle = planck.Circle,
+        Polygon = planck.Polygon,
+        Edge = planck.Edge,
+        Chain = planck.Chain,
+        RevoluteJoint = planck.RevoluteJoint,
+        DistanceJoint = planck.DistanceJoint,
+        PrismaticJoint = planck.PrismaticJoint,
+        FrictionJoint = planck.FrictionJoint,
+        WeldJoint = planck.WeldJoint;
 
     function RubeLoader(json, world) {
     	
@@ -136,28 +49,28 @@ function (Box2D) {
 	        return null;
 	    }    
 	    
-	    var bd = new b2BodyDef();
+	    var bodyDef = {};
 	    if ( bodyJson.type == 2 )
-	        bd.type = b2_dynamicBody;
+	        bodyDef.type = 'dynamic';
 	    else if ( bodyJson.type == 1 )
-	        bd.type = b2_kinematicBody;
+	        bodyDef.type = 'kinematic';
 	    if ( bodyJson.hasOwnProperty('angle') )
-	        bd.angle = bodyJson.angle;
+	        bodyDef.angle = bodyJson.angle;
 	    if ( bodyJson.hasOwnProperty('angularVelocity') )
-	        bd.angularVelocity = bodyJson.angularVelocity;
+	        bodyDef.angularVelocity = bodyJson.angularVelocity;
 	    if ( bodyJson.hasOwnProperty('active') )
-	        bd.awake = bodyJson.active;        
+	        bodyDef.awake = bodyJson.active;        
 	    if ( bodyJson.hasOwnProperty('fixedRotation') )
-	        bd.fixedRotation = bodyJson.fixedRotation;
+	        bodyDef.fixedRotation = bodyJson.fixedRotation;
 	    if ( bodyJson.hasOwnProperty('linearVelocity') && bodyJson.linearVelocity instanceof Object )
-	        bd.linearVelocity.SetV( bodyJson.linearVelocity );
+	        bodyDef.linearVelocity = Vec2(bodyJson.linearVelocity.x, bodyJson.linearVelocity.y);
 	    if ( bodyJson.hasOwnProperty('position') && bodyJson.position instanceof Object )
-	        bd.position.SetV( this.getVectorValue(bodyJson.position) );
+	        bodyDef.position = this.getVectorValue(bodyJson.position);
 	    if ( bodyJson.hasOwnProperty('awake') )
-	        bd.awake = bodyJson.awake;
+	        bodyDef.awake = bodyJson.awake;
 	    else
-	        bd.awake = false;
-	    var body = world.CreateBody(bd);
+	        bodyDef.awake = false;
+	    var body = world.createBody(bodyDef);
 	    if ( bodyJson.hasOwnProperty('fixture') ) {
 	        for (k = 0; k < bodyJson['fixture'].length; k++) {
 	            var fixtureJson = bodyJson['fixture'][k];
@@ -174,55 +87,49 @@ function (Box2D) {
 
 	RubeLoader.prototype.loadFixtureFromRUBE = function (body, fixtureJson) {
 	    //console.log(fixtureJson);
-	    var fd = new b2FixtureDef();
-	    if (fixtureJson.hasOwnProperty('friction'))
-	        fd.friction = fixtureJson.friction;
-	    if (fixtureJson.hasOwnProperty('density'))
-	        fd.density = fixtureJson.density;
-	    if (fixtureJson.hasOwnProperty('restitution'))
-	        fd.restitution = fixtureJson.restitution;
-	    if (fixtureJson.hasOwnProperty('sensor'))
-	        fd.isSensor = fixtureJson.sensor;
+	    var fixtureDef = {};
+	    if(fixtureJson.hasOwnProperty('friction'))
+	        fixtureDef.friction = fixtureJson.friction;
+	    if(fixtureJson.hasOwnProperty('density'))
+	        fixtureDef.density = fixtureJson.density;
+	    if(fixtureJson.hasOwnProperty('restitution'))
+	        fixtureDef.restitution = fixtureJson.restitution;
+	    if(fixtureJson.hasOwnProperty('sensor'))
+	        fixtureDef.isSensor = fixtureJson.sensor;
 	    if ( fixtureJson.hasOwnProperty('filter-categoryBits') )
-	        fd.filter.categoryBits = fixtureJson['filter-categoryBits'];
+	        fixtureDef.filterCategoryBits = fixtureJson['filter-categoryBits'];
 	    if ( fixtureJson.hasOwnProperty('filter-maskBits') )
-	        fd.filter.maskBits = fixtureJson['filter-maskBits'];
+	        fixtureDef.filterMaskBits = fixtureJson['filter-maskBits'];
 	    if ( fixtureJson.hasOwnProperty('filter-groupIndex') )
-	        fd.filter.groupIndex = fixtureJson['filter-groupIndex'];
-	    if (fixtureJson.hasOwnProperty('circle')) {
-	        fd.shape = new b2CircleShape();
-	        fd.shape.m_radius = fixtureJson.circle.radius;
+	        fixtureDef.filterGroupIndex = fixtureJson['filter-groupIndex'];
+	    if(fixtureJson.hasOwnProperty('circle')) {
+	        fixtureDef.shape = Circle(fixtureJson.circle.radius);
 	        if ( fixtureJson.circle.center )
-	            fd.shape.m_p.SetV(fixtureJson.circle.center);
-	        var fixture = body.createFixture(fd);        
-	        if ( fixtureJson.name )
+	            fixtureDef.shape.m_center = Vec2(fixtureJson.circle.center.x, fixtureJson.circle.center.y);
+	        var fixture = body.createFixture(fixtureDef);        
+	        if ( fixture && fixtureJson.name )
 	            fixture.name = fixtureJson.name;
 	    }
 	    else if (fixtureJson.hasOwnProperty('polygon')) {
-	        fd.shape = new b2PolygonShape();
 	        var verts = [];
 
-
 	        for (v = fixtureJson.polygon.vertices.x.length - 1; v >= 0 ; v--) 
-	           verts.push( new b2Vec2( fixtureJson.polygon.vertices.x[v], -fixtureJson.polygon.vertices.y[v] ) );
-	        fd.shape.SetAsArray(verts, verts.length);
-	        var fixture = body.createFixture(fd);        
+	           verts.push( Vec2( fixtureJson.polygon.vertices.x[v], -fixtureJson.polygon.vertices.y[v] ) );
+	        fixtureDef.shape = Polygon(verts);
+	        var fixture = body.createFixture(fixtureDef);        
 	        if ( fixture && fixtureJson.name )
 	            fixture.name = fixtureJson.name;
 	    }
 	    else if (fixtureJson.hasOwnProperty('chain')) {
-	        fd.shape = new b2PolygonShape();
-	        var lastVertex = new b2Vec2();
+	        var verts = [];
 	        for (v =  fixtureJson.chain.vertices.x.length - 1; v >= 0; v--) {
-	            var thisVertex = new b2Vec2( fixtureJson.chain.vertices.x[v], -fixtureJson.chain.vertices.y[v] );
-	            if ( v < fixtureJson.chain.vertices.x.length - 1 ) {
-	                fd.shape.SetAsEdge( lastVertex, thisVertex );
-	                var fixture = body.createFixture(fd);        
-	                if ( fixtureJson.name )
-	                    fixture.name = fixtureJson.name;
-	            }
-	            lastVertex = thisVertex;
+	            var thisVertex = Vec2( fixtureJson.chain.vertices.x[v], -fixtureJson.chain.vertices.y[v] );
+	            verts.push(thisVertex);
 	        }
+	        fixtureDef.shape = Chain(verts);
+	        var fixture = body.createFixture(fixtureDef);        
+	        if ( fixtureJson.name )
+	            fixture.name = fixtureJson.name;
 	    }
 	    else {
 	        console.log("Could not find shape type for fixture");
@@ -231,17 +138,17 @@ function (Box2D) {
 
 	RubeLoader.prototype.getVectorValue = function (val) {
 	    if ( val instanceof Object ) {
-	        return { x: val.x, y: val.y * -1 };
+	        return Vec2(val.x, val.y * -1);
 	    } else {
-	        return { x:0, y:0 };
+	        return Vec2(0, 0);
 	    }
 	}
 
 	RubeLoader.prototype.loadJointCommonProperties = function (jd, jointJson, loadedBodies) {    
 	    jd.bodyA = loadedBodies[jointJson.bodyA];
 	    jd.bodyB = loadedBodies[jointJson.bodyB];
-	    jd.localAnchorA.SetV( this.getVectorValue(jointJson.anchorA) );
-	    jd.localAnchorB.SetV( this.getVectorValue(jointJson.anchorB) );
+	    jd.localAnchorA = this.getVectorValue(jointJson.anchorA);
+	    jd.localAnchorB = this.getVectorValue(jointJson.anchorB);
 	    if ( jointJson.collideConnected )
 	        jd.collideConnected = jointJson.collideConnected;
 	}
@@ -263,7 +170,7 @@ function (Box2D) {
 	    
 	    var joint = null;
 	    if ( jointJson.type == "revolute" ) {
-	        var jd = new b2RevoluteJointDef();
+	        var jd = {};
 	        this.loadJointCommonProperties(jd, jointJson, loadedBodies);
 	        if ( jointJson.hasOwnProperty('refAngle') )
 	            jd.referenceAngle = jointJson.refAngle;
@@ -279,12 +186,12 @@ function (Box2D) {
 	            jd.enableLimit = jointJson.enableLimit;
 	        if ( jointJson.hasOwnProperty('enableMotor') )
 	            jd.enableMotor = jointJson.enableMotor;
-	        joint = world.CreateJoint(jd);
+	        joint = world.createJoint(RevoluteJoint(jd));
 	    }
 	    else if ( jointJson.type == "distance" || jointJson.type == "rope" ) {
 	        if ( jointJson.type == "rope" )
 	            console.log("Replacing unsupported rope joint with distance joint!");
-	        var jd = new b2DistanceJointDef();
+	        var jd = {};
 	        this.loadJointCommonProperties(jd, jointJson, loadedBodies);
 	        if ( jointJson.hasOwnProperty('length') )
 	            jd.length = jointJson.length;
@@ -292,13 +199,13 @@ function (Box2D) {
 	            jd.dampingRatio = jointJson.dampingRatio;
 	        if ( jointJson.hasOwnProperty('frequency') )
 	            jd.frequencyHz = jointJson.frequency;
-	        joint = world.CreateJoint(jd);
+	        joint = world.createJoint(DistanceJoint(jd));
 	    }
 	    else if ( jointJson.type == "prismatic" ) {
-	        var jd = new b2PrismaticJointDef();
+	        var jd = {};
 	        this.loadJointCommonProperties(jd, jointJson, loadedBodies);        
 	        if ( jointJson.hasOwnProperty('localAxisA') )
-	            jd.localAxisA.SetV( this.getVectorValue(jointJson.localAxisA) );         
+	            jd.localAxisA = this.getVectorValue(jointJson.localAxisA);         
 	        if ( jointJson.hasOwnProperty('refAngle') )
 	            jd.referenceAngle = jointJson.refAngle;
 	        if ( jointJson.hasOwnProperty('enableLimit') )
@@ -313,44 +220,44 @@ function (Box2D) {
 	            jd.maxMotorForce = jointJson.maxMotorForce;
 	        if ( jointJson.hasOwnProperty('motorSpeed') )
 	            jd.motorSpeed = jointJson.motorSpeed;            
-	        joint = world.CreateJoint(jd);
+	        joint = world.createJoint(PrismaticJoint(jd));
 	    }
 	    else if ( jointJson.type == "wheel" ) {
-	        //Make a fake wheel joint using a line joint and a distance joint.
-	        //Return the line joint because it has the linear motor controls.
+	        //Make a fake wheel joint using a distance joint and a prismatic joint.
+	        //Return the prismatic joint because it has the linear motor controls.
 	        //Use ApplyTorque on the bodies to spin the wheel...
 	        
-	        var jd = new b2DistanceJointDef();
+	        var jd = {};
 	        this.loadJointCommonProperties(jd, jointJson, loadedBodies);
 	        jd.length = 0.0;
 	        if ( jointJson.hasOwnProperty('springDampingRatio') )
 	            jd.dampingRatio = jointJson.springDampingRatio;
 	        if ( jointJson.hasOwnProperty('springFrequency') )
 	            jd.frequencyHz = jointJson.springFrequency;
-	        world.CreateJoint(jd);
+	        world.createJoint(DistanceJoint(jd));
 	        
-	        jd = new b2LineJointDef();
+	        jd = {};
 	        this.loadJointCommonProperties(jd, jointJson, loadedBodies);
 	        if ( jointJson.hasOwnProperty('localAxisA') )
-	            jd.localAxisA.SetV( this.getVectorValue(jointJson.localAxisA) );
+	            jd.localAxisA = this.getVectorValue(jointJson.localAxisA);
 	            
-	        joint = world.CreateJoint(jd);
+	        joint = world.createJoint(PrismaticJoint(jd));
 	    }
 	    else if ( jointJson.type == "friction" ) {
-	        var jd = new b2FrictionJointDef();
+	        var jd = {};
 	        this.loadJointCommonProperties(jd, jointJson, loadedBodies);
 	        if ( jointJson.hasOwnProperty('maxForce') )
 	            jd.maxForce = jointJson.maxForce;
 	        if ( jointJson.hasOwnProperty('maxTorque') )
 	            jd.maxTorque = jointJson.maxTorque;
-	        joint = world.CreateJoint(jd);
+	        joint = world.createJoint(FrictionJoint(jd));
 	    }
 	    else if ( jointJson.type == "weld" ) {
-	        var jd = new b2WeldJointDef();
+	        var jd = {};
 	        this.loadJointCommonProperties(jd, jointJson, loadedBodies);
 	        if ( jointJson.hasOwnProperty('referenceAngle') )
 	            jd.referenceAngle = jointJson.referenceAngle;
-	        joint = world.CreateJoint(jd);
+	        joint = world.createJoint(WeldJoint(jd));
 	    }
 	    else {
 	        console.log("Unsupported joint type: " + jointJson.type);
@@ -381,8 +288,7 @@ function (Box2D) {
 	    else
 	        image.body = null;
 	        
-	    image.center = new b2Vec2();
-	    image.center.SetV( this.getVectorValue(imageJson.center) );
+	    image.center = this.getVectorValue(imageJson.center);
 	    
 	    return image;
 	}
@@ -434,10 +340,10 @@ function (Box2D) {
 
 	//create a world variable and return it if loading succeeds
 	RubeLoader.prototype.loadWorldFromRUBE = function (worldJson) {
-	    var gravity = new b2Vec2(0,0);
+	    var gravity = Vec2(0,0);
 	    if ( worldJson.hasOwnProperty('gravity') && worldJson.gravity instanceof Object )
-	        gravity.SetV( worldJson.gravity );
-	    var world = new b2World( gravity );
+	        gravity = Vec2(worldJson.gravity.x, worldJson.gravity.y);
+	    var world = planck.World({ gravity: gravity });
 	    if ( ! this.loadSceneIntoWorld(worldJson, world) )
 	        return false;
 	    return world;
@@ -445,7 +351,8 @@ function (Box2D) {
 
 	RubeLoader.prototype.getNamedBodies = function (world, name) {
 	    var bodies = [];
-	    for (b = world.m_bodyList; b; b = b.m_next) {
+	    var bodyList = world.getBodyList();
+	    for (var b = bodyList; b; b = b.getNext()) {
 	        if ( b.name == name )
 	            bodies.push(b);
 	    }
@@ -454,8 +361,10 @@ function (Box2D) {
 
 	RubeLoader.prototype.getNamedFixtures = function (world, name) {
 	    var fixtures = [];
-	    for (b = world.m_bodyList; b; b = b.m_next) {
-	        for (f = b.m_fixtureList; f; f = f.m_next) {
+	    var bodyList = world.getBodyList();
+	    for (var b = bodyList; b; b = b.getNext()) {
+	        var fixtureList = b.getFixtureList();
+	        for (var f = fixtureList; f; f = f.getNext()) {
 	            if ( f.name == name )
 	                fixtures.push(f);
 	        }
@@ -465,7 +374,8 @@ function (Box2D) {
 
 	RubeLoader.prototype.getNamedJoints = function (world, name) {
 	    var joints = [];
-	    for (j = world.m_jointList; j; j = j.m_next) {
+	    var jointList = world.getJointList();
+	    for (var j = jointList; j; j = j.getNext()) {
 	        if ( j.name == name )
 	            joints.push(j);
 	    }
@@ -484,7 +394,8 @@ function (Box2D) {
 	//custom properties
 	RubeLoader.prototype.getBodiesByCustomProperty = function (world, propertyType, propertyName, valueToMatch) {
 	    var bodies = [];
-	    for (b = world.m_bodyList; b; b = b.m_next) {
+	    var bodyList = world.getBodyList();
+	    for (var b = bodyList; b; b = b.getNext()) {
 	        if ( ! b.hasOwnProperty('customProperties') )
 	            continue;
 	        for (var i = 0; i < b.customProperties.length; i++) {

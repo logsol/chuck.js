@@ -6,7 +6,7 @@ define([
     "Lib/Utilities/Assert"
 ],
  
-function (Parent, Item, Box2D, nc, Assert) {
+function (Parent, Item, planck, nc, Assert) {
 
 	"use strict";
  

@@ -1,25 +1,21 @@
 define([
     "Game/" + GLOBALS.context + "/GameObjects/Item",
-    // "Lib/Vendor/RubeLoader", // Temporarily disabled during Planck.js migration
+    "Lib/Vendor/RubeLoader", // Re-enabled for Planck.js
     "Lib/Vendor/Planck",
     "Game/Config/Settings",
     "Lib/Utilities/Assert",
     "Lib/Utilities/NotificationCenter",
-    "Lib/Utilities/Matrix"
-    // "json!Game/Asset/RubeDoll.json" // Temporarily disabled during Planck.js migration
+    "Lib/Utilities/Matrix",
+    "json!Game/Asset/RubeDoll.json" // Re-enabled for Planck.js
 ],
 
-function (Parent, /* RubeLoader, */ planck, Settings, Assert, nc, Matrix /* , RubeDollJson */) {
+function (Parent, RubeLoader, planck, Settings, Assert, nc, Matrix, RubeDollJson) {
 
 	"use strict";
  
     function RubeDoll(physicsEngine, uid, options) {
         Assert.number(options.x, options.y);
 
-        // TODO: Implement RubeDoll with Planck.js
-        // Temporarily stubbed out during Box2D -> Planck.js migration
-        console.warn("RubeDoll is temporarily disabled during Planck.js migration");
-        
         this.rubeLoader = null;
         this.body = null;
         this.limbs = {};
@@ -27,15 +23,15 @@ function (Parent, /* RubeLoader, */ planck, Settings, Assert, nc, Matrix /* , Ru
         this.limits = [];
 
         var chest = null;
-        // this.rubeLoader = new RubeLoader(RubeDollJson, physicsEngine.getWorldForRubeLoader());
-        // this.loadRubeDollFromScene(options);
+        this.rubeLoader = new RubeLoader(RubeDollJson, physicsEngine.getWorldForRubeLoader());
+        this.loadRubeDollFromScene(options);
 
         Parent.call(this, physicsEngine, uid, options);
         physicsEngine.destroyBody(this.body);
         this.body = this.limbs.chest;
         delete this.limbs.chest;
 
-        this.body.SetUserData(this);
+        this.body.setUserData(this);
 
         this.flip(options.direction || 1);
     }
@@ -45,24 +41,22 @@ function (Parent, /* RubeLoader, */ planck, Settings, Assert, nc, Matrix /* , Ru
     RubeDoll.prototype.loadRubeDollFromScene = function(options) {
         var scene = this.rubeLoader.getScene();
 
-
-
         for (var i in scene.bodies) {
             var body = scene.bodies[i];
-            var position = body.GetPosition().clone();
-            position.Add(planck.Vec2(
+            var position = body.getPosition().clone();
+            position.add(planck.Vec2(
                 options.x / Settings.RATIO, 
                 options.y / Settings.RATIO
             ));
-            body.SetPosition(position);
+            body.setPosition(position);
             this.limbs[body.name] = body;
 
             // code snipped possibly needed for filtering between doll and rubedoll while holding
-            //var filterData = new Box2D.Dynamics.b2FilterData();
+            //var filterData = new planck.Filter();
             //filterData.groupIndex = -66;
             //if(body.name != "head" && body.name != "chest") {
             //    for (var fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
-            //        fixture.SetFilterData(filterData);
+            //        fixture.setFilterData(filterData);
             //    }
             //}
         }
@@ -72,13 +66,13 @@ function (Parent, /* RubeLoader, */ planck, Settings, Assert, nc, Matrix /* , Ru
         var count = 0;
         for (var i in this.joints) {
             this.limits[i] = {
-                lower: this.joints[i].GetLowerLimit(),
-                upper: this.joints[i].GetUpperLimit(),
+                lower: this.joints[i].getLowerLimit(),
+                upper: this.joints[i].getUpperLimit(),
             };
 /*
-            this.joints[i].EnableLimit(false);
+            this.joints[i].enableLimit(false);
 
-            if(count < 4 && this.joints[i] instanceof Box2D.Dynamics.Joints.b2RevoluteJoint) {
+            if(count < 4 && this.joints[i] instanceof planck.RevoluteJoint) {
                 console.log(i);
             } else {
                 body.getWorld().destroyJoint(this.joints[i]);
@@ -90,7 +84,7 @@ function (Parent, /* RubeLoader, */ planck, Settings, Assert, nc, Matrix /* , Ru
 
     RubeDoll.prototype.getFixtureDef = function() {
         var fixtureDef = { shape: null, density: 1.0, friction: 0.3, restitution: 0.0, isSensor: false };
-        fixtureDef.shape = new Box2D.Collision.Shapes.b2CircleShape();
+        fixtureDef.shape = planck.Circle(0.1); // Small circle as placeholder
         return fixtureDef;
     };
 
@@ -105,10 +99,10 @@ function (Parent, /* RubeLoader, */ planck, Settings, Assert, nc, Matrix /* , Ru
                 var joint = this.joints[i];
                 var limits = this.limits[i];
 
-                if (joint instanceof Box2D.Dynamics.Joints.b2RevoluteJoint) {
+                if (joint instanceof planck.RevoluteJoint) {
 
                     if (direction > 0) {
-                        joint.SetLimits(limits.lower, limits.upper);
+                        joint.setLimits(limits.lower, limits.upper);
                         continue;
                     }
 
@@ -116,12 +110,12 @@ function (Parent, /* RubeLoader, */ planck, Settings, Assert, nc, Matrix /* , Ru
                     var a2 = limits.upper * -1;
 
                     if (a2 > a1) {
-                        joint.SetLimits(a1, a2);
+                        joint.setLimits(a1, a2);
                     } else {
-                        joint.SetLimits(a2, a1);
+                        joint.setLimits(a2, a1);
                     }
 
-                    // joint.SetAngle(joint.GetAngle() * -1);
+                    // joint.setAngle(joint.getAngle() * -1);
                 }
             }
         }
@@ -129,46 +123,46 @@ function (Parent, /* RubeLoader, */ planck, Settings, Assert, nc, Matrix /* , Ru
 
     RubeDoll.prototype.reposition = function(handPosition, direction) {
         var oldPosition = this.getPosition();
-        var oldAngle = this.body.GetAngle();
+        var oldAngle = this.body.getAngle();
         var oldDirection = this.flipDirection;
         
         // calls flip() at the end of Parent reposition()
         Parent.prototype.reposition.call(this, handPosition, direction);
 
-        var differenceAngle = oldAngle - this.body.GetAngle();
+        var differenceAngle = oldAngle - this.body.getAngle();
 
-        //this.body.SetLinearVelocity(planck.Vec2(0, 0));
+        //this.body.setLinearVelocity(planck.Vec2(0, 0));
 
-        var offset = Box2D.Common.Math.b2Math.SubtractVV(this.getPosition(), oldPosition);
+        var offset = planck.Vec2(this.getPosition()).sub(planck.Vec2(oldPosition));
         var grabAngle = (this.options.grabAngle || 0.001);
 
         for(var key in this.limbs) {
             var limb = this.limbs[key];
 
             // Setting position offset first (floor to hand)
-            var position = limb.GetPosition().clone();
-            position.Add(offset);
-            limb.SetPosition(position);
+            var position = limb.getPosition().clone();
+            position.add(offset);
+            limb.setPosition(position);
 
             // grabing local point to "rotate" around (x, y position transform only)
-            var localPoint = this.body.getLocalPoint(limb.GetPosition().clone());
+            var localPoint = this.body.getLocalPoint(limb.getPosition().clone());
 
             // create rotation matrix from chest rotation difference
-            var mat = Box2D.Common.Math.b2Mat22.FromAngle(differenceAngle);
+            var mat = planck.Mat22.fromAngle(differenceAngle);
 
             // matrix multiplication with local limb position
-            position = Box2D.Common.Math.b2Math.MulTMV(mat, localPoint);
+            position = mat.mulTV(localPoint);
 
             // translating back to global position
             var globalPoint = this.body.getWorldPoint(position);
-            limb.SetPosition(globalPoint);
+            limb.setPosition(globalPoint);
 
             // relative limb rotating by chest rotation difference
             var d = (oldDirection == direction) ? -1 : 1;
-            limb.SetAngle((limb.GetAngle() - differenceAngle) * d);
+            limb.setAngle((limb.getAngle() - differenceAngle) * d);
             
-            //limb.SetType('static');
-            //limb.SetLinearVelocity(planck.Vec2(0, 0));
+            //limb.setType('static');
+            //limb.setLinearVelocity(planck.Vec2(0, 0));
         }
     };
 
@@ -176,26 +170,25 @@ function (Parent, /* RubeLoader, */ planck, Settings, Assert, nc, Matrix /* , Ru
         Assert.number(options.linearVelocity.x, options.linearVelocity.y);
         Assert.number(options.angularVelocity);
 
-        this.body.SetLinearVelocity(options.linearVelocity);
+        this.body.setLinearVelocity(options.linearVelocity);
         this.body.setAngularVelocity(options.angularVelocity);
         for(var name in this.limbs) {
-            this.limbs[name].SetLinearVelocity(options.linearVelocity);
+            this.limbs[name].setLinearVelocity(options.linearVelocity);
         }
     };
 
     RubeDoll.prototype.getPosition = function() {
-        return this.body.GetPosition().clone();
+        return this.body.getPosition().clone();
     };
 
     RubeDoll.prototype.getHeadPosition = function() {
-        return this.limbs.head.GetPosition().clone();
+        return this.limbs.head.getPosition().clone();
     };
 
     RubeDoll.prototype.setUpdateData = function(update) {
         
         Parent.prototype.setUpdateData.call(this, update);
 
-/*
         for(var name in update.limbs) {
             Assert.number(update.limbs[name].p.x, update.limbs[name].p.y);
             Assert.number(update.limbs[name].a);
@@ -203,12 +196,11 @@ function (Parent, /* RubeLoader, */ planck, Settings, Assert, nc, Matrix /* , Ru
             Assert.number(update.limbs[name].av);
 
             this.limbs[name].setAwake(true);
-            this.limbs[name].SetPosition(update.limbs[name].p);
-            this.limbs[name].SetAngle(update.limbs[name].a);
-            this.limbs[name].SetLinearVelocity(update.limbs[name].lv);
+            this.limbs[name].setPosition(update.limbs[name].p);
+            this.limbs[name].setAngle(update.limbs[name].a);
+            this.limbs[name].setLinearVelocity(update.limbs[name].lv);
             this.limbs[name].setAngularVelocity(update.limbs[name].av);
         }
-        */
     }
 
     RubeDoll.prototype.destroy = function() {
