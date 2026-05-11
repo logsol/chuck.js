@@ -1,24 +1,24 @@
 define([
 	"Game/Core/Control/PlayerController",
 	"Lib/Utilities/NotificationCenter",
-    "Lib/Utilities/Protocol/Parser",
-    "Game/Config/Settings"
+    "Lib/Utilities/Protocol/Parser"
 ],
- 
-function(Parent, nc, Parser, Settings) {
+
+function(Parent, nc, Parser) {
 
     "use strict";
  
     function PlayerController(player) {
 
     	Parent.call(this, player);
+        this._lastProcessedSeq = 0;
     }
 
     PlayerController.prototype = Object.create(Parent.prototype);
 
-    /* 
-     * retrieves move (and other) commands from client and executes them at the server 
-     */ 
+    /*
+     * retrieves move (and other) commands from client and executes them at the server
+     */
     PlayerController.prototype.applyCommand = function(options) {
         // FIXME: remove this function and use ProtocolHelper.applyCommand() instead
         // Don't forget to change the function names to on...
@@ -28,9 +28,16 @@ function(Parent, nc, Parser, Settings) {
         } else {
             message = options;
         }
-        
+
         for (var command in message) {
-            this[command].call(this, message[command]);
+            var commandOptions = message[command];
+
+            // Track sequence number from client input commands
+            if (commandOptions && typeof commandOptions === 'object' && commandOptions._seq !== undefined) {
+                this._lastProcessedSeq = commandOptions._seq;
+            }
+
+            this[command].call(this, commandOptions);
         }
     };
 
@@ -43,36 +50,6 @@ function(Parent, nc, Parser, Settings) {
 
     PlayerController.prototype.suicide = function() {
         this.player.suicide();
-    };
-
-    PlayerController.prototype.mePositionStateOverride = function(update) {
-
-        if(!this.player.isSpawned()) {
-            // if someone still falls but is dead on the server already
-            return; 
-        }
-
-        var difference = {
-            x: Math.abs(update.p.x - this.player.doll.body.GetPosition().x),
-            y: Math.abs(update.p.y - this.player.doll.body.GetPosition().y)
-        };
-
-        if(difference.x < Settings.PUNKBUSTER_DIFFERENCE_METERS &&
-           difference.y < Settings.PUNKBUSTER_DIFFERENCE_METERS) {
-            this.player.doll.updatePositionState(update);
-        } else {
-            // HARD UPDATE FOR SELF
-            console.log(this.player.user.options.nickname + " is cheating.");
-
-            var body = this.player.doll.body;
-
-            var options = {
-                p: body.GetPosition(),
-                lv: body.GetLinearVelocity()
-            };
-
-            nc.trigger(nc.ns.channel.to.client.user.gameCommand.send + this.player.id, "positionStateReset", options);
-        }
     };
 
     return PlayerController;

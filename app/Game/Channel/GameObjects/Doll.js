@@ -2,11 +2,10 @@ define([
 	"Game/Core/GameObjects/Doll",
     "Game/Channel/GameObjects/Item",
     "Lib/Vendor/Box2D",
-    "Lib/Utilities/NotificationCenter",
-    "Lib/Utilities/Assert"
+    "Lib/Utilities/NotificationCenter"
 ],
- 
-function (Parent, Item, Box2D, nc, Assert) {
+
+function (Parent, Item, Box2D, nc) {
 
 	"use strict";
  
@@ -90,16 +89,6 @@ function (Parent, Item, Box2D, nc, Assert) {
                     }
                 }
             }
-        }
-    };
-
-    Doll.prototype.updatePositionState = function(update) {
-        if(!this.isAnotherPlayerNearby()) {
-            Assert.number(update.p.x, update.p.y);
-            Assert.number(update.lv.x, update.lv.y);
-            this.body.SetAwake(true);
-            this.body.SetPosition(update.p);
-            this.body.SetLinearVelocity(update.lv);
         }
     };
 

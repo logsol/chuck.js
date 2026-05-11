@@ -4,9 +4,10 @@ define([
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Assert",
     "Game/Client/Control/PlayerController",
+    "Game/Client/InputBuffer",
 ],
- 
-function (Parent, Settings, nc, Assert, PlayerController) {
+
+function (Parent, Settings, nc, Assert, PlayerController, InputBuffer) {
 
 	"use strict";
  
@@ -19,12 +20,7 @@ function (Parent, Settings, nc, Assert, PlayerController) {
             y: 0
         };
 
-    	this.lastServerPositionState = {
-    		p: {
-    			x: 0,
-    			y: 0
-    		}
-    	};
+        this.inputBuffer = new InputBuffer();
 
         this.arrowMesh = null;
         this.createAndAddArrow();
@@ -49,50 +45,25 @@ function (Parent, Settings, nc, Assert, PlayerController) {
         };
     };
  
-    Me.prototype.setLastServerPositionState = function(update) {
-    	this.lastServerPositionState = update;
-    };
+    Me.prototype.applyReconciliation = function(x, y, vx, vy) {
+        var currentPos = this.doll.body.GetPosition();
+        var diffX = x - currentPos.x;
+        var diffY = y - currentPos.y;
+        var distance = Math.sqrt(diffX * diffX + diffY * diffY);
 
-    // Checks if client should send out its position to server
-	Me.prototype.isPositionStateOverrideNeeded = function() {
-
-		if(!this.doll) {
-            return false;
+        if (distance > Settings.RECONCILIATION_SNAP_THRESHOLD) {
+            // Large error — snap immediately (server-side teleport, respawn, etc.)
+            this.doll.body.SetPosition({x: x, y: y});
+        } else {
+            // Small error — blend toward reconciled position
+            var factor = Settings.RECONCILIATION_BLEND_FACTOR;
+            this.doll.body.SetPosition({
+                x: currentPos.x + diffX * factor,
+                y: currentPos.y + diffY * factor
+            });
         }
 
-        if(this.doll.isAnotherPlayerNearby()) {
-            return false;
-        }
-
-		var difference = {
-			x: Math.abs(this.lastServerPositionState.p.x - this.doll.body.GetPosition().x),
-			y: Math.abs(this.lastServerPositionState.p.y - this.doll.body.GetPosition().y)
-		};
-
-		if(difference.x > Settings.ME_STATE_MAX_DIFFERENCE_METERS ||
-            difference.y > Settings.ME_STATE_MAX_DIFFERENCE_METERS) {
-			return true;
-		}
-    	return false;
-    };
-
-    Me.prototype.getPositionStateOverride = function() {
-    	return {
-    		p: this.doll.body.GetPosition().Copy(),
-    		lv: this.doll.body.GetLinearVelocity().Copy()
-    	};
-    };
-
-    Me.prototype.acceptPositionStateUpdateFromServer = function() {
-        // gamecontroller should accept  me's doll update only when another players doll is nearby.
-        return this.doll.isAnotherPlayerNearby();
-    };
-
-    Me.prototype.resetPositionState = function(options) {
-        Assert.number(options.p.x, options.p.y);
-        Assert.number(options.lv.x, options.lv.y);
-        this.doll.body.SetPosition(options.p);
-        this.doll.body.SetLinearVelocity(options.lv);
+        this.doll.body.SetLinearVelocity({x: vx, y: vy});
     };
 
     Me.prototype.createAndAddArrow = function() {

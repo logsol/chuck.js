@@ -113,11 +113,28 @@ function (Parent, PhysicsEngine, Settings, requestAnimFrame, nc, Box2D, Player, 
     };
 
     GameController.prototype.updateWorld = function () {
-        
+
         var update = this.getWorldUpdateObject(false);
 
         if(Object.getOwnPropertyNames(update).length > 0) {
             nc.trigger(nc.ns.channel.to.client.gameCommand.broadcast, "worldUpdate", update);
+        }
+
+        // Send per-user input acknowledgments for server reconciliation
+        for (var id in this.players) {
+            var player = this.players[id];
+            if (player.isSpawned() && player.playerController._lastProcessedSeq > 0) {
+                var body = player.doll.body;
+                nc.trigger(
+                    nc.ns.channel.to.client.user.gameCommand.send + id,
+                    "inputAck",
+                    {
+                        seq: player.playerController._lastProcessedSeq,
+                        p: { x: body.GetPosition().x, y: body.GetPosition().y },
+                        lv: { x: body.GetLinearVelocity().x, y: body.GetLinearVelocity().y }
+                    }
+                );
+            }
         }
 
         this.worldUpdateTimeout = setTimeout(this.updateWorld.bind(this), Settings.NETWORK_UPDATE_INTERVAL);
