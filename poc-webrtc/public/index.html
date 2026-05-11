@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>chuck.js WebRTC POC</title>
+    <style>
+        body { font-family: monospace; background: #111; color: #ddd; margin: 0; padding: 12px; }
+        .row { display: flex; gap: 12px; align-items: flex-start; }
+        .panel { background: #1c1c1c; padding: 10px; border-radius: 6px; }
+        canvas { background: #222; border: 1px solid #333; image-rendering: pixelated; }
+        .stat { display: flex; justify-content: space-between; gap: 16px; min-width: 240px; }
+        .stat span:last-child { color: #8cf; font-weight: bold; }
+        h1 { font-size: 16px; margin: 0 0 8px; }
+        .hint { color: #888; font-size: 11px; margin-top: 8px; }
+        #log { font-size: 11px; line-height: 1.4; white-space: pre-wrap; max-height: 200px; overflow-y: auto; color: #888; }
+        .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: middle; margin-right: 4px; }
+        .dot.ok { background: #4c4; }
+        .dot.bad { background: #c44; }
+        .dot.wait { background: #cc4; }
+    </style>
+</head>
+<body>
+    <h1>chuck.js networking POC — transport: <span id="transport">?</span></h1>
+    <div class="row">
+        <div class="panel">
+            <canvas id="world" width="800" height="600"></canvas>
+            <div class="hint">A/D or ←/→ move · Space jump</div>
+        </div>
+        <div class="panel">
+            <div class="stat"><span><span class="dot wait" id="status-dot"></span>connection</span><span id="status">connecting…</span></div>
+            <div class="stat"><span>RTT (last)</span><span id="rtt">– ms</span></div>
+            <div class="stat"><span>RTT (avg, 50)</span><span id="rtt-avg">– ms</span></div>
+            <div class="stat"><span>RTT (95p, 50)</span><span id="rtt-p95">– ms</span></div>
+            <div class="stat"><span>worldUpdate /s</span><span id="rate">0</span></div>
+            <div class="stat"><span>recv seq</span><span id="seq">0</span></div>
+            <div class="stat"><span>seq gaps</span><span id="gaps">0</span></div>
+            <canvas id="rtt-chart" width="240" height="80" style="margin-top:8px"></canvas>
+            <div style="margin-top:8px">
+                <div style="color:#888;font-size:11px;margin-bottom:4px">Mark phase in log:</div>
+                <button onclick="POC_MARK('baseline')">baseline</button>
+                <button onclick="POC_MARK('1%-loss')">1% loss</button>
+                <button onclick="POC_MARK('5%-loss')">5% loss</button>
+                <button onclick="POC_MARK('10%-loss+100ms')">10% + 100ms</button>
+                <button onclick="POC_MARK(prompt('label?')||'')">custom…</button>
+            </div>
+            <div id="log"></div>
+        </div>
+    </div>
+    <script>
+        window.POC_TRANSPORT = new URLSearchParams(location.search).get("transport") || "webrtc";
+        document.getElementById("transport").textContent = window.POC_TRANSPORT;
+    </script>
+    <script src="common.js"></script>
+    <script>
+        if (window.POC_TRANSPORT === "socketio") {
+            const s = document.createElement("script");
+            s.src = "/socketio/socket.io.js";
+            s.onload = () => { const c = document.createElement("script"); c.src = "socketio-client.js"; document.body.appendChild(c); };
+            document.body.appendChild(s);
+        } else {
+            const c = document.createElement("script");
+            c.src = "client.js";
+            document.body.appendChild(c);
+        }
+    </script>
+</body>
+</html>
