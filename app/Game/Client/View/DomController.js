@@ -115,6 +115,13 @@ function (Settings, nc, Screenfull, Graph, pointerLockManager) {
         li.appendChild(this.ping);
         this.devToolsContainer.appendChild(li);
 
+        // create Transport: container
+        li = document.createElement("li");
+        this.transport = document.createElement("label");
+        this.transport.innerHTML = "transport:?";
+        li.appendChild(this.transport);
+        this.devToolsContainer.appendChild(li);
+
 
         // create debug mode
         li = document.createElement("li");
@@ -163,6 +170,10 @@ function (Settings, nc, Screenfull, Graph, pointerLockManager) {
     DomController.prototype.setPing = function(ping) {
         this.ping.innerHTML = "Ping:" + ping;
         // this.pingGraph.addValue(ping);
+    };
+
+    DomController.prototype.setTransport = function(name) {
+        if (this.transport) this.transport.innerHTML = "transport:" + name;
     };
 
     DomController.prototype.getCanvasContainer = function () {

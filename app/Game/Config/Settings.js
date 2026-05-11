@@ -83,6 +83,8 @@ function () {
         NETWORK_LOG_INCOMING: false,
         NETWORK_LOG_OUTGOING: false,
         NETWORK_LOG_FILTER: ["ping", "pong", "worldUpdate", "lookAt"],
+        USE_WEBRTC: true,
+        WEBRTC_STUN_SERVERS: ["stun:stun.l.google.com:19302"],
 
         // CHANNEL
         CHANNEL_MAX_USERS: 20,
