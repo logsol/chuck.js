@@ -95,10 +95,6 @@ function () {
         CHANNEL_DEFAULT_LEVELS: ["debug"],
         CHANNEL_RECORD_SESSION: false,
 
-        // RECONCILIATION
-        RECONCILIATION_THRESHOLD: 1,
-        RECONCILIATION_SNAP_THRESHOLD: 5.0,
-        RECONCILIATION_BLEND_FACTOR: 0.2
     };
 
     Settings.TILE_RATIO = Settings.ORIGINAL_TILE_SIZE / Settings.TILE_SIZE;

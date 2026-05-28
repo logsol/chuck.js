@@ -4,10 +4,9 @@ define([
     "Lib/Utilities/NotificationCenter",
     "Lib/Utilities/Assert",
     "Game/Client/Control/PlayerController",
-    "Game/Client/InputBuffer",
 ],
 
-function (Parent, Settings, nc, Assert, PlayerController, InputBuffer) {
+function (Parent, Settings, nc, Assert, PlayerController) {
 
 	"use strict";
  
@@ -19,8 +18,6 @@ function (Parent, Settings, nc, Assert, PlayerController, InputBuffer) {
             x: Settings.VIEWPORT_LOOK_AHEAD,
             y: 0
         };
-
-        this.inputBuffer = new InputBuffer();
 
         this.arrowMesh = null;
         this.createAndAddArrow();
@@ -45,27 +42,6 @@ function (Parent, Settings, nc, Assert, PlayerController, InputBuffer) {
         };
     };
  
-    Me.prototype.applyReconciliation = function(x, y, vx, vy) {
-        var currentPos = this.doll.body.GetPosition();
-        var diffX = x - currentPos.x;
-        var diffY = y - currentPos.y;
-        var distance = Math.sqrt(diffX * diffX + diffY * diffY);
-
-        if (distance > Settings.RECONCILIATION_SNAP_THRESHOLD) {
-            // Large error — snap immediately (server-side teleport, respawn, etc.)
-            this.doll.body.SetPosition({x: x, y: y});
-        } else {
-            // Small error — blend toward reconciled position
-            var factor = Settings.RECONCILIATION_BLEND_FACTOR;
-            this.doll.body.SetPosition({
-                x: currentPos.x + diffX * factor,
-                y: currentPos.y + diffY * factor
-            });
-        }
-
-        this.doll.body.SetLinearVelocity({x: vx, y: vy});
-    };
-
     Me.prototype.createAndAddArrow = function() {
         var self = this;
 

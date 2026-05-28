@@ -14,7 +14,6 @@ function (Parent, nc, KeyboardAndMouse, Gamepad, pointerLockManager) {
 
         Parent.call(this, me);
 
-        this._inputSeq = 0;
         this.keyboardAndMouse = new KeyboardAndMouse(this);
         this.gamepad = new Gamepad(this);
     }
@@ -27,48 +26,34 @@ function (Parent, nc, KeyboardAndMouse, Gamepad, pointerLockManager) {
         this.gamepad.update();
     };
 
-    PlayerController.prototype._recordAndSend = function(command) {
-        this._inputSeq++;
-        if (this.player.doll && this.player.doll.body) {
-            var vel = this.player.doll.body.GetLinearVelocity();
-            this.player.inputBuffer.add({
-                seq: this._inputSeq,
-                timestamp: Date.now(),
-                vx: vel.x,
-                vy: vel.y
-            });
-        }
-        nc.trigger(nc.ns.client.to.server.gameCommand.send, command, {_seq: this._inputSeq});
-    };
-
     PlayerController.prototype.moveLeft = function () {
         if (!this.isPlayerInputAllowed()) return;
         Parent.prototype.moveLeft.call(this);
-        this._recordAndSend('moveLeft');
+        nc.trigger(nc.ns.client.to.server.gameCommand.send, 'moveLeft');
     }
 
     PlayerController.prototype.moveRight = function () {
         if (!this.isPlayerInputAllowed()) return;
         Parent.prototype.moveRight.call(this);
-        this._recordAndSend('moveRight');
+        nc.trigger(nc.ns.client.to.server.gameCommand.send, 'moveRight');
     }
 
     // always allow to stop, to prevent endless running
     PlayerController.prototype.stop = function () {
         Parent.prototype.stop.call(this);
-        this._recordAndSend('stop');
+        nc.trigger(nc.ns.client.to.server.gameCommand.send, 'stop');
     }
 
     PlayerController.prototype.jump = function () {
         if (!this.isPlayerInputAllowed()) return;
         Parent.prototype.jump.call(this);
-        this._recordAndSend('jump');
+        nc.trigger(nc.ns.client.to.server.gameCommand.send, 'jump');
     }
 
     // always allow to stop.
     PlayerController.prototype.jumpStop = function () {
         Parent.prototype.jumpStop.call(this);
-        this._recordAndSend('jumpStop');
+        nc.trigger(nc.ns.client.to.server.gameCommand.send, 'jumpStop');
     }
 
     PlayerController.prototype.setXY = function(x, y) {

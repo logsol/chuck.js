@@ -60,35 +60,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, nc, reque
         domController.fpsStep();
     };
 
-    GameController.prototype.onInputAck = function(ackData) {
-        if (!this.me || !this.me.doll) return;
-
-        this.me.inputBuffer.acknowledgeUpTo(ackData.seq);
-
-        var currentPos = this.me.doll.body.GetPosition();
-        var diffX = Math.abs(ackData.p.x - currentPos.x);
-        var diffY = Math.abs(ackData.p.y - currentPos.y);
-
-        // Scale the acceptable drift by how many inputs the server
-        // hasn't processed yet. More unacked time = more expected drift.
-        var unacked = this.me.inputBuffer.getUnacknowledged();
-        var expectedDrift = 0;
-        if (unacked.length > 0) {
-            var unackedTime = (Date.now() - unacked[0].timestamp) / 1000;
-            expectedDrift = unackedTime * Settings.RUN_SPEED;
-        }
-
-        var threshold = Settings.RECONCILIATION_THRESHOLD + expectedDrift;
-
-        // Only correct when the error exceeds what latency can explain —
-        // meaning something unexpected happened (collision, being hit, etc.)
-        if (diffX > threshold || diffY > threshold) {
-            this.me.applyReconciliation(
-                ackData.p.x, ackData.p.y,
-                ackData.lv.x, ackData.lv.y
-            );
-        }
-    };
 
     GameController.prototype.onClientReadyResponse = function(options) {
         var i;
@@ -131,7 +102,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, nc, reque
 
     };
 
-    // Own doll position is handled by onInputAck reconciliation, not worldUpdate
     GameController.prototype.updateGameObject = function (gameObject, gameObjectUpdate) {
         if (gameObject === this.me.doll) {
             return;
@@ -164,10 +134,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, nc, reque
 
         var player = this.players[playerId];
         player.spawn(x, y);
-
-        if (player === this.me) {
-            this.me.inputBuffer.clear();
-        }
 
         if(options.holdingItemUid) {
             this.onHandActionResponse({
@@ -224,10 +190,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, nc, reque
         var killedByPlayer = this.players[options.killedByPlayerId];
         player.kill(killedByPlayer, options.ragDollId);
 
-        if (player === this.me) {
-            this.me.inputBuffer.clear();
-        }
-
         nc.trigger(nc.ns.client.view.gameStats.kill, {
             victim: {
                 name: player.user.options.nickname,
@@ -259,7 +221,6 @@ function (Parent, Box2D, PhysicsEngine, ViewManager, PlayerController, nc, reque
 
     GameController.prototype.endRound = function() {
         this.me.setInBetweenRounds(true);
-        this.me.inputBuffer.clear();
         this.toggleGameStats(true);
     };
 

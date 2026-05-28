@@ -11,7 +11,6 @@ function(Parent, nc, Parser) {
     function PlayerController(player) {
 
     	Parent.call(this, player);
-        this._lastProcessedSeq = 0;
     }
 
     PlayerController.prototype = Object.create(Parent.prototype);
@@ -30,14 +29,7 @@ function(Parent, nc, Parser) {
         }
 
         for (var command in message) {
-            var commandOptions = message[command];
-
-            // Track sequence number from client input commands
-            if (commandOptions && typeof commandOptions === 'object' && commandOptions._seq !== undefined) {
-                this._lastProcessedSeq = commandOptions._seq;
-            }
-
-            this[command].call(this, commandOptions);
+            this[command].call(this, message[command]);
         }
     };
 
